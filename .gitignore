@@ -1,12 +1,7 @@
-###> common ###
 /vendor/
-###< common ###
-
-###> phpstorm ###
 /.idea
-###< phpstorm ###
-
-###> phpunit/phpunit ###
+/composer.lock
+/composer.phar
 /phpunit.xml
-.phpunit.result.cache
-###< phpunit/phpunit ###
+/.phpunit.result.cache
+/index.php
