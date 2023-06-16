@@ -1,0 +1,43 @@
+{
+    "name": "programmatordev/openweathermap-php-api",
+    "description": "OpenWeatherMap PHP API library.",
+    "type": "library",
+    "keywords": ["OpenWeatherMap", "API", "PHP"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "André Pimpão",
+            "email": "a.pimpao@programmator.dev",
+            "homepage": "https://programmator.dev"
+        }
+    ],
+    "require": {
+        "php": ">=8.0",
+        "psr/http-factory": "^1.0",
+        "psr/http-client": "^1.0",
+        "php-http/client-common": "^2.7",
+        "php-http/discovery": "^1.18",
+        "psr/http-client-implementation": "*",
+        "symfony/options-resolver": "^6.3"
+    },
+    "require-dev": {
+        "symfony/http-client": "^6.3",
+        "nyholm/psr7": "^1.8",
+        "symfony/var-dumper": "^6.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "ProgrammatorDev\\OpenWeatherMap\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ProgrammatorDev\\OpenWeatherMap\\Test\\": "tests/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
+    }
+}
