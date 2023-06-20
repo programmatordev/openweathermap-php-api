@@ -23,7 +23,9 @@
     "require-dev": {
         "symfony/http-client": "^6.3",
         "nyholm/psr7": "^1.8",
-        "symfony/var-dumper": "^6.3"
+        "symfony/var-dumper": "^6.3",
+        "phpunit/phpunit": "^9.6",
+        "php-http/mock-client": "^1.6"
     },
     "autoload": {
         "psr-4": {
