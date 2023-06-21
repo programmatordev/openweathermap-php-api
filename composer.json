@@ -12,19 +12,21 @@
         }
     ],
     "require": {
-        "php": ">=8.0",
+        "php": ">=8.1",
         "psr/http-factory": "^1.0",
         "psr/http-client": "^1.0",
         "php-http/client-common": "^2.7",
         "php-http/discovery": "^1.18",
-        "psr/http-client-implementation": "*",
         "symfony/options-resolver": "^6.3"
+    },
+    "provide": {
+        "psr/http-client-implementation": "*"
     },
     "require-dev": {
         "symfony/http-client": "^6.3",
         "nyholm/psr7": "^1.8",
         "symfony/var-dumper": "^6.3",
-        "phpunit/phpunit": "^9.6",
+        "phpunit/phpunit": "^10.0",
         "php-http/mock-client": "^1.6"
     },
     "autoload": {
