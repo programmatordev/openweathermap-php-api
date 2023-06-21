@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         colors="true"
+         bootstrap="vendor/autoload.php"
+         stopOnError="true"
+>
+    <php>
+        <ini name="memory_limit" value="-1" />
+        <ini name="error_reporting" value="-1" />
+        <ini name="log_errors_max_len" value="0" />
+        <ini name="zend.assertions" value="1" />
+        <ini name="assert.exception" value="1" />
+        <ini name="xdebug.show_exception_trace" value="0" />
+    </php>
+
+    <testsuites>
+        <testsuite name="Project Test Suite">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>
