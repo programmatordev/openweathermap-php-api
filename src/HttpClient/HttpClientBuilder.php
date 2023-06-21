@@ -31,6 +31,14 @@ class HttpClientBuilder
         $this->plugins[] = $plugin;
     }
 
+    /**
+     * @return Plugin[]
+     */
+    public function getPlugins(): array
+    {
+        return $this->plugins;
+    }
+
     public function getHttpClient(): HttpMethodsClient
     {
         $this->addPlugin(new Plugin\HeaderDefaultsPlugin([

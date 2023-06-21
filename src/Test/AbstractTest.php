@@ -8,7 +8,7 @@ use ProgrammatorDev\OpenWeatherMap\Config;
 use ProgrammatorDev\OpenWeatherMap\HttpClient\HttpClientBuilder;
 use ProgrammatorDev\OpenWeatherMap\OpenWeatherMap;
 
-class AbstractTestCase extends TestCase
+class AbstractTest extends TestCase
 {
     protected Client $mockHttpClient;
 
@@ -23,7 +23,7 @@ class AbstractTestCase extends TestCase
     {
         return new OpenWeatherMap(
             new Config([
-                'applicationKey' => 'fakeappkey',
+                'applicationKey' => 'testappkey',
                 'httpClientBuilder' => new HttpClientBuilder($this->mockHttpClient)
             ])
         );
