@@ -2,7 +2,7 @@
 
 namespace ProgrammatorDev\OpenWeatherMap\Entity;
 
-class Coordinates
+class Coordinate
 {
     private float $latitude;
 
