@@ -1,6 +1,6 @@
 <?php
 
-namespace ProgrammatorDev\OpenWeatherMap\Test\Response;
+namespace ProgrammatorDev\OpenWeatherMap\Test;
 
 class MockResponse
 {

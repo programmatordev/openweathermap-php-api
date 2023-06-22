@@ -5,7 +5,6 @@ namespace ProgrammatorDev\OpenWeatherMap\Endpoint;
 use Http\Client\Exception;
 use ProgrammatorDev\OpenWeatherMap\Entity\Location;
 use ProgrammatorDev\OpenWeatherMap\Entity\ZipLocation;
-use ProgrammatorDev\OpenWeatherMap\HttpClient\ResponseMediator;
 use ProgrammatorDev\OpenWeatherMap\Util\CreateEntityListTrait;
 use ProgrammatorDev\OpenWeatherMap\Util\ValidateCoordinateTrait;
 
@@ -26,13 +25,13 @@ class Geocoding extends AbstractEndpoint
      */
     public function getCoordinatesByLocationName(string $locationName, int $limit = 5): array
     {
-        $url = $this->createUrl($this->urlDirectGeocoding, [
-            'q' => $locationName,
-            'limit' => $limit
-        ]);
-
-        $data = ResponseMediator::toArray(
-            $this->getHttpClient()->get($url)
+        $data = $this->sendRequest(
+            method: 'GET',
+            baseUrl: $this->urlDirectGeocoding,
+            query: [
+                'q' => $locationName,
+                'limit' => $limit
+            ]
         );
 
         return $this->createEntityList($data, Location::class);
@@ -41,15 +40,14 @@ class Geocoding extends AbstractEndpoint
     /**
      * @throws Exception
      */
-    public function getCoordinatesByZipCode(string $zipCode, string $countryCode, int $limit = 5): ZipLocation
+    public function getCoordinatesByZipCode(string $zipCode, string $countryCode): ZipLocation
     {
-        $url = $this->createUrl($this->urlZipGeocoding, [
-            'zip' => \sprintf('%s,%s', $zipCode, $countryCode),
-            'limit' => $limit
-        ]);
-
-        $data = ResponseMediator::toArray(
-            $this->getHttpClient()->get($url)
+        $data = $this->sendRequest(
+            method: 'GET',
+            baseUrl: $this->urlZipGeocoding,
+            query: [
+                'zip' => \sprintf('%s,%s', $zipCode, $countryCode)
+            ]
         );
 
         return new ZipLocation($data);
@@ -63,14 +61,14 @@ class Geocoding extends AbstractEndpoint
     {
         $this->validateCoordinate($latitude, $longitude);
 
-        $url = $this->createUrl($this->urlReverseGeocoding, [
-            'lat' => $latitude,
-            'lon' => $longitude,
-            'limit' => $limit
-        ]);
-
-        $data = ResponseMediator::toArray(
-            $this->getHttpClient()->get($url)
+        $data = $this->sendRequest(
+            method: 'GET',
+            baseUrl: $this->urlReverseGeocoding,
+            query: [
+                'lat' => $latitude,
+                'lon' => $longitude,
+                'limit' => $limit
+            ]
         );
 
         return $this->createEntityList($data, Location::class);
