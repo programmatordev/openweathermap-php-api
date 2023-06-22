@@ -4,28 +4,28 @@ namespace ProgrammatorDev\OpenWeatherMap\Entity;
 
 class ZipLocation
 {
-    private string $zip;
+    private string $zipCode;
 
     private string $name;
 
-    private Coordinates $coordinates;
+    private Coordinate $coordinate;
 
     private string $countryCode;
 
     public function __construct(array $data)
     {
-        $this->zip = $data['zip'];
+        $this->zipCode = $data['zip'];
         $this->name = $data['name'];
         $this->countryCode = $data['country'];
-        $this->coordinates = new Coordinates([
+        $this->coordinate = new Coordinate([
             'lat' => $data['lat'],
             'lon' => $data['lon']
         ]);
     }
 
-    public function getZip(): string
+    public function getZipCode(): string
     {
-        return $this->zip;
+        return $this->zipCode;
     }
 
     public function getName(): string
@@ -33,9 +33,9 @@ class ZipLocation
         return $this->name;
     }
 
-    public function getCoordinates(): Coordinates
+    public function getCoordinate(): Coordinate
     {
-        return $this->coordinates;
+        return $this->coordinate;
     }
 
     public function getCountryCode(): string
