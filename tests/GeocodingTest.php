@@ -6,7 +6,6 @@ use Nyholm\Psr7\Response;
 use ProgrammatorDev\OpenWeatherMap\Entity\Coordinate;
 use ProgrammatorDev\OpenWeatherMap\Entity\Location;
 use ProgrammatorDev\OpenWeatherMap\Entity\ZipLocation;
-use ProgrammatorDev\OpenWeatherMap\Test\Response\MockResponse;
 
 class GeocodingTest extends AbstractTest
 {
