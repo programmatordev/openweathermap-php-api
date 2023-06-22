@@ -7,10 +7,12 @@ use ProgrammatorDev\OpenWeatherMap\Entity\Location;
 use ProgrammatorDev\OpenWeatherMap\Entity\ZipLocation;
 use ProgrammatorDev\OpenWeatherMap\HttpClient\ResponseMediator;
 use ProgrammatorDev\OpenWeatherMap\Util\CreateEntityListTrait;
+use ProgrammatorDev\OpenWeatherMap\Util\ValidateCoordinateTrait;
 
 class Geocoding extends AbstractEndpoint
 {
     use CreateEntityListTrait;
+    use ValidateCoordinateTrait;
 
     private string $urlDirectGeocoding = 'https://api.openweathermap.org/geo/1.0/direct';
 
@@ -59,6 +61,8 @@ class Geocoding extends AbstractEndpoint
      */
     public function getLocationNameByCoordinates(float $latitude, float $longitude, int $limit = 5): array
     {
+        $this->validateCoordinate($latitude, $longitude);
+
         $url = $this->createUrl($this->urlReverseGeocoding, [
             'lat' => $latitude,
             'lon' => $longitude,
