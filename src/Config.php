@@ -15,6 +15,10 @@ class Config
 
         $this->configureOptions($optionsResolver);
         $this->config = $optionsResolver->resolve($config);
+
+        if (empty($this->config['applicationKey'])) {
+            throw new \InvalidArgumentException('The option "applicationKey" must not be empty.');
+        }
     }
 
     private function configureOptions(OptionsResolver $optionsResolver): void

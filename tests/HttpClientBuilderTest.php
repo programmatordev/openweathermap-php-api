@@ -14,9 +14,7 @@ class HttpClientBuilderTest extends AbstractTest
     {
         parent::setUp();
 
-        $this->httpClientBuilder = $this->getApi()
-            ->getConfig()
-            ->getHttpClientBuilder();
+        $this->httpClientBuilder = new HttpClientBuilder();
     }
 
     public function testHttpClientBuilderGetPlugins()
