@@ -41,11 +41,10 @@ class Geocoding extends AbstractEndpoint
     /**
      * @throws Exception
      */
-    public function getCoordinatesByZipCode(string $zipCode, string $countryCode, int $limit = 5): ZipLocation
+    public function getCoordinatesByZipCode(string $zipCode, string $countryCode): ZipLocation
     {
         $url = $this->createUrl($this->urlZipGeocoding, [
-            'zip' => \sprintf('%s,%s', $zipCode, $countryCode),
-            'limit' => $limit
+            'zip' => \sprintf('%s,%s', $zipCode, $countryCode)
         ]);
 
         $data = ResponseMediator::toArray(
