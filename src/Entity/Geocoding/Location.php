@@ -1,6 +1,8 @@
 <?php
 
-namespace ProgrammatorDev\OpenWeatherMap\Entity;
+namespace ProgrammatorDev\OpenWeatherMap\Entity\Geocoding;
+
+use ProgrammatorDev\OpenWeatherMap\Entity\Coordinate;
 
 class Location
 {

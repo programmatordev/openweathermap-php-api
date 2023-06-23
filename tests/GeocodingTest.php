@@ -3,9 +3,10 @@
 namespace ProgrammatorDev\OpenWeatherMap\Test;
 
 use Nyholm\Psr7\Response;
+use PHPUnit\Framework\Attributes\DataProvider;
 use ProgrammatorDev\OpenWeatherMap\Entity\Coordinate;
-use ProgrammatorDev\OpenWeatherMap\Entity\Location;
-use ProgrammatorDev\OpenWeatherMap\Entity\ZipLocation;
+use ProgrammatorDev\OpenWeatherMap\Entity\Geocoding\Location;
+use ProgrammatorDev\OpenWeatherMap\Entity\Geocoding\ZipLocation;
 
 class GeocodingTest extends AbstractTest
 {
@@ -58,24 +59,6 @@ class GeocodingTest extends AbstractTest
         $this->assertSame(-9.1333, $coordinate->getLongitude());
     }
 
-    /**
-     * @dataProvider provideGeocodingGetLocationNameByCoordinatesWithInvalidParamsData
-     */
-    public function testGeocodingGetLocationNameByCoordinatesWithInvalidParams(float $latitude, float $longitude)
-    {
-        $this->expectException(\InvalidArgumentException::class);
-
-        $this->getApi()->getGeocoding()->getLocationNameByCoordinates($latitude, $longitude);
-    }
-
-    public static function provideGeocodingGetLocationNameByCoordinatesWithInvalidParamsData(): \Generator
-    {
-        yield 'lower than -90 latitude' => [-91, -9.1365919];
-        yield 'greater than 90 latitude' => [91, -9.1365919];
-        yield 'lower than -180 longitude' => [38.7077507, -181];
-        yield 'greater than 180 longitude' => [38.7077507, 181];
-    }
-
     public function testGeocodingGetLocationNameByCoordinates()
     {
         $this->mockHttpClient->addResponse(
@@ -101,5 +84,21 @@ class GeocodingTest extends AbstractTest
         $this->assertInstanceOf(Coordinate::class, $coordinate);
         $this->assertSame(38.7077507, $coordinate->getLatitude());
         $this->assertSame(-9.1365919, $coordinate->getLongitude());
+    }
+
+    #[DataProvider('provideGeocodingGetLocationNameByCoordinatesWithInvalidParamsData')]
+    public function testGeocodingGetLocationNameByCoordinatesWithInvalidParams(float $latitude, float $longitude)
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        $this->getApi()->getGeocoding()->getLocationNameByCoordinates($latitude, $longitude);
+    }
+
+    public static function provideGeocodingGetLocationNameByCoordinatesWithInvalidParamsData(): \Generator
+    {
+        yield 'lower than -90 latitude' => [-91, -9.1365919];
+        yield 'greater than 90 latitude' => [91, -9.1365919];
+        yield 'lower than -180 longitude' => [38.7077507, -181];
+        yield 'greater than 180 longitude' => [38.7077507, 181];
     }
 }
