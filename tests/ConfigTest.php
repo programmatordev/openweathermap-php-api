@@ -19,6 +19,11 @@ class ConfigTest extends AbstractTest
         ]);
     }
 
+    public function testConfigGetApplicationKey()
+    {
+        $this->assertSame('testappkey', $this->config->getApplicationKey());
+    }
+
     public function testConfigRequiredApplicationKey()
     {
         $this->expectException(MissingOptionsException::class);
@@ -33,11 +38,6 @@ class ConfigTest extends AbstractTest
         new Config([
             'applicationKey' => ''
         ]);
-    }
-
-    public function testConfigGetApplicationKey()
-    {
-        $this->assertSame('testappkey', $this->config->getApplicationKey());
     }
 
     public function testConfigGetHttpClientBuilder()
