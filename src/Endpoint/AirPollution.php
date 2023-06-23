@@ -3,12 +3,17 @@
 namespace ProgrammatorDev\OpenWeatherMap\Endpoint;
 
 use Http\Client\Exception;
+use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\AirPollutionList;
 use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\CurrentAirPollution;
 use ProgrammatorDev\OpenWeatherMap\Util\ValidateCoordinateTrait;
+use ProgrammatorDev\OpenWeatherMap\Util\ValidateDateRangeTrait;
+use ProgrammatorDev\OpenWeatherMap\Util\ValidatePastDateTrait;
 
 class AirPollution extends AbstractEndpoint
 {
     use ValidateCoordinateTrait;
+    use ValidateDateRangeTrait;
+    use ValidatePastDateTrait;
 
     private string $urlCurrentAirPollution = 'https://api.openweathermap.org/data/2.5/air_pollution';
 
@@ -52,7 +57,7 @@ class AirPollution extends AbstractEndpoint
     /**
      * @throws Exception
      */
-    public function getForecast(float $latitude, float $longitude)
+    public function getForecast(float $latitude, float $longitude): AirPollutionList
     {
         $this->validateCoordinate($latitude, $longitude);
 
@@ -65,7 +70,21 @@ class AirPollution extends AbstractEndpoint
             ]
         );
 
-        dd($data);
+        return new AirPollutionList($data);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getForecastByLocationName(string $locationName): AirPollutionList
+    {
+        // Get first result (most relevant)
+        $location = $this->api->getGeocoding()->getCoordinatesByLocationName($locationName)[0];
+
+        return $this->getForecast(
+            $location->getCoordinate()->getLatitude(),
+            $location->getCoordinate()->getLongitude()
+        );
     }
 
     /**
@@ -76,9 +95,14 @@ class AirPollution extends AbstractEndpoint
         float $longitude,
         \DateTimeImmutable $startDate,
         \DateTimeImmutable $endDate
-    )
+    ): AirPollutionList
     {
         $this->validateCoordinate($latitude, $longitude);
+        $this->validatePastDate('startDate', $startDate);
+        $this->validatePastDate('endDate', $endDate);
+        $this->validateDateRange($startDate, $endDate);
+
+        $utcTimezone = new \DateTimeZone('UTC');
 
         $data = $this->sendRequest(
             method: 'GET',
@@ -86,11 +110,31 @@ class AirPollution extends AbstractEndpoint
             query: [
                 'lat' => $latitude,
                 'lon' => $longitude,
-                'start' => $startDate->setTimezone(new \DateTimeZone('UTC'))->getTimestamp(),
-                'end' => $endDate->setTimezone(new \DateTimeZone('UTC'))->getTimestamp()
+                'start' => $startDate->setTimezone($utcTimezone)->getTimestamp(),
+                'end' => $endDate->setTimezone($utcTimezone)->getTimestamp()
             ]
         );
 
-        dd($data);
+        return new AirPollutionList($data);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getHistoryByLocationName(
+        string $locationName,
+        \DateTimeImmutable $startDate,
+        \DateTimeImmutable $endDate
+    ): AirPollutionList
+    {
+        // Get first result (most relevant)
+        $location = $this->api->getGeocoding()->getCoordinatesByLocationName($locationName)[0];
+
+        return $this->getHistory(
+            $location->getCoordinate()->getLatitude(),
+            $location->getCoordinate()->getLongitude(),
+            $startDate,
+            $endDate
+        );
     }
 }
