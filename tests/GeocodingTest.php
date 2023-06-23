@@ -3,6 +3,7 @@
 namespace ProgrammatorDev\OpenWeatherMap\Test;
 
 use Nyholm\Psr7\Response;
+use PHPUnit\Framework\Attributes\DataProvider;
 use ProgrammatorDev\OpenWeatherMap\Entity\Coordinate;
 use ProgrammatorDev\OpenWeatherMap\Entity\Geocoding\Location;
 use ProgrammatorDev\OpenWeatherMap\Entity\Geocoding\ZipLocation;
@@ -85,9 +86,7 @@ class GeocodingTest extends AbstractTest
         $this->assertSame(-9.1365919, $coordinate->getLongitude());
     }
 
-    /**
-     * @dataProvider provideGeocodingGetLocationNameByCoordinatesWithInvalidParamsData
-     */
+    #[DataProvider('provideGeocodingGetLocationNameByCoordinatesWithInvalidParamsData')]
     public function testGeocodingGetLocationNameByCoordinatesWithInvalidParams(float $latitude, float $longitude)
     {
         $this->expectException(\InvalidArgumentException::class);
