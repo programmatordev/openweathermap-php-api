@@ -30,7 +30,7 @@ class AbstractEndpoint
             $baseUrl = (string) $baseUrl;
         }
 
-        $uri = $this->createUrl($baseUrl, $query);
+        $uri = $this->buildUrl($baseUrl, $query);
 
         return ResponseMediator::toArray(
             $this->getHttpClient()->send($method, $uri, $headers, $body)
@@ -44,7 +44,7 @@ class AbstractEndpoint
             ->getHttpClient();
     }
 
-    private function createUrl(string $baseUrl, array $query): string
+    private function buildUrl(string $baseUrl, array $query): string
     {
         // Add application key to all requests
         $query = $query + [
