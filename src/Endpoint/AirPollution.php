@@ -38,6 +38,20 @@ class AirPollution extends AbstractEndpoint
     /**
      * @throws Exception
      */
+    public function getCurrentByLocationName(string $locationName): CurrentAirPollution
+    {
+        // Get first result (most relevant)
+        $location = $this->api->getGeocoding()->getCoordinatesByLocationName($locationName)[0];
+
+        return $this->getCurrent(
+            $location->getCoordinate()->getLatitude(),
+            $location->getCoordinate()->getLongitude()
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
     public function getForecast(float $latitude, float $longitude)
     {
         $this->validateCoordinate($latitude, $longitude);
@@ -57,7 +71,12 @@ class AirPollution extends AbstractEndpoint
     /**
      * @throws Exception
      */
-    public function getHistory(float $latitude, float $longitude, \DateTime $startDate, \DateTime $endDate)
+    public function getHistory(
+        float $latitude,
+        float $longitude,
+        \DateTimeImmutable $startDate,
+        \DateTimeImmutable $endDate
+    )
     {
         $this->validateCoordinate($latitude, $longitude);
 
