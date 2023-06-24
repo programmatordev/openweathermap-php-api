@@ -96,9 +96,9 @@ class GeocodingTest extends AbstractTest
 
     public static function provideGeocodingGetLocationNameByCoordinatesWithInvalidParamsData(): \Generator
     {
-        yield 'lower than -90 latitude' => [-91, -9.1365919];
-        yield 'greater than 90 latitude' => [91, -9.1365919];
-        yield 'lower than -180 longitude' => [38.7077507, -181];
-        yield 'greater than 180 longitude' => [38.7077507, 181];
+        yield 'latitude lower than -90' => [-91, -9.1365919];
+        yield 'latitude greater than 90' => [91, -9.1365919];
+        yield 'longitude lower than -180' => [38.7077507, -181];
+        yield 'longitude greater than 180' => [38.7077507, 181];
     }
 }
