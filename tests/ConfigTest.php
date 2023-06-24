@@ -3,6 +3,7 @@
 namespace ProgrammatorDev\OpenWeatherMap\Test;
 
 use ProgrammatorDev\OpenWeatherMap\Config;
+use ProgrammatorDev\OpenWeatherMap\Exception\InvalidApplicationKeyException;
 use ProgrammatorDev\OpenWeatherMap\HttpClient\HttpClientBuilder;
 use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
 
@@ -33,7 +34,7 @@ class ConfigTest extends AbstractTest
 
     public function testConfigEmptyApplicationKey()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidApplicationKeyException::class);
 
         new Config([
             'applicationKey' => ''

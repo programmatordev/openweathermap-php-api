@@ -5,6 +5,9 @@ namespace ProgrammatorDev\OpenWeatherMap\Endpoint;
 use Http\Client\Exception;
 use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\AirPollutionList;
 use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\CurrentAirPollution;
+use ProgrammatorDev\OpenWeatherMap\Exception\InvalidDateRangeException;
+use ProgrammatorDev\OpenWeatherMap\Exception\InvalidPastDateException;
+use ProgrammatorDev\OpenWeatherMap\Exception\OutOfRangeCoordinateException;
 use ProgrammatorDev\OpenWeatherMap\Util\ValidateCoordinateTrait;
 use ProgrammatorDev\OpenWeatherMap\Util\ValidateDateRangeTrait;
 use ProgrammatorDev\OpenWeatherMap\Util\ValidatePastDateTrait;
@@ -23,6 +26,7 @@ class AirPollution extends AbstractEndpoint
 
     /**
      * @throws Exception
+     * @throws OutOfRangeCoordinateException
      */
     public function getCurrent(float $latitude, float $longitude): CurrentAirPollution
     {
@@ -42,6 +46,7 @@ class AirPollution extends AbstractEndpoint
 
     /**
      * @throws Exception
+     * @throws OutOfRangeCoordinateException
      */
     public function getCurrentByLocationName(string $locationName): CurrentAirPollution
     {
@@ -56,6 +61,7 @@ class AirPollution extends AbstractEndpoint
 
     /**
      * @throws Exception
+     * @throws OutOfRangeCoordinateException
      */
     public function getForecast(float $latitude, float $longitude): AirPollutionList
     {
@@ -75,6 +81,7 @@ class AirPollution extends AbstractEndpoint
 
     /**
      * @throws Exception
+     * @throws OutOfRangeCoordinateException
      */
     public function getForecastByLocationName(string $locationName): AirPollutionList
     {
@@ -89,6 +96,9 @@ class AirPollution extends AbstractEndpoint
 
     /**
      * @throws Exception
+     * @throws OutOfRangeCoordinateException
+     * @throws InvalidDateRangeException
+     * @throws InvalidPastDateException
      */
     public function getHistory(
         float $latitude,
@@ -120,6 +130,9 @@ class AirPollution extends AbstractEndpoint
 
     /**
      * @throws Exception
+     * @throws OutOfRangeCoordinateException
+     * @throws InvalidDateRangeException
+     * @throws InvalidPastDateException
      */
     public function getHistoryByLocationName(
         string $locationName,
