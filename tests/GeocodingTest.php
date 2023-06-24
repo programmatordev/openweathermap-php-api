@@ -7,6 +7,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use ProgrammatorDev\OpenWeatherMap\Entity\Coordinate;
 use ProgrammatorDev\OpenWeatherMap\Entity\Geocoding\Location;
 use ProgrammatorDev\OpenWeatherMap\Entity\Geocoding\ZipLocation;
+use ProgrammatorDev\OpenWeatherMap\Exception\OutOfRangeCoordinateException;
 
 class GeocodingTest extends AbstractTest
 {
@@ -89,8 +90,7 @@ class GeocodingTest extends AbstractTest
     #[DataProvider('provideGeocodingGetLocationNameByCoordinatesWithInvalidParamsData')]
     public function testGeocodingGetLocationNameByCoordinatesWithInvalidParams(float $latitude, float $longitude)
     {
-        $this->expectException(\InvalidArgumentException::class);
-
+        $this->expectException(OutOfRangeCoordinateException::class);
         $this->getApi()->getGeocoding()->getLocationNameByCoordinates($latitude, $longitude);
     }
 

@@ -10,6 +10,9 @@ use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\AirQuality;
 use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\Component;
 use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\CurrentAirPollution;
 use ProgrammatorDev\OpenWeatherMap\Entity\Coordinate;
+use ProgrammatorDev\OpenWeatherMap\Exception\InvalidDateRangeException;
+use ProgrammatorDev\OpenWeatherMap\Exception\InvalidPastDateException;
+use ProgrammatorDev\OpenWeatherMap\Exception\OutOfRangeCoordinateException;
 
 class AirPollutionTest extends AbstractTest
 {
@@ -29,7 +32,7 @@ class AirPollutionTest extends AbstractTest
     #[DataProvider('provideInvalidCoordinateParamsData')]
     public function testGetCurrentWithInvalidParams(float $latitude, float $longitude)
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(OutOfRangeCoordinateException::class);
         $this->getApi()->getAirPollution()->getCurrent($latitude, $longitude);
     }
 
@@ -68,7 +71,7 @@ class AirPollutionTest extends AbstractTest
     #[DataProvider('provideInvalidCoordinateParamsData')]
     public function testGetForecastWithInvalidParams(float $latitude, float $longitude)
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(OutOfRangeCoordinateException::class);
         $this->getApi()->getAirPollution()->getForecast($latitude, $longitude);
     }
 
@@ -116,10 +119,11 @@ class AirPollutionTest extends AbstractTest
         float $latitude,
         float $longitude,
         \DateTimeImmutable $startDate,
-        \DateTimeImmutable $endDate
+        \DateTimeImmutable $endDate,
+        string $expectedException
     )
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException($expectedException);
         $this->getApi()->getAirPollution()->getHistory($latitude, $longitude, $startDate, $endDate);
     }
 
@@ -162,43 +166,50 @@ class AirPollutionTest extends AbstractTest
             -91,
             -9.1365919,
             new \DateTimeImmutable('-5 days'),
-            new \DateTimeImmutable('-4 days')
+            new \DateTimeImmutable('-4 days'),
+            OutOfRangeCoordinateException::class
         ];
         yield 'greater than 90 latitude' => [
             91,
             -9.1365919,
             new \DateTimeImmutable('-5 days'),
-            new \DateTimeImmutable('-4 days')
+            new \DateTimeImmutable('-4 days'),
+            OutOfRangeCoordinateException::class
         ];
         yield 'lower than -180 longitude' => [
             38.7077507,
             -181,
             new \DateTimeImmutable('-5 days'),
-            new \DateTimeImmutable('-4 days')
+            new \DateTimeImmutable('-4 days'),
+            OutOfRangeCoordinateException::class
         ];
         yield 'greater than 180 longitude' => [
             38.7077507,
             181,
             new \DateTimeImmutable('-5 days'),
-            new \DateTimeImmutable('-4 days')
+            new \DateTimeImmutable('-4 days'),
+            OutOfRangeCoordinateException::class
         ];
-        yield 'greater than now start date' => [
+        yield 'invalid past start date' => [
             38.7077507,
             -9.1365919,
             new \DateTimeImmutable('1 days'),
-            new \DateTimeImmutable('-4 days')
+            new \DateTimeImmutable('-4 days'),
+            InvalidPastDateException::class
         ];
-        yield 'greater than now end date' => [
+        yield 'invalid past end date' => [
             38.7077507,
             -9.1365919,
             new \DateTimeImmutable('-5 days'),
-            new \DateTimeImmutable('1 days')
+            new \DateTimeImmutable('1 days'),
+            InvalidPastDateException::class
         ];
         yield 'start date greater than end date' => [
             38.7077507,
             -9.1365919,
             new \DateTimeImmutable('-4 days'),
-            new \DateTimeImmutable('5 days')
+            new \DateTimeImmutable('-5 days'),
+            InvalidDateRangeException::class
         ];
     }
 
