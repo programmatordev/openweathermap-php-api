@@ -2,6 +2,7 @@
 
 namespace ProgrammatorDev\OpenWeatherMap;
 
+use ProgrammatorDev\OpenWeatherMap\Exception\InvalidApplicationKeyException;
 use ProgrammatorDev\OpenWeatherMap\HttpClient\HttpClientBuilder;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -9,6 +10,9 @@ class Config
 {
     private array $config;
 
+    /**
+     * @throws InvalidApplicationKeyException
+     */
     public function __construct(array $config = [])
     {
         $optionsResolver = new OptionsResolver();
@@ -17,7 +21,7 @@ class Config
         $this->config = $optionsResolver->resolve($config);
 
         if (empty($this->config['applicationKey'])) {
-            throw new \InvalidArgumentException('The option "applicationKey" must not be empty.');
+            throw new InvalidApplicationKeyException('The option "applicationKey" must not be empty.');
         }
     }
 
