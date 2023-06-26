@@ -31,19 +31,19 @@ class ConfigTest extends AbstractTest
         $this->assertInstanceOf(HttpClientBuilder::class, $this->config->getHttpClientBuilder());
     }
 
-    public function testConfigGetUnit()
+    public function testConfigGetMeasurementSystem()
     {
-        $this->assertSame('metric', $this->config->getUnit()); // Default value
+        $this->assertSame('metric', $this->config->getMeasurementSystem()); // Default value
     }
 
-    public function testConfigGetUnitWithOptionValue()
+    public function testConfigGetMeasurementSystemWithConfigValue()
     {
         $config = new Config([
             'applicationKey' => self::APPLICATION_KEY,
-            'unit' => 'imperial'
+            'measurementSystem' => 'imperial'
         ]);
 
-        $this->assertSame('imperial', $config->getUnit());
+        $this->assertSame('imperial', $config->getMeasurementSystem());
     }
 
     public function testConfigGetLanguage()
@@ -51,7 +51,7 @@ class ConfigTest extends AbstractTest
         $this->assertSame('en', $this->config->getLanguage()); // Default value
     }
 
-    public function testConfigGetLanguageWithOptionValue()
+    public function testConfigGetLanguageWithConfigValue()
     {
         $config = new Config([
             'applicationKey' => self::APPLICATION_KEY,
@@ -81,10 +81,10 @@ class ConfigTest extends AbstractTest
             ],
             InvalidOptionsException::class
         ];
-        yield 'invalid unit' => [
+        yield 'invalid measurement system' => [
             [
                 'applicationKey' => self::APPLICATION_KEY,
-                'unit' => 'invalid'
+                'measurementSystem' => 'invalid'
             ],
             InvalidOptionsException::class
         ];

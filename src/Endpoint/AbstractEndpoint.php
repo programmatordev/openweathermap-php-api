@@ -11,9 +11,15 @@ use Psr\Http\Message\UriInterface;
 
 class AbstractEndpoint
 {
-    public function __construct(
-        protected OpenWeatherMap $api
-    ) {}
+    protected string $measurementSystem;
+
+    protected string $language;
+
+    public function __construct(protected OpenWeatherMap $api)
+    {
+        $this->measurementSystem = $this->api->getConfig()->getMeasurementSystem();
+        $this->language = $this->api->getConfig()->getLanguage();
+    }
 
     /**
      * @throws Exception

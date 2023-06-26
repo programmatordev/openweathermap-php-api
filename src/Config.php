@@ -12,8 +12,8 @@ class Config
     public function __construct(array $options = [])
     {
         $optionsResolver = new OptionsResolver();
-
         $this->configureOptions($optionsResolver);
+
         $this->options = $optionsResolver->resolve($options);
     }
 
@@ -21,7 +21,7 @@ class Config
     {
         $optionsResolver->setDefaults([
             'httpClientBuilder' => new HttpClientBuilder(),
-            'unit' => Unit::CELSIUS,
+            'measurementSystem' => MeasurementSystem::METRIC,
             'language' => Language::ENGLISH
         ]);
 
@@ -29,13 +29,13 @@ class Config
 
         $optionsResolver->setAllowedTypes('applicationKey', 'string');
         $optionsResolver->setAllowedTypes('httpClientBuilder', HttpClientBuilder::class);
-        $optionsResolver->setAllowedTypes('unit', 'string');
+        $optionsResolver->setAllowedTypes('measurementSystem', 'string');
         $optionsResolver->setAllowedTypes('language', 'string');
 
         $optionsResolver->setAllowedValues('applicationKey', function($value) {
             return !empty($value);
         });
-        $optionsResolver->setAllowedValues('unit', Unit::getList());
+        $optionsResolver->setAllowedValues('measurementSystem', MeasurementSystem::getList());
         $optionsResolver->setAllowedValues('language', Language::getList());
     }
 
@@ -49,9 +49,9 @@ class Config
         return $this->options['httpClientBuilder'];
     }
 
-    public function getUnit(): string
+    public function getMeasurementSystem(): string
     {
-        return $this->options['unit'];
+        return $this->options['measurementSystem'];
     }
 
     public function getLanguage(): string
