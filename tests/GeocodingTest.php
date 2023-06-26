@@ -3,11 +3,11 @@
 namespace ProgrammatorDev\OpenWeatherMap\Test;
 
 use Nyholm\Psr7\Response;
-use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
 use ProgrammatorDev\OpenWeatherMap\Entity\Coordinate;
 use ProgrammatorDev\OpenWeatherMap\Entity\Geocoding\Location;
 use ProgrammatorDev\OpenWeatherMap\Entity\Geocoding\ZipLocation;
-use ProgrammatorDev\OpenWeatherMap\Exception\OutOfRangeCoordinateException;
+use ProgrammatorDev\OpenWeatherMap\Test\DataProvider\InvalidParamDataProvider;
 
 class GeocodingTest extends AbstractTest
 {
@@ -87,18 +87,14 @@ class GeocodingTest extends AbstractTest
         $this->assertSame(-9.1365919, $coordinate->getLongitude());
     }
 
-    #[DataProvider('provideGeocodingGetLocationNameByCoordinatesWithInvalidParamsData')]
-    public function testGeocodingGetLocationNameByCoordinatesWithInvalidParams(float $latitude, float $longitude)
+    #[DataProviderExternal(InvalidParamDataProvider::class, 'provideInvalidCoordinateData')]
+    public function testGeocodingGetLocationNameByCoordinatesWithInvalidCoordinate(
+        float $latitude,
+        float $longitude,
+        string $expectedException
+    )
     {
-        $this->expectException(OutOfRangeCoordinateException::class);
+        $this->expectException($expectedException);
         $this->getApi()->getGeocoding()->getLocationNameByCoordinates($latitude, $longitude);
-    }
-
-    public static function provideGeocodingGetLocationNameByCoordinatesWithInvalidParamsData(): \Generator
-    {
-        yield 'latitude lower than -90' => [-91, -9.1365919];
-        yield 'latitude greater than 90' => [91, -9.1365919];
-        yield 'longitude lower than -180' => [38.7077507, -181];
-        yield 'longitude greater than 180' => [38.7077507, 181];
     }
 }

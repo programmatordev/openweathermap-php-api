@@ -3,16 +3,14 @@
 namespace ProgrammatorDev\OpenWeatherMap\Test;
 
 use Nyholm\Psr7\Response;
-use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
 use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\AirPollution;
 use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\AirPollutionList;
 use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\AirQuality;
 use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\Component;
 use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\CurrentAirPollution;
 use ProgrammatorDev\OpenWeatherMap\Entity\Coordinate;
-use ProgrammatorDev\OpenWeatherMap\Exception\InvalidDateRangeException;
-use ProgrammatorDev\OpenWeatherMap\Exception\InvalidPastDateException;
-use ProgrammatorDev\OpenWeatherMap\Exception\OutOfRangeCoordinateException;
+use ProgrammatorDev\OpenWeatherMap\Test\DataProvider\InvalidParamDataProvider;
 
 class AirPollutionTest extends AbstractTest
 {
@@ -29,10 +27,10 @@ class AirPollutionTest extends AbstractTest
         $this->assertCurrentResponse($response);
     }
 
-    #[DataProvider('provideInvalidCoordinateParamsData')]
-    public function testGetCurrentWithInvalidParams(float $latitude, float $longitude)
+    #[DataProviderExternal(InvalidParamDataProvider::class, 'provideInvalidCoordinateData')]
+    public function testGetCurrentWithInvalidCoordinate(float $latitude, float $longitude, string $expectedException)
     {
-        $this->expectException(OutOfRangeCoordinateException::class);
+        $this->expectException($expectedException);
         $this->getApi()->getAirPollution()->getCurrent($latitude, $longitude);
     }
 
@@ -68,10 +66,10 @@ class AirPollutionTest extends AbstractTest
         $this->assertForecastResponse($response);
     }
 
-    #[DataProvider('provideInvalidCoordinateParamsData')]
-    public function testGetForecastWithInvalidParams(float $latitude, float $longitude)
+    #[DataProviderExternal(InvalidParamDataProvider::class, 'provideInvalidCoordinateData')]
+    public function testGetForecastWithInvalidCoordinate(float $latitude, float $longitude, string $expectedException)
     {
-        $this->expectException(OutOfRangeCoordinateException::class);
+        $this->expectException($expectedException);
         $this->getApi()->getAirPollution()->getForecast($latitude, $longitude);
     }
 
@@ -114,17 +112,27 @@ class AirPollutionTest extends AbstractTest
         $this->assertHistoryResponse($response);
     }
 
-    #[DataProvider('provideInvalidCoordinateAndDateParamsData')]
-    public function testGetHistoryWithInvalidParams(
-        float $latitude,
-        float $longitude,
+    #[DataProviderExternal(InvalidParamDataProvider::class, 'provideInvalidCoordinateData')]
+    public function testGetHistoryWithInvalidCoordinate(float $latitude, float $longitude, string $expectedException)
+    {
+        $this->expectException($expectedException);
+
+        $startDate = new \DateTimeImmutable('-5 days');
+        $endDate = new \DateTimeImmutable('-4 days');
+
+        $this->getApi()->getAirPollution()->getHistory($latitude, $longitude, $startDate, $endDate);
+    }
+
+    #[DataProviderExternal(InvalidParamDataProvider::class, 'provideInvalidPastDateData')]
+    #[DataProviderExternal(InvalidParamDataProvider::class, 'provideInvalidDateRangeData')]
+    public function testGetHistoryWithInvalidDates(
         \DateTimeImmutable $startDate,
         \DateTimeImmutable $endDate,
         string $expectedException
     )
     {
         $this->expectException($expectedException);
-        $this->getApi()->getAirPollution()->getHistory($latitude, $longitude, $startDate, $endDate);
+        $this->getApi()->getAirPollution()->getHistory(38.7077507, -9.1365919, $startDate, $endDate);
     }
 
     public function testGetHistoryByLocationName()
@@ -150,67 +158,6 @@ class AirPollutionTest extends AbstractTest
             new \DateTimeImmutable('-4 days', $utcTimezone)
         );
         $this->assertHistoryResponse($response);
-    }
-
-    public static function provideInvalidCoordinateParamsData(): \Generator
-    {
-        yield 'latitude lower than -90' => [-91, -9.1365919];
-        yield 'latitude greater than 90' => [91, -9.1365919];
-        yield 'longitude lower than -180' => [38.7077507, -181];
-        yield 'longitude greater than 180' => [38.7077507, 181];
-    }
-
-    public static function provideInvalidCoordinateAndDateParamsData(): \Generator
-    {
-        yield 'latitude lower than -90' => [
-            -91,
-            -9.1365919,
-            new \DateTimeImmutable('-5 days'),
-            new \DateTimeImmutable('-4 days'),
-            OutOfRangeCoordinateException::class
-        ];
-        yield 'latitude greater than 90' => [
-            91,
-            -9.1365919,
-            new \DateTimeImmutable('-5 days'),
-            new \DateTimeImmutable('-4 days'),
-            OutOfRangeCoordinateException::class
-        ];
-        yield 'longitude lower than -180' => [
-            38.7077507,
-            -181,
-            new \DateTimeImmutable('-5 days'),
-            new \DateTimeImmutable('-4 days'),
-            OutOfRangeCoordinateException::class
-        ];
-        yield 'longitude greater than 180' => [
-            38.7077507,
-            181,
-            new \DateTimeImmutable('-5 days'),
-            new \DateTimeImmutable('-4 days'),
-            OutOfRangeCoordinateException::class
-        ];
-        yield 'invalid past start date' => [
-            38.7077507,
-            -9.1365919,
-            new \DateTimeImmutable('1 days'),
-            new \DateTimeImmutable('-4 days'),
-            InvalidPastDateException::class
-        ];
-        yield 'invalid past end date' => [
-            38.7077507,
-            -9.1365919,
-            new \DateTimeImmutable('-5 days'),
-            new \DateTimeImmutable('1 days'),
-            InvalidPastDateException::class
-        ];
-        yield 'start date greater than end date' => [
-            38.7077507,
-            -9.1365919,
-            new \DateTimeImmutable('-4 days'),
-            new \DateTimeImmutable('-5 days'),
-            InvalidDateRangeException::class
-        ];
     }
 
     private function assertCurrentResponse(CurrentAirPollution $response): void
