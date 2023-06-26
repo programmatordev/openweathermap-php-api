@@ -10,6 +10,8 @@ use ProgrammatorDev\OpenWeatherMap\OpenWeatherMap;
 
 class AbstractTest extends TestCase
 {
+    protected const APPLICATION_KEY = 'testappkey';
+
     protected Client $mockHttpClient;
 
     protected function setUp(): void
@@ -23,7 +25,7 @@ class AbstractTest extends TestCase
     {
         return new OpenWeatherMap(
             new Config([
-                'applicationKey' => 'testappkey',
+                'applicationKey' => self::APPLICATION_KEY,
                 'httpClientBuilder' => new HttpClientBuilder($this->mockHttpClient)
             ])
         );

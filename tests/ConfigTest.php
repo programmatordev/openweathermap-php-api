@@ -2,9 +2,10 @@
 
 namespace ProgrammatorDev\OpenWeatherMap\Test;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use ProgrammatorDev\OpenWeatherMap\Config;
-use ProgrammatorDev\OpenWeatherMap\Exception\InvalidApplicationKeyException;
 use ProgrammatorDev\OpenWeatherMap\HttpClient\HttpClientBuilder;
+use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
 
 class ConfigTest extends AbstractTest
@@ -16,7 +17,7 @@ class ConfigTest extends AbstractTest
         parent::setUp();
 
         $this->config = new Config([
-            'applicationKey' => 'testappkey'
+            'applicationKey' => self::APPLICATION_KEY
         ]);
     }
 
@@ -25,24 +26,74 @@ class ConfigTest extends AbstractTest
         $this->assertSame('testappkey', $this->config->getApplicationKey());
     }
 
-    public function testConfigRequiredApplicationKey()
-    {
-        $this->expectException(MissingOptionsException::class);
-
-        new Config();
-    }
-
-    public function testConfigEmptyApplicationKey()
-    {
-        $this->expectException(InvalidApplicationKeyException::class);
-
-        new Config([
-            'applicationKey' => ''
-        ]);
-    }
-
     public function testConfigGetHttpClientBuilder()
     {
         $this->assertInstanceOf(HttpClientBuilder::class, $this->config->getHttpClientBuilder());
+    }
+
+    public function testConfigGetUnit()
+    {
+        $this->assertSame('metric', $this->config->getUnit()); // Default value
+    }
+
+    public function testConfigGetUnitWithOptionValue()
+    {
+        $config = new Config([
+            'applicationKey' => self::APPLICATION_KEY,
+            'unit' => 'imperial'
+        ]);
+
+        $this->assertSame('imperial', $config->getUnit());
+    }
+
+    public function testConfigGetLanguage()
+    {
+        $this->assertSame('en', $this->config->getLanguage()); // Default value
+    }
+
+    public function testConfigGetLanguageWithOptionValue()
+    {
+        $config = new Config([
+            'applicationKey' => self::APPLICATION_KEY,
+            'language' => 'pt'
+        ]);
+
+        $this->assertSame('pt', $config->getLanguage());
+    }
+
+    #[DataProvider('provideInvalidConfigOptionsData')]
+    public function testConfigWithInvalidOptions(array $options, string $expectedException)
+    {
+        $this->expectException($expectedException);
+
+        new Config($options);
+    }
+
+    public static function provideInvalidConfigOptionsData(): \Generator
+    {
+        yield 'missing application key' => [
+            [],
+            MissingOptionsException::class
+        ];
+        yield 'empty application key' => [
+            [
+                'applicationKey' => ''
+            ],
+            InvalidOptionsException::class
+        ];
+        yield 'invalid unit' => [
+            [
+                'applicationKey' => self::APPLICATION_KEY,
+                'unit' => 'invalid'
+            ],
+            InvalidOptionsException::class
+        ];
+        yield 'invalid language' => [
+            [
+                'applicationKey' => self::APPLICATION_KEY,
+                'language' => 'invalid'
+            ],
+            InvalidOptionsException::class
+        ];
     }
 }

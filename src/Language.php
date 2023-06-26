@@ -8,21 +8,23 @@ class Language
     public const ALBANIAN = 'al';
     public const ARABIC = 'ar';
     public const AZERBAIJANI = 'az';
+    public const BASQUE = 'eu';
     public const BULGARIAN = 'bg';
     public const CATALAN = 'ca';
+    public const CHINESE_SIMPLIFIED = 'zh_cn';
+    public const CHINESE_TRADITIONAL = 'zh_tw';
+    public const CROATIAN = 'hr';
     public const CZECH = 'za';
     public const DANISH = 'da';
-    public const GERMAN = 'de';
-    public const GREEK = 'el';
+    public const DUTCH = 'nl';
     public const ENGLISH = 'en';
-    public const BASQUE = 'eu';
-    public const PERSIAN = 'fa';
     public const FINNISH = 'fi';
     public const FRENCH = 'fr';
     public const GALICIAN = 'gl';
-    public const HEBREW = 'he';
+    public const GERMAN = 'de';
+    public const GREEK = 'el';
     public const HINDI = 'hi';
-    public const CROATIAN = 'hr';
+    public const HEBREW = 'he';
     public const HUNGARIAN = 'hu';
     public const INDONESIAN = 'id';
     public const ITALIAN = 'it';
@@ -32,22 +34,72 @@ class Language
     public const LITHUANIAN = 'lt';
     public const MACEDONIAN = 'mk';
     public const NORWEGIAN = 'no';
-    public const DUTCH = 'nl';
+    public const PERSIAN = 'fa';
     public const POLISH = 'pl';
     public const PORTUGUESE = 'pt';
     public const PORTUGUESE_BRAZIL = 'pt_br';
     public const ROMANIAN = 'ro';
     public const RUSSIAN = 'ru';
-    public const SWEDISH = 'sv';
+    public const SERBIAN = 'sr';
     public const SLOVAK = 'sk';
     public const SLOVENIAN = 'sl';
     public const SPANISH = 'es';
-    public const SERBIAN = 'sr';
+    public const SWEDISH = 'sv';
     public const THAI = 'th';
     public const TURKISH = 'tr';
     public const UKRAINIAN = 'ua';
     public const VIETNAMESE = 'vi';
-    public const CHINESE_SIMPLIFIED = 'zh_cn';
-    public const CHINESE_TRADITIONAL = 'zh_tw';
     public const ZULU = 'zu';
+
+    public static function getList(): array
+    {
+        return [
+            self::AFRIKAANS,
+            self::ALBANIAN,
+            self::ARABIC,
+            self::AZERBAIJANI,
+            self::BASQUE,
+            self::BULGARIAN,
+            self::CATALAN,
+            self::CHINESE_SIMPLIFIED,
+            self::CHINESE_TRADITIONAL,
+            self::CROATIAN,
+            self::CZECH,
+            self::DANISH,
+            self::DUTCH,
+            self::ENGLISH,
+            self::FINNISH,
+            self::FRENCH,
+            self::GALICIAN,
+            self::GERMAN,
+            self::GREEK,
+            self::HEBREW,
+            self::HINDI,
+            self::HUNGARIAN,
+            self::INDONESIAN,
+            self::ITALIAN,
+            self::JAPANESE,
+            self::KOREAN,
+            self::LATVIAN,
+            self::LITHUANIAN,
+            self::MACEDONIAN,
+            self::NORWEGIAN,
+            self::PERSIAN,
+            self::POLISH,
+            self::PORTUGUESE,
+            self::PORTUGUESE_BRAZIL,
+            self::ROMANIAN,
+            self::RUSSIAN,
+            self::SERBIAN,
+            self::SLOVAK,
+            self::SLOVENIAN,
+            self::SPANISH,
+            self::SWEDISH,
+            self::THAI,
+            self::TURKISH,
+            self::UKRAINIAN,
+            self::VIETNAMESE,
+            self::ZULU
+        ];
+    }
 }
