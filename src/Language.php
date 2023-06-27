@@ -14,7 +14,7 @@ class Language
     public const CHINESE_SIMPLIFIED = 'zh_cn';
     public const CHINESE_TRADITIONAL = 'zh_tw';
     public const CROATIAN = 'hr';
-    public const CZECH = 'za';
+    public const CZECH = 'cz';
     public const DANISH = 'da';
     public const DUTCH = 'nl';
     public const ENGLISH = 'en';
@@ -34,7 +34,7 @@ class Language
     public const LITHUANIAN = 'lt';
     public const MACEDONIAN = 'mk';
     public const NORWEGIAN = 'no';
-    public const PERSIAN = 'fa';
+    public const PERSIAN_FARSI = 'fa';
     public const POLISH = 'pl';
     public const PORTUGUESE = 'pt';
     public const PORTUGUESE_BRAZIL = 'pt_br';
@@ -58,23 +58,22 @@ class Language
             self::ALBANIAN,
             self::ARABIC,
             self::AZERBAIJANI,
-            self::BASQUE,
             self::BULGARIAN,
             self::CATALAN,
-            self::CHINESE_SIMPLIFIED,
-            self::CHINESE_TRADITIONAL,
-            self::CROATIAN,
             self::CZECH,
             self::DANISH,
-            self::DUTCH,
+            self::GERMAN,
+            self::GREEK,
             self::ENGLISH,
+            self::SPANISH,
+            self::BASQUE,
+            self::PERSIAN_FARSI,
             self::FINNISH,
             self::FRENCH,
             self::GALICIAN,
-            self::GERMAN,
-            self::GREEK,
             self::HEBREW,
             self::HINDI,
+            self::CROATIAN,
             self::HUNGARIAN,
             self::INDONESIAN,
             self::ITALIAN,
@@ -84,21 +83,22 @@ class Language
             self::LITHUANIAN,
             self::MACEDONIAN,
             self::NORWEGIAN,
-            self::PERSIAN,
+            self::DUTCH,
             self::POLISH,
             self::PORTUGUESE,
             self::PORTUGUESE_BRAZIL,
             self::ROMANIAN,
             self::RUSSIAN,
-            self::SERBIAN,
+            self::SWEDISH,
             self::SLOVAK,
             self::SLOVENIAN,
-            self::SPANISH,
-            self::SWEDISH,
+            self::SERBIAN,
             self::THAI,
             self::TURKISH,
             self::UKRAINIAN,
             self::VIETNAMESE,
+            self::CHINESE_SIMPLIFIED,
+            self::CHINESE_TRADITIONAL,
             self::ZULU
         ];
     }
