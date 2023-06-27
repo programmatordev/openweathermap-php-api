@@ -36,14 +36,14 @@ class Location
         $this->localNames = $data['local_names'] ?? null;
         $this->state = $data['state'] ?? null;
 
-        $this->sunriseAt = ( ! empty($data['sunrise']))
+        $this->sunriseAt = (isset($data['sunrise']))
             ? \DateTimeImmutable::createFromFormat('U', $data['sunrise'], new \DateTimeZone('UTC'))
             : null;
-        $this->sunsetAt = ( ! empty($data['sunset']))
+        $this->sunsetAt = (isset($data['sunset']))
             ? \DateTimeImmutable::createFromFormat('U', $data['sunset'], new \DateTimeZone('UTC'))
             : null;
 
-        $this->timezone = ( ! empty($data['timezone_offset']))
+        $this->timezone = (isset($data['timezone_offset']))
             ? new Timezone(['timezone_offset' => $data['timezone_offset']])
             : null;
 
