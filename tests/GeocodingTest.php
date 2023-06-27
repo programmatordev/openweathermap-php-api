@@ -5,8 +5,8 @@ namespace ProgrammatorDev\OpenWeatherMap\Test;
 use Nyholm\Psr7\Response;
 use PHPUnit\Framework\Attributes\DataProviderExternal;
 use ProgrammatorDev\OpenWeatherMap\Entity\Coordinate;
-use ProgrammatorDev\OpenWeatherMap\Entity\Geocoding\Location;
-use ProgrammatorDev\OpenWeatherMap\Entity\Geocoding\ZipLocation;
+use ProgrammatorDev\OpenWeatherMap\Entity\Geocoding\ZipCodeLocation;
+use ProgrammatorDev\OpenWeatherMap\Entity\Location;
 use ProgrammatorDev\OpenWeatherMap\Test\DataProvider\InvalidParamDataProvider;
 
 class GeocodingTest extends AbstractTest
@@ -48,7 +48,7 @@ class GeocodingTest extends AbstractTest
         );
 
         $response = $this->getApi()->getGeocoding()->getCoordinatesByZipCode('1000-001', 'pt');
-        $this->assertInstanceOf(ZipLocation::class, $response);
+        $this->assertInstanceOf(ZipCodeLocation::class, $response);
 
         $this->assertSame('1000-001', $response->getZipCode());
         $this->assertSame('Lisbon', $response->getName());
