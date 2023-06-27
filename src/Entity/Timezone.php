@@ -12,7 +12,6 @@ class Timezone
     {
         $this->offset = $data['timezone_offset'];
 
-        // Optional data
         $this->identifier = $data['timezone'] ?? null;
     }
 

@@ -6,11 +6,11 @@ class Location
 {
     private ?int $id;
 
-    private string $name;
+    private ?string $name;
 
     private ?string $state;
 
-    private string $countryCode;
+    private ?string $countryCode;
 
     private ?array $localNames;
 
@@ -24,15 +24,14 @@ class Location
 
     public function __construct(array $data)
     {
-        $this->name = $data['name'];
-        $this->countryCode = $data['country'];
         $this->coordinate = new Coordinate([
             'lat' => $data['lat'],
             'lon' => $data['lon']
         ]);
 
-        // Optional data
         $this->id = $data['id'] ?? null;
+        $this->name = $data['name'] ?? null;
+        $this->countryCode = $data['country'] ?? null;
         $this->localNames = $data['local_names'] ?? null;
         $this->state = $data['state'] ?? null;
 
@@ -56,7 +55,7 @@ class Location
         return $this->id;
     }
 
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -66,7 +65,7 @@ class Location
         return $this->state;
     }
 
-    public function getCountryCode(): string
+    public function getCountryCode(): ?string
     {
         return $this->countryCode;
     }
