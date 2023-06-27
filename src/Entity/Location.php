@@ -4,19 +4,23 @@ namespace ProgrammatorDev\OpenWeatherMap\Entity;
 
 class Location
 {
+    private ?int $id;
+
     private string $name;
+
+    private ?string $state;
 
     private string $countryCode;
 
-    private Coordinate $coordinate;
-
     private ?array $localNames;
 
-    private ?string $localFeatureName;
+    private Coordinate $coordinate;
 
-    private ?string $localAsciiName;
+    private ?Timezone $timezone;
 
-    private ?string $state;
+    private ?\DateTimeImmutable $sunriseAt;
+
+    private ?\DateTimeImmutable $sunsetAt;
 
     public function __construct(array $data)
     {
@@ -28,13 +32,28 @@ class Location
         ]);
 
         // Optional data
+        $this->id = $data['id'] ?? null;
         $this->localNames = $data['local_names'] ?? null;
-        $this->localFeatureName = $this->localNames['feature_name'] ?? null;
-        $this->localAsciiName = $this->localNames['ascii'] ?? null;
         $this->state = $data['state'] ?? null;
+
+        $this->sunriseAt = ( ! empty($data['sunrise']))
+            ? \DateTimeImmutable::createFromFormat('U', $data['sunrise'], new \DateTimeZone('UTC'))
+            : null;
+        $this->sunsetAt = ( ! empty($data['sunset']))
+            ? \DateTimeImmutable::createFromFormat('U', $data['sunset'], new \DateTimeZone('UTC'))
+            : null;
+
+        $this->timezone = ( ! empty($data['timezone_offset']))
+            ? new Timezone(['timezone_offset' => $data['timezone_offset']])
+            : null;
 
         unset($this->localNames['feature_name']);
         unset($this->localNames['ascii']);
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
     }
 
     public function getName(): string
@@ -42,14 +61,14 @@ class Location
         return $this->name;
     }
 
+    public function getState(): ?string
+    {
+        return $this->state;
+    }
+
     public function getCountryCode(): string
     {
         return $this->countryCode;
-    }
-
-    public function getCoordinate(): Coordinate
-    {
-        return $this->coordinate;
     }
 
     public function getLocalNames(): array
@@ -63,18 +82,23 @@ class Location
         return $this->localNames[$countryCode] ?? null;
     }
 
-    public function getLocalFeatureName(): ?string
+    public function getCoordinate(): Coordinate
     {
-        return $this->localFeatureName;
+        return $this->coordinate;
     }
 
-    public function getLocalAsciiName(): ?string
+    public function getTimezone(): ?Timezone
     {
-        return $this->localAsciiName;
+        return $this->timezone;
     }
 
-    public function getState(): ?string
+    public function getSunriseAt(): ?\DateTimeImmutable
     {
-        return $this->state;
+        return $this->sunriseAt;
+    }
+
+    public function getSunsetAt(): ?\DateTimeImmutable
+    {
+        return $this->sunsetAt;
     }
 }
