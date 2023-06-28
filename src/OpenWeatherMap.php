@@ -4,6 +4,7 @@ namespace ProgrammatorDev\OpenWeatherMap;
 
 use ProgrammatorDev\OpenWeatherMap\Endpoint\AirPollution;
 use ProgrammatorDev\OpenWeatherMap\Endpoint\Geocoding;
+use ProgrammatorDev\OpenWeatherMap\Endpoint\Weather;
 
 class OpenWeatherMap
 {
@@ -16,13 +17,18 @@ class OpenWeatherMap
         return $this->config;
     }
 
-    public function getGeocoding(): Geocoding
+    public function getWeather(): Weather
     {
-        return new Geocoding($this);
+        return new Weather($this);
     }
 
     public function getAirPollution(): AirPollution
     {
         return new AirPollution($this);
+    }
+
+    public function getGeocoding(): Geocoding
+    {
+        return new Geocoding($this);
     }
 }

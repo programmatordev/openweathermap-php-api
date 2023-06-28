@@ -5,8 +5,8 @@ namespace ProgrammatorDev\OpenWeatherMap\Test;
 use Nyholm\Psr7\Response;
 use PHPUnit\Framework\Attributes\DataProviderExternal;
 use ProgrammatorDev\OpenWeatherMap\Entity\Coordinate;
-use ProgrammatorDev\OpenWeatherMap\Entity\Geocoding\Location;
-use ProgrammatorDev\OpenWeatherMap\Entity\Geocoding\ZipLocation;
+use ProgrammatorDev\OpenWeatherMap\Entity\Geocoding\ZipCodeLocation;
+use ProgrammatorDev\OpenWeatherMap\Entity\Location;
 use ProgrammatorDev\OpenWeatherMap\Test\DataProvider\InvalidParamDataProvider;
 
 class GeocodingTest extends AbstractTest
@@ -21,21 +21,7 @@ class GeocodingTest extends AbstractTest
         );
 
         $response = $this->getApi()->getGeocoding()->getCoordinatesByLocationName('lisbon, pt');
-        $this->assertContainsOnlyInstancesOf(Location::class, $response);
-
-        $location = $response[0];
-        $this->assertSame('Lisbon', $location->getName());
-        $this->assertIsArray($location->getLocalNames());
-        $this->assertSame('Lisboa', $location->getLocalName('pt'));
-        $this->assertSame('Lisbon', $location->getLocalFeatureName());
-        $this->assertSame('Lisbon', $location->getLocalAsciiName());
-        $this->assertSame('PT', $location->getCountryCode());
-        $this->assertSame(null, $location->getState());
-
-        $coordinate = $response[0]->getCoordinate();
-        $this->assertInstanceOf(Coordinate::class, $coordinate);
-        $this->assertSame(38.7077507, $coordinate->getLatitude());
-        $this->assertSame(-9.1365919, $coordinate->getLongitude());
+        $this->assertLocationListResponse($response);
     }
 
     public function testGeocodingGetCoordinatesByZipCode()
@@ -48,7 +34,7 @@ class GeocodingTest extends AbstractTest
         );
 
         $response = $this->getApi()->getGeocoding()->getCoordinatesByZipCode('1000-001', 'pt');
-        $this->assertInstanceOf(ZipLocation::class, $response);
+        $this->assertInstanceOf(ZipCodeLocation::class, $response);
 
         $this->assertSame('1000-001', $response->getZipCode());
         $this->assertSame('Lisbon', $response->getName());
@@ -70,21 +56,7 @@ class GeocodingTest extends AbstractTest
         );
 
         $response = $this->getApi()->getGeocoding()->getLocationNameByCoordinates(38.7077507, -9.1365919);
-        $this->assertContainsOnlyInstancesOf(Location::class, $response);
-
-        $location = $response[0];
-        $this->assertSame('Lisbon', $location->getName());
-        $this->assertIsArray($location->getLocalNames());
-        $this->assertSame('Lisboa', $location->getLocalName('pt'));
-        $this->assertSame('Lisbon', $location->getLocalFeatureName());
-        $this->assertSame('Lisbon', $location->getLocalAsciiName());
-        $this->assertSame('PT', $location->getCountryCode());
-        $this->assertSame(null, $location->getState());
-
-        $coordinate = $response[0]->getCoordinate();
-        $this->assertInstanceOf(Coordinate::class, $coordinate);
-        $this->assertSame(38.7077507, $coordinate->getLatitude());
-        $this->assertSame(-9.1365919, $coordinate->getLongitude());
+        $this->assertLocationListResponse($response);
     }
 
     #[DataProviderExternal(InvalidParamDataProvider::class, 'provideInvalidCoordinateData')]
@@ -96,5 +68,29 @@ class GeocodingTest extends AbstractTest
     {
         $this->expectException($expectedException);
         $this->getApi()->getGeocoding()->getLocationNameByCoordinates($latitude, $longitude);
+    }
+
+    /**
+     * @param Location[] $response
+     */
+    private function assertLocationListResponse(array $response): void
+    {
+        $this->assertContainsOnlyInstancesOf(Location::class, $response);
+
+        $location = $response[0];
+        $this->assertSame(null, $location->getId());
+        $this->assertSame('Lisbon', $location->getName());
+        $this->assertSame(null, $location->getState());
+        $this->assertSame('PT', $location->getCountryCode());
+        $this->assertIsArray($location->getLocalNames());
+        $this->assertSame('Lisboa', $location->getLocalName('pt'));
+        $this->assertSame(null, $location->getTimezone());
+        $this->assertSame(null, $location->getSunriseAt());
+        $this->assertSame(null, $location->getSunsetAt());
+
+        $coordinate = $response[0]->getCoordinate();
+        $this->assertInstanceOf(Coordinate::class, $coordinate);
+        $this->assertSame(38.7077507, $coordinate->getLatitude());
+        $this->assertSame(-9.1365919, $coordinate->getLongitude());
     }
 }

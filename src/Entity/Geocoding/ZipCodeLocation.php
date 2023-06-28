@@ -4,7 +4,7 @@ namespace ProgrammatorDev\OpenWeatherMap\Entity\Geocoding;
 
 use ProgrammatorDev\OpenWeatherMap\Entity\Coordinate;
 
-class ZipLocation
+class ZipCodeLocation
 {
     private string $zipCode;
 

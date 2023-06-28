@@ -3,8 +3,8 @@
 namespace ProgrammatorDev\OpenWeatherMap\Endpoint;
 
 use Http\Client\Exception;
-use ProgrammatorDev\OpenWeatherMap\Entity\Geocoding\Location;
-use ProgrammatorDev\OpenWeatherMap\Entity\Geocoding\ZipLocation;
+use ProgrammatorDev\OpenWeatherMap\Entity\Geocoding\ZipCodeLocation;
+use ProgrammatorDev\OpenWeatherMap\Entity\Location;
 use ProgrammatorDev\OpenWeatherMap\Exception\OutOfRangeCoordinateException;
 use ProgrammatorDev\OpenWeatherMap\Util\CreateEntityListTrait;
 use ProgrammatorDev\OpenWeatherMap\Util\ValidateCoordinateTrait;
@@ -41,7 +41,7 @@ class Geocoding extends AbstractEndpoint
     /**
      * @throws Exception
      */
-    public function getCoordinatesByZipCode(string $zipCode, string $countryCode): ZipLocation
+    public function getCoordinatesByZipCode(string $zipCode, string $countryCode): ZipCodeLocation
     {
         $data = $this->sendRequest(
             method: 'GET',
@@ -51,7 +51,7 @@ class Geocoding extends AbstractEndpoint
             ]
         );
 
-        return new ZipLocation($data);
+        return new ZipCodeLocation($data);
     }
 
     /**
