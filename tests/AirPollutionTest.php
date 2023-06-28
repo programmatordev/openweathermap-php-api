@@ -14,7 +14,7 @@ use ProgrammatorDev\OpenWeatherMap\Test\DataProvider\InvalidParamDataProvider;
 
 class AirPollutionTest extends AbstractTest
 {
-    public function testGetCurrent()
+    public function testAirPollutionGetCurrent()
     {
         $this->mockHttpClient->addResponse(
             new Response(
@@ -34,7 +34,7 @@ class AirPollutionTest extends AbstractTest
         $this->getApi()->getAirPollution()->getCurrent($latitude, $longitude);
     }
 
-    public function testGetCurrentByLocationName()
+    public function testAirPollutionGetCurrentByLocationName()
     {
         $this->mockHttpClient->addResponse(
             new Response(
@@ -53,7 +53,7 @@ class AirPollutionTest extends AbstractTest
         $this->assertCurrentResponse($response);
     }
 
-    public function testGetForecast()
+    public function testAirPollutionGetForecast()
     {
         $this->mockHttpClient->addResponse(
             new Response(
@@ -73,7 +73,7 @@ class AirPollutionTest extends AbstractTest
         $this->getApi()->getAirPollution()->getForecast($latitude, $longitude);
     }
 
-    public function testGetForecastByLocationName()
+    public function testAirPollutionGetForecastByLocationName()
     {
         $this->mockHttpClient->addResponse(
             new Response(
@@ -92,7 +92,7 @@ class AirPollutionTest extends AbstractTest
         $this->assertForecastResponse($response);
     }
 
-    public function testGetHistory()
+    public function testAirPollutionGetHistory()
     {
         $this->mockHttpClient->addResponse(
             new Response(
@@ -113,7 +113,7 @@ class AirPollutionTest extends AbstractTest
     }
 
     #[DataProviderExternal(InvalidParamDataProvider::class, 'provideInvalidCoordinateData')]
-    public function testGetHistoryWithInvalidCoordinate(float $latitude, float $longitude, string $expectedException)
+    public function testAirPollutionGetHistoryWithInvalidCoordinate(float $latitude, float $longitude, string $expectedException)
     {
         $this->expectException($expectedException);
 
@@ -125,7 +125,7 @@ class AirPollutionTest extends AbstractTest
 
     #[DataProviderExternal(InvalidParamDataProvider::class, 'provideInvalidPastDateData')]
     #[DataProviderExternal(InvalidParamDataProvider::class, 'provideInvalidDateRangeData')]
-    public function testGetHistoryWithInvalidDates(
+    public function testAirPollutionGetHistoryWithInvalidDates(
         \DateTimeImmutable $startDate,
         \DateTimeImmutable $endDate,
         string $expectedException
@@ -135,7 +135,7 @@ class AirPollutionTest extends AbstractTest
         $this->getApi()->getAirPollution()->getHistory(38.7077507, -9.1365919, $startDate, $endDate);
     }
 
-    public function testGetHistoryByLocationName()
+    public function testAirPollutionGetHistoryByLocationName()
     {
         $this->mockHttpClient->addResponse(
             new Response(
