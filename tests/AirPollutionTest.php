@@ -167,6 +167,15 @@ class AirPollutionTest extends AbstractTest
 
         $location = $response->getLocation();
         $this->assertInstanceOf(Location::class, $location);
+        $this->assertSame(null, $location->getId());
+        $this->assertSame(null, $location->getName());
+        $this->assertSame(null, $location->getState());
+        $this->assertSame(null, $location->getCountryCode());
+        $this->assertSame(null, $location->getLocalNames());
+        $this->assertSame(null, $location->getPopulation());
+        $this->assertSame(null, $location->getTimezone());
+        $this->assertSame(null, $location->getSunriseAt());
+        $this->assertSame(null, $location->getSunsetAt());
 
         $coordinate = $location->getCoordinate();
         $this->assertInstanceOf(Coordinate::class, $coordinate);
@@ -200,6 +209,15 @@ class AirPollutionTest extends AbstractTest
 
         $location = $response->getLocation();
         $this->assertInstanceOf(Location::class, $location);
+        $this->assertSame(null, $location->getId());
+        $this->assertSame(null, $location->getName());
+        $this->assertSame(null, $location->getState());
+        $this->assertSame(null, $location->getCountryCode());
+        $this->assertSame(null, $location->getLocalNames());
+        $this->assertSame(null, $location->getPopulation());
+        $this->assertSame(null, $location->getTimezone());
+        $this->assertSame(null, $location->getSunriseAt());
+        $this->assertSame(null, $location->getSunsetAt());
 
         $coordinate = $location->getCoordinate();
         $this->assertInstanceOf(Coordinate::class, $coordinate);
@@ -236,6 +254,15 @@ class AirPollutionTest extends AbstractTest
 
         $location = $response->getLocation();
         $this->assertInstanceOf(Location::class, $location);
+        $this->assertSame(null, $location->getId());
+        $this->assertSame(null, $location->getName());
+        $this->assertSame(null, $location->getState());
+        $this->assertSame(null, $location->getCountryCode());
+        $this->assertSame(null, $location->getLocalNames());
+        $this->assertSame(null, $location->getPopulation());
+        $this->assertSame(null, $location->getTimezone());
+        $this->assertSame(null, $location->getSunriseAt());
+        $this->assertSame(null, $location->getSunsetAt());
 
         $coordinate = $location->getCoordinate();
         $this->assertInstanceOf(Coordinate::class, $coordinate);

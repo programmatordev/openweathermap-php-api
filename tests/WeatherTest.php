@@ -124,6 +124,7 @@ class WeatherTest extends AbstractTest
         $this->assertSame('Chiado', $location->getName());
         $this->assertSame('PT', $location->getCountryCode());
         $this->assertSame(null, $location->getLocalNames());
+        $this->assertSame(null, $location->getPopulation());
 
         $coordinate = $location->getCoordinate();
         $this->assertInstanceOf(Coordinate::class, $coordinate);

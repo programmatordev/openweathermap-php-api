@@ -84,6 +84,7 @@ class GeocodingTest extends AbstractTest
         $this->assertSame('PT', $location->getCountryCode());
         $this->assertIsArray($location->getLocalNames());
         $this->assertSame('Lisboa', $location->getLocalName('pt'));
+        $this->assertSame(null, $location->getPopulation());
         $this->assertSame(null, $location->getTimezone());
         $this->assertSame(null, $location->getSunriseAt());
         $this->assertSame(null, $location->getSunsetAt());
