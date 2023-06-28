@@ -18,7 +18,7 @@ class AirPollution extends AbstractEndpoint
     use ValidateDateRangeTrait;
     use ValidatePastDateTrait;
 
-    private string $urlCurrentAirPollution = 'https://api.openweathermap.org/data/2.5/air_pollution';
+    private string $urlAirPollution = 'https://api.openweathermap.org/data/2.5/air_pollution';
 
     private string $urlAirPollutionForecast = 'https://api.openweathermap.org/data/2.5/air_pollution/forecast';
 
@@ -34,7 +34,7 @@ class AirPollution extends AbstractEndpoint
 
         $data = $this->sendRequest(
             method: 'GET',
-            baseUrl: $this->urlCurrentAirPollution,
+            baseUrl: $this->urlAirPollution,
             query: [
                 'lat' => $latitude,
                 'lon' => $longitude
@@ -50,7 +50,6 @@ class AirPollution extends AbstractEndpoint
      */
     public function getCurrentByLocationName(string $locationName): CurrentAirPollution
     {
-        // Get first result (most relevant)
         $location = $this->api->getGeocoding()->getCoordinatesByLocationName($locationName)[0];
 
         return $this->getCurrent(
@@ -85,7 +84,6 @@ class AirPollution extends AbstractEndpoint
      */
     public function getForecastByLocationName(string $locationName): AirPollutionList
     {
-        // Get first result (most relevant)
         $location = $this->api->getGeocoding()->getCoordinatesByLocationName($locationName)[0];
 
         return $this->getForecast(
@@ -140,7 +138,6 @@ class AirPollution extends AbstractEndpoint
         \DateTimeImmutable $endDate
     ): AirPollutionList
     {
-        // Get first result (most relevant)
         $location = $this->api->getGeocoding()->getCoordinatesByLocationName($locationName)[0];
 
         return $this->getHistory(
