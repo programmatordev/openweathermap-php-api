@@ -3,6 +3,7 @@
 namespace ProgrammatorDev\OpenWeatherMap\Test\DataProvider;
 
 use ProgrammatorDev\OpenWeatherMap\Exception\InvalidDateRangeException;
+use ProgrammatorDev\OpenWeatherMap\Exception\InvalidNumResultsException;
 use ProgrammatorDev\OpenWeatherMap\Exception\InvalidPastDateException;
 use ProgrammatorDev\OpenWeatherMap\Exception\OutOfRangeCoordinateException;
 
@@ -37,5 +38,11 @@ class InvalidParamDataProvider
             new \DateTimeImmutable('-5 days'),
             InvalidDateRangeException::class
         ];
+    }
+
+    public static function provideInvalidNumResultsData(): \Generator
+    {
+        yield 'equal to zero num results' => [0,  InvalidNumResultsException::class];
+        yield 'negative num results' => [-1,  InvalidNumResultsException::class];
     }
 }

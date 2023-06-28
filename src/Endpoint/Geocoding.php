@@ -14,11 +14,11 @@ class Geocoding extends AbstractEndpoint
     use CreateEntityListTrait;
     use ValidateCoordinateTrait;
 
-    private string $urlDirectGeocoding = 'https://api.openweathermap.org/geo/1.0/direct';
+    private string $urlGeocodingDirect = 'https://api.openweathermap.org/geo/1.0/direct';
 
-    private string $urlZipGeocoding = 'https://api.openweathermap.org/geo/1.0/zip';
+    private string $urlGeocodingZipCode = 'https://api.openweathermap.org/geo/1.0/zip';
 
-    private string $urlReverseGeocoding = 'https://api.openweathermap.org/geo/1.0/reverse';
+    private string $urlGeocodingReverse = 'https://api.openweathermap.org/geo/1.0/reverse';
 
     /**
      * @return Location[]
@@ -28,7 +28,7 @@ class Geocoding extends AbstractEndpoint
     {
         $data = $this->sendRequest(
             method: 'GET',
-            baseUrl: $this->urlDirectGeocoding,
+            baseUrl: $this->urlGeocodingDirect,
             query: [
                 'q' => $locationName,
                 'limit' => $limit
@@ -45,7 +45,7 @@ class Geocoding extends AbstractEndpoint
     {
         $data = $this->sendRequest(
             method: 'GET',
-            baseUrl: $this->urlZipGeocoding,
+            baseUrl: $this->urlGeocodingZipCode,
             query: [
                 'zip' => \sprintf('%s,%s', $zipCode, $countryCode)
             ]
@@ -65,7 +65,7 @@ class Geocoding extends AbstractEndpoint
 
         $data = $this->sendRequest(
             method: 'GET',
-            baseUrl: $this->urlReverseGeocoding,
+            baseUrl: $this->urlGeocodingReverse,
             query: [
                 'lat' => $latitude,
                 'lon' => $longitude,

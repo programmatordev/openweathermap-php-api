@@ -10,7 +10,7 @@ class Rain extends Volume
     {
         parent::__construct($data);
 
-        $this->precipitationProbability = $data['pop']
+        $this->precipitationProbability = isset($data['pop'])
             ? round($data['pop'] * 100)
             : null;
     }

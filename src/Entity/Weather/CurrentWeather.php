@@ -13,9 +13,9 @@ class CurrentWeather extends Weather
         parent::__construct($data);
 
         $this->location = new Location([
-            'id' => !empty($data['id']) ? $data['id'] : null,
-            'name' => !empty($data['name']) ? $data['name'] : null,
-            'country' => $data['sys']['country'] ?? null,
+            'id' => $data['id'],
+            'name' => $data['name'],
+            'country' => $data['sys']['country'],
             'lat' => $data['coord']['lat'],
             'lon' => $data['coord']['lon'],
             'sunrise' => $data['sys']['sunrise'],

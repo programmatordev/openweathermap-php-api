@@ -3,25 +3,30 @@
 namespace ProgrammatorDev\OpenWeatherMap\Entity\AirPollution;
 
 use ProgrammatorDev\OpenWeatherMap\Entity\Coordinate;
+use ProgrammatorDev\OpenWeatherMap\Entity\Location;
 use ProgrammatorDev\OpenWeatherMap\Util\CreateEntityListTrait;
 
 class AirPollutionList
 {
     use CreateEntityListTrait;
 
-    private Coordinate $coordinate;
+    private Location $location;
 
     private array $list;
 
     public function __construct(array $data)
     {
-        $this->coordinate = new Coordinate($data['coord']);
+        $this->location = new Location([
+            'lat' => $data['coord']['lat'],
+            'lon' => $data['coord']['lon']
+        ]);
+
         $this->list = $this->createEntityList($data['list'], AirPollution::class);
     }
 
-    public function getCoordinate(): Coordinate
+    public function getLocation(): Location
     {
-        return $this->coordinate;
+        return $this->location;
     }
 
     /**

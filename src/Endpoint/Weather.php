@@ -6,16 +6,20 @@ use Http\Client\Exception;
 use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\WithLanguageTrait;
 use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\WithMeasurementSystemTrait;
 use ProgrammatorDev\OpenWeatherMap\Entity\Weather\CurrentWeather;
+use ProgrammatorDev\OpenWeatherMap\Entity\Weather\WeatherList;
+use ProgrammatorDev\OpenWeatherMap\Exception\InvalidNumResultsException;
 use ProgrammatorDev\OpenWeatherMap\Exception\OutOfRangeCoordinateException;
 use ProgrammatorDev\OpenWeatherMap\Util\ValidateCoordinateTrait;
+use ProgrammatorDev\OpenWeatherMap\Util\ValidateNumResultsTrait;
 
 class Weather extends AbstractEndpoint
 {
     use WithMeasurementSystemTrait;
     use WithLanguageTrait;
     use ValidateCoordinateTrait;
+    use ValidateNumResultsTrait;
 
-    private string $urlCurrentWeather = 'https://api.openweathermap.org/data/2.5/weather';
+    private string $urlWeather = 'https://api.openweathermap.org/data/2.5/weather';
 
     private string $urlWeatherForecast = 'https://api.openweathermap.org/data/2.5/forecast';
 
@@ -29,7 +33,7 @@ class Weather extends AbstractEndpoint
 
         $data = $this->sendRequest(
             method: 'GET',
-            baseUrl: $this->urlCurrentWeather,
+            baseUrl: $this->urlWeather,
             query: [
                 'lat' => $latitude,
                 'lon' => $longitude,
@@ -47,7 +51,6 @@ class Weather extends AbstractEndpoint
      */
     public function getCurrentByLocationName(string $locationName): CurrentWeather
     {
-        // Get first result (most relevant)
         $location = $this->api->getGeocoding()->getCoordinatesByLocationName($locationName)[0];
 
         return $this->getCurrent(
@@ -59,10 +62,12 @@ class Weather extends AbstractEndpoint
     /**
      * @throws Exception
      * @throws OutOfRangeCoordinateException
+     * @throws InvalidNumResultsException
      */
-    public function getForecast(float $latitude, float $longitude)
+    public function getForecast(float $latitude, float $longitude, ?int $numResults = null): WeatherList
     {
         $this->validateCoordinate($latitude, $longitude);
+        $this->validateNumResults($numResults);
 
         $data = $this->sendRequest(
             method: 'GET',
@@ -70,11 +75,28 @@ class Weather extends AbstractEndpoint
             query: [
                 'lat' => $latitude,
                 'lon' => $longitude,
+                'cnt' => $numResults,
                 'units' => $this->measurementSystem,
                 'lang' => $this->language
             ]
         );
 
-        dd($data);
+        return new WeatherList($data);
+    }
+
+    /**
+     * @throws Exception
+     * @throws OutOfRangeCoordinateException
+     * @throws InvalidNumResultsException
+     */
+    public function getForecastByLocationName(string $locationName, ?int $numResults = null): WeatherList
+    {
+        $location = $this->api->getGeocoding()->getCoordinatesByLocationName($locationName)[0];
+
+        return $this->getForecast(
+            $location->getCoordinate()->getLatitude(),
+            $location->getCoordinate()->getLongitude(),
+            $numResults
+        );
     }
 }
