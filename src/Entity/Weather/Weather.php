@@ -52,14 +52,14 @@ class Weather
         $this->atmosphericPressure = new AtmosphericPressure($data['main']);
         $this->dateTime = \DateTimeImmutable::createFromFormat('U', $data['dt'], new \DateTimeZone('UTC'));
 
-        $this->rain = (isset($data['rain']) || isset($data['pop']))
+        $this->rain = (!empty($data['rain']) || !empty($data['pop']))
             ? new Rain([
                 'pop' => $data['pop'] ?? null,
                 '1h' => $data['rain']['1h'] ?? null,
                 '3h' => $data['rain']['3h'] ?? null
             ])
             : null;
-        $this->snow = (isset($data['snow']))
+        $this->snow = !empty($data['snow'])
             ? new Snow($data['snow'])
             : null;
     }
