@@ -10,6 +10,7 @@ use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\AirQuality;
 use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\Component;
 use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\CurrentAirPollution;
 use ProgrammatorDev\OpenWeatherMap\Entity\Coordinate;
+use ProgrammatorDev\OpenWeatherMap\Entity\Location;
 use ProgrammatorDev\OpenWeatherMap\Test\DataProvider\InvalidParamDataProvider;
 
 class AirPollutionTest extends AbstractTest
@@ -164,7 +165,10 @@ class AirPollutionTest extends AbstractTest
     {
         $this->assertInstanceOf(CurrentAirPollution::class, $response);
 
-        $coordinate = $response->getCoordinate();
+        $location = $response->getLocation();
+        $this->assertInstanceOf(Location::class, $location);
+
+        $coordinate = $location->getCoordinate();
         $this->assertInstanceOf(Coordinate::class, $coordinate);
         $this->assertSame(38.7078, $coordinate->getLatitude());
         $this->assertSame(-9.1366, $coordinate->getLongitude());
@@ -194,7 +198,10 @@ class AirPollutionTest extends AbstractTest
     {
         $this->assertInstanceOf(AirPollutionList::class, $response);
 
-        $coordinate = $response->getCoordinate();
+        $location = $response->getLocation();
+        $this->assertInstanceOf(Location::class, $location);
+
+        $coordinate = $location->getCoordinate();
         $this->assertInstanceOf(Coordinate::class, $coordinate);
         $this->assertSame(38.7078, $coordinate->getLatitude());
         $this->assertSame(-9.1366, $coordinate->getLongitude());
@@ -227,7 +234,10 @@ class AirPollutionTest extends AbstractTest
     {
         $this->assertInstanceOf(AirPollutionList::class, $response);
 
-        $coordinate = $response->getCoordinate();
+        $location = $response->getLocation();
+        $this->assertInstanceOf(Location::class, $location);
+
+        $coordinate = $location->getCoordinate();
         $this->assertInstanceOf(Coordinate::class, $coordinate);
         $this->assertSame(38.7078, $coordinate->getLatitude());
         $this->assertSame(-9.1366, $coordinate->getLongitude());
