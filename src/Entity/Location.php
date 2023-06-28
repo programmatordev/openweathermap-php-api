@@ -70,7 +70,7 @@ class Location
         return $this->countryCode;
     }
 
-    public function getLocalNames(): array
+    public function getLocalNames(): ?array
     {
         return $this->localNames;
     }

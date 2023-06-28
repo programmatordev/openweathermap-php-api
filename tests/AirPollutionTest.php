@@ -28,7 +28,7 @@ class AirPollutionTest extends AbstractTest
     }
 
     #[DataProviderExternal(InvalidParamDataProvider::class, 'provideInvalidCoordinateData')]
-    public function testGetCurrentWithInvalidCoordinate(float $latitude, float $longitude, string $expectedException)
+    public function testAirPollutionGetCurrentWithInvalidCoordinate(float $latitude, float $longitude, string $expectedException)
     {
         $this->expectException($expectedException);
         $this->getApi()->getAirPollution()->getCurrent($latitude, $longitude);
@@ -67,7 +67,7 @@ class AirPollutionTest extends AbstractTest
     }
 
     #[DataProviderExternal(InvalidParamDataProvider::class, 'provideInvalidCoordinateData')]
-    public function testGetForecastWithInvalidCoordinate(float $latitude, float $longitude, string $expectedException)
+    public function testAirPollutionGetForecastWithInvalidCoordinate(float $latitude, float $longitude, string $expectedException)
     {
         $this->expectException($expectedException);
         $this->getApi()->getAirPollution()->getForecast($latitude, $longitude);

@@ -6,16 +6,16 @@ class AtmosphericPressure
 {
     private int $pressure;
 
-    private ?int $seaLevel;
+    private ?int $seaLevelPressure;
 
-    private ?int $groundLevel;
+    private ?int $groundLevelPressure;
 
     public function __construct(array $data)
     {
         $this->pressure = $data['pressure'];
 
-        $this->seaLevel = $data['sea_level'] ?? null;
-        $this->groundLevel = $data['grnd_level'] ?? null;
+        $this->seaLevelPressure = $data['sea_level'] ?? null;
+        $this->groundLevelPressure = $data['grnd_level'] ?? null;
     }
 
     public function getPressure(): int
@@ -23,13 +23,13 @@ class AtmosphericPressure
         return $this->pressure;
     }
 
-    public function getSeaLevel(): ?int
+    public function getSeaLevelPressure(): ?int
     {
-        return $this->seaLevel;
+        return $this->seaLevelPressure;
     }
 
-    public function getGroundLevel(): ?int
+    public function getGroundLevelPressure(): ?int
     {
-        return $this->groundLevel;
+        return $this->groundLevelPressure;
     }
 }

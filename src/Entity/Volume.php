@@ -4,29 +4,29 @@ namespace ProgrammatorDev\OpenWeatherMap\Entity;
 
 class Volume
 {
-    private ?float $lastOneHour;
+    private ?float $lastOneHourVolume;
 
-    private ?float $lastThreeHours;
+    private ?float $lastThreeHoursVolume;
 
     public function __construct(array $data)
     {
-        $this->lastOneHour = $data['1h'] ?? null;
-        $this->lastThreeHours = $data['3h'] ?? null;
+        $this->lastOneHourVolume = $data['1h'] ?? null;
+        $this->lastThreeHoursVolume = $data['3h'] ?? null;
     }
 
     /**
      * Volume for the last 1 hour, in millimetres (mm)
      */
-    public function getLastOneHour(): ?float
+    public function getLastOneHourVolume(): ?float
     {
-        return $this->lastOneHour;
+        return $this->lastOneHourVolume;
     }
 
     /**
      * Volume for the last 3 hours, in millimetres (mm)
      */
-    public function getLastThreeHours(): ?float
+    public function getLastThreeHoursVolume(): ?float
     {
-        return $this->lastThreeHours;
+        return $this->lastThreeHoursVolume;
     }
 }
