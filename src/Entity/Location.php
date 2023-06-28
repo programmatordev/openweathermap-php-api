@@ -45,7 +45,7 @@ class Location
             ? \DateTimeImmutable::createFromFormat('U', $data['sunset'], new \DateTimeZone('UTC'))
             : null;
 
-        $this->timezone = !empty($data['timezone_offset'])
+        $this->timezone = isset($data['timezone_offset'])
             ? new Timezone(['timezone_offset' => $data['timezone_offset']])
             : null;
     }
