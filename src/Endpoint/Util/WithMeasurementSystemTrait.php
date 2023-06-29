@@ -21,4 +21,9 @@ trait WithMeasurementSystemTrait
 
         return $clone;
     }
+
+    public function getMeasurementSystem(): string
+    {
+        return $this->measurementSystem;
+    }
 }

@@ -41,8 +41,8 @@ class ConfigTest extends AbstractTest
     {
         $this->assertSame(self::APPLICATION_KEY, $this->config->getApplicationKey());
 
-        $this->config->setApplicationKey('othertestappkey');
-        $this->assertSame('othertestappkey', $this->config->getApplicationKey());
+        $this->config->setApplicationKey('newtestappkey');
+        $this->assertSame('newtestappkey', $this->config->getApplicationKey());
     }
 
     public function testConfigSetApplicationKeyWithEmptyValue()
