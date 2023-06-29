@@ -37,8 +37,8 @@ class Weather extends AbstractEndpoint
             query: [
                 'lat' => $latitude,
                 'lon' => $longitude,
-                'units' => $this->measurementSystem,
-                'lang' => $this->language
+                'units' => $this->getMeasurementSystem(),
+                'lang' => $this->getLanguage()
             ]
         );
 
@@ -76,8 +76,8 @@ class Weather extends AbstractEndpoint
                 'lat' => $latitude,
                 'lon' => $longitude,
                 'cnt' => $numResults,
-                'units' => $this->measurementSystem,
-                'lang' => $this->language
+                'units' => $this->getMeasurementSystem(),
+                'lang' => $this->getLanguage()
             ]
         );
 
