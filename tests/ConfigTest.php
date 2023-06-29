@@ -3,8 +3,11 @@
 namespace ProgrammatorDev\OpenWeatherMap\Test;
 
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
 use ProgrammatorDev\OpenWeatherMap\Config;
+use ProgrammatorDev\OpenWeatherMap\Exception\InvalidApplicationKeyException;
 use ProgrammatorDev\OpenWeatherMap\HttpClient\HttpClientBuilder;
+use ProgrammatorDev\OpenWeatherMap\Test\DataProvider\InvalidParamDataProvider;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
 
@@ -21,14 +24,31 @@ class ConfigTest extends AbstractTest
         ]);
     }
 
-    public function testConfigGetApplicationKey()
+    #[DataProvider('provideInvalidConfigOptionsData')]
+    public function testConfigWithInvalidOptions(array $options, string $expectedException)
     {
-        $this->assertSame('testappkey', $this->config->getApplicationKey());
+        $this->expectException($expectedException);
+
+        new Config($options);
     }
 
-    public function testConfigGetHttpClientBuilder()
+    public function testConfigGetApplicationKey()
     {
-        $this->assertInstanceOf(HttpClientBuilder::class, $this->config->getHttpClientBuilder());
+        $this->assertSame(self::APPLICATION_KEY, $this->config->getApplicationKey());
+    }
+
+    public function testConfigSetApplicationKey()
+    {
+        $this->assertSame(self::APPLICATION_KEY, $this->config->getApplicationKey());
+
+        $this->config->setApplicationKey('othertestappkey');
+        $this->assertSame('othertestappkey', $this->config->getApplicationKey());
+    }
+
+    public function testConfigSetApplicationKeyWithEmptyValue()
+    {
+        $this->expectException(InvalidApplicationKeyException::class);
+        $this->config->setApplicationKey('');
     }
 
     public function testConfigGetMeasurementSystem()
@@ -46,6 +66,21 @@ class ConfigTest extends AbstractTest
         $this->assertSame('imperial', $config->getMeasurementSystem());
     }
 
+    public function testConfigSetMeasurementSystem()
+    {
+        $this->assertSame('metric', $this->config->getMeasurementSystem());
+
+        $this->config->setMeasurementSystem('imperial');
+        $this->assertSame('imperial', $this->config->getMeasurementSystem());
+    }
+
+    #[DataProviderExternal(InvalidParamDataProvider::class, 'provideInvalidMeasurementSystemData')]
+    public function testConfigSetMeasurementSystemWithInvalidValue(string $measurementSystem, string $expectedException)
+    {
+        $this->expectException($expectedException);
+        $this->config->setMeasurementSystem($measurementSystem);
+    }
+
     public function testConfigGetLanguage()
     {
         $this->assertSame('en', $this->config->getLanguage()); // Default value
@@ -61,12 +96,24 @@ class ConfigTest extends AbstractTest
         $this->assertSame('pt', $config->getLanguage());
     }
 
-    #[DataProvider('provideInvalidConfigOptionsData')]
-    public function testConfigWithInvalidOptions(array $options, string $expectedException)
+    public function testConfigSetLanguage()
+    {
+        $this->assertSame('en', $this->config->getLanguage());
+
+        $this->config->setLanguage('pt');
+        $this->assertSame('pt', $this->config->getLanguage());
+    }
+
+    #[DataProviderExternal(InvalidParamDataProvider::class, 'provideInvalidLanguageData')]
+    public function testConfigSetLanguageWithInvalidValue(string $language, string $expectedException)
     {
         $this->expectException($expectedException);
+        $this->config->setLanguage($language);
+    }
 
-        new Config($options);
+    public function testConfigGetHttpClientBuilder()
+    {
+        $this->assertInstanceOf(HttpClientBuilder::class, $this->config->getHttpClientBuilder());
     }
 
     public static function provideInvalidConfigOptionsData(): \Generator
