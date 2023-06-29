@@ -6,13 +6,18 @@ use Http\Client\Exception;
 use ProgrammatorDev\OpenWeatherMap\Entity\Geocoding\ZipCodeLocation;
 use ProgrammatorDev\OpenWeatherMap\Entity\Location;
 use ProgrammatorDev\OpenWeatherMap\Exception\InvalidCoordinateException;
+use ProgrammatorDev\OpenWeatherMap\Exception\InvalidNumResultsException;
 use ProgrammatorDev\OpenWeatherMap\Util\CreateEntityListTrait;
 use ProgrammatorDev\OpenWeatherMap\Util\ValidateCoordinateTrait;
+use ProgrammatorDev\OpenWeatherMap\Util\ValidateNumResultsTrait;
 
 class Geocoding extends AbstractEndpoint
 {
     use CreateEntityListTrait;
     use ValidateCoordinateTrait;
+    use ValidateNumResultsTrait;
+
+    private const NUM_RESULTS = 5;
 
     private string $urlGeocodingDirect = 'https://api.openweathermap.org/geo/1.0/direct';
 
@@ -23,15 +28,18 @@ class Geocoding extends AbstractEndpoint
     /**
      * @return Location[]
      * @throws Exception
+     * @throws InvalidNumResultsException
      */
-    public function getCoordinatesByLocationName(string $locationName, int $limit = 5): array
+    public function getCoordinatesByLocationName(string $locationName, int $numResults = self::NUM_RESULTS): array
     {
+        $this->validateNumResults($numResults);
+
         $data = $this->sendRequest(
             method: 'GET',
             baseUrl: $this->urlGeocodingDirect,
             query: [
                 'q' => $locationName,
-                'limit' => $limit
+                'limit' => $numResults
             ]
         );
 
@@ -58,10 +66,12 @@ class Geocoding extends AbstractEndpoint
      * @return Location[]
      * @throws Exception
      * @throws InvalidCoordinateException
+     * @throws InvalidNumResultsException
      */
-    public function getLocationNameByCoordinates(float $latitude, float $longitude, int $limit = 5): array
+    public function getLocationNameByCoordinates(float $latitude, float $longitude, int $numResults = self::NUM_RESULTS): array
     {
         $this->validateCoordinate($latitude, $longitude);
+        $this->validateNumResults($numResults);
 
         $data = $this->sendRequest(
             method: 'GET',
@@ -69,7 +79,7 @@ class Geocoding extends AbstractEndpoint
             query: [
                 'lat' => $latitude,
                 'lon' => $longitude,
-                'limit' => $limit
+                'limit' => $numResults
             ]
         );
 

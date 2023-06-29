@@ -19,6 +19,8 @@ class Weather extends AbstractEndpoint
     use ValidateCoordinateTrait;
     use ValidateNumResultsTrait;
 
+    private const NUM_RESULTS = 40;
+
     private string $urlWeather = 'https://api.openweathermap.org/data/2.5/weather';
 
     private string $urlWeatherForecast = 'https://api.openweathermap.org/data/2.5/forecast';
@@ -64,7 +66,7 @@ class Weather extends AbstractEndpoint
      * @throws InvalidCoordinateException
      * @throws InvalidNumResultsException
      */
-    public function getForecast(float $latitude, float $longitude, ?int $numResults = null): WeatherList
+    public function getForecast(float $latitude, float $longitude, int $numResults = self::NUM_RESULTS): WeatherList
     {
         $this->validateCoordinate($latitude, $longitude);
         $this->validateNumResults($numResults);
@@ -89,7 +91,7 @@ class Weather extends AbstractEndpoint
      * @throws InvalidCoordinateException
      * @throws InvalidNumResultsException
      */
-    public function getForecastByLocationName(string $locationName, ?int $numResults = null): WeatherList
+    public function getForecastByLocationName(string $locationName, int $numResults = self::NUM_RESULTS): WeatherList
     {
         $location = $this->api->getGeocoding()->getCoordinatesByLocationName($locationName)[0];
 

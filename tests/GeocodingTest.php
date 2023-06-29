@@ -70,6 +70,16 @@ class GeocodingTest extends AbstractTest
         $this->getApi()->getGeocoding()->getLocationNameByCoordinates($latitude, $longitude);
     }
 
+    #[DataProviderExternal(InvalidParamDataProvider::class, 'provideInvalidNumResultsData')]
+    public function testGeocodingGetLocationNameByCoordinatesWithInvalidNumResults(
+        int $numResults,
+        string $expectedException
+    )
+    {
+        $this->expectException($expectedException);
+        $this->getApi()->getGeocoding()->getLocationNameByCoordinates(38.7077507, -9.1365919, $numResults);
+    }
+
     /**
      * @param Location[] $response
      */
