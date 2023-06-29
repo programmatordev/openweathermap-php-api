@@ -21,4 +21,9 @@ trait WithLanguageTrait
 
         return $clone;
     }
+
+    public function getLanguage(): string
+    {
+        return $this->language;
+    }
 }
