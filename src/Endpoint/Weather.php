@@ -8,7 +8,7 @@ use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\WithMeasurementSystemTrait;
 use ProgrammatorDev\OpenWeatherMap\Entity\Weather\CurrentWeather;
 use ProgrammatorDev\OpenWeatherMap\Entity\Weather\WeatherList;
 use ProgrammatorDev\OpenWeatherMap\Exception\InvalidNumResultsException;
-use ProgrammatorDev\OpenWeatherMap\Exception\OutOfRangeCoordinateException;
+use ProgrammatorDev\OpenWeatherMap\Exception\InvalidCoordinateException;
 use ProgrammatorDev\OpenWeatherMap\Util\ValidateCoordinateTrait;
 use ProgrammatorDev\OpenWeatherMap\Util\ValidateNumResultsTrait;
 
@@ -25,7 +25,7 @@ class Weather extends AbstractEndpoint
 
     /**
      * @throws Exception
-     * @throws OutOfRangeCoordinateException
+     * @throws InvalidCoordinateException
      */
     public function getCurrent(float $latitude, float $longitude): CurrentWeather
     {
@@ -47,7 +47,7 @@ class Weather extends AbstractEndpoint
 
     /**
      * @throws Exception
-     * @throws OutOfRangeCoordinateException
+     * @throws InvalidCoordinateException
      */
     public function getCurrentByLocationName(string $locationName): CurrentWeather
     {
@@ -61,7 +61,7 @@ class Weather extends AbstractEndpoint
 
     /**
      * @throws Exception
-     * @throws OutOfRangeCoordinateException
+     * @throws InvalidCoordinateException
      * @throws InvalidNumResultsException
      */
     public function getForecast(float $latitude, float $longitude, ?int $numResults = null): WeatherList
@@ -86,7 +86,7 @@ class Weather extends AbstractEndpoint
 
     /**
      * @throws Exception
-     * @throws OutOfRangeCoordinateException
+     * @throws InvalidCoordinateException
      * @throws InvalidNumResultsException
      */
     public function getForecastByLocationName(string $locationName, ?int $numResults = null): WeatherList

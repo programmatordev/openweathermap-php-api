@@ -5,7 +5,7 @@ namespace ProgrammatorDev\OpenWeatherMap\Endpoint;
 use Http\Client\Exception;
 use ProgrammatorDev\OpenWeatherMap\Entity\Geocoding\ZipCodeLocation;
 use ProgrammatorDev\OpenWeatherMap\Entity\Location;
-use ProgrammatorDev\OpenWeatherMap\Exception\OutOfRangeCoordinateException;
+use ProgrammatorDev\OpenWeatherMap\Exception\InvalidCoordinateException;
 use ProgrammatorDev\OpenWeatherMap\Util\CreateEntityListTrait;
 use ProgrammatorDev\OpenWeatherMap\Util\ValidateCoordinateTrait;
 
@@ -57,7 +57,7 @@ class Geocoding extends AbstractEndpoint
     /**
      * @return Location[]
      * @throws Exception
-     * @throws OutOfRangeCoordinateException
+     * @throws InvalidCoordinateException
      */
     public function getLocationNameByCoordinates(float $latitude, float $longitude, int $limit = 5): array
     {
