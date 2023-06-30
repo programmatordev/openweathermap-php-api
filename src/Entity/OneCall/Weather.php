@@ -14,9 +14,9 @@ class Weather
 
     private \DateTimeImmutable $dateTime;
 
-    private \DateTimeImmutable $sunriseAt;
+    private ?\DateTimeImmutable $sunriseAt;
 
-    private \DateTimeImmutable $sunsetAt;
+    private ?\DateTimeImmutable $sunsetAt;
 
     private float $temperature;
 
@@ -47,8 +47,12 @@ class Weather
         $timezoneUtc = new \DateTimeZone('UTC');
 
         $this->dateTime = \DateTimeImmutable::createFromFormat('U', $data['dt'], $timezoneUtc);
-        $this->sunriseAt = \DateTimeImmutable::createFromFormat('U', $data['sunrise'], $timezoneUtc);
-        $this->sunsetAt = \DateTimeImmutable::createFromFormat('U', $data['sunset'], $timezoneUtc);
+        $this->sunriseAt = !empty($data['sunrise'])
+            ? \DateTimeImmutable::createFromFormat('U', $data['sunrise'], $timezoneUtc)
+            : null;
+        $this->sunsetAt = !empty($data['sunset'])
+            ? \DateTimeImmutable::createFromFormat('U', $data['sunset'], $timezoneUtc)
+            : null;
         $this->temperature = $data['temp'];
         $this->temperatureFeelsLike = $data['feels_like'];
         $this->atmosphericPressure = $data['pressure'];
@@ -62,8 +66,11 @@ class Weather
             'deg' => $data['wind_deg'],
             'gust' => $data['wind_gust'] ?? null
         ]);
-        $this->rain = !empty($data['rain'])
-            ? new Rain($data['rain'])
+        $this->rain = (!empty($data['rain']) || isset($data['pop']))
+            ? new Rain([
+                'pop' => $data['pop'] ?? null,
+                '1h' => $data['rain']['1h'] ?? null
+            ])
             : null;
         $this->snow = !empty($data['snow'])
             ? new Snow($data['snow'])

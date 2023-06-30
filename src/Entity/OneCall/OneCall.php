@@ -30,6 +30,7 @@ class OneCall
         $this->timezone = new Timezone($data);
         $this->current = new Current($data['current']);
         $this->minutelyForecast = $this->createEntityList($data['minutely'], MinuteForecast::class);
+        $this->hourlyForecast = $this->createEntityList($data['hourly'], HourForecast::class);
         $this->alerts = !empty($data['alerts'])
             ? $this->createEntityList($data['alerts'], Alert::class)
             : null;
