@@ -11,9 +11,9 @@ trait ValidateDateRangeTrait
      */
     private function validateDateRange(\DateTimeImmutable $startDate, \DateTimeImmutable $endDate): void
     {
-        $utcTimezone = new \DateTimeZone('UTC');
-        $startTimestamp = $startDate->setTimezone($utcTimezone)->getTimestamp();
-        $endTimestamp = $endDate->setTimezone($utcTimezone)->getTimestamp();
+        $timezoneUtc = new \DateTimeZone('UTC');
+        $startTimestamp = $startDate->setTimezone($timezoneUtc)->getTimestamp();
+        $endTimestamp = $endDate->setTimezone($timezoneUtc)->getTimestamp();
 
         if ($endTimestamp <= $startTimestamp) {
             throw new InvalidDateRangeException('The end date should be greater than the start date.');

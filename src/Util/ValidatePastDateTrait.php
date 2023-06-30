@@ -11,9 +11,9 @@ trait ValidatePastDateTrait
      */
     private function validatePastDate(string $name, \DateTimeImmutable $date): void
     {
-        $utcTimezone = new \DateTimeZone('UTC');
-        $nowTimestamp = (new \DateTimeImmutable('now', $utcTimezone))->getTimestamp();
-        $dateTimestamp = $date->setTimezone($utcTimezone)->getTimestamp();
+        $timezoneUtc = new \DateTimeZone('UTC');
+        $nowTimestamp = (new \DateTimeImmutable('now', $timezoneUtc))->getTimestamp();
+        $dateTimestamp = $date->setTimezone($timezoneUtc)->getTimestamp();
 
         if ($dateTimestamp > $nowTimestamp) {
             throw new InvalidPastDateException(

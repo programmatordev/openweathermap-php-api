@@ -36,6 +36,6 @@ class OneCallEndpoint extends AbstractEndpoint
             ]
         );
 
-        dd($data);
+        return new OneCall($data);
     }
 }

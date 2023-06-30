@@ -110,7 +110,7 @@ class AirPollutionEndpoint extends AbstractEndpoint
         $this->validatePastDate('endDate', $endDate);
         $this->validateDateRange($startDate, $endDate);
 
-        $utcTimezone = new \DateTimeZone('UTC');
+        $timezoneUtc = new \DateTimeZone('UTC');
 
         $data = $this->sendRequest(
             method: 'GET',
@@ -118,8 +118,8 @@ class AirPollutionEndpoint extends AbstractEndpoint
             query: [
                 'lat' => $latitude,
                 'lon' => $longitude,
-                'start' => $startDate->setTimezone($utcTimezone)->getTimestamp(),
-                'end' => $endDate->setTimezone($utcTimezone)->getTimestamp()
+                'start' => $startDate->setTimezone($timezoneUtc)->getTimestamp(),
+                'end' => $endDate->setTimezone($timezoneUtc)->getTimestamp()
             ]
         );
 
