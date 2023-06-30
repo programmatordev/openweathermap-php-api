@@ -50,6 +50,7 @@ class Weather extends AbstractEndpoint
     /**
      * @throws Exception
      * @throws InvalidCoordinateException
+     * @throws InvalidNumResultsException
      */
     public function getCurrentByLocationName(string $locationName): CurrentWeather
     {

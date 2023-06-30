@@ -4,6 +4,7 @@ namespace ProgrammatorDev\OpenWeatherMap;
 
 use ProgrammatorDev\OpenWeatherMap\Endpoint\AirPollution;
 use ProgrammatorDev\OpenWeatherMap\Endpoint\Geocoding;
+use ProgrammatorDev\OpenWeatherMap\Endpoint\OneCall;
 use ProgrammatorDev\OpenWeatherMap\Endpoint\Weather;
 
 class OpenWeatherMap
@@ -15,6 +16,11 @@ class OpenWeatherMap
     public function getConfig(): Config
     {
         return $this->config;
+    }
+
+    public function getOneCall(): OneCall
+    {
+        return new OneCall($this);
     }
 
     public function getWeather(): Weather

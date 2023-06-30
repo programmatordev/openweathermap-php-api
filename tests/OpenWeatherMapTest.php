@@ -5,6 +5,7 @@ namespace ProgrammatorDev\OpenWeatherMap\Test;
 use ProgrammatorDev\OpenWeatherMap\Config;
 use ProgrammatorDev\OpenWeatherMap\Endpoint\AirPollution;
 use ProgrammatorDev\OpenWeatherMap\Endpoint\Geocoding;
+use ProgrammatorDev\OpenWeatherMap\Endpoint\OneCall;
 use ProgrammatorDev\OpenWeatherMap\Endpoint\Weather;
 
 class OpenWeatherMapTest extends AbstractTest
@@ -12,6 +13,11 @@ class OpenWeatherMapTest extends AbstractTest
     public function testOpenWeatherMapGetConfig()
     {
         $this->assertInstanceOf(Config::class, $this->getApi()->getConfig());
+    }
+
+    public function testOpenWeatherMapGetOneCall()
+    {
+        $this->assertInstanceOf(OneCall::class, $this->getApi()->getOneCall());
     }
 
     public function testOpenWeatherMapGetWeather()
