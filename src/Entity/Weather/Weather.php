@@ -30,6 +30,8 @@ class Weather
 
     private Wind $wind;
 
+    private ?int $precipitationProbability;
+
     private ?Rain $rain;
 
     private ?Snow $snow;
@@ -40,6 +42,7 @@ class Weather
 
     public function __construct(array $data)
     {
+        $this->dateTime = \DateTimeImmutable::createFromFormat('U', $data['dt'], new \DateTimeZone('UTC'));
         $this->temperature = $data['main']['temp'];
         $this->temperatureFeelsLike = $data['main']['feels_like'];
         $this->minTemperature = $data['main']['temp_min'];
@@ -48,16 +51,13 @@ class Weather
         $this->cloudiness = $data['clouds']['all'];
         $this->visibility = $data['visibility'];
         $this->weatherConditions = $this->createEntityList($data['weather'], WeatherCondition::class);
-        $this->wind = new Wind($data['wind']);
         $this->atmosphericPressure = new AtmosphericPressure($data['main']);
-        $this->dateTime = \DateTimeImmutable::createFromFormat('U', $data['dt'], new \DateTimeZone('UTC'));
-
-        $this->rain = (!empty($data['rain']) || isset($data['pop']))
-            ? new Rain([
-                'pop' => $data['pop'] ?? null,
-                '1h' => $data['rain']['1h'] ?? null,
-                '3h' => $data['rain']['3h'] ?? null
-            ])
+        $this->wind = new Wind($data['wind']);
+        $this->precipitationProbability = isset($data['pop'])
+            ? round($data['pop'] * 100)
+            : null;
+        $this->rain = !empty($data['rain'])
+            ? new Rain($data['rain'])
             : null;
         $this->snow = !empty($data['snow'])
             ? new Snow($data['snow'])
@@ -110,6 +110,14 @@ class Weather
     public function getWind(): Wind
     {
         return $this->wind;
+    }
+
+    /**
+     * Probability of precipitation, in percentage (%)
+     */
+    public function getPrecipitationProbability(): ?int
+    {
+        return $this->precipitationProbability;
     }
 
     public function getRain(): ?Rain

@@ -124,6 +124,7 @@ class WeatherEndpointTest extends AbstractTest
         $this->assertSame(59, $response->getHumidity());
         $this->assertSame(0, $response->getCloudiness());
         $this->assertSame(10000, $response->getVisibility());
+        $this->assertSame(null, $response->getPrecipitationProbability());
 
         $weatherConditions = $response->getWeatherConditions();
         $this->assertContainsOnlyInstancesOf(WeatherCondition::class, $weatherConditions);
@@ -149,7 +150,6 @@ class WeatherEndpointTest extends AbstractTest
         $this->assertInstanceOf(Rain::class, $rain);
         $this->assertSame(0.17, $rain->getLastOneHourVolume());
         $this->assertSame(0.81, $rain->getLastThreeHoursVolume());
-        $this->assertSame(null, $rain->getPrecipitationProbability());
 
         $snow = $response->getSnow();
         $this->assertInstanceOf(Snow::class, $snow);
@@ -210,6 +210,7 @@ class WeatherEndpointTest extends AbstractTest
         $this->assertSame(56, $weather->getHumidity());
         $this->assertSame(0, $weather->getCloudiness());
         $this->assertSame(10000, $weather->getVisibility());
+        $this->assertSame(0, $weather->getPrecipitationProbability());
 
         $weatherConditions = $weather->getWeatherConditions();
         $this->assertContainsOnlyInstancesOf(WeatherCondition::class, $weatherConditions);
@@ -232,10 +233,7 @@ class WeatherEndpointTest extends AbstractTest
         $this->assertSame(13.77, $wind->getGust());
 
         $rain = $weather->getRain();
-        $this->assertInstanceOf(Rain::class, $rain);
-        $this->assertSame(null, $rain->getLastOneHourVolume());
-        $this->assertSame(null, $rain->getLastThreeHoursVolume());
-        $this->assertSame(0, $rain->getPrecipitationProbability());
+        $this->assertSame(null, $rain);
 
         $snow = $weather->getSnow();
         $this->assertSame(null, $snow);
