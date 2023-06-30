@@ -5,10 +5,11 @@ namespace ProgrammatorDev\OpenWeatherMap\Endpoint;
 use Http\Client\Exception;
 use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\WithLanguageTrait;
 use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\WithMeasurementSystemTrait;
+use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\OneCall;
 use ProgrammatorDev\OpenWeatherMap\Exception\InvalidCoordinateException;
 use ProgrammatorDev\OpenWeatherMap\Util\ValidateCoordinateTrait;
 
-class OneCall extends AbstractEndpoint
+class OneCallEndpoint extends AbstractEndpoint
 {
     use WithMeasurementSystemTrait;
     use WithLanguageTrait;
@@ -20,7 +21,7 @@ class OneCall extends AbstractEndpoint
      * @throws Exception
      * @throws InvalidCoordinateException
      */
-    public function getCurrent(float $latitude, float $longitude)
+    public function getWeather(float $latitude, float $longitude): OneCall
     {
         $this->validateCoordinate($latitude, $longitude);
 

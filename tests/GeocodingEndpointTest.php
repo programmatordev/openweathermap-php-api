@@ -9,7 +9,7 @@ use ProgrammatorDev\OpenWeatherMap\Entity\Geocoding\ZipCodeLocation;
 use ProgrammatorDev\OpenWeatherMap\Entity\Location;
 use ProgrammatorDev\OpenWeatherMap\Test\DataProvider\InvalidParamDataProvider;
 
-class GeocodingTest extends AbstractTest
+class GeocodingEndpointTest extends AbstractTest
 {
     public function testGeocodingGetCoordinatesByLocationName()
     {

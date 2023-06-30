@@ -12,7 +12,7 @@ use ProgrammatorDev\OpenWeatherMap\Exception\InvalidCoordinateException;
 use ProgrammatorDev\OpenWeatherMap\Util\ValidateCoordinateTrait;
 use ProgrammatorDev\OpenWeatherMap\Util\ValidateNumResultsTrait;
 
-class Weather extends AbstractEndpoint
+class WeatherEndpoint extends AbstractEndpoint
 {
     use WithMeasurementSystemTrait;
     use WithLanguageTrait;

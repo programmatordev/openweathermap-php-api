@@ -13,7 +13,7 @@ use ProgrammatorDev\OpenWeatherMap\Entity\Coordinate;
 use ProgrammatorDev\OpenWeatherMap\Entity\Location;
 use ProgrammatorDev\OpenWeatherMap\Test\DataProvider\InvalidParamDataProvider;
 
-class AirPollutionTest extends AbstractTest
+class AirPollutionEndpointTest extends AbstractTest
 {
     public function testAirPollutionGetCurrent()
     {

@@ -3,10 +3,10 @@
 namespace ProgrammatorDev\OpenWeatherMap\Test;
 
 use ProgrammatorDev\OpenWeatherMap\Config;
-use ProgrammatorDev\OpenWeatherMap\Endpoint\AirPollution;
-use ProgrammatorDev\OpenWeatherMap\Endpoint\Geocoding;
-use ProgrammatorDev\OpenWeatherMap\Endpoint\OneCall;
-use ProgrammatorDev\OpenWeatherMap\Endpoint\Weather;
+use ProgrammatorDev\OpenWeatherMap\Endpoint\AirPollutionEndpoint;
+use ProgrammatorDev\OpenWeatherMap\Endpoint\GeocodingEndpoint;
+use ProgrammatorDev\OpenWeatherMap\Endpoint\OneCallEndpoint;
+use ProgrammatorDev\OpenWeatherMap\Endpoint\WeatherEndpoint;
 
 class OpenWeatherMapTest extends AbstractTest
 {
@@ -17,21 +17,21 @@ class OpenWeatherMapTest extends AbstractTest
 
     public function testOpenWeatherMapGetOneCall()
     {
-        $this->assertInstanceOf(OneCall::class, $this->getApi()->getOneCall());
+        $this->assertInstanceOf(OneCallEndpoint::class, $this->getApi()->getOneCall());
     }
 
     public function testOpenWeatherMapGetWeather()
     {
-        $this->assertInstanceOf(Weather::class, $this->getApi()->getWeather());
+        $this->assertInstanceOf(WeatherEndpoint::class, $this->getApi()->getWeather());
     }
 
     public function testOpenWeatherMapGetAirPollution()
     {
-        $this->assertInstanceOf(AirPollution::class, $this->getApi()->getAirPollution());
+        $this->assertInstanceOf(AirPollutionEndpoint::class, $this->getApi()->getAirPollution());
     }
 
     public function testOpenWeatherMapGetGeocoding()
     {
-        $this->assertInstanceOf(Geocoding::class, $this->getApi()->getGeocoding());
+        $this->assertInstanceOf(GeocodingEndpoint::class, $this->getApi()->getGeocoding());
     }
 }

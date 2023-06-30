@@ -12,7 +12,7 @@ use ProgrammatorDev\OpenWeatherMap\Util\ValidateCoordinateTrait;
 use ProgrammatorDev\OpenWeatherMap\Util\ValidateDateRangeTrait;
 use ProgrammatorDev\OpenWeatherMap\Util\ValidatePastDateTrait;
 
-class AirPollution extends AbstractEndpoint
+class AirPollutionEndpoint extends AbstractEndpoint
 {
     use ValidateCoordinateTrait;
     use ValidateDateRangeTrait;

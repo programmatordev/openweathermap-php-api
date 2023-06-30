@@ -18,7 +18,7 @@ use ProgrammatorDev\OpenWeatherMap\Entity\WeatherCondition;
 use ProgrammatorDev\OpenWeatherMap\Entity\Wind;
 use ProgrammatorDev\OpenWeatherMap\Test\DataProvider\InvalidParamDataProvider;
 
-class WeatherTest extends AbstractTest
+class WeatherEndpointTest extends AbstractTest
 {
     public function testWeatherGetCurrent()
     {

@@ -11,7 +11,7 @@ use ProgrammatorDev\OpenWeatherMap\Util\CreateEntityListTrait;
 use ProgrammatorDev\OpenWeatherMap\Util\ValidateCoordinateTrait;
 use ProgrammatorDev\OpenWeatherMap\Util\ValidateNumResultsTrait;
 
-class Geocoding extends AbstractEndpoint
+class GeocodingEndpoint extends AbstractEndpoint
 {
     use CreateEntityListTrait;
     use ValidateCoordinateTrait;
