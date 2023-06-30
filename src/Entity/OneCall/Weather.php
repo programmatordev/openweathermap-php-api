@@ -18,9 +18,15 @@ class Weather
 
     private ?\DateTimeImmutable $sunsetAt;
 
-    private float $temperature;
+    private ?\DateTimeImmutable $moonriseAt;
 
-    private float $temperatureFeelsLike;
+    private ?\DateTimeImmutable $moonsetAt;
+
+    private ?MoonPhase $moonPhase;
+
+    private Temperature|float $temperature;
+
+    private Temperature|float $temperatureFeelsLike;
 
     private int $atmosphericPressure;
 
@@ -32,9 +38,11 @@ class Weather
 
     private int $cloudiness;
 
-    private int $visibility;
+    private ?int $visibility;
 
     private Wind $wind;
+
+    private ?int $precipitationProbability;
 
     private ?Rain $rain;
 
@@ -53,24 +61,37 @@ class Weather
         $this->sunsetAt = !empty($data['sunset'])
             ? \DateTimeImmutable::createFromFormat('U', $data['sunset'], $timezoneUtc)
             : null;
-        $this->temperature = $data['temp'];
-        $this->temperatureFeelsLike = $data['feels_like'];
+        $this->moonriseAt = !empty($data['moonrise'])
+            ? \DateTimeImmutable::createFromFormat('U', $data['moonrise'], $timezoneUtc)
+            : null;
+        $this->moonsetAt = !empty($data['moonset'])
+            ? \DateTimeImmutable::createFromFormat('U', $data['moonset'], $timezoneUtc)
+            : null;
+        $this->moonPhase = !empty($data['moon_phase'])
+            ? new MoonPhase($data['moon_phase'])
+            : null;
+        $this->temperature = is_array($data['temp'])
+            ? new Temperature($data['temp'])
+            : $data['temp'];
+        $this->temperatureFeelsLike = is_array($data['feels_like'])
+            ? new Temperature($data['feels_like'])
+            : $data['feels_like'];
         $this->atmosphericPressure = $data['pressure'];
         $this->humidity = $data['humidity'];
         $this->dewPoint = $data['dew_point'];
         $this->ultraVioletIndex = $data['uvi'];
         $this->cloudiness = $data['clouds'];
-        $this->visibility = $data['visibility'];
+        $this->visibility = $data['visibility'] ?? null;
         $this->wind = new Wind([
             'speed' => $data['wind_speed'],
             'deg' => $data['wind_deg'],
             'gust' => $data['wind_gust'] ?? null
         ]);
-        $this->rain = (!empty($data['rain']) || isset($data['pop']))
-            ? new Rain([
-                'pop' => $data['pop'] ?? null,
-                '1h' => $data['rain']['1h'] ?? null
-            ])
+        $this->precipitationProbability = isset($data['pop'])
+            ? round($data['pop'] * 100)
+            : null;
+        $this->rain = !empty($data['rain'])
+            ? new Rain($data['rain'])
             : null;
         $this->snow = !empty($data['snow'])
             ? new Snow($data['snow'])

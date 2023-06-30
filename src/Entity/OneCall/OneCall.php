@@ -14,9 +14,9 @@ class OneCall
 
     private Timezone $timezone;
 
-    private Current $current;
+    private Weather $current;
 
-    private array $minutelyForecast;
+    private ?array $minutelyForecast;
 
     private array $hourlyForecast;
 
@@ -28,9 +28,12 @@ class OneCall
     {
         $this->coordinate = new Coordinate($data);
         $this->timezone = new Timezone($data);
-        $this->current = new Current($data['current']);
-        $this->minutelyForecast = $this->createEntityList($data['minutely'], MinuteForecast::class);
-        $this->hourlyForecast = $this->createEntityList($data['hourly'], HourForecast::class);
+        $this->current = new Weather($data['current']);
+        $this->minutelyForecast = !empty($data['minutely'])
+            ? $this->createEntityList($data['minutely'], MinuteForecast::class)
+            : null;
+        $this->hourlyForecast = $this->createEntityList($data['hourly'], Weather::class);
+        $this->dailyForecast = $this->createEntityList($data['daily'], Weather::class);
         $this->alerts = !empty($data['alerts'])
             ? $this->createEntityList($data['alerts'], Alert::class)
             : null;
@@ -46,7 +49,7 @@ class OneCall
         return $this->timezone;
     }
 
-    public function getCurrent(): Current
+    public function getCurrent(): Weather
     {
         return $this->current;
     }

@@ -53,28 +53,15 @@ class WeatherCondition
      */
     private function findGroup(int $id): string
     {
-        if ($id >= 200 && $id < 300) {
-            return 'Thunderstorm';
-        }
-        else if ($id >= 300 && $id < 400) {
-            return 'Drizzle';
-        }
-        else if ($id >= 500 && $id < 600) {
-            return 'Rain';
-        }
-        else if ($id >= 600 && $id < 700) {
-            return 'Snow';
-        }
-        else if ($id >= 700 && $id < 800) {
-            return 'Atmosphere';
-        }
-        else if ($id === 800) {
-            return 'Clear';
-        }
-        else if ($id >= 801 && $id < 810) {
-            return 'Clouds';
-        }
-
-        return 'Undefined';
+        return match (true) {
+            $id >= 200 && $id < 300 => 'Thunderstorm',
+            $id >= 300 && $id < 400 => 'Drizzle',
+            $id >= 500 && $id < 600 => 'Rain',
+            $id >= 600 && $id < 700 => 'Snow',
+            $id >= 700 && $id < 800 => 'Atmosphere',
+            $id === 800 => 'Clear',
+            $id >= 801 && $id < 810 => 'Clouds',
+            default => 'Undefined'
+        };
     }
 }
