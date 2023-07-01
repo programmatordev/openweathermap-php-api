@@ -55,11 +55,27 @@ class OneCall
     }
 
     /**
-     * @return MinuteForecast[]
+     * @return MinuteForecast[]|null
      */
-    public function getMinutelyForecast(): array
+    public function getMinutelyForecast(): ?array
     {
         return $this->minutelyForecast;
+    }
+
+    /**
+     * @return Weather[]
+     */
+    public function getHourlyForecast(): array
+    {
+        return $this->hourlyForecast;
+    }
+
+    /**
+     * @return Weather[]
+     */
+    public function getDailyForecast(): array
+    {
+        return $this->dailyForecast;
     }
 
     /**
