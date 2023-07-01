@@ -44,9 +44,9 @@ class Weather
 
     private ?int $precipitationProbability;
 
-    private ?Rain $rain;
+    private Rain|float|null $rain;
 
-    private ?Snow $snow;
+    private Snow|float|null $snow;
 
     private array $weatherConditions;
 
@@ -68,7 +68,7 @@ class Weather
             ? \DateTimeImmutable::createFromFormat('U', $data['moonset'], $timezoneUtc)
             : null;
         $this->moonPhase = !empty($data['moon_phase'])
-            ? new MoonPhase($data['moon_phase'])
+            ? new MoonPhase($data)
             : null;
         $this->temperature = is_array($data['temp'])
             ? new Temperature($data['temp'])
@@ -91,10 +91,10 @@ class Weather
             ? round($data['pop'] * 100)
             : null;
         $this->rain = !empty($data['rain'])
-            ? new Rain($data['rain'])
+            ? is_array($data['rain']) ? new Rain($data['rain']) : $data['rain']
             : null;
         $this->snow = !empty($data['snow'])
-            ? new Snow($data['snow'])
+            ? is_array($data['snow']) ? new Snow($data['snow']) : $data['snow']
             : null;
         $this->weatherConditions = $this->createEntityList($data['weather'], WeatherCondition::class);
     }

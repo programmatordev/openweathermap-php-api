@@ -4,37 +4,37 @@ namespace ProgrammatorDev\OpenWeatherMap\Entity\OneCall;
 
 class MoonPhase
 {
-    private float $phaseValue;
+    private float $value;
 
-    private string $phaseName;
+    private string $name;
 
-    public function __construct(float $phaseValue)
+    public function __construct(array $data)
     {
-        $this->phaseValue = $phaseValue;
-        $this->phaseName = $this->findPhaseName($phaseValue);
+        $this->value = $data['moon_phase'];
+        $this->name = $this->findName($this->value);
     }
 
-    public function getPhaseValue(): float
+    public function getValue(): float
     {
-        return $this->phaseValue;
+        return $this->value;
     }
 
-    public function getPhaseName(): string
+    public function getName(): string
     {
-        return $this->phaseName;
+        return $this->name;
     }
 
-    private function findPhaseName(float $phaseValue): string
+    private function findName(float $value): string
     {
         return match (true) {
-            $phaseValue > 0 && $phaseValue < 0.25 => 'Waxing crescent',
-            $phaseValue === 0.25 => 'First quarter moon',
-            $phaseValue > 0.25 && $phaseValue < 0.5 => 'Waxing gibbous',
-            $phaseValue === 0.5 => 'Full moon',
-            $phaseValue > 0.5 && $phaseValue < 0.75 => 'Waning gibbous',
-            $phaseValue === 0.75 => 'Last quarter moon',
-            $phaseValue > 0.75 && $phaseValue < 1 => 'Waning crescent',
-            default => 'New moon' // between 0.75 and 1.0
+            $value > 0 && $value < 0.25 => 'Waxing crescent',
+            $value === 0.25 => 'First quarter moon',
+            $value > 0.25 && $value < 0.5 => 'Waxing gibbous',
+            $value === 0.5 => 'Full moon',
+            $value > 0.5 && $value < 0.75 => 'Waning gibbous',
+            $value === 0.75 => 'Last quarter moon',
+            $value > 0.75 && $value < 1 => 'Waning crescent',
+            default => 'New moon' // 0.0 or 1.0
         };
     }
 }
