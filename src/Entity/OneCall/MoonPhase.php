@@ -22,8 +22,8 @@ class MoonPhase
     public function __construct(array $data)
     {
         $this->value = $data['moon_phase'];
-
-        $this->setNames($this->value);
+        $this->sysName = $this->findSysName($this->value);
+        $this->name = ucfirst(strtolower(str_replace('_', ' ', $this->sysName)));
     }
 
     public function getValue(): float
@@ -41,9 +41,9 @@ class MoonPhase
         return $this->sysName;
     }
 
-    private function setNames(float $value): void
+    private function findSysName(float $value): string
     {
-        $this->sysName = match (true) {
+        return match (true) {
             $value > 0 && $value < 0.25 => self::WAXING_CRESCENT,
             $value === 0.25 => self::FIRST_QUARTER_MOON,
             $value > 0.25 && $value < 0.5 => self::WAXING_GIBBOUS,
@@ -53,8 +53,5 @@ class MoonPhase
             $value > 0.75 && $value < 1 => self::WANING_CRESCENT,
             default => self::NEW_MOON // 0.0 or 1.0
         };
-
-        // Convert string to user-friendly text
-        $this->name = ucfirst(strtolower(str_replace('_', ' ', $this->sysName)));
     }
 }

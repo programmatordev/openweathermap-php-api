@@ -131,9 +131,9 @@ class WeatherEndpointTest extends AbstractTest
 
         $weatherCondition = $weatherConditions[0];
         $this->assertSame(800, $weatherCondition->getId());
-        $this->assertSame('Clear', $weatherCondition->getGroup());
-        $this->assertSame('Clear', $weatherCondition->getMain());
+        $this->assertSame('Clear', $weatherCondition->getName());
         $this->assertSame('clear sky', $weatherCondition->getDescription());
+        $this->assertSame('CLEAR', $weatherCondition->getSysName());
 
         $icon = $weatherCondition->getIcon();
         $this->assertInstanceOf(Icon::class, $icon);
@@ -217,9 +217,9 @@ class WeatherEndpointTest extends AbstractTest
 
         $weatherCondition = $weatherConditions[0];
         $this->assertSame(800, $weatherCondition->getId());
-        $this->assertSame('Clear', $weatherCondition->getGroup());
-        $this->assertSame('Clear', $weatherCondition->getMain());
+        $this->assertSame('Clear', $weatherCondition->getName());
         $this->assertSame('clear sky', $weatherCondition->getDescription());
+        $this->assertSame('CLEAR', $weatherCondition->getSysName());
 
         $icon = $weatherCondition->getIcon();
         $this->assertInstanceOf(Icon::class, $icon);

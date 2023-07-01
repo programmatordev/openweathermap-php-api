@@ -99,5 +99,101 @@ class Weather
         $this->weatherConditions = $this->createEntityList($data['weather'], WeatherCondition::class);
     }
 
+    public function getDateTime(): \DateTimeImmutable
+    {
+        return $this->dateTime;
+    }
 
+    public function getSunriseAt(): ?\DateTimeImmutable
+    {
+        return $this->sunriseAt;
+    }
+
+    public function getSunsetAt(): ?\DateTimeImmutable
+    {
+        return $this->sunsetAt;
+    }
+
+    public function getMoonriseAt(): ?\DateTimeImmutable
+    {
+        return $this->moonriseAt;
+    }
+
+    public function getMoonsetAt(): ?\DateTimeImmutable
+    {
+        return $this->moonsetAt;
+    }
+
+    public function getMoonPhase(): ?MoonPhase
+    {
+        return $this->moonPhase;
+    }
+
+    public function getTemperature(): Temperature|float
+    {
+        return $this->temperature;
+    }
+
+    public function getTemperatureFeelsLike(): Temperature|float
+    {
+        return $this->temperatureFeelsLike;
+    }
+
+    public function getAtmosphericPressure(): int
+    {
+        return $this->atmosphericPressure;
+    }
+
+    public function getHumidity(): int
+    {
+        return $this->humidity;
+    }
+
+    public function getDewPoint(): float
+    {
+        return $this->dewPoint;
+    }
+
+    public function getUltraVioletIndex(): float
+    {
+        return $this->ultraVioletIndex;
+    }
+
+    public function getCloudiness(): int
+    {
+        return $this->cloudiness;
+    }
+
+    public function getVisibility(): ?int
+    {
+        return $this->visibility;
+    }
+
+    public function getWind(): Wind
+    {
+        return $this->wind;
+    }
+
+    public function getPrecipitationProbability(): ?int
+    {
+        return $this->precipitationProbability;
+    }
+
+    public function getRain(): Rain|float|null
+    {
+        return $this->rain;
+    }
+
+    public function getSnow(): Snow|float|null
+    {
+        return $this->snow;
+    }
+
+    /**
+     * @return WeatherCondition[]
+     */
+    public function getWeatherConditions(): array
+    {
+        return $this->weatherConditions;
+    }
 }
