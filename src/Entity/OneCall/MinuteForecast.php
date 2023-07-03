@@ -6,7 +6,7 @@ class MinuteForecast
 {
     private \DateTimeImmutable $dateTime;
 
-    private int $precipitation;
+    private float $precipitation;
 
     public function __construct(array $data)
     {
@@ -19,7 +19,7 @@ class MinuteForecast
         return $this->dateTime;
     }
 
-    public function getPrecipitation(): int
+    public function getPrecipitation(): float
     {
         return $this->precipitation;
     }
