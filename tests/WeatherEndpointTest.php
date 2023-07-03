@@ -105,7 +105,7 @@ class WeatherEndpointTest extends AbstractTest
         $this->assertForecastResponse($response);
     }
 
-    public function testWeatherWithMethodsExist()
+    public function testWeatherMethodsWithExist()
     {
         $weatherEndpoint = $this->getApi()->getWeather();
 
