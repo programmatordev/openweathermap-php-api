@@ -21,13 +21,7 @@ class InvalidParamDataProvider
 
     public static function provideInvalidPastDateData(): \Generator
     {
-        yield 'invalid past start date' => [
-            new \DateTimeImmutable('1 days'),
-            new \DateTimeImmutable('-4 days'),
-            InvalidPastDateException::class
-        ];
-        yield 'invalid past end date' => [
-            new \DateTimeImmutable('-5 days'),
+        yield 'invalid past date' => [
             new \DateTimeImmutable('1 days'),
             InvalidPastDateException::class
         ];

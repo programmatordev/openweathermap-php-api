@@ -7,6 +7,7 @@ use PHPUnit\Framework\Attributes\DataProviderExternal;
 use ProgrammatorDev\OpenWeatherMap\Entity\Coordinate;
 use ProgrammatorDev\OpenWeatherMap\Entity\Icon;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\Alert;
+use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\HistoryMoment;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\MinuteForecast;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\MoonPhase;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\OneCall;
@@ -56,6 +57,63 @@ class OneCallEndpointTest extends AbstractTest
 
         $response = $this->getApi()->getOneCall()->getWeatherByLocationName('lisbon, pt');
         $this->assertWeatherResponse($response);
+    }
+
+    public function testOneCallGetHistoryMoment()
+    {
+        $this->mockHttpClient->addResponse(
+            new Response(
+                status: 200,
+                body: MockResponse::ONE_CALL_TIMEMACHINE
+            )
+        );
+
+        $response = $this->getApi()->getOneCall()->getHistoryMoment(
+            38.7077507,
+            -9.1365919,
+            new \DateTimeImmutable('2023-01-01 00:00:00')
+        );
+        $this->assertHistoryMomentResponse($response);
+    }
+
+    #[DataProviderExternal(InvalidParamDataProvider::class, 'provideInvalidCoordinateData')]
+    public function testOneCallGetHistoryMomentWithInvalidCoordinate(float $latitude, float $longitude, string $expectedException)
+    {
+        $this->expectException($expectedException);
+        $this->getApi()->getOneCall()->getHistoryMoment(
+            $latitude,
+            $longitude,
+            new \DateTimeImmutable('2023-01-01 00:00:00')
+        );
+    }
+
+    #[DataProviderExternal(InvalidParamDataProvider::class, 'provideInvalidPastDateData')]
+    public function testOneCallGetHistoryMomentWithInvalidPastDate(\DateTimeImmutable $dateTime, string $expectedException)
+    {
+        $this->expectException($expectedException);
+        $this->getApi()->getOneCall()->getHistoryMoment(38.7077507, -9.1365919, $dateTime);
+    }
+
+    public function testOneCallGetHistoryMomentByLocationName()
+    {
+        $this->mockHttpClient->addResponse(
+            new Response(
+                status: 200,
+                body: MockResponse::GEOCODING_DIRECT
+            )
+        );
+        $this->mockHttpClient->addResponse(
+            new Response(
+                status: 200,
+                body: MockResponse::ONE_CALL_TIMEMACHINE
+            )
+        );
+
+        $response = $this->getApi()->getOneCall()->getHistoryMomentByLocationName(
+            'lisbon, pt',
+            new \DateTimeImmutable('2023-01-01 00:00:00')
+        );
+        $this->assertHistoryMomentResponse($response);
     }
 
     public function testOneCallMethodsWithExist()
@@ -274,5 +332,66 @@ class OneCallEndpointTest extends AbstractTest
         $alertsEndsAt = $alerts[0]->getEndsAt();
         $this->assertInstanceOf(\DateTimeImmutable::class, $alertsEndsAt);
         $this->assertSame('2023-07-06 06:00:00', $alertsEndsAt->format('Y-m-d H:i:s'));
+    }
+
+    private function assertHistoryMomentResponse(HistoryMoment $response): void
+    {
+        $this->assertInstanceOf(HistoryMoment::class, $response);
+
+        $this->assertSame(null, $response->getMoonriseAt());
+        $this->assertSame(null, $response->getMoonsetAt());
+        $this->assertSame(null, $response->getMoonPhase());
+        $this->assertSame(17.48, $response->getTemperature());
+        $this->assertSame(17.16, $response->getTemperatureFeelsLike());
+        $this->assertSame(null, $response->getDescription());
+        $this->assertSame(1019, $response->getAtmosphericPressure());
+        $this->assertSame(72, $response->getHumidity());
+        $this->assertSame(12.38, $response->getDewPoint());
+        $this->assertSame(null, $response->getUltraVioletIndex());
+        $this->assertSame(20, $response->getCloudiness());
+        $this->assertSame(9999, $response->getVisibility());
+        $this->assertSame(null, $response->getPrecipitationProbability());
+        $this->assertSame(null, $response->getRain());
+        $this->assertSame(null, $response->getSnow());
+
+        $wind = $response->getWind();
+        $this->assertInstanceOf(Wind::class, $wind);
+        $this->assertSame(16.54, $wind->getSpeed());
+        $this->assertSame(337, $wind->getDirection());
+        $this->assertSame(16.54, $wind->getGust());
+
+        $weatherConditions = $response->getWeatherConditions();
+        $this->assertContainsOnlyInstancesOf(WeatherCondition::class, $weatherConditions);
+        $this->assertSame(801, $weatherConditions[0]->getId());
+        $this->assertSame('Clouds', $weatherConditions[0]->getName());
+        $this->assertSame('few clouds', $weatherConditions[0]->getDescription());
+        $this->assertSame('CLOUDS', $weatherConditions[0]->getSysName());
+
+        $weatherConditionsIcon = $weatherConditions[0]->getIcon();
+        $this->assertInstanceOf(Icon::class, $weatherConditionsIcon);
+        $this->assertSame('02n', $weatherConditionsIcon->getId());
+        $this->assertSame('https://openweathermap.org/img/wn/02n@4x.png', $weatherConditionsIcon->getImageUrl());
+
+        $dateTime = $response->getDateTime();
+        $this->assertInstanceOf(\DateTimeImmutable::class, $dateTime);
+        $this->assertSame('2023-01-01 00:00:00', $dateTime->format('Y-m-d H:i:s'));
+
+        $sunriseAt = $response->getSunriseAt();
+        $this->assertInstanceOf(\DateTimeImmutable::class, $sunriseAt);
+        $this->assertSame('2023-01-01 07:54:31', $sunriseAt->format('Y-m-d H:i:s'));
+
+        $sunsetAt = $response->getSunsetAt();
+        $this->assertInstanceOf(\DateTimeImmutable::class, $sunsetAt);
+        $this->assertSame('2023-01-01 17:25:02', $sunsetAt->format('Y-m-d H:i:s'));
+
+        $coordinate = $response->getCoordinate();
+        $this->assertInstanceOf(Coordinate::class, $coordinate);
+        $this->assertSame(38.7078, $coordinate->getLatitude());
+        $this->assertSame(-9.1366, $coordinate->getLongitude());
+
+        $timezone = $response->getTimezone();
+        $this->assertInstanceOf(Timezone::class, $timezone);
+        $this->assertSame('Europe/Lisbon', $timezone->getIdentifier());
+        $this->assertSame(0, $timezone->getOffset());
     }
 }

@@ -36,7 +36,7 @@ class Weather
 
     private float $dewPoint;
 
-    private float $ultraVioletIndex;
+    private ?float $ultraVioletIndex;
 
     private int $cloudiness;
 
@@ -82,7 +82,7 @@ class Weather
         $this->atmosphericPressure = $data['pressure'];
         $this->humidity = $data['humidity'];
         $this->dewPoint = $data['dew_point'];
-        $this->ultraVioletIndex = $data['uvi'];
+        $this->ultraVioletIndex = $data['uvi'] ?? null;
         $this->cloudiness = $data['clouds'];
         $this->visibility = $data['visibility'] ?? null;
         $this->wind = new Wind([
@@ -162,7 +162,7 @@ class Weather
         return $this->dewPoint;
     }
 
-    public function getUltraVioletIndex(): float
+    public function getUltraVioletIndex(): ?float
     {
         return $this->ultraVioletIndex;
     }

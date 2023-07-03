@@ -125,8 +125,37 @@ class AirPollutionEndpointTest extends AbstractTest
     }
 
     #[DataProviderExternal(InvalidParamDataProvider::class, 'provideInvalidPastDateData')]
+    public function testAirPollutionGetHistoryWithInvalidPastStartDate(
+        \DateTimeImmutable $startDate,
+        string $expectedException
+    )
+    {
+        $this->expectException($expectedException);
+        $this->getApi()->getAirPollution()->getHistory(
+            38.7077507,
+            -9.1365919,
+            $startDate,
+            new \DateTimeImmutable('-5 days', new \DateTimeZone('UTC'))
+        );
+    }
+
+    #[DataProviderExternal(InvalidParamDataProvider::class, 'provideInvalidPastDateData')]
+    public function testAirPollutionGetHistoryWithInvalidPastEndDate(
+        \DateTimeImmutable $endDate,
+        string $expectedException
+    )
+    {
+        $this->expectException($expectedException);
+        $this->getApi()->getAirPollution()->getHistory(
+            38.7077507,
+            -9.1365919,
+            new \DateTimeImmutable('-5 days', new \DateTimeZone('UTC')),
+            $endDate
+        );
+    }
+
     #[DataProviderExternal(InvalidParamDataProvider::class, 'provideInvalidDateRangeData')]
-    public function testAirPollutionGetHistoryWithInvalidDates(
+    public function testAirPollutionGetHistoryWithInvalidDateRange(
         \DateTimeImmutable $startDate,
         \DateTimeImmutable $endDate,
         string $expectedException
