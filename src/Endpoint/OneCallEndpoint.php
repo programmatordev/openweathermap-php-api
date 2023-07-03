@@ -7,6 +7,7 @@ use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\WithLanguageTrait;
 use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\WithMeasurementSystemTrait;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\OneCall;
 use ProgrammatorDev\OpenWeatherMap\Exception\InvalidCoordinateException;
+use ProgrammatorDev\OpenWeatherMap\Exception\InvalidNumResultsException;
 use ProgrammatorDev\OpenWeatherMap\Util\ValidateCoordinateTrait;
 
 class OneCallEndpoint extends AbstractEndpoint
@@ -37,5 +38,20 @@ class OneCallEndpoint extends AbstractEndpoint
         );
 
         return new OneCall($data);
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidCoordinateException
+     * @throws InvalidNumResultsException
+     */
+    public function getWeatherByLocationName(string $locationName): OneCall
+    {
+        $location = $this->api->getGeocoding()->getCoordinatesByLocationName($locationName)[0];
+
+        return $this->getWeather(
+            $location->getCoordinate()->getLatitude(),
+            $location->getCoordinate()->getLongitude()
+        );
     }
 }

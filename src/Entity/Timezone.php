@@ -10,9 +10,8 @@ class Timezone
 
     public function __construct(array $data)
     {
-        $this->offset = $data['timezone_offset'];
-
         $this->identifier = $data['timezone'] ?? null;
+        $this->offset = $data['timezone_offset'];
     }
 
     public function getIdentifier(): ?string
