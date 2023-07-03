@@ -5,6 +5,7 @@ namespace ProgrammatorDev\OpenWeatherMap\Endpoint;
 use Http\Client\Exception;
 use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\WithLanguageTrait;
 use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\WithMeasurementSystemTrait;
+use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\HistoryDaySummary;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\HistoryMoment;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\OneCall;
 use ProgrammatorDev\OpenWeatherMap\Exception\InvalidCoordinateException;
@@ -99,6 +100,48 @@ class OneCallEndpoint extends AbstractEndpoint
         $location = $this->api->getGeocoding()->getCoordinatesByLocationName($locationName)[0];
 
         return $this->getHistoryMoment(
+            $location->getCoordinate()->getLatitude(),
+            $location->getCoordinate()->getLongitude(),
+            $dateTime
+        );
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidPastDateException
+     * @throws InvalidCoordinateException
+     */
+    public function getHistoryDaySummary(float $latitude, float $longitude, \DateTimeImmutable $dateTime): HistoryDaySummary
+    {
+        $this->validateCoordinate($latitude, $longitude);
+        $this->validatePastDate('dateTime', $dateTime);
+
+        $data = $this->sendRequest(
+            method: 'GET',
+            baseUrl: $this->urlOneCallDaySummary,
+            query: [
+                'lat' => $latitude,
+                'lon' => $longitude,
+                'date' => $dateTime->format('Y-m-d'),
+                'units' => $this->getMeasurementSystem(),
+                'lang' => $this->getLanguage()
+            ]
+        );
+
+        return new HistoryDaySummary($data);
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidCoordinateException
+     * @throws InvalidPastDateException
+     * @throws InvalidNumResultsException
+     */
+    public function getHistoryDaySummaryByLocationName(string $locationName, \DateTimeImmutable $dateTime): HistoryDaySummary
+    {
+        $location = $this->api->getGeocoding()->getCoordinatesByLocationName($locationName)[0];
+
+        return $this->getHistoryDaySummary(
             $location->getCoordinate()->getLatitude(),
             $location->getCoordinate()->getLongitude(),
             $dateTime
