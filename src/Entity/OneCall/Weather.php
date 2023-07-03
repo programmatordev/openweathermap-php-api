@@ -28,6 +28,8 @@ class Weather
 
     private Temperature|float $temperatureFeelsLike;
 
+    private ?string $description;
+
     private int $atmosphericPressure;
 
     private int $humidity;
@@ -76,6 +78,7 @@ class Weather
         $this->temperatureFeelsLike = is_array($data['feels_like'])
             ? new Temperature($data['feels_like'])
             : $data['feels_like'];
+        $this->description = $data['summary'] ?? null;
         $this->atmosphericPressure = $data['pressure'];
         $this->humidity = $data['humidity'];
         $this->dewPoint = $data['dew_point'];
@@ -137,6 +140,11 @@ class Weather
     public function getTemperatureFeelsLike(): Temperature|float
     {
         return $this->temperatureFeelsLike;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
     }
 
     public function getAtmosphericPressure(): int
