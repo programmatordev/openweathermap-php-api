@@ -128,17 +128,15 @@ class WeatherEndpointTest extends AbstractTest
 
         $weatherConditions = $response->getWeatherConditions();
         $this->assertContainsOnlyInstancesOf(WeatherCondition::class, $weatherConditions);
+        $this->assertSame(800, $weatherConditions[0]->getId());
+        $this->assertSame('Clear', $weatherConditions[0]->getName());
+        $this->assertSame('clear sky', $weatherConditions[0]->getDescription());
+        $this->assertSame('CLEAR', $weatherConditions[0]->getSysName());
 
-        $weatherCondition = $weatherConditions[0];
-        $this->assertSame(800, $weatherCondition->getId());
-        $this->assertSame('Clear', $weatherCondition->getName());
-        $this->assertSame('clear sky', $weatherCondition->getDescription());
-        $this->assertSame('CLEAR', $weatherCondition->getSysName());
-
-        $icon = $weatherCondition->getIcon();
-        $this->assertInstanceOf(Icon::class, $icon);
-        $this->assertSame('01d', $icon->getId());
-        $this->assertSame('https://openweathermap.org/img/wn/01d@4x.png', $icon->getImageUrl());
+        $weatherConditionsIcon = $weatherConditions[0]->getIcon();
+        $this->assertInstanceOf(Icon::class, $weatherConditionsIcon);
+        $this->assertSame('01d', $weatherConditionsIcon->getId());
+        $this->assertSame('https://openweathermap.org/img/wn/01d@4x.png', $weatherConditionsIcon->getImageUrl());
 
         $wind = $response->getWind();
         $this->assertInstanceOf(Wind::class, $wind);
@@ -214,17 +212,15 @@ class WeatherEndpointTest extends AbstractTest
 
         $weatherConditions = $weather->getWeatherConditions();
         $this->assertContainsOnlyInstancesOf(WeatherCondition::class, $weatherConditions);
+        $this->assertSame(800, $weatherConditions[0]->getId());
+        $this->assertSame('Clear', $weatherConditions[0]->getName());
+        $this->assertSame('clear sky', $weatherConditions[0]->getDescription());
+        $this->assertSame('CLEAR', $weatherConditions[0]->getSysName());
 
-        $weatherCondition = $weatherConditions[0];
-        $this->assertSame(800, $weatherCondition->getId());
-        $this->assertSame('Clear', $weatherCondition->getName());
-        $this->assertSame('clear sky', $weatherCondition->getDescription());
-        $this->assertSame('CLEAR', $weatherCondition->getSysName());
-
-        $icon = $weatherCondition->getIcon();
-        $this->assertInstanceOf(Icon::class, $icon);
-        $this->assertSame('01d', $icon->getId());
-        $this->assertSame('https://openweathermap.org/img/wn/01d@4x.png', $icon->getImageUrl());
+        $weatherConditionsIcon = $weatherConditions[0]->getIcon();
+        $this->assertInstanceOf(Icon::class, $weatherConditionsIcon);
+        $this->assertSame('01d', $weatherConditionsIcon->getId());
+        $this->assertSame('https://openweathermap.org/img/wn/01d@4x.png', $weatherConditionsIcon->getImageUrl());
 
         $wind = $weather->getWind();
         $this->assertInstanceOf(Wind::class, $wind);
