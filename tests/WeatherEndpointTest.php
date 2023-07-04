@@ -40,25 +40,6 @@ class WeatherEndpointTest extends AbstractTest
         $this->getApi()->getWeather()->getCurrent($latitude, $longitude);
     }
 
-    public function testWeatherGetCurrentByLocationName()
-    {
-        $this->mockHttpClient->addResponse(
-            new Response(
-                status: 200,
-                body: MockResponse::GEOCODING_DIRECT
-            )
-        );
-        $this->mockHttpClient->addResponse(
-            new Response(
-                status: 200,
-                body: MockResponse::WEATHER_CURRENT
-            )
-        );
-
-        $response = $this->getApi()->getWeather()->getCurrentByLocationName('lisbon, pt');
-        $this->assertInstanceOf(CurrentWeather::class, $response);
-    }
-
     public function testWeatherGetForecast()
     {
         $this->mockHttpClient->addResponse(
@@ -84,25 +65,6 @@ class WeatherEndpointTest extends AbstractTest
     {
         $this->expectException($expectedException);
         $this->getApi()->getWeather()->getForecast(38.7077507, -9.1365919, $numResults);
-    }
-
-    public function testWeatherGetForecastByLocationName()
-    {
-        $this->mockHttpClient->addResponse(
-            new Response(
-                status: 200,
-                body: MockResponse::GEOCODING_DIRECT
-            )
-        );
-        $this->mockHttpClient->addResponse(
-            new Response(
-                status: 200,
-                body: MockResponse::WEATHER_FORECAST
-            )
-        );
-
-        $response = $this->getApi()->getWeather()->getForecastByLocationName('lisbon, pt', 1);
-        $this->assertInstanceOf(WeatherList::class, $response);
     }
 
     public function testWeatherMethodsWithExist()

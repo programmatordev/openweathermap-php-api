@@ -7,6 +7,11 @@ use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\WithLanguageTrait;
 use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\WithMeasurementSystemTrait;
 use ProgrammatorDev\OpenWeatherMap\Entity\Weather\CurrentWeather;
 use ProgrammatorDev\OpenWeatherMap\Entity\Weather\WeatherList;
+use ProgrammatorDev\OpenWeatherMap\Exception\ApiError\BadRequestException;
+use ProgrammatorDev\OpenWeatherMap\Exception\ApiError\NotFoundException;
+use ProgrammatorDev\OpenWeatherMap\Exception\ApiError\TooManyRequestsException;
+use ProgrammatorDev\OpenWeatherMap\Exception\ApiError\UnauthorizedException;
+use ProgrammatorDev\OpenWeatherMap\Exception\ApiError\UnexpectedErrorException;
 use ProgrammatorDev\OpenWeatherMap\Exception\InvalidNumResultsException;
 use ProgrammatorDev\OpenWeatherMap\Exception\InvalidCoordinateException;
 use ProgrammatorDev\OpenWeatherMap\Util\ValidateCoordinateTrait;
@@ -26,8 +31,13 @@ class WeatherEndpoint extends AbstractEndpoint
     private string $urlWeatherForecast = 'https://api.openweathermap.org/data/2.5/forecast';
 
     /**
-     * @throws Exception
      * @throws InvalidCoordinateException
+     * @throws Exception
+     * @throws BadRequestException
+     * @throws NotFoundException
+     * @throws TooManyRequestsException
+     * @throws UnauthorizedException
+     * @throws UnexpectedErrorException
      */
     public function getCurrent(float $latitude, float $longitude): CurrentWeather
     {
@@ -48,24 +58,14 @@ class WeatherEndpoint extends AbstractEndpoint
     }
 
     /**
-     * @throws Exception
      * @throws InvalidCoordinateException
      * @throws InvalidNumResultsException
-     */
-    public function getCurrentByLocationName(string $locationName): CurrentWeather
-    {
-        $location = $this->api->getGeocoding()->getCoordinatesByLocationName($locationName)[0];
-
-        return $this->getCurrent(
-            $location->getCoordinate()->getLatitude(),
-            $location->getCoordinate()->getLongitude()
-        );
-    }
-
-    /**
      * @throws Exception
-     * @throws InvalidCoordinateException
-     * @throws InvalidNumResultsException
+     * @throws BadRequestException
+     * @throws NotFoundException
+     * @throws TooManyRequestsException
+     * @throws UnauthorizedException
+     * @throws UnexpectedErrorException
      */
     public function getForecast(float $latitude, float $longitude, int $numResults = self::NUM_RESULTS): WeatherList
     {
@@ -85,21 +85,5 @@ class WeatherEndpoint extends AbstractEndpoint
         );
 
         return new WeatherList($data);
-    }
-
-    /**
-     * @throws Exception
-     * @throws InvalidCoordinateException
-     * @throws InvalidNumResultsException
-     */
-    public function getForecastByLocationName(string $locationName, int $numResults = self::NUM_RESULTS): WeatherList
-    {
-        $location = $this->api->getGeocoding()->getCoordinatesByLocationName($locationName)[0];
-
-        return $this->getForecast(
-            $location->getCoordinate()->getLatitude(),
-            $location->getCoordinate()->getLongitude(),
-            $numResults
-        );
     }
 }

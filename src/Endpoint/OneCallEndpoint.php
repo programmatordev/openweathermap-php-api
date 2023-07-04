@@ -8,8 +8,12 @@ use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\WithMeasurementSystemTrait;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\HistoryDaySummary;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\HistoryMoment;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\OneCall;
+use ProgrammatorDev\OpenWeatherMap\Exception\ApiError\BadRequestException;
+use ProgrammatorDev\OpenWeatherMap\Exception\ApiError\NotFoundException;
+use ProgrammatorDev\OpenWeatherMap\Exception\ApiError\TooManyRequestsException;
+use ProgrammatorDev\OpenWeatherMap\Exception\ApiError\UnauthorizedException;
+use ProgrammatorDev\OpenWeatherMap\Exception\ApiError\UnexpectedErrorException;
 use ProgrammatorDev\OpenWeatherMap\Exception\InvalidCoordinateException;
-use ProgrammatorDev\OpenWeatherMap\Exception\InvalidNumResultsException;
 use ProgrammatorDev\OpenWeatherMap\Exception\InvalidPastDateException;
 use ProgrammatorDev\OpenWeatherMap\Util\ValidateCoordinateTrait;
 use ProgrammatorDev\OpenWeatherMap\Util\ValidatePastDateTrait;
@@ -28,8 +32,13 @@ class OneCallEndpoint extends AbstractEndpoint
     private string $urlOneCallHistoryDaySummary = 'https://api.openweathermap.org/data/3.0/onecall/day_summary';
 
     /**
-     * @throws Exception
      * @throws InvalidCoordinateException
+     * @throws Exception
+     * @throws BadRequestException
+     * @throws NotFoundException
+     * @throws TooManyRequestsException
+     * @throws UnauthorizedException
+     * @throws UnexpectedErrorException
      */
     public function getWeather(float $latitude, float $longitude): OneCall
     {
@@ -50,24 +59,14 @@ class OneCallEndpoint extends AbstractEndpoint
     }
 
     /**
-     * @throws Exception
-     * @throws InvalidCoordinateException
-     * @throws InvalidNumResultsException
-     */
-    public function getWeatherByLocationName(string $locationName): OneCall
-    {
-        $location = $this->api->getGeocoding()->getCoordinatesByLocationName($locationName)[0];
-
-        return $this->getWeather(
-            $location->getCoordinate()->getLatitude(),
-            $location->getCoordinate()->getLongitude()
-        );
-    }
-
-    /**
-     * @throws Exception
      * @throws InvalidCoordinateException
      * @throws InvalidPastDateException
+     * @throws Exception
+     * @throws BadRequestException
+     * @throws NotFoundException
+     * @throws TooManyRequestsException
+     * @throws UnauthorizedException
+     * @throws UnexpectedErrorException
      */
     public function getHistoryMoment(float $latitude, float $longitude, \DateTimeImmutable $dateTime): HistoryMoment
     {
@@ -90,26 +89,14 @@ class OneCallEndpoint extends AbstractEndpoint
     }
 
     /**
-     * @throws Exception
      * @throws InvalidCoordinateException
      * @throws InvalidPastDateException
-     * @throws InvalidNumResultsException
-     */
-    public function getHistoryMomentByLocationName(string $locationName, \DateTimeImmutable $dateTime): HistoryMoment
-    {
-        $location = $this->api->getGeocoding()->getCoordinatesByLocationName($locationName)[0];
-
-        return $this->getHistoryMoment(
-            $location->getCoordinate()->getLatitude(),
-            $location->getCoordinate()->getLongitude(),
-            $dateTime
-        );
-    }
-
-    /**
      * @throws Exception
-     * @throws InvalidPastDateException
-     * @throws InvalidCoordinateException
+     * @throws BadRequestException
+     * @throws NotFoundException
+     * @throws TooManyRequestsException
+     * @throws UnauthorizedException
+     * @throws UnexpectedErrorException
      */
     public function getHistoryDaySummary(float $latitude, float $longitude, \DateTimeImmutable $dateTime): HistoryDaySummary
     {
@@ -129,22 +116,5 @@ class OneCallEndpoint extends AbstractEndpoint
         );
 
         return new HistoryDaySummary($data);
-    }
-
-    /**
-     * @throws Exception
-     * @throws InvalidCoordinateException
-     * @throws InvalidPastDateException
-     * @throws InvalidNumResultsException
-     */
-    public function getHistoryDaySummaryByLocationName(string $locationName, \DateTimeImmutable $dateTime): HistoryDaySummary
-    {
-        $location = $this->api->getGeocoding()->getCoordinatesByLocationName($locationName)[0];
-
-        return $this->getHistoryDaySummary(
-            $location->getCoordinate()->getLatitude(),
-            $location->getCoordinate()->getLongitude(),
-            $dateTime
-        );
     }
 }

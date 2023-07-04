@@ -41,25 +41,6 @@ class OneCallEndpointTest extends AbstractTest
         $this->getApi()->getOneCall()->getWeather($latitude, $longitude);
     }
 
-    public function testOneCallGetWeatherByLocationName()
-    {
-        $this->mockHttpClient->addResponse(
-            new Response(
-                status: 200,
-                body: MockResponse::GEOCODING_DIRECT
-            )
-        );
-        $this->mockHttpClient->addResponse(
-            new Response(
-                status: 200,
-                body: MockResponse::ONE_CALL_WEATHER
-            )
-        );
-
-        $response = $this->getApi()->getOneCall()->getWeatherByLocationName('lisbon, pt');
-        $this->assertInstanceOf(OneCall::class, $response);
-    }
-
     public function testOneCallGetHistoryMoment()
     {
         $this->mockHttpClient->addResponse(
@@ -95,28 +76,6 @@ class OneCallEndpointTest extends AbstractTest
         $this->getApi()->getOneCall()->getHistoryMoment(38.7077507, -9.1365919, $dateTime);
     }
 
-    public function testOneCallGetHistoryMomentByLocationName()
-    {
-        $this->mockHttpClient->addResponse(
-            new Response(
-                status: 200,
-                body: MockResponse::GEOCODING_DIRECT
-            )
-        );
-        $this->mockHttpClient->addResponse(
-            new Response(
-                status: 200,
-                body: MockResponse::ONE_CALL_MOMENT
-            )
-        );
-
-        $response = $this->getApi()->getOneCall()->getHistoryMomentByLocationName(
-            'lisbon, pt',
-            new \DateTimeImmutable('2023-01-01 00:00:00')
-        );
-        $this->assertInstanceOf(HistoryMoment::class, $response);
-    }
-
     public function testOneCallGetHistoryDaySummary()
     {
         $this->mockHttpClient->addResponse(
@@ -150,28 +109,6 @@ class OneCallEndpointTest extends AbstractTest
     {
         $this->expectException($expectedException);
         $this->getApi()->getOneCall()->getHistoryDaySummary(38.7077507, -9.1365919, $dateTime);
-    }
-
-    public function testOneCallGetHistoryDaySummaryByLocationName()
-    {
-        $this->mockHttpClient->addResponse(
-            new Response(
-                status: 200,
-                body: MockResponse::GEOCODING_DIRECT
-            )
-        );
-        $this->mockHttpClient->addResponse(
-            new Response(
-                status: 200,
-                body: MockResponse::ONE_CALL_DAY_SUMMARY
-            )
-        );
-
-        $response = $this->getApi()->getOneCall()->getHistoryDaySummaryByLocationName(
-            'lisbon, pt',
-            new \DateTimeImmutable('2023-01-01 00:00:00')
-        );
-        $this->assertInstanceOf(HistoryDaySummary::class, $response);
     }
 
     public function testOneCallMethodsWithExist()
