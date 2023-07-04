@@ -56,7 +56,7 @@ class WeatherEndpointTest extends AbstractTest
         );
 
         $response = $this->getApi()->getWeather()->getCurrentByLocationName('lisbon, pt');
-        $this->assertCurrentResponse($response);
+        $this->assertInstanceOf(CurrentWeather::class, $response);
     }
 
     public function testWeatherGetForecast()
@@ -102,7 +102,7 @@ class WeatherEndpointTest extends AbstractTest
         );
 
         $response = $this->getApi()->getWeather()->getForecastByLocationName('lisbon, pt', 1);
-        $this->assertForecastResponse($response);
+        $this->assertInstanceOf(WeatherList::class, $response);
     }
 
     public function testWeatherMethodsWithExist()

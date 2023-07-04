@@ -51,7 +51,7 @@ class AirPollutionEndpointTest extends AbstractTest
         );
 
         $response = $this->getApi()->getAirPollution()->getCurrentByLocationName('lisbon, pt');
-        $this->assertCurrentResponse($response);
+        $this->assertInstanceOf(CurrentAirPollution::class, $response);
     }
 
     public function testAirPollutionGetForecast()
@@ -90,7 +90,7 @@ class AirPollutionEndpointTest extends AbstractTest
         );
 
         $response = $this->getApi()->getAirPollution()->getForecastByLocationName('lisbon, pt');
-        $this->assertForecastResponse($response);
+        $this->assertInstanceOf(AirPollutionList::class, $response);
     }
 
     public function testAirPollutionGetHistory()
@@ -187,7 +187,7 @@ class AirPollutionEndpointTest extends AbstractTest
             new \DateTimeImmutable('-5 days', $utcTimezone),
             new \DateTimeImmutable('-4 days', $utcTimezone)
         );
-        $this->assertHistoryResponse($response);
+        $this->assertInstanceOf(AirPollutionList::class, $response);
     }
 
     private function assertCurrentResponse(CurrentAirPollution $response): void
