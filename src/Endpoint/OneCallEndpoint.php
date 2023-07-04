@@ -23,9 +23,9 @@ class OneCallEndpoint extends AbstractEndpoint
 
     private string $urlOneCall = 'https://api.openweathermap.org/data/3.0/onecall';
 
-    private string $urlOneCallTimeMachine = 'https://api.openweathermap.org/data/3.0/onecall/timemachine';
+    private string $urlOneCallHistoryMoment = 'https://api.openweathermap.org/data/3.0/onecall/timemachine';
 
-    private string $urlOneCallDaySummary = 'https://api.openweathermap.org/data/3.0/onecall/day_summary';
+    private string $urlOneCallHistoryDaySummary = 'https://api.openweathermap.org/data/3.0/onecall/day_summary';
 
     /**
      * @throws Exception
@@ -76,7 +76,7 @@ class OneCallEndpoint extends AbstractEndpoint
 
         $data = $this->sendRequest(
             method: 'GET',
-            baseUrl: $this->urlOneCallTimeMachine,
+            baseUrl: $this->urlOneCallHistoryMoment,
             query: [
                 'lat' => $latitude,
                 'lon' => $longitude,
@@ -118,7 +118,7 @@ class OneCallEndpoint extends AbstractEndpoint
 
         $data = $this->sendRequest(
             method: 'GET',
-            baseUrl: $this->urlOneCallDaySummary,
+            baseUrl: $this->urlOneCallHistoryDaySummary,
             query: [
                 'lat' => $latitude,
                 'lon' => $longitude,
