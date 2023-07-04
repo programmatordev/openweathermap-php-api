@@ -12,7 +12,7 @@ use ProgrammatorDev\OpenWeatherMap\Util\ValidateCoordinateTrait;
 use ProgrammatorDev\OpenWeatherMap\Util\ValidateDateRangeTrait;
 use ProgrammatorDev\OpenWeatherMap\Util\ValidatePastDateTrait;
 
-class AirPollution extends AbstractEndpoint
+class AirPollutionEndpoint extends AbstractEndpoint
 {
     use ValidateCoordinateTrait;
     use ValidateDateRangeTrait;
@@ -110,7 +110,7 @@ class AirPollution extends AbstractEndpoint
         $this->validatePastDate('endDate', $endDate);
         $this->validateDateRange($startDate, $endDate);
 
-        $utcTimezone = new \DateTimeZone('UTC');
+        $timezoneUtc = new \DateTimeZone('UTC');
 
         $data = $this->sendRequest(
             method: 'GET',
@@ -118,8 +118,8 @@ class AirPollution extends AbstractEndpoint
             query: [
                 'lat' => $latitude,
                 'lon' => $longitude,
-                'start' => $startDate->setTimezone($utcTimezone)->getTimestamp(),
-                'end' => $endDate->setTimezone($utcTimezone)->getTimestamp()
+                'start' => $startDate->setTimezone($timezoneUtc)->getTimestamp(),
+                'end' => $endDate->setTimezone($timezoneUtc)->getTimestamp()
             ]
         );
 

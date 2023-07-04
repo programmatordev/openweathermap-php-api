@@ -31,7 +31,7 @@ class Wind
         return $this->direction;
     }
 
-    public function getGust(): float
+    public function getGust(): ?float
     {
         return $this->gust;
     }

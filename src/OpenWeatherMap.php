@@ -2,9 +2,10 @@
 
 namespace ProgrammatorDev\OpenWeatherMap;
 
-use ProgrammatorDev\OpenWeatherMap\Endpoint\AirPollution;
-use ProgrammatorDev\OpenWeatherMap\Endpoint\Geocoding;
-use ProgrammatorDev\OpenWeatherMap\Endpoint\Weather;
+use ProgrammatorDev\OpenWeatherMap\Endpoint\AirPollutionEndpoint;
+use ProgrammatorDev\OpenWeatherMap\Endpoint\GeocodingEndpoint;
+use ProgrammatorDev\OpenWeatherMap\Endpoint\OneCallEndpoint;
+use ProgrammatorDev\OpenWeatherMap\Endpoint\WeatherEndpoint;
 
 class OpenWeatherMap
 {
@@ -17,18 +18,23 @@ class OpenWeatherMap
         return $this->config;
     }
 
-    public function getWeather(): Weather
+    public function getOneCall(): OneCallEndpoint
     {
-        return new Weather($this);
+        return new OneCallEndpoint($this);
     }
 
-    public function getAirPollution(): AirPollution
+    public function getWeather(): WeatherEndpoint
     {
-        return new AirPollution($this);
+        return new WeatherEndpoint($this);
     }
 
-    public function getGeocoding(): Geocoding
+    public function getAirPollution(): AirPollutionEndpoint
     {
-        return new Geocoding($this);
+        return new AirPollutionEndpoint($this);
+    }
+
+    public function getGeocoding(): GeocodingEndpoint
+    {
+        return new GeocodingEndpoint($this);
     }
 }
