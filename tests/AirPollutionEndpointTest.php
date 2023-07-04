@@ -35,25 +35,6 @@ class AirPollutionEndpointTest extends AbstractTest
         $this->getApi()->getAirPollution()->getCurrent($latitude, $longitude);
     }
 
-    public function testAirPollutionGetCurrentByLocationName()
-    {
-        $this->mockHttpClient->addResponse(
-            new Response(
-                status: 200,
-                body: MockResponse::GEOCODING_DIRECT
-            )
-        );
-        $this->mockHttpClient->addResponse(
-            new Response(
-                status: 200,
-                body: MockResponse::AIR_POLLUTION_CURRENT
-            )
-        );
-
-        $response = $this->getApi()->getAirPollution()->getCurrentByLocationName('lisbon, pt');
-        $this->assertInstanceOf(CurrentAirPollution::class, $response);
-    }
-
     public function testAirPollutionGetForecast()
     {
         $this->mockHttpClient->addResponse(
@@ -72,25 +53,6 @@ class AirPollutionEndpointTest extends AbstractTest
     {
         $this->expectException($expectedException);
         $this->getApi()->getAirPollution()->getForecast($latitude, $longitude);
-    }
-
-    public function testAirPollutionGetForecastByLocationName()
-    {
-        $this->mockHttpClient->addResponse(
-            new Response(
-                status: 200,
-                body: MockResponse::GEOCODING_DIRECT
-            )
-        );
-        $this->mockHttpClient->addResponse(
-            new Response(
-                status: 200,
-                body: MockResponse::AIR_POLLUTION_FORECAST
-            )
-        );
-
-        $response = $this->getApi()->getAirPollution()->getForecastByLocationName('lisbon, pt');
-        $this->assertInstanceOf(AirPollutionList::class, $response);
     }
 
     public function testAirPollutionGetHistory()
@@ -163,31 +125,6 @@ class AirPollutionEndpointTest extends AbstractTest
     {
         $this->expectException($expectedException);
         $this->getApi()->getAirPollution()->getHistory(38.7077507, -9.1365919, $startDate, $endDate);
-    }
-
-    public function testAirPollutionGetHistoryByLocationName()
-    {
-        $this->mockHttpClient->addResponse(
-            new Response(
-                status: 200,
-                body: MockResponse::GEOCODING_DIRECT
-            )
-        );
-        $this->mockHttpClient->addResponse(
-            new Response(
-                status: 200,
-                body: MockResponse::AIR_POLLUTION_HISTORY
-            )
-        );
-
-        $utcTimezone = new \DateTimeZone('UTC');
-
-        $response = $this->getApi()->getAirPollution()->getHistoryByLocationName(
-            'lisbon, pt',
-            new \DateTimeImmutable('-5 days', $utcTimezone),
-            new \DateTimeImmutable('-4 days', $utcTimezone)
-        );
-        $this->assertInstanceOf(AirPollutionList::class, $response);
     }
 
     private function assertCurrentResponse(CurrentAirPollution $response): void

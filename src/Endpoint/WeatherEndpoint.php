@@ -67,26 +67,6 @@ class WeatherEndpoint extends AbstractEndpoint
      * @throws UnauthorizedException
      * @throws UnexpectedErrorException
      */
-    public function getCurrentByLocationName(string $locationName): CurrentWeather
-    {
-        $location = $this->api->getGeocoding()->getCoordinatesByLocationName($locationName)[0];
-
-        return $this->getCurrent(
-            $location->getCoordinate()->getLatitude(),
-            $location->getCoordinate()->getLongitude()
-        );
-    }
-
-    /**
-     * @throws InvalidCoordinateException
-     * @throws InvalidNumResultsException
-     * @throws Exception
-     * @throws BadRequestException
-     * @throws NotFoundException
-     * @throws TooManyRequestsException
-     * @throws UnauthorizedException
-     * @throws UnexpectedErrorException
-     */
     public function getForecast(float $latitude, float $longitude, int $numResults = self::NUM_RESULTS): WeatherList
     {
         $this->validateCoordinate($latitude, $longitude);
@@ -105,26 +85,5 @@ class WeatherEndpoint extends AbstractEndpoint
         );
 
         return new WeatherList($data);
-    }
-
-    /**
-     * @throws InvalidCoordinateException
-     * @throws InvalidNumResultsException
-     * @throws Exception
-     * @throws BadRequestException
-     * @throws NotFoundException
-     * @throws TooManyRequestsException
-     * @throws UnauthorizedException
-     * @throws UnexpectedErrorException
-     */
-    public function getForecastByLocationName(string $locationName, int $numResults = self::NUM_RESULTS): WeatherList
-    {
-        $location = $this->api->getGeocoding()->getCoordinatesByLocationName($locationName)[0];
-
-        return $this->getForecast(
-            $location->getCoordinate()->getLatitude(),
-            $location->getCoordinate()->getLongitude(),
-            $numResults
-        );
     }
 }
