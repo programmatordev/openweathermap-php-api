@@ -51,7 +51,10 @@ class AbstractEndpoint
         $uri = $this->buildUrl($baseUrl, $query);
         $response = $this->getHttpClient()->send($method, $uri, $headers, $body);
 
-        $this->handleApiError($response);
+        // If API returns a status code error
+        if (($statusCode = $response->getStatusCode()) >= 400) {
+            $this->handleApiError($response, $statusCode);
+        }
 
         return ResponseMediator::toArray($response);
     }
@@ -80,21 +83,17 @@ class AbstractEndpoint
      * @throws TooManyRequestsException
      * @throws NotFoundException
      */
-    private function handleApiError(ResponseInterface $response): void
+    private function handleApiError(ResponseInterface $response, int $statusCode): void
     {
-        $statusCode = $response->getStatusCode();
+        $data = ResponseMediator::toArray($response);
+        $error = new Error($data);
 
-        if ($statusCode >= 400) {
-            $data = ResponseMediator::toArray($response);
-            $error = new Error($data);
-
-            match ($statusCode) {
-                400 => throw new BadRequestException($error->getMessage(), $error->getCode(), $error->getParameters()),
-                401 => throw new UnauthorizedException($error->getMessage(), $error->getCode(), $error->getParameters()),
-                404 => throw new NotFoundException($error->getMessage(), $error->getCode(), $error->getParameters()),
-                429 => throw new TooManyRequestsException($error->getMessage(), $error->getCode(), $error->getParameters()),
-                default => throw new UnexpectedErrorException($error->getMessage(), $error->getCode(), $error->getParameters())
-            };
-        }
+        match ($statusCode) {
+            400 => throw new BadRequestException($error->getMessage(), $error->getCode(), $error->getParameters()),
+            401 => throw new UnauthorizedException($error->getMessage(), $error->getCode(), $error->getParameters()),
+            404 => throw new NotFoundException($error->getMessage(), $error->getCode(), $error->getParameters()),
+            429 => throw new TooManyRequestsException($error->getMessage(), $error->getCode(), $error->getParameters()),
+            default => throw new UnexpectedErrorException($error->getMessage(), $error->getCode(), $error->getParameters())
+        };
     }
 }
