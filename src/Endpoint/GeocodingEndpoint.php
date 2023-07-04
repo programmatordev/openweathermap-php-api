@@ -5,6 +5,11 @@ namespace ProgrammatorDev\OpenWeatherMap\Endpoint;
 use Http\Client\Exception;
 use ProgrammatorDev\OpenWeatherMap\Entity\Geocoding\ZipCodeLocation;
 use ProgrammatorDev\OpenWeatherMap\Entity\Location;
+use ProgrammatorDev\OpenWeatherMap\Exception\ApiError\BadRequestException;
+use ProgrammatorDev\OpenWeatherMap\Exception\ApiError\NotFoundException;
+use ProgrammatorDev\OpenWeatherMap\Exception\ApiError\TooManyRequestsException;
+use ProgrammatorDev\OpenWeatherMap\Exception\ApiError\UnauthorizedException;
+use ProgrammatorDev\OpenWeatherMap\Exception\ApiError\UnexpectedErrorException;
 use ProgrammatorDev\OpenWeatherMap\Exception\InvalidCoordinateException;
 use ProgrammatorDev\OpenWeatherMap\Exception\InvalidNumResultsException;
 use ProgrammatorDev\OpenWeatherMap\Util\CreateEntityListTrait;
@@ -27,8 +32,13 @@ class GeocodingEndpoint extends AbstractEndpoint
 
     /**
      * @return Location[]
-     * @throws Exception
      * @throws InvalidNumResultsException
+     * @throws Exception
+     * @throws BadRequestException
+     * @throws NotFoundException
+     * @throws TooManyRequestsException
+     * @throws UnauthorizedException
+     * @throws UnexpectedErrorException
      */
     public function getCoordinatesByLocationName(string $locationName, int $numResults = self::NUM_RESULTS): array
     {
@@ -48,6 +58,11 @@ class GeocodingEndpoint extends AbstractEndpoint
 
     /**
      * @throws Exception
+     * @throws BadRequestException
+     * @throws NotFoundException
+     * @throws TooManyRequestsException
+     * @throws UnauthorizedException
+     * @throws UnexpectedErrorException
      */
     public function getCoordinatesByZipCode(string $zipCode, string $countryCode): ZipCodeLocation
     {
@@ -64,9 +79,14 @@ class GeocodingEndpoint extends AbstractEndpoint
 
     /**
      * @return Location[]
-     * @throws Exception
      * @throws InvalidCoordinateException
      * @throws InvalidNumResultsException
+     * @throws Exception
+     * @throws BadRequestException
+     * @throws NotFoundException
+     * @throws TooManyRequestsException
+     * @throws UnauthorizedException
+     * @throws UnexpectedErrorException
      */
     public function getLocationNameByCoordinates(float $latitude, float $longitude, int $numResults = self::NUM_RESULTS): array
     {
