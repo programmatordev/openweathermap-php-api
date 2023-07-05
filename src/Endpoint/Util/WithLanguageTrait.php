@@ -2,19 +2,20 @@
 
 namespace ProgrammatorDev\OpenWeatherMap\Endpoint\Util;
 
-use ProgrammatorDev\OpenWeatherMap\Exception\InvalidLanguageException;
-use ProgrammatorDev\OpenWeatherMap\Util\ValidateLanguageTrait;
+use ProgrammatorDev\OpenWeatherMap\Exception\InvalidChoiceException;
+use ProgrammatorDev\OpenWeatherMap\Language;
+use ProgrammatorDev\OpenWeatherMap\Util\ValidateChoiceTrait;
 
 trait WithLanguageTrait
 {
-    use ValidateLanguageTrait;
+    use ValidateChoiceTrait;
 
     /**
-     * @throws InvalidLanguageException
+     * @throws InvalidChoiceException
      */
     public function withLanguage(string $language): static
     {
-        $this->validateLanguage($language);
+        $this->validateChoice('language', $language, Language::getList());
 
         $clone = clone $this;
         $clone->language = $language;

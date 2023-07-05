@@ -4,18 +4,15 @@ namespace ProgrammatorDev\OpenWeatherMap;
 
 use ProgrammatorDev\OpenWeatherMap\Exception\InvalidBlankException;
 use ProgrammatorDev\OpenWeatherMap\Exception\InvalidChoiceException;
-use ProgrammatorDev\OpenWeatherMap\Exception\InvalidLanguageException;
 use ProgrammatorDev\OpenWeatherMap\HttpClient\HttpClientBuilder;
 use ProgrammatorDev\OpenWeatherMap\Util\ValidateBlankTrait;
 use ProgrammatorDev\OpenWeatherMap\Util\ValidateChoiceTrait;
-use ProgrammatorDev\OpenWeatherMap\Util\ValidateLanguageTrait;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class Config
 {
     use ValidateBlankTrait;
     use ValidateChoiceTrait;
-    use ValidateLanguageTrait;
 
     private array $options;
 
@@ -89,11 +86,11 @@ class Config
     }
 
     /**
-     * @throws InvalidLanguageException
+     * @throws InvalidChoiceException
      */
     public function setLanguage(string $language): self
     {
-        $this->validateLanguage($language);
+        $this->validateChoice('language', $language, Language::getList());
 
         $this->options['language'] = $language;
 

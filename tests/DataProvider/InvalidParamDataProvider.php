@@ -50,6 +50,6 @@ class InvalidParamDataProvider
 
     public static function provideInvalidLanguageData(): \Generator
     {
-        yield 'not allowed language' => ['invalid', InvalidLanguageException::class];
+        yield 'not allowed language' => ['invalid', InvalidChoiceException::class];
     }
 }
