@@ -1,6 +1,6 @@
 <?php
 
-namespace ProgrammatorDev\OpenWeatherMap\Exception\ApiError;
+namespace ProgrammatorDev\OpenWeatherMap\Exception;
 
 class ApiErrorException extends \Exception
 {

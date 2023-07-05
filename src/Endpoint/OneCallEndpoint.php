@@ -8,13 +8,13 @@ use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\WithMeasurementSystemTrait;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\HistoryDaySummary;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\HistoryMoment;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\OneCall;
-use ProgrammatorDev\OpenWeatherMap\Exception\ApiError\BadRequestException;
-use ProgrammatorDev\OpenWeatherMap\Exception\ApiError\NotFoundException;
-use ProgrammatorDev\OpenWeatherMap\Exception\ApiError\TooManyRequestsException;
-use ProgrammatorDev\OpenWeatherMap\Exception\ApiError\UnauthorizedException;
-use ProgrammatorDev\OpenWeatherMap\Exception\ApiError\UnexpectedErrorException;
+use ProgrammatorDev\OpenWeatherMap\Exception\BadRequestException;
 use ProgrammatorDev\OpenWeatherMap\Exception\InvalidCoordinateException;
 use ProgrammatorDev\OpenWeatherMap\Exception\InvalidPastDateException;
+use ProgrammatorDev\OpenWeatherMap\Exception\NotFoundException;
+use ProgrammatorDev\OpenWeatherMap\Exception\TooManyRequestsException;
+use ProgrammatorDev\OpenWeatherMap\Exception\UnauthorizedException;
+use ProgrammatorDev\OpenWeatherMap\Exception\UnexpectedErrorException;
 use ProgrammatorDev\OpenWeatherMap\Util\ValidateCoordinateTrait;
 use ProgrammatorDev\OpenWeatherMap\Util\ValidatePastDateTrait;
 

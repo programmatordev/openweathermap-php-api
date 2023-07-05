@@ -4,12 +4,12 @@ namespace ProgrammatorDev\OpenWeatherMap\Test;
 
 use Nyholm\Psr7\Response;
 use PHPUnit\Framework\Attributes\DataProvider;
-use ProgrammatorDev\OpenWeatherMap\Exception\ApiError\ApiErrorException;
-use ProgrammatorDev\OpenWeatherMap\Exception\ApiError\BadRequestException;
-use ProgrammatorDev\OpenWeatherMap\Exception\ApiError\NotFoundException;
-use ProgrammatorDev\OpenWeatherMap\Exception\ApiError\TooManyRequestsException;
-use ProgrammatorDev\OpenWeatherMap\Exception\ApiError\UnauthorizedException;
-use ProgrammatorDev\OpenWeatherMap\Exception\ApiError\UnexpectedErrorException;
+use ProgrammatorDev\OpenWeatherMap\Exception\ApiErrorException;
+use ProgrammatorDev\OpenWeatherMap\Exception\BadRequestException;
+use ProgrammatorDev\OpenWeatherMap\Exception\NotFoundException;
+use ProgrammatorDev\OpenWeatherMap\Exception\TooManyRequestsException;
+use ProgrammatorDev\OpenWeatherMap\Exception\UnauthorizedException;
+use ProgrammatorDev\OpenWeatherMap\Exception\UnexpectedErrorException;
 
 class ApiErrorTest extends AbstractTest
 {
