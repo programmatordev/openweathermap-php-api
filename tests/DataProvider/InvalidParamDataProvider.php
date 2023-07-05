@@ -3,7 +3,6 @@
 namespace ProgrammatorDev\OpenWeatherMap\Test\DataProvider;
 
 use ProgrammatorDev\OpenWeatherMap\Exception\InvalidDateRangeException;
-use ProgrammatorDev\OpenWeatherMap\Exception\InvalidNumResultsException;
 use ProgrammatorDev\OpenWeatherMap\Exception\InvalidPastDateException;
 
 class InvalidParamDataProvider
@@ -35,8 +34,8 @@ class InvalidParamDataProvider
 
     public static function provideInvalidNumResultsData(): \Generator
     {
-        yield 'equal to zero num results' => [0,  InvalidNumResultsException::class];
-        yield 'negative num results' => [-1,  InvalidNumResultsException::class];
+        yield 'equal to zero num results' => [0,  \UnexpectedValueException::class];
+        yield 'negative num results' => [-1,  \UnexpectedValueException::class];
     }
 
     public static function provideInvalidMeasurementSystemData(): \Generator

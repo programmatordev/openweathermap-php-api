@@ -6,7 +6,6 @@ use Http\Client\Exception;
 use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\AirPollutionList;
 use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\CurrentAirPollution;
 use ProgrammatorDev\OpenWeatherMap\Exception\BadRequestException;
-use ProgrammatorDev\OpenWeatherMap\Exception\InvalidCoordinateException;
 use ProgrammatorDev\OpenWeatherMap\Exception\InvalidDateRangeException;
 use ProgrammatorDev\OpenWeatherMap\Exception\InvalidPastDateException;
 use ProgrammatorDev\OpenWeatherMap\Exception\NotFoundException;
@@ -30,7 +29,6 @@ class AirPollutionEndpoint extends AbstractEndpoint
     private string $urlAirPollutionHistory = 'https://api.openweathermap.org/data/2.5/air_pollution/history';
 
     /**
-     * @throws InvalidCoordinateException
      * @throws Exception
      * @throws BadRequestException
      * @throws NotFoundException
@@ -55,7 +53,6 @@ class AirPollutionEndpoint extends AbstractEndpoint
     }
 
     /**
-     * @throws InvalidCoordinateException
      * @throws Exception
      * @throws BadRequestException
      * @throws NotFoundException
@@ -80,7 +77,6 @@ class AirPollutionEndpoint extends AbstractEndpoint
     }
 
     /**
-     * @throws InvalidCoordinateException
      * @throws InvalidDateRangeException
      * @throws InvalidPastDateException
      * @throws Exception

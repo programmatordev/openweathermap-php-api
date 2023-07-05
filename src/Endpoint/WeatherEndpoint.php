@@ -8,21 +8,19 @@ use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\WithMeasurementSystemTrait;
 use ProgrammatorDev\OpenWeatherMap\Entity\Weather\CurrentWeather;
 use ProgrammatorDev\OpenWeatherMap\Entity\Weather\WeatherList;
 use ProgrammatorDev\OpenWeatherMap\Exception\BadRequestException;
-use ProgrammatorDev\OpenWeatherMap\Exception\InvalidCoordinateException;
-use ProgrammatorDev\OpenWeatherMap\Exception\InvalidNumResultsException;
 use ProgrammatorDev\OpenWeatherMap\Exception\NotFoundException;
 use ProgrammatorDev\OpenWeatherMap\Exception\TooManyRequestsException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnauthorizedException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnexpectedErrorException;
 use ProgrammatorDev\OpenWeatherMap\Util\ValidateCoordinateTrait;
-use ProgrammatorDev\OpenWeatherMap\Util\ValidateNumResultsTrait;
+use ProgrammatorDev\OpenWeatherMap\Util\ValidateGreaterThanTrait;
 
 class WeatherEndpoint extends AbstractEndpoint
 {
     use WithMeasurementSystemTrait;
     use WithLanguageTrait;
     use ValidateCoordinateTrait;
-    use ValidateNumResultsTrait;
+    use ValidateGreaterThanTrait;
 
     private const NUM_RESULTS = 40;
 
@@ -31,7 +29,6 @@ class WeatherEndpoint extends AbstractEndpoint
     private string $urlWeatherForecast = 'https://api.openweathermap.org/data/2.5/forecast';
 
     /**
-     * @throws InvalidCoordinateException
      * @throws Exception
      * @throws BadRequestException
      * @throws NotFoundException
@@ -58,8 +55,6 @@ class WeatherEndpoint extends AbstractEndpoint
     }
 
     /**
-     * @throws InvalidCoordinateException
-     * @throws InvalidNumResultsException
      * @throws Exception
      * @throws BadRequestException
      * @throws NotFoundException
@@ -70,7 +65,7 @@ class WeatherEndpoint extends AbstractEndpoint
     public function getForecast(float $latitude, float $longitude, int $numResults = self::NUM_RESULTS): WeatherList
     {
         $this->validateCoordinate($latitude, $longitude);
-        $this->validateNumResults($numResults);
+        $this->validateGreaterThan('numResults', $numResults, 0);
 
         $data = $this->sendRequest(
             method: 'GET',

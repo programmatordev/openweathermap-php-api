@@ -6,21 +6,19 @@ use Http\Client\Exception;
 use ProgrammatorDev\OpenWeatherMap\Entity\Geocoding\ZipCodeLocation;
 use ProgrammatorDev\OpenWeatherMap\Entity\Location;
 use ProgrammatorDev\OpenWeatherMap\Exception\BadRequestException;
-use ProgrammatorDev\OpenWeatherMap\Exception\InvalidCoordinateException;
-use ProgrammatorDev\OpenWeatherMap\Exception\InvalidNumResultsException;
 use ProgrammatorDev\OpenWeatherMap\Exception\NotFoundException;
 use ProgrammatorDev\OpenWeatherMap\Exception\TooManyRequestsException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnauthorizedException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnexpectedErrorException;
 use ProgrammatorDev\OpenWeatherMap\Util\CreateEntityListTrait;
 use ProgrammatorDev\OpenWeatherMap\Util\ValidateCoordinateTrait;
-use ProgrammatorDev\OpenWeatherMap\Util\ValidateNumResultsTrait;
+use ProgrammatorDev\OpenWeatherMap\Util\ValidateGreaterThanTrait;
 
 class GeocodingEndpoint extends AbstractEndpoint
 {
     use CreateEntityListTrait;
     use ValidateCoordinateTrait;
-    use ValidateNumResultsTrait;
+    use ValidateGreaterThanTrait;
 
     private const NUM_RESULTS = 5;
 
@@ -32,7 +30,6 @@ class GeocodingEndpoint extends AbstractEndpoint
 
     /**
      * @return Location[]
-     * @throws InvalidNumResultsException
      * @throws Exception
      * @throws BadRequestException
      * @throws NotFoundException
@@ -42,7 +39,7 @@ class GeocodingEndpoint extends AbstractEndpoint
      */
     public function getCoordinatesByLocationName(string $locationName, int $numResults = self::NUM_RESULTS): array
     {
-        $this->validateNumResults($numResults);
+        $this->validateGreaterThan('numResults', $numResults, 0);
 
         $data = $this->sendRequest(
             method: 'GET',
@@ -79,8 +76,6 @@ class GeocodingEndpoint extends AbstractEndpoint
 
     /**
      * @return Location[]
-     * @throws InvalidCoordinateException
-     * @throws InvalidNumResultsException
      * @throws Exception
      * @throws BadRequestException
      * @throws NotFoundException
@@ -91,7 +86,7 @@ class GeocodingEndpoint extends AbstractEndpoint
     public function getLocationNameByCoordinates(float $latitude, float $longitude, int $numResults = self::NUM_RESULTS): array
     {
         $this->validateCoordinate($latitude, $longitude);
-        $this->validateNumResults($numResults);
+        $this->validateGreaterThan('numResults', $numResults, 0);
 
         $data = $this->sendRequest(
             method: 'GET',

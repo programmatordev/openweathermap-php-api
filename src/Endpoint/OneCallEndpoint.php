@@ -9,7 +9,6 @@ use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\HistoryDaySummary;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\HistoryMoment;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\OneCall;
 use ProgrammatorDev\OpenWeatherMap\Exception\BadRequestException;
-use ProgrammatorDev\OpenWeatherMap\Exception\InvalidCoordinateException;
 use ProgrammatorDev\OpenWeatherMap\Exception\InvalidPastDateException;
 use ProgrammatorDev\OpenWeatherMap\Exception\NotFoundException;
 use ProgrammatorDev\OpenWeatherMap\Exception\TooManyRequestsException;
@@ -32,7 +31,6 @@ class OneCallEndpoint extends AbstractEndpoint
     private string $urlOneCallHistoryDaySummary = 'https://api.openweathermap.org/data/3.0/onecall/day_summary';
 
     /**
-     * @throws InvalidCoordinateException
      * @throws Exception
      * @throws BadRequestException
      * @throws NotFoundException
@@ -59,7 +57,6 @@ class OneCallEndpoint extends AbstractEndpoint
     }
 
     /**
-     * @throws InvalidCoordinateException
      * @throws InvalidPastDateException
      * @throws Exception
      * @throws BadRequestException
@@ -89,7 +86,6 @@ class OneCallEndpoint extends AbstractEndpoint
     }
 
     /**
-     * @throws InvalidCoordinateException
      * @throws InvalidPastDateException
      * @throws Exception
      * @throws BadRequestException
