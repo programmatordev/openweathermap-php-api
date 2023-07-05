@@ -2,19 +2,20 @@
 
 namespace ProgrammatorDev\OpenWeatherMap\Endpoint\Util;
 
-use ProgrammatorDev\OpenWeatherMap\Exception\InvalidMeasurementSystemException;
-use ProgrammatorDev\OpenWeatherMap\Util\ValidateMeasurementSystemTrait;
+use ProgrammatorDev\OpenWeatherMap\Exception\InvalidChoiceException;
+use ProgrammatorDev\OpenWeatherMap\MeasurementSystem;
+use ProgrammatorDev\OpenWeatherMap\Util\ValidateChoiceTrait;
 
 trait WithMeasurementSystemTrait
 {
-    use ValidateMeasurementSystemTrait;
+    use ValidateChoiceTrait;
 
     /**
-     * @throws InvalidMeasurementSystemException
+     * @throws InvalidChoiceException
      */
     public function withMeasurementSystem(string $measurementSystem): static
     {
-        $this->validateMeasureSystem($measurementSystem);
+        $this->validateChoice('measurementSystem', $measurementSystem, MeasurementSystem::getList());
 
         $clone = clone $this;
         $clone->measurementSystem = $measurementSystem;

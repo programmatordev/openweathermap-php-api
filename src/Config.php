@@ -2,19 +2,19 @@
 
 namespace ProgrammatorDev\OpenWeatherMap;
 
-use ProgrammatorDev\OpenWeatherMap\Exception\InvalidApplicationKeyException;
+use ProgrammatorDev\OpenWeatherMap\Exception\InvalidBlankException;
+use ProgrammatorDev\OpenWeatherMap\Exception\InvalidChoiceException;
 use ProgrammatorDev\OpenWeatherMap\Exception\InvalidLanguageException;
-use ProgrammatorDev\OpenWeatherMap\Exception\InvalidMeasurementSystemException;
 use ProgrammatorDev\OpenWeatherMap\HttpClient\HttpClientBuilder;
-use ProgrammatorDev\OpenWeatherMap\Util\ValidateApplicationKeyTrait;
+use ProgrammatorDev\OpenWeatherMap\Util\ValidateBlankTrait;
+use ProgrammatorDev\OpenWeatherMap\Util\ValidateChoiceTrait;
 use ProgrammatorDev\OpenWeatherMap\Util\ValidateLanguageTrait;
-use ProgrammatorDev\OpenWeatherMap\Util\ValidateMeasurementSystemTrait;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class Config
 {
-    use ValidateApplicationKeyTrait;
-    use ValidateMeasurementSystemTrait;
+    use ValidateBlankTrait;
+    use ValidateChoiceTrait;
     use ValidateLanguageTrait;
 
     private array $options;
@@ -55,11 +55,11 @@ class Config
     }
 
     /**
-     * @throws InvalidApplicationKeyException
+     * @throws InvalidBlankException
      */
     public function setApplicationKey(string $applicationKey): self
     {
-        $this->validateApplicationKey($applicationKey);
+        $this->validateBlank('applicationKey', $applicationKey);
 
         $this->options['applicationKey'] = $applicationKey;
 
@@ -72,11 +72,11 @@ class Config
     }
 
     /**
-     * @throws InvalidMeasurementSystemException
+     * @throws InvalidChoiceException
      */
     public function setMeasurementSystem(string $measurementSystem): self
     {
-        $this->validateMeasureSystem($measurementSystem);
+        $this->validateChoice('measurementSystem', $measurementSystem, MeasurementSystem::getList());
 
         $this->options['measurementSystem'] = $measurementSystem;
 

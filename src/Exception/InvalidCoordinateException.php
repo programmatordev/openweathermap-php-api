@@ -2,7 +2,7 @@
 
 namespace ProgrammatorDev\OpenWeatherMap\Exception;
 
-class InvalidCoordinateException extends \Exception
+class InvalidCoordinateException extends \UnexpectedValueException
 {
     protected $message = 'The coordinate latitude and/or longitude is invalid.';
 }

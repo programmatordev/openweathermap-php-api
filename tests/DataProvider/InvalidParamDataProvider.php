@@ -2,6 +2,7 @@
 
 namespace ProgrammatorDev\OpenWeatherMap\Test\DataProvider;
 
+use ProgrammatorDev\OpenWeatherMap\Exception\InvalidChoiceException;
 use ProgrammatorDev\OpenWeatherMap\Exception\InvalidDateRangeException;
 use ProgrammatorDev\OpenWeatherMap\Exception\InvalidLanguageException;
 use ProgrammatorDev\OpenWeatherMap\Exception\InvalidMeasurementSystemException;
@@ -44,7 +45,7 @@ class InvalidParamDataProvider
 
     public static function provideInvalidMeasurementSystemData(): \Generator
     {
-        yield 'not allowed measurement system' => ['invalid', InvalidMeasurementSystemException::class];
+        yield 'not allowed measurement system' => ['invalid', InvalidChoiceException::class];
     }
 
     public static function provideInvalidLanguageData(): \Generator
