@@ -3,14 +3,14 @@
 namespace ProgrammatorDev\OpenWeatherMap;
 
 use ProgrammatorDev\OpenWeatherMap\HttpClient\HttpClientBuilder;
-use ProgrammatorDev\OpenWeatherMap\Util\ValidateBlankTrait;
-use ProgrammatorDev\OpenWeatherMap\Util\ValidateChoiceTrait;
+use ProgrammatorDev\OpenWeatherMap\Validator\BlankValidatorTrait;
+use ProgrammatorDev\OpenWeatherMap\Validator\ChoiceValidatorTrait;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class Config
 {
-    use ValidateBlankTrait;
-    use ValidateChoiceTrait;
+    use BlankValidatorTrait;
+    use ChoiceValidatorTrait;
 
     private array $options;
 

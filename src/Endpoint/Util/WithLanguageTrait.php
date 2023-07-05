@@ -3,11 +3,11 @@
 namespace ProgrammatorDev\OpenWeatherMap\Endpoint\Util;
 
 use ProgrammatorDev\OpenWeatherMap\Language;
-use ProgrammatorDev\OpenWeatherMap\Util\ValidateChoiceTrait;
+use ProgrammatorDev\OpenWeatherMap\Validator\ChoiceValidatorTrait;
 
 trait WithLanguageTrait
 {
-    use ValidateChoiceTrait;
+    use ChoiceValidatorTrait;
 
     public function withLanguage(string $language): static
     {

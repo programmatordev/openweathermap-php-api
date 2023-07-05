@@ -1,8 +1,8 @@
 <?php
 
-namespace ProgrammatorDev\OpenWeatherMap\Util;
+namespace ProgrammatorDev\OpenWeatherMap\Validator;
 
-trait ValidateLessThanTrait
+trait LessThanValidatorTrait
 {
     private function validateLessThan(
         string $name,

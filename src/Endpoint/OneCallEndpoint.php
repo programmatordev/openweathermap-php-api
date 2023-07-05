@@ -13,15 +13,15 @@ use ProgrammatorDev\OpenWeatherMap\Exception\NotFoundException;
 use ProgrammatorDev\OpenWeatherMap\Exception\TooManyRequestsException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnauthorizedException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnexpectedErrorException;
-use ProgrammatorDev\OpenWeatherMap\Util\ValidateCoordinateTrait;
-use ProgrammatorDev\OpenWeatherMap\Util\ValidateLessThanTrait;
+use ProgrammatorDev\OpenWeatherMap\Validator\CoordinateValidatorTrait;
+use ProgrammatorDev\OpenWeatherMap\Validator\LessThanValidatorTrait;
 
 class OneCallEndpoint extends AbstractEndpoint
 {
     use WithMeasurementSystemTrait;
     use WithLanguageTrait;
-    use ValidateCoordinateTrait;
-    use ValidateLessThanTrait;
+    use CoordinateValidatorTrait;
+    use LessThanValidatorTrait;
 
     private string $urlOneCall = 'https://api.openweathermap.org/data/3.0/onecall';
 

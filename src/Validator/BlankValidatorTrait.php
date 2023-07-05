@@ -1,8 +1,8 @@
 <?php
 
-namespace ProgrammatorDev\OpenWeatherMap\Util;
+namespace ProgrammatorDev\OpenWeatherMap\Validator;
 
-trait ValidateBlankTrait
+trait BlankValidatorTrait
 {
     private function validateBlank(string $name, string $value): void
     {

@@ -10,15 +10,15 @@ use ProgrammatorDev\OpenWeatherMap\Exception\NotFoundException;
 use ProgrammatorDev\OpenWeatherMap\Exception\TooManyRequestsException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnauthorizedException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnexpectedErrorException;
-use ProgrammatorDev\OpenWeatherMap\Util\ValidateCoordinateTrait;
-use ProgrammatorDev\OpenWeatherMap\Util\ValidateLessThanTrait;
-use ProgrammatorDev\OpenWeatherMap\Util\ValidateRangeTrait;
+use ProgrammatorDev\OpenWeatherMap\Validator\CoordinateValidatorTrait;
+use ProgrammatorDev\OpenWeatherMap\Validator\LessThanValidatorTrait;
+use ProgrammatorDev\OpenWeatherMap\Validator\RangeValidatorTrait;
 
 class AirPollutionEndpoint extends AbstractEndpoint
 {
-    use ValidateCoordinateTrait;
-    use ValidateLessThanTrait;
-    use ValidateRangeTrait;
+    use CoordinateValidatorTrait;
+    use LessThanValidatorTrait;
+    use RangeValidatorTrait;
 
     private string $urlAirPollution = 'https://api.openweathermap.org/data/2.5/air_pollution';
 

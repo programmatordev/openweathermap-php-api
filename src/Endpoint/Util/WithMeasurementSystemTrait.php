@@ -3,11 +3,11 @@
 namespace ProgrammatorDev\OpenWeatherMap\Endpoint\Util;
 
 use ProgrammatorDev\OpenWeatherMap\MeasurementSystem;
-use ProgrammatorDev\OpenWeatherMap\Util\ValidateChoiceTrait;
+use ProgrammatorDev\OpenWeatherMap\Validator\ChoiceValidatorTrait;
 
 trait WithMeasurementSystemTrait
 {
-    use ValidateChoiceTrait;
+    use ChoiceValidatorTrait;
 
     public function withMeasurementSystem(string $measurementSystem): static
     {

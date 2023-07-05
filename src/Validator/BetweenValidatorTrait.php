@@ -1,8 +1,8 @@
 <?php
 
-namespace ProgrammatorDev\OpenWeatherMap\Util;
+namespace ProgrammatorDev\OpenWeatherMap\Validator;
 
-trait ValidateBetweenTrait
+trait BetweenValidatorTrait
 {
     private function ValidateBetween(
         string $name,

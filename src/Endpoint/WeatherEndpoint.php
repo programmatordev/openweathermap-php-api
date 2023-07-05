@@ -12,15 +12,15 @@ use ProgrammatorDev\OpenWeatherMap\Exception\NotFoundException;
 use ProgrammatorDev\OpenWeatherMap\Exception\TooManyRequestsException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnauthorizedException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnexpectedErrorException;
-use ProgrammatorDev\OpenWeatherMap\Util\ValidateCoordinateTrait;
-use ProgrammatorDev\OpenWeatherMap\Util\ValidateGreaterThanTrait;
+use ProgrammatorDev\OpenWeatherMap\Validator\CoordinateValidatorTrait;
+use ProgrammatorDev\OpenWeatherMap\Validator\GreaterThanValidatorTrait;
 
 class WeatherEndpoint extends AbstractEndpoint
 {
     use WithMeasurementSystemTrait;
     use WithLanguageTrait;
-    use ValidateCoordinateTrait;
-    use ValidateGreaterThanTrait;
+    use CoordinateValidatorTrait;
+    use GreaterThanValidatorTrait;
 
     private const NUM_RESULTS = 40;
 

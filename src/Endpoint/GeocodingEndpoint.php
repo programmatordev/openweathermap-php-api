@@ -11,14 +11,14 @@ use ProgrammatorDev\OpenWeatherMap\Exception\TooManyRequestsException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnauthorizedException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnexpectedErrorException;
 use ProgrammatorDev\OpenWeatherMap\Util\CreateEntityListTrait;
-use ProgrammatorDev\OpenWeatherMap\Util\ValidateCoordinateTrait;
-use ProgrammatorDev\OpenWeatherMap\Util\ValidateGreaterThanTrait;
+use ProgrammatorDev\OpenWeatherMap\Validator\CoordinateValidatorTrait;
+use ProgrammatorDev\OpenWeatherMap\Validator\GreaterThanValidatorTrait;
 
 class GeocodingEndpoint extends AbstractEndpoint
 {
     use CreateEntityListTrait;
-    use ValidateCoordinateTrait;
-    use ValidateGreaterThanTrait;
+    use CoordinateValidatorTrait;
+    use GreaterThanValidatorTrait;
 
     private const NUM_RESULTS = 5;
 

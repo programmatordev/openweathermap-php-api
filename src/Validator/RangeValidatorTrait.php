@@ -1,10 +1,10 @@
 <?php
 
-namespace ProgrammatorDev\OpenWeatherMap\Util;
+namespace ProgrammatorDev\OpenWeatherMap\Validator;
 
-trait ValidateRangeTrait
+trait RangeValidatorTrait
 {
-    use ValidateLessThanTrait;
+    use LessThanValidatorTrait;
 
     public function validateRange(
         string $startName,

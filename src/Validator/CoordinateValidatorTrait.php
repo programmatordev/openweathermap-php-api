@@ -1,10 +1,10 @@
 <?php
 
-namespace ProgrammatorDev\OpenWeatherMap\Util;
+namespace ProgrammatorDev\OpenWeatherMap\Validator;
 
-trait ValidateCoordinateTrait
+trait CoordinateValidatorTrait
 {
-    use ValidateBetweenTrait;
+    use BetweenValidatorTrait;
 
     private function validateCoordinate(float $latitude, float $longitude): void
     {

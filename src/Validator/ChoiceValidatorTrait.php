@@ -1,8 +1,8 @@
 <?php
 
-namespace ProgrammatorDev\OpenWeatherMap\Util;
+namespace ProgrammatorDev\OpenWeatherMap\Validator;
 
-trait ValidateChoiceTrait
+trait ChoiceValidatorTrait
 {
     private function validateChoice(string $name, mixed $value, array $options): void
     {
