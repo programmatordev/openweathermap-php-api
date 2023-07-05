@@ -11,11 +11,11 @@ trait ValidateLessThanTrait
     ): void
     {
         if ($value instanceof \DateTimeImmutable && !$constraint instanceof \DateTimeImmutable) {
-            throw new \LogicException('Constraint should be of type \DateTimeImmutable.');
+            throw new \LogicException('$constraint should be of type \DateTimeImmutable.');
         }
 
         if (!$value instanceof \DateTimeImmutable && $constraint instanceof \DateTimeImmutable) {
-            throw new \LogicException('Constraint should be of type int|float.');
+            throw new \LogicException('$constraint should be of type int|float.');
         }
 
         if ($value instanceof \DateTimeImmutable) {

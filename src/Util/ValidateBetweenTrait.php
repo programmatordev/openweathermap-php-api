@@ -7,26 +7,26 @@ trait ValidateBetweenTrait
     private function ValidateBetween(
         string $name,
         \DateTimeImmutable|int|float $value,
-        \DateTimeImmutable|int|float $start,
-        \DateTimeImmutable|int|float $end
+        \DateTimeImmutable|int|float $startConstraint,
+        \DateTimeImmutable|int|float $endConstraint
     ): void
     {
         if (
             $value instanceof \DateTimeImmutable
-            && (!$start instanceof \DateTimeImmutable || !$end instanceof \DateTimeImmutable)
+            && (!$startConstraint instanceof \DateTimeImmutable || !$endConstraint instanceof \DateTimeImmutable)
         ) {
-            throw new \LogicException('Both start and end should be of type \DateTimeImmutable.');
+            throw new \LogicException('Both $startConstraint and $endConstraint should be of type \DateTimeImmutable.');
         }
 
         if (
             !$value instanceof \DateTimeImmutable
-            && ($start instanceof \DateTimeImmutable || $end instanceof \DateTimeImmutable)
+            && ($startConstraint instanceof \DateTimeImmutable || $endConstraint instanceof \DateTimeImmutable)
         ) {
-            throw new \LogicException('Both start and end should be of type int|float.');
+            throw new \LogicException('Both $startConstraint and $endConstraint should be of type int|float.');
         }
 
         if ($value instanceof \DateTimeImmutable) {
-            if ($value->getTimestamp() < $start->getTimestamp() || $value->getTimestamp() > $end->getTimestamp()) {
+            if ($value->getTimestamp() < $startConstraint->getTimestamp() || $value->getTimestamp() > $endConstraint->getTimestamp()) {
                 $dateFormat = 'Y-m-d H:i:s';
 
                 throw new \UnexpectedValueException(
@@ -34,21 +34,21 @@ trait ValidateBetweenTrait
                         'The "%s" date "%s" is invalid. Must be between "%s" and "%s".',
                         $name,
                         $value->format($dateFormat),
-                        $start->format($dateFormat),
-                        $end->format($dateFormat)
+                        $startConstraint->format($dateFormat),
+                        $endConstraint->format($dateFormat)
                     )
                 );
             }
         }
 
-        if ($value < $start || $value > $end) {
+        if ($value < $startConstraint || $value > $endConstraint) {
             throw new \UnexpectedValueException(
                 \sprintf(
                     'The "%s" value "%d" is invalid. Must be between "%d" and "%d".',
                     $name,
                     $value,
-                    $start,
-                    $end
+                    $startConstraint,
+                    $endConstraint
                 )
             );
         }
