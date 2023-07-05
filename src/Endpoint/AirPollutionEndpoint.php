@@ -7,20 +7,19 @@ use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\AirPollutionList;
 use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\CurrentAirPollution;
 use ProgrammatorDev\OpenWeatherMap\Exception\BadRequestException;
 use ProgrammatorDev\OpenWeatherMap\Exception\InvalidDateRangeException;
-use ProgrammatorDev\OpenWeatherMap\Exception\InvalidPastDateException;
 use ProgrammatorDev\OpenWeatherMap\Exception\NotFoundException;
 use ProgrammatorDev\OpenWeatherMap\Exception\TooManyRequestsException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnauthorizedException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnexpectedErrorException;
 use ProgrammatorDev\OpenWeatherMap\Util\ValidateCoordinateTrait;
 use ProgrammatorDev\OpenWeatherMap\Util\ValidateDateRangeTrait;
-use ProgrammatorDev\OpenWeatherMap\Util\ValidatePastDateTrait;
+use ProgrammatorDev\OpenWeatherMap\Util\ValidateLessThanTrait;
 
 class AirPollutionEndpoint extends AbstractEndpoint
 {
     use ValidateCoordinateTrait;
+    use ValidateLessThanTrait;
     use ValidateDateRangeTrait;
-    use ValidatePastDateTrait;
 
     private string $urlAirPollution = 'https://api.openweathermap.org/data/2.5/air_pollution';
 
@@ -78,7 +77,6 @@ class AirPollutionEndpoint extends AbstractEndpoint
 
     /**
      * @throws InvalidDateRangeException
-     * @throws InvalidPastDateException
      * @throws Exception
      * @throws BadRequestException
      * @throws NotFoundException
@@ -94,8 +92,8 @@ class AirPollutionEndpoint extends AbstractEndpoint
     ): AirPollutionList
     {
         $this->validateCoordinate($latitude, $longitude);
-        $this->validatePastDate('startDate', $startDate);
-        $this->validatePastDate('endDate', $endDate);
+        $this->validateLessThan('startDate', $startDate, new \DateTimeImmutable('now'));
+        $this->validateLessThan('endDate', $endDate, new \DateTimeImmutable('now'));
         $this->validateDateRange($startDate, $endDate);
 
         $timezoneUtc = new \DateTimeZone('UTC');

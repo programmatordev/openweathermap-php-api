@@ -3,7 +3,6 @@
 namespace ProgrammatorDev\OpenWeatherMap\Test\DataProvider;
 
 use ProgrammatorDev\OpenWeatherMap\Exception\InvalidDateRangeException;
-use ProgrammatorDev\OpenWeatherMap\Exception\InvalidPastDateException;
 
 class InvalidParamDataProvider
 {
@@ -19,7 +18,7 @@ class InvalidParamDataProvider
     {
         yield 'invalid past date' => [
             new \DateTimeImmutable('1 days'),
-            InvalidPastDateException::class
+            \UnexpectedValueException::class
         ];
     }
 

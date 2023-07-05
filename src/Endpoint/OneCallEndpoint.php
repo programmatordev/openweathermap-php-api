@@ -9,20 +9,19 @@ use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\HistoryDaySummary;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\HistoryMoment;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\OneCall;
 use ProgrammatorDev\OpenWeatherMap\Exception\BadRequestException;
-use ProgrammatorDev\OpenWeatherMap\Exception\InvalidPastDateException;
 use ProgrammatorDev\OpenWeatherMap\Exception\NotFoundException;
 use ProgrammatorDev\OpenWeatherMap\Exception\TooManyRequestsException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnauthorizedException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnexpectedErrorException;
 use ProgrammatorDev\OpenWeatherMap\Util\ValidateCoordinateTrait;
-use ProgrammatorDev\OpenWeatherMap\Util\ValidatePastDateTrait;
+use ProgrammatorDev\OpenWeatherMap\Util\ValidateLessThanTrait;
 
 class OneCallEndpoint extends AbstractEndpoint
 {
     use WithMeasurementSystemTrait;
     use WithLanguageTrait;
     use ValidateCoordinateTrait;
-    use ValidatePastDateTrait;
+    use ValidateLessThanTrait;
 
     private string $urlOneCall = 'https://api.openweathermap.org/data/3.0/onecall';
 
@@ -57,7 +56,6 @@ class OneCallEndpoint extends AbstractEndpoint
     }
 
     /**
-     * @throws InvalidPastDateException
      * @throws Exception
      * @throws BadRequestException
      * @throws NotFoundException
@@ -68,7 +66,7 @@ class OneCallEndpoint extends AbstractEndpoint
     public function getHistoryMoment(float $latitude, float $longitude, \DateTimeImmutable $dateTime): HistoryMoment
     {
         $this->validateCoordinate($latitude, $longitude);
-        $this->validatePastDate('dateTime', $dateTime);
+        $this->validateLessThan('dateTime', $dateTime, new \DateTimeImmutable('now'));
 
         $data = $this->sendRequest(
             method: 'GET',
@@ -86,7 +84,6 @@ class OneCallEndpoint extends AbstractEndpoint
     }
 
     /**
-     * @throws InvalidPastDateException
      * @throws Exception
      * @throws BadRequestException
      * @throws NotFoundException
@@ -97,7 +94,7 @@ class OneCallEndpoint extends AbstractEndpoint
     public function getHistoryDaySummary(float $latitude, float $longitude, \DateTimeImmutable $dateTime): HistoryDaySummary
     {
         $this->validateCoordinate($latitude, $longitude);
-        $this->validatePastDate('dateTime', $dateTime);
+        $this->validateLessThan('dateTime', $dateTime, new \DateTimeImmutable('now'));
 
         $data = $this->sendRequest(
             method: 'GET',
