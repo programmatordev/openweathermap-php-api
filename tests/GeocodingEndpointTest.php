@@ -3,6 +3,7 @@
 namespace ProgrammatorDev\OpenWeatherMap\Test;
 
 use Nyholm\Psr7\Response;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\DataProviderExternal;
 use ProgrammatorDev\OpenWeatherMap\Entity\Coordinate;
 use ProgrammatorDev\OpenWeatherMap\Entity\Geocoding\ZipCodeLocation;
@@ -22,6 +23,12 @@ class GeocodingEndpointTest extends AbstractTest
 
         $response = $this->getApi()->getGeocoding()->getCoordinatesByLocationName('lisbon, pt');
         $this->assertLocationListResponse($response);
+    }
+
+    public function testGeocodingGetCoordinatesByLocationNameWithBlankValue()
+    {
+        $this->expectException(\UnexpectedValueException::class);
+        $this->getApi()->getGeocoding()->getCoordinatesByLocationName('');
     }
 
     public function testGeocodingGetCoordinatesByZipCode()
@@ -44,6 +51,19 @@ class GeocodingEndpointTest extends AbstractTest
         $this->assertInstanceOf(Coordinate::class, $coordinate);
         $this->assertSame(38.7167, $coordinate->getLatitude());
         $this->assertSame(-9.1333, $coordinate->getLongitude());
+    }
+
+    #[DataProvider('provideGeocodingGetCoordinatesByZipCodeWithBlankValueData')]
+    public function testGeocodingGetCoordinatesByZipCodeWithBlankValue(string $zipCode, string $countryCode)
+    {
+        $this->expectException(\UnexpectedValueException::class);
+        $this->getApi()->getGeocoding()->getCoordinatesByZipCode($zipCode, $countryCode);
+    }
+
+    public static function provideGeocodingGetCoordinatesByZipCodeWithBlankValueData(): \Generator
+    {
+        yield 'blank zip code' => ['', 'pt'];
+        yield 'blank country code' => ['1000-100', ''];
     }
 
     public function testGeocodingGetLocationNameByCoordinates()

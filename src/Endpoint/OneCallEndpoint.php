@@ -8,22 +8,20 @@ use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\WithMeasurementSystemTrait;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\HistoryDaySummary;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\HistoryMoment;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\OneCall;
-use ProgrammatorDev\OpenWeatherMap\Exception\ApiError\BadRequestException;
-use ProgrammatorDev\OpenWeatherMap\Exception\ApiError\NotFoundException;
-use ProgrammatorDev\OpenWeatherMap\Exception\ApiError\TooManyRequestsException;
-use ProgrammatorDev\OpenWeatherMap\Exception\ApiError\UnauthorizedException;
-use ProgrammatorDev\OpenWeatherMap\Exception\ApiError\UnexpectedErrorException;
-use ProgrammatorDev\OpenWeatherMap\Exception\InvalidCoordinateException;
-use ProgrammatorDev\OpenWeatherMap\Exception\InvalidPastDateException;
-use ProgrammatorDev\OpenWeatherMap\Util\ValidateCoordinateTrait;
-use ProgrammatorDev\OpenWeatherMap\Util\ValidatePastDateTrait;
+use ProgrammatorDev\OpenWeatherMap\Exception\BadRequestException;
+use ProgrammatorDev\OpenWeatherMap\Exception\NotFoundException;
+use ProgrammatorDev\OpenWeatherMap\Exception\TooManyRequestsException;
+use ProgrammatorDev\OpenWeatherMap\Exception\UnauthorizedException;
+use ProgrammatorDev\OpenWeatherMap\Exception\UnexpectedErrorException;
+use ProgrammatorDev\OpenWeatherMap\Validator\CoordinateValidatorTrait;
+use ProgrammatorDev\OpenWeatherMap\Validator\LessThanValidatorTrait;
 
 class OneCallEndpoint extends AbstractEndpoint
 {
     use WithMeasurementSystemTrait;
     use WithLanguageTrait;
-    use ValidateCoordinateTrait;
-    use ValidatePastDateTrait;
+    use CoordinateValidatorTrait;
+    use LessThanValidatorTrait;
 
     private string $urlOneCall = 'https://api.openweathermap.org/data/3.0/onecall';
 
@@ -32,7 +30,6 @@ class OneCallEndpoint extends AbstractEndpoint
     private string $urlOneCallHistoryDaySummary = 'https://api.openweathermap.org/data/3.0/onecall/day_summary';
 
     /**
-     * @throws InvalidCoordinateException
      * @throws Exception
      * @throws BadRequestException
      * @throws NotFoundException
@@ -59,8 +56,6 @@ class OneCallEndpoint extends AbstractEndpoint
     }
 
     /**
-     * @throws InvalidCoordinateException
-     * @throws InvalidPastDateException
      * @throws Exception
      * @throws BadRequestException
      * @throws NotFoundException
@@ -71,7 +66,7 @@ class OneCallEndpoint extends AbstractEndpoint
     public function getHistoryMoment(float $latitude, float $longitude, \DateTimeImmutable $dateTime): HistoryMoment
     {
         $this->validateCoordinate($latitude, $longitude);
-        $this->validatePastDate('dateTime', $dateTime);
+        $this->validateLessThan('dateTime', $dateTime, new \DateTimeImmutable('now'));
 
         $data = $this->sendRequest(
             method: 'GET',
@@ -89,8 +84,6 @@ class OneCallEndpoint extends AbstractEndpoint
     }
 
     /**
-     * @throws InvalidCoordinateException
-     * @throws InvalidPastDateException
      * @throws Exception
      * @throws BadRequestException
      * @throws NotFoundException
@@ -101,7 +94,7 @@ class OneCallEndpoint extends AbstractEndpoint
     public function getHistoryDaySummary(float $latitude, float $longitude, \DateTimeImmutable $dateTime): HistoryDaySummary
     {
         $this->validateCoordinate($latitude, $longitude);
-        $this->validatePastDate('dateTime', $dateTime);
+        $this->validateLessThan('dateTime', $dateTime, new \DateTimeImmutable('now'));
 
         $data = $this->sendRequest(
             method: 'GET',

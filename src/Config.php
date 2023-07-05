@@ -2,20 +2,15 @@
 
 namespace ProgrammatorDev\OpenWeatherMap;
 
-use ProgrammatorDev\OpenWeatherMap\Exception\InvalidApplicationKeyException;
-use ProgrammatorDev\OpenWeatherMap\Exception\InvalidLanguageException;
-use ProgrammatorDev\OpenWeatherMap\Exception\InvalidMeasurementSystemException;
 use ProgrammatorDev\OpenWeatherMap\HttpClient\HttpClientBuilder;
-use ProgrammatorDev\OpenWeatherMap\Util\ValidateApplicationKeyTrait;
-use ProgrammatorDev\OpenWeatherMap\Util\ValidateLanguageTrait;
-use ProgrammatorDev\OpenWeatherMap\Util\ValidateMeasurementSystemTrait;
+use ProgrammatorDev\OpenWeatherMap\Validator\BlankValidatorTrait;
+use ProgrammatorDev\OpenWeatherMap\Validator\ChoiceValidatorTrait;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class Config
 {
-    use ValidateApplicationKeyTrait;
-    use ValidateMeasurementSystemTrait;
-    use ValidateLanguageTrait;
+    use BlankValidatorTrait;
+    use ChoiceValidatorTrait;
 
     private array $options;
 
@@ -54,12 +49,9 @@ class Config
         return $this->options['applicationKey'];
     }
 
-    /**
-     * @throws InvalidApplicationKeyException
-     */
     public function setApplicationKey(string $applicationKey): self
     {
-        $this->validateApplicationKey($applicationKey);
+        $this->validateBlank('applicationKey', $applicationKey);
 
         $this->options['applicationKey'] = $applicationKey;
 
@@ -71,12 +63,9 @@ class Config
         return $this->options['measurementSystem'];
     }
 
-    /**
-     * @throws InvalidMeasurementSystemException
-     */
     public function setMeasurementSystem(string $measurementSystem): self
     {
-        $this->validateMeasureSystem($measurementSystem);
+        $this->validateChoice('measurementSystem', $measurementSystem, MeasurementSystem::getList());
 
         $this->options['measurementSystem'] = $measurementSystem;
 
@@ -88,12 +77,9 @@ class Config
         return $this->options['language'];
     }
 
-    /**
-     * @throws InvalidLanguageException
-     */
     public function setLanguage(string $language): self
     {
-        $this->validateLanguage($language);
+        $this->validateChoice('language', $language, Language::getList());
 
         $this->options['language'] = $language;
 

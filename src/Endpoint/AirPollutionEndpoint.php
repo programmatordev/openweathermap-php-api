@@ -5,23 +5,20 @@ namespace ProgrammatorDev\OpenWeatherMap\Endpoint;
 use Http\Client\Exception;
 use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\AirPollutionList;
 use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\CurrentAirPollution;
-use ProgrammatorDev\OpenWeatherMap\Exception\ApiError\BadRequestException;
-use ProgrammatorDev\OpenWeatherMap\Exception\ApiError\NotFoundException;
-use ProgrammatorDev\OpenWeatherMap\Exception\ApiError\TooManyRequestsException;
-use ProgrammatorDev\OpenWeatherMap\Exception\ApiError\UnauthorizedException;
-use ProgrammatorDev\OpenWeatherMap\Exception\ApiError\UnexpectedErrorException;
-use ProgrammatorDev\OpenWeatherMap\Exception\InvalidDateRangeException;
-use ProgrammatorDev\OpenWeatherMap\Exception\InvalidPastDateException;
-use ProgrammatorDev\OpenWeatherMap\Exception\InvalidCoordinateException;
-use ProgrammatorDev\OpenWeatherMap\Util\ValidateCoordinateTrait;
-use ProgrammatorDev\OpenWeatherMap\Util\ValidateDateRangeTrait;
-use ProgrammatorDev\OpenWeatherMap\Util\ValidatePastDateTrait;
+use ProgrammatorDev\OpenWeatherMap\Exception\BadRequestException;
+use ProgrammatorDev\OpenWeatherMap\Exception\NotFoundException;
+use ProgrammatorDev\OpenWeatherMap\Exception\TooManyRequestsException;
+use ProgrammatorDev\OpenWeatherMap\Exception\UnauthorizedException;
+use ProgrammatorDev\OpenWeatherMap\Exception\UnexpectedErrorException;
+use ProgrammatorDev\OpenWeatherMap\Validator\CoordinateValidatorTrait;
+use ProgrammatorDev\OpenWeatherMap\Validator\LessThanValidatorTrait;
+use ProgrammatorDev\OpenWeatherMap\Validator\RangeValidatorTrait;
 
 class AirPollutionEndpoint extends AbstractEndpoint
 {
-    use ValidateCoordinateTrait;
-    use ValidateDateRangeTrait;
-    use ValidatePastDateTrait;
+    use CoordinateValidatorTrait;
+    use LessThanValidatorTrait;
+    use RangeValidatorTrait;
 
     private string $urlAirPollution = 'https://api.openweathermap.org/data/2.5/air_pollution';
 
@@ -30,7 +27,6 @@ class AirPollutionEndpoint extends AbstractEndpoint
     private string $urlAirPollutionHistory = 'https://api.openweathermap.org/data/2.5/air_pollution/history';
 
     /**
-     * @throws InvalidCoordinateException
      * @throws Exception
      * @throws BadRequestException
      * @throws NotFoundException
@@ -55,7 +51,6 @@ class AirPollutionEndpoint extends AbstractEndpoint
     }
 
     /**
-     * @throws InvalidCoordinateException
      * @throws Exception
      * @throws BadRequestException
      * @throws NotFoundException
@@ -80,9 +75,6 @@ class AirPollutionEndpoint extends AbstractEndpoint
     }
 
     /**
-     * @throws InvalidCoordinateException
-     * @throws InvalidDateRangeException
-     * @throws InvalidPastDateException
      * @throws Exception
      * @throws BadRequestException
      * @throws NotFoundException
@@ -98,9 +90,9 @@ class AirPollutionEndpoint extends AbstractEndpoint
     ): AirPollutionList
     {
         $this->validateCoordinate($latitude, $longitude);
-        $this->validatePastDate('startDate', $startDate);
-        $this->validatePastDate('endDate', $endDate);
-        $this->validateDateRange($startDate, $endDate);
+        $this->validateLessThan('startDate', $startDate, new \DateTimeImmutable('now'));
+        $this->validateLessThan('endDate', $endDate, new \DateTimeImmutable('now'));
+        $this->validateRange('startDate', 'endDate', $startDate, $endDate);
 
         $timezoneUtc = new \DateTimeZone('UTC');
 

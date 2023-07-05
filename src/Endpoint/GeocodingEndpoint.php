@@ -5,22 +5,22 @@ namespace ProgrammatorDev\OpenWeatherMap\Endpoint;
 use Http\Client\Exception;
 use ProgrammatorDev\OpenWeatherMap\Entity\Geocoding\ZipCodeLocation;
 use ProgrammatorDev\OpenWeatherMap\Entity\Location;
-use ProgrammatorDev\OpenWeatherMap\Exception\ApiError\BadRequestException;
-use ProgrammatorDev\OpenWeatherMap\Exception\ApiError\NotFoundException;
-use ProgrammatorDev\OpenWeatherMap\Exception\ApiError\TooManyRequestsException;
-use ProgrammatorDev\OpenWeatherMap\Exception\ApiError\UnauthorizedException;
-use ProgrammatorDev\OpenWeatherMap\Exception\ApiError\UnexpectedErrorException;
-use ProgrammatorDev\OpenWeatherMap\Exception\InvalidCoordinateException;
-use ProgrammatorDev\OpenWeatherMap\Exception\InvalidNumResultsException;
+use ProgrammatorDev\OpenWeatherMap\Exception\BadRequestException;
+use ProgrammatorDev\OpenWeatherMap\Exception\NotFoundException;
+use ProgrammatorDev\OpenWeatherMap\Exception\TooManyRequestsException;
+use ProgrammatorDev\OpenWeatherMap\Exception\UnauthorizedException;
+use ProgrammatorDev\OpenWeatherMap\Exception\UnexpectedErrorException;
 use ProgrammatorDev\OpenWeatherMap\Util\CreateEntityListTrait;
-use ProgrammatorDev\OpenWeatherMap\Util\ValidateCoordinateTrait;
-use ProgrammatorDev\OpenWeatherMap\Util\ValidateNumResultsTrait;
+use ProgrammatorDev\OpenWeatherMap\Validator\BlankValidatorTrait;
+use ProgrammatorDev\OpenWeatherMap\Validator\CoordinateValidatorTrait;
+use ProgrammatorDev\OpenWeatherMap\Validator\GreaterThanValidatorTrait;
 
 class GeocodingEndpoint extends AbstractEndpoint
 {
     use CreateEntityListTrait;
-    use ValidateCoordinateTrait;
-    use ValidateNumResultsTrait;
+    use BlankValidatorTrait;
+    use CoordinateValidatorTrait;
+    use GreaterThanValidatorTrait;
 
     private const NUM_RESULTS = 5;
 
@@ -32,7 +32,6 @@ class GeocodingEndpoint extends AbstractEndpoint
 
     /**
      * @return Location[]
-     * @throws InvalidNumResultsException
      * @throws Exception
      * @throws BadRequestException
      * @throws NotFoundException
@@ -42,7 +41,8 @@ class GeocodingEndpoint extends AbstractEndpoint
      */
     public function getCoordinatesByLocationName(string $locationName, int $numResults = self::NUM_RESULTS): array
     {
-        $this->validateNumResults($numResults);
+        $this->validateBlank('locationName', $locationName);
+        $this->validateGreaterThan('numResults', $numResults, 0);
 
         $data = $this->sendRequest(
             method: 'GET',
@@ -66,6 +66,9 @@ class GeocodingEndpoint extends AbstractEndpoint
      */
     public function getCoordinatesByZipCode(string $zipCode, string $countryCode): ZipCodeLocation
     {
+        $this->validateBlank('zipCode', $zipCode);
+        $this->validateBlank('countryCode', $countryCode);
+
         $data = $this->sendRequest(
             method: 'GET',
             baseUrl: $this->urlGeocodingZipCode,
@@ -79,8 +82,6 @@ class GeocodingEndpoint extends AbstractEndpoint
 
     /**
      * @return Location[]
-     * @throws InvalidCoordinateException
-     * @throws InvalidNumResultsException
      * @throws Exception
      * @throws BadRequestException
      * @throws NotFoundException
@@ -91,7 +92,7 @@ class GeocodingEndpoint extends AbstractEndpoint
     public function getLocationNameByCoordinates(float $latitude, float $longitude, int $numResults = self::NUM_RESULTS): array
     {
         $this->validateCoordinate($latitude, $longitude);
-        $this->validateNumResults($numResults);
+        $this->validateGreaterThan('numResults', $numResults, 0);
 
         $data = $this->sendRequest(
             method: 'GET',
