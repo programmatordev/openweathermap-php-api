@@ -2,8 +2,6 @@
 
 namespace ProgrammatorDev\OpenWeatherMap;
 
-use ProgrammatorDev\OpenWeatherMap\Exception\InvalidBlankException;
-use ProgrammatorDev\OpenWeatherMap\Exception\InvalidChoiceException;
 use ProgrammatorDev\OpenWeatherMap\HttpClient\HttpClientBuilder;
 use ProgrammatorDev\OpenWeatherMap\Util\ValidateBlankTrait;
 use ProgrammatorDev\OpenWeatherMap\Util\ValidateChoiceTrait;
@@ -51,9 +49,6 @@ class Config
         return $this->options['applicationKey'];
     }
 
-    /**
-     * @throws InvalidBlankException
-     */
     public function setApplicationKey(string $applicationKey): self
     {
         $this->validateBlank('applicationKey', $applicationKey);
@@ -68,9 +63,6 @@ class Config
         return $this->options['measurementSystem'];
     }
 
-    /**
-     * @throws InvalidChoiceException
-     */
     public function setMeasurementSystem(string $measurementSystem): self
     {
         $this->validateChoice('measurementSystem', $measurementSystem, MeasurementSystem::getList());
@@ -85,9 +77,6 @@ class Config
         return $this->options['language'];
     }
 
-    /**
-     * @throws InvalidChoiceException
-     */
     public function setLanguage(string $language): self
     {
         $this->validateChoice('language', $language, Language::getList());

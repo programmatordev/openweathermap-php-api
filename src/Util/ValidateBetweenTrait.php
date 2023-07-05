@@ -2,8 +2,6 @@
 
 namespace ProgrammatorDev\OpenWeatherMap\Util;
 
-use ProgrammatorDev\OpenWeatherMap\Exception\InvalidBetweenException;
-
 trait ValidateBetweenTrait
 {
     private function ValidateBetween(
@@ -31,7 +29,7 @@ trait ValidateBetweenTrait
             if ($value->getTimestamp() < $start->getTimestamp() || $value->getTimestamp() > $end->getTimestamp()) {
                 $dateFormat = 'Y-m-d H:i:s';
 
-                throw new InvalidBetweenException(
+                throw new \UnexpectedValueException(
                     \sprintf(
                         'The "%s" date "%s" is invalid. Must be between "%s" and "%s".',
                         $name,
@@ -44,7 +42,7 @@ trait ValidateBetweenTrait
         }
 
         if ($value < $start || $value > $end) {
-            throw new InvalidBetweenException(
+            throw new \UnexpectedValueException(
                 \sprintf(
                     'The "%s" value "%d" is invalid. Must be between "%d" and "%d".',
                     $name,

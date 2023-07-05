@@ -5,8 +5,6 @@ namespace ProgrammatorDev\OpenWeatherMap\Test;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\DataProviderExternal;
 use ProgrammatorDev\OpenWeatherMap\Config;
-use ProgrammatorDev\OpenWeatherMap\Exception\InvalidBlankException;
-use ProgrammatorDev\OpenWeatherMap\Exception\InvalidApplicationKeyException;
 use ProgrammatorDev\OpenWeatherMap\HttpClient\HttpClientBuilder;
 use ProgrammatorDev\OpenWeatherMap\Test\DataProvider\InvalidParamDataProvider;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
@@ -48,7 +46,7 @@ class ConfigTest extends AbstractTest
 
     public function testConfigSetApplicationKeyWithBlankValue()
     {
-        $this->expectException(InvalidBlankException::class);
+        $this->expectException(\UnexpectedValueException::class);
         $this->config->setApplicationKey('');
     }
 
