@@ -11,12 +11,14 @@ use ProgrammatorDev\OpenWeatherMap\Exception\TooManyRequestsException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnauthorizedException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnexpectedErrorException;
 use ProgrammatorDev\OpenWeatherMap\Util\CreateEntityListTrait;
+use ProgrammatorDev\OpenWeatherMap\Validator\BlankValidatorTrait;
 use ProgrammatorDev\OpenWeatherMap\Validator\CoordinateValidatorTrait;
 use ProgrammatorDev\OpenWeatherMap\Validator\GreaterThanValidatorTrait;
 
 class GeocodingEndpoint extends AbstractEndpoint
 {
     use CreateEntityListTrait;
+    use BlankValidatorTrait;
     use CoordinateValidatorTrait;
     use GreaterThanValidatorTrait;
 
@@ -39,6 +41,7 @@ class GeocodingEndpoint extends AbstractEndpoint
      */
     public function getCoordinatesByLocationName(string $locationName, int $numResults = self::NUM_RESULTS): array
     {
+        $this->validateBlank('locationName', $locationName);
         $this->validateGreaterThan('numResults', $numResults, 0);
 
         $data = $this->sendRequest(
@@ -63,6 +66,9 @@ class GeocodingEndpoint extends AbstractEndpoint
      */
     public function getCoordinatesByZipCode(string $zipCode, string $countryCode): ZipCodeLocation
     {
+        $this->validateBlank('zipCode', $zipCode);
+        $this->validateBlank('countryCode', $countryCode);
+
         $data = $this->sendRequest(
             method: 'GET',
             baseUrl: $this->urlGeocodingZipCode,
