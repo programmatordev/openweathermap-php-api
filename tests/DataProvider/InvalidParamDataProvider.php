@@ -2,8 +2,6 @@
 
 namespace ProgrammatorDev\OpenWeatherMap\Test\DataProvider;
 
-use ProgrammatorDev\OpenWeatherMap\Exception\InvalidDateRangeException;
-
 class InvalidParamDataProvider
 {
     public static function provideInvalidCoordinateData(): \Generator
@@ -27,7 +25,7 @@ class InvalidParamDataProvider
         yield 'start date greater than end date' => [
             new \DateTimeImmutable('-4 days'),
             new \DateTimeImmutable('-5 days'),
-            InvalidDateRangeException::class
+            \UnexpectedValueException::class
         ];
     }
 
