@@ -32,7 +32,7 @@ class GeocodingEndpoint extends AbstractEndpoint
 
     private string $urlGeocodingReverse = 'https://api.openweathermap.org/geo/1.0/reverse';
 
-    protected \DateInterval|int|null $cacheTtl = 60 * 60 * 24 * 30; // 1 month
+    protected \DateInterval|int|null $cacheTtl = 60 * 60 * 24 * 30; // 30 days
 
     /**
      * @return Location[]
