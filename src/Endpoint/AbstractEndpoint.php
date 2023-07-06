@@ -12,6 +12,7 @@ use ProgrammatorDev\OpenWeatherMap\Exception\UnauthorizedException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnexpectedErrorException;
 use ProgrammatorDev\OpenWeatherMap\HttpClient\ResponseMediator;
 use ProgrammatorDev\OpenWeatherMap\OpenWeatherMap;
+use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
@@ -49,6 +50,7 @@ class AbstractEndpoint
         }
 
         $uri = $this->buildUrl($baseUrl, $query);
+
         $response = $this->getHttpClient()->send($method, $uri, $headers, $body);
 
         // If API returns a status code error
@@ -57,23 +59,6 @@ class AbstractEndpoint
         }
 
         return ResponseMediator::toArray($response);
-    }
-
-    private function getHttpClient(): HttpMethodsClient
-    {
-        return $this->api->getConfig()
-            ->getHttpClientBuilder()
-            ->getHttpClient();
-    }
-
-    private function buildUrl(string $baseUrl, array $query): string
-    {
-        // Add application key to all requests
-        $query = $query + [
-            'appid' => $this->api->getConfig()->getApplicationKey()
-        ];
-
-        return \sprintf('%s?%s', $baseUrl, http_build_query($query));
     }
 
     /**
@@ -95,5 +80,28 @@ class AbstractEndpoint
             429 => throw new TooManyRequestsException($error->getMessage(), $error->getCode(), $error->getParameters()),
             default => throw new UnexpectedErrorException($error->getMessage(), $error->getCode(), $error->getParameters())
         };
+    }
+
+    private function buildUrl(string $baseUrl, array $query): string
+    {
+        // Add application key to all requests
+        $query = $query + [
+                'appid' => $this->api->getConfig()->getApplicationKey()
+            ];
+
+        return \sprintf('%s?%s', $baseUrl, http_build_query($query));
+    }
+
+    private function getHttpClient(): HttpMethodsClient
+    {
+        return $this->api->getConfig()
+            ->getHttpClientBuilder()
+            ->getHttpClient();
+    }
+
+    private function getCache(): ?CacheItemPoolInterface
+    {
+        return $this->api->getConfig()
+            ->getCache();
     }
 }
