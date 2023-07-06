@@ -4,6 +4,8 @@ namespace ProgrammatorDev\OpenWeatherMap\Endpoint;
 
 use Http\Client\Common\HttpMethodsClient;
 use Http\Client\Exception;
+use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\WithCacheInvalidationTrait;
+use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\WithCacheTtlTrait;
 use ProgrammatorDev\OpenWeatherMap\Entity\Error;
 use ProgrammatorDev\OpenWeatherMap\Exception\BadRequestException;
 use ProgrammatorDev\OpenWeatherMap\Exception\NotFoundException;
@@ -20,9 +22,14 @@ use Psr\Http\Message\UriInterface;
 
 class AbstractEndpoint
 {
+    use WithCacheTtlTrait;
+    use WithCacheInvalidationTrait;
+
     private HttpMethodsClient $httpClient;
 
     private ?CacheItemPoolInterface $cache;
+
+    private bool $cacheInvalidation = false;
 
     protected \DateInterval|int|null $cacheTtl = 60 * 10; // 10 minutes
 
@@ -38,19 +45,6 @@ class AbstractEndpoint
         $this->cache = $config->getCache();
         $this->measurementSystem = $config->getMeasurementSystem();
         $this->language = $config->getLanguage();
-    }
-
-    public function withCacheTtl(\DateInterval|int|null $cacheTtl): static
-    {
-        $clone = clone $this;
-        $clone->cacheTtl = $cacheTtl;
-
-        return $clone;
-    }
-
-    public function getCacheTtl(): \DateInterval|int|null
-    {
-        return $this->cacheTtl;
     }
 
     /**
@@ -75,6 +69,12 @@ class AbstractEndpoint
         // If there is a cache adapter, save responses into cache
         if ($this->cache !== null) {
             $cacheKey = $this->getCacheKey($uri);
+
+            // Invalidate cache (if exists) to force renewal
+            if ($this->cacheInvalidation === true) {
+                $this->cache->deleteItem($cacheKey);
+            }
+
             $cacheItem = $this->cache->getItem($cacheKey);
 
             // If cache does not exist...

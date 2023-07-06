@@ -2,9 +2,9 @@
 
 namespace ProgrammatorDev\OpenWeatherMap\Test;
 
-class AbstractEndpointTest extends AbstractTest
+class WithCacheTtl extends AbstractTest
 {
-    public function testAbstractEndpointWithCacheTtl()
+    public function testWithCacheTtl()
     {
         $this->assertSame(
             60 * 60,
@@ -14,7 +14,7 @@ class AbstractEndpointTest extends AbstractTest
         );
     }
 
-    public function testAbstractEndpointGetCacheTtl()
+    public function testWithCacheTtlGetCacheTtl()
     {
         $this->assertSame(60 * 10, $this->getApi()->getWeather()->getCacheTtl());
     }

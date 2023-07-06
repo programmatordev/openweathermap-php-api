@@ -23,4 +23,9 @@ class WithMeasurementSystemTest extends AbstractTest
         $this->expectException($expectedException);
         $this->getApi()->getWeather()->withMeasurementSystem($measurementSystem);
     }
+
+    public function testWithMeasurementSystemGetMeasurementSystem()
+    {
+        $this->assertSame('metric', $this->getApi()->getWeather()->getMeasurementSystem());
+    }
 }
