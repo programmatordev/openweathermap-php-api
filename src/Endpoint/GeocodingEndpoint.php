@@ -3,6 +3,7 @@
 namespace ProgrammatorDev\OpenWeatherMap\Endpoint;
 
 use Http\Client\Exception;
+use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\WithCacheTtlTrait;
 use ProgrammatorDev\OpenWeatherMap\Entity\Geocoding\ZipCodeLocation;
 use ProgrammatorDev\OpenWeatherMap\Entity\Location;
 use ProgrammatorDev\OpenWeatherMap\Exception\BadRequestException;
@@ -14,6 +15,7 @@ use ProgrammatorDev\OpenWeatherMap\Util\CreateEntityListTrait;
 use ProgrammatorDev\OpenWeatherMap\Validator\BlankValidatorTrait;
 use ProgrammatorDev\OpenWeatherMap\Validator\CoordinateValidatorTrait;
 use ProgrammatorDev\OpenWeatherMap\Validator\GreaterThanValidatorTrait;
+use Psr\Cache\InvalidArgumentException;
 
 class GeocodingEndpoint extends AbstractEndpoint
 {
@@ -30,6 +32,8 @@ class GeocodingEndpoint extends AbstractEndpoint
 
     private string $urlGeocodingReverse = 'https://api.openweathermap.org/geo/1.0/reverse';
 
+    protected \DateInterval|int|null $cacheTtl = 60 * 60 * 24 * 30; // 1 month
+
     /**
      * @return Location[]
      * @throws Exception
@@ -38,6 +42,7 @@ class GeocodingEndpoint extends AbstractEndpoint
      * @throws TooManyRequestsException
      * @throws UnauthorizedException
      * @throws UnexpectedErrorException
+     * @throws InvalidArgumentException
      */
     public function getCoordinatesByLocationName(string $locationName, int $numResults = self::NUM_RESULTS): array
     {
@@ -63,6 +68,7 @@ class GeocodingEndpoint extends AbstractEndpoint
      * @throws TooManyRequestsException
      * @throws UnauthorizedException
      * @throws UnexpectedErrorException
+     * @throws InvalidArgumentException
      */
     public function getCoordinatesByZipCode(string $zipCode, string $countryCode): ZipCodeLocation
     {
@@ -88,6 +94,7 @@ class GeocodingEndpoint extends AbstractEndpoint
      * @throws TooManyRequestsException
      * @throws UnauthorizedException
      * @throws UnexpectedErrorException
+     * @throws InvalidArgumentException
      */
     public function getLocationNameByCoordinates(float $latitude, float $longitude, int $numResults = self::NUM_RESULTS): array
     {

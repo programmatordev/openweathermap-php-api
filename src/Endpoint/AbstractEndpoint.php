@@ -24,7 +24,7 @@ class AbstractEndpoint
 
     private ?CacheItemPoolInterface $cache;
 
-    protected \DateInterval|int|null $cacheTtl = 60 * 10;
+    protected \DateInterval|int|null $cacheTtl = 60 * 10; // 10 minutes
 
     protected string $measurementSystem;
 
@@ -40,13 +40,27 @@ class AbstractEndpoint
         $this->language = $config->getLanguage();
     }
 
+    public function withCacheTtl(\DateInterval|int|null $cacheTtl): static
+    {
+        $clone = clone $this;
+        $clone->cacheTtl = $cacheTtl;
+
+        return $clone;
+    }
+
+    public function getCacheTtl(): \DateInterval|int|null
+    {
+        return $this->cacheTtl;
+    }
+
     /**
      * @throws Exception
      * @throws BadRequestException
      * @throws NotFoundException
      * @throws TooManyRequestsException
      * @throws UnauthorizedException
-     * @throws UnexpectedErrorException|InvalidArgumentException
+     * @throws UnexpectedErrorException
+     * @throws InvalidArgumentException
      */
     protected function sendRequest(
         string $method,
