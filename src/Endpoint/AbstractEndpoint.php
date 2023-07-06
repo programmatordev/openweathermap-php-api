@@ -4,6 +4,8 @@ namespace ProgrammatorDev\OpenWeatherMap\Endpoint;
 
 use Http\Client\Common\HttpMethodsClient;
 use Http\Client\Exception;
+use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\WithCacheInvalidationTrait;
+use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\WithCacheTtlTrait;
 use ProgrammatorDev\OpenWeatherMap\Entity\Error;
 use ProgrammatorDev\OpenWeatherMap\Exception\BadRequestException;
 use ProgrammatorDev\OpenWeatherMap\Exception\NotFoundException;
@@ -12,20 +14,37 @@ use ProgrammatorDev\OpenWeatherMap\Exception\UnauthorizedException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnexpectedErrorException;
 use ProgrammatorDev\OpenWeatherMap\HttpClient\ResponseMediator;
 use ProgrammatorDev\OpenWeatherMap\OpenWeatherMap;
+use Psr\Cache\CacheItemPoolInterface;
+use Psr\Cache\InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
 
 class AbstractEndpoint
 {
+    use WithCacheTtlTrait;
+    use WithCacheInvalidationTrait;
+
+    private HttpMethodsClient $httpClient;
+
+    private ?CacheItemPoolInterface $cache;
+
+    private bool $cacheInvalidation = false;
+
+    protected \DateInterval|int|null $cacheTtl = 60 * 10; // 10 minutes
+
     protected string $measurementSystem;
 
     protected string $language;
 
     public function __construct(protected OpenWeatherMap $api)
     {
-        $this->measurementSystem = $this->api->getConfig()->getMeasurementSystem();
-        $this->language = $this->api->getConfig()->getLanguage();
+        $config = $this->api->getConfig();
+
+        $this->httpClient = $config->getHttpClientBuilder()->getHttpClient();
+        $this->cache = $config->getCache();
+        $this->measurementSystem = $config->getMeasurementSystem();
+        $this->language = $config->getLanguage();
     }
 
     /**
@@ -35,39 +54,91 @@ class AbstractEndpoint
      * @throws TooManyRequestsException
      * @throws UnauthorizedException
      * @throws UnexpectedErrorException
+     * @throws InvalidArgumentException
      */
     protected function sendRequest(
         string $method,
-        string|UriInterface $baseUrl,
+        UriInterface|string $baseUrl,
         array $query = [],
         array $headers = [],
-        string|StreamInterface $body = null
+        StreamInterface|string $body = null
     ): array
+    {
+        $uri = $this->buildUrl($baseUrl, $query);
+
+        // If there is a cache adapter, save responses into cache
+        if ($this->cache !== null) {
+            $cacheKey = $this->getCacheKey($uri);
+
+            // Invalidate cache (if exists) to force renewal
+            if ($this->cacheInvalidation === true) {
+                $this->cache->deleteItem($cacheKey);
+            }
+
+            $cacheItem = $this->cache->getItem($cacheKey);
+
+            // If cache does not exist...
+            if (!$cacheItem->isHit()) {
+                $response = ResponseMediator::toArray(
+                    $this->handleSendRequest($method, $uri, $headers, $body)
+                );
+
+                $cacheItem->set($response);
+                $cacheItem->expiresAfter($this->cacheTtl);
+
+                $this->cache->save($cacheItem);
+            }
+
+            return $cacheItem->get();
+        }
+
+        return ResponseMediator::toArray(
+            $this->handleSendRequest($method, $uri, $headers, $body)
+        );
+    }
+
+    /**
+     * @throws Exception
+     * @throws NotFoundException
+     * @throws UnexpectedErrorException
+     * @throws TooManyRequestsException
+     * @throws BadRequestException
+     * @throws UnauthorizedException
+     */
+    private function handleSendRequest(
+        string $method,
+        string $uri,
+        array $headers,
+        StreamInterface|string $body = null
+    ): ResponseInterface
+    {
+        $response = $this->httpClient->send($method, $uri, $headers, $body);
+        $statusCode = $response->getStatusCode();
+
+        // If API returns an error, throw exception
+        if ($statusCode >= 400) {
+            $error = new Error(
+                ResponseMediator::toArray($response)
+            );
+
+            match ($statusCode) {
+                400 => throw new BadRequestException($error),
+                401 => throw new UnauthorizedException($error),
+                404 => throw new NotFoundException($error),
+                429 => throw new TooManyRequestsException($error),
+                default => throw new UnexpectedErrorException($error)
+            };
+        }
+
+        return $response;
+    }
+
+    private function buildUrl(UriInterface|string $baseUrl, array $query): string
     {
         if ($baseUrl instanceof UriInterface) {
             $baseUrl = (string) $baseUrl;
         }
 
-        $uri = $this->buildUrl($baseUrl, $query);
-        $response = $this->getHttpClient()->send($method, $uri, $headers, $body);
-
-        // If API returns a status code error
-        if (($statusCode = $response->getStatusCode()) >= 400) {
-            $this->handleApiError($response, $statusCode);
-        }
-
-        return ResponseMediator::toArray($response);
-    }
-
-    private function getHttpClient(): HttpMethodsClient
-    {
-        return $this->api->getConfig()
-            ->getHttpClientBuilder()
-            ->getHttpClient();
-    }
-
-    private function buildUrl(string $baseUrl, array $query): string
-    {
         // Add application key to all requests
         $query = $query + [
             'appid' => $this->api->getConfig()->getApplicationKey()
@@ -76,24 +147,8 @@ class AbstractEndpoint
         return \sprintf('%s?%s', $baseUrl, http_build_query($query));
     }
 
-    /**
-     * @throws BadRequestException
-     * @throws UnauthorizedException
-     * @throws UnexpectedErrorException
-     * @throws TooManyRequestsException
-     * @throws NotFoundException
-     */
-    private function handleApiError(ResponseInterface $response, int $statusCode): void
+    private function getCacheKey(string $value): string
     {
-        $data = ResponseMediator::toArray($response);
-        $error = new Error($data);
-
-        match ($statusCode) {
-            400 => throw new BadRequestException($error->getMessage(), $error->getCode(), $error->getParameters()),
-            401 => throw new UnauthorizedException($error->getMessage(), $error->getCode(), $error->getParameters()),
-            404 => throw new NotFoundException($error->getMessage(), $error->getCode(), $error->getParameters()),
-            429 => throw new TooManyRequestsException($error->getMessage(), $error->getCode(), $error->getParameters()),
-            default => throw new UnexpectedErrorException($error->getMessage(), $error->getCode(), $error->getParameters())
-        };
+        return md5($value);
     }
 }

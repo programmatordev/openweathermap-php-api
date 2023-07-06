@@ -23,8 +23,6 @@ class ApiErrorTest extends AbstractTest
             )
         );
 
-        $this->assertInstanceOf(ApiErrorException::class, new $expectedException('Error'));
-
         $this->expectException($expectedException);
         $this->getApi()->getWeather()->getCurrent(38.7077507, -9.1365919);
     }

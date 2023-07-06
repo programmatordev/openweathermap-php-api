@@ -14,6 +14,7 @@ use ProgrammatorDev\OpenWeatherMap\Exception\UnauthorizedException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnexpectedErrorException;
 use ProgrammatorDev\OpenWeatherMap\Validator\CoordinateValidatorTrait;
 use ProgrammatorDev\OpenWeatherMap\Validator\GreaterThanValidatorTrait;
+use Psr\Cache\InvalidArgumentException;
 
 class WeatherEndpoint extends AbstractEndpoint
 {
@@ -35,6 +36,7 @@ class WeatherEndpoint extends AbstractEndpoint
      * @throws TooManyRequestsException
      * @throws UnauthorizedException
      * @throws UnexpectedErrorException
+     * @throws InvalidArgumentException
      */
     public function getCurrent(float $latitude, float $longitude): CurrentWeather
     {
@@ -61,6 +63,7 @@ class WeatherEndpoint extends AbstractEndpoint
      * @throws TooManyRequestsException
      * @throws UnauthorizedException
      * @throws UnexpectedErrorException
+     * @throws InvalidArgumentException
      */
     public function getForecast(float $latitude, float $longitude, int $numResults = self::NUM_RESULTS): WeatherList
     {

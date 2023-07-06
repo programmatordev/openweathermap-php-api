@@ -5,6 +5,7 @@ namespace ProgrammatorDev\OpenWeatherMap;
 use ProgrammatorDev\OpenWeatherMap\HttpClient\HttpClientBuilder;
 use ProgrammatorDev\OpenWeatherMap\Validator\BlankValidatorTrait;
 use ProgrammatorDev\OpenWeatherMap\Validator\ChoiceValidatorTrait;
+use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class Config
@@ -25,17 +26,19 @@ class Config
     private function configureOptions(OptionsResolver $optionsResolver): void
     {
         $optionsResolver->setDefaults([
-            'httpClientBuilder' => new HttpClientBuilder(),
             'measurementSystem' => MeasurementSystem::METRIC,
-            'language' => Language::ENGLISH
+            'language' => Language::ENGLISH,
+            'httpClientBuilder' => new HttpClientBuilder(),
+            'cache' => null
         ]);
 
         $optionsResolver->setRequired('applicationKey');
 
         $optionsResolver->setAllowedTypes('applicationKey', 'string');
-        $optionsResolver->setAllowedTypes('httpClientBuilder', HttpClientBuilder::class);
         $optionsResolver->setAllowedTypes('measurementSystem', 'string');
         $optionsResolver->setAllowedTypes('language', 'string');
+        $optionsResolver->setAllowedTypes('httpClientBuilder', HttpClientBuilder::class);
+        $optionsResolver->setAllowedTypes('cache', ['null', CacheItemPoolInterface::class]);
 
         $optionsResolver->setAllowedValues('applicationKey', function($value) {
             return !empty($value);
@@ -89,5 +92,17 @@ class Config
     public function getHttpClientBuilder(): HttpClientBuilder
     {
         return $this->options['httpClientBuilder'];
+    }
+
+    public function getCache(): ?CacheItemPoolInterface
+    {
+        return $this->options['cache'];
+    }
+
+    public function setCache(?CacheItemPoolInterface $cache): self
+    {
+        $this->options['cache'] = $cache;
+
+        return $this;
     }
 }

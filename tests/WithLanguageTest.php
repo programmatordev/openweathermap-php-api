@@ -9,8 +9,6 @@ class WithLanguageTest extends AbstractTest
 {
     public function testWithLanguage()
     {
-        $this->assertSame('en', $this->getApi()->getWeather()->getLanguage());
-
         $this->assertSame(
             'pt',
             $this->getApi()->getWeather()
@@ -24,5 +22,10 @@ class WithLanguageTest extends AbstractTest
     {
         $this->expectException($expectedException);
         $this->getApi()->getWeather()->withLanguage($language);
+    }
+
+    public function testWithLanguageGetLanguage()
+    {
+        $this->assertSame('en', $this->getApi()->getWeather()->getLanguage());
     }
 }
