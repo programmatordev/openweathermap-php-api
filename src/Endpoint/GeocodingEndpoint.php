@@ -3,7 +3,6 @@
 namespace ProgrammatorDev\OpenWeatherMap\Endpoint;
 
 use Http\Client\Exception;
-use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\WithCacheTtlTrait;
 use ProgrammatorDev\OpenWeatherMap\Entity\Geocoding\ZipCodeLocation;
 use ProgrammatorDev\OpenWeatherMap\Entity\Location;
 use ProgrammatorDev\OpenWeatherMap\Exception\BadRequestException;
