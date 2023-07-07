@@ -125,6 +125,12 @@ class ConfigTest extends AbstractTest
         $this->config->setLanguage($language);
     }
 
+    public function testConfigSetHttpClientBuilder()
+    {
+        $this->config->setHttpClientBuilder(new HttpClientBuilder());
+        $this->assertInstanceOf(HttpClientBuilder::class, $this->config->getHttpClientBuilder());
+    }
+
     public function testConfigSetCache()
     {
         $this->config->setCache(new FilesystemAdapter());

@@ -17,34 +17,34 @@ class Config
 
     public function __construct(array $options = [])
     {
-        $optionsResolver = new OptionsResolver();
-        $this->configureOptions($optionsResolver);
+        $resolver = new OptionsResolver();
+        $this->configureOptions($resolver);
 
-        $this->options = $optionsResolver->resolve($options);
+        $this->options = $resolver->resolve($options);
     }
 
-    private function configureOptions(OptionsResolver $optionsResolver): void
+    private function configureOptions(OptionsResolver $resolver): void
     {
-        $optionsResolver->setDefaults([
+        $resolver->setDefaults([
             'measurementSystem' => MeasurementSystem::METRIC,
             'language' => Language::ENGLISH,
             'httpClientBuilder' => new HttpClientBuilder(),
             'cache' => null
         ]);
 
-        $optionsResolver->setRequired('applicationKey');
+        $resolver->setRequired('applicationKey');
 
-        $optionsResolver->setAllowedTypes('applicationKey', 'string');
-        $optionsResolver->setAllowedTypes('measurementSystem', 'string');
-        $optionsResolver->setAllowedTypes('language', 'string');
-        $optionsResolver->setAllowedTypes('httpClientBuilder', HttpClientBuilder::class);
-        $optionsResolver->setAllowedTypes('cache', ['null', CacheItemPoolInterface::class]);
+        $resolver->setAllowedTypes('applicationKey', 'string');
+        $resolver->setAllowedTypes('measurementSystem', 'string');
+        $resolver->setAllowedTypes('language', 'string');
+        $resolver->setAllowedTypes('httpClientBuilder', HttpClientBuilder::class);
+        $resolver->setAllowedTypes('cache', ['null', CacheItemPoolInterface::class]);
 
-        $optionsResolver->setAllowedValues('applicationKey', function($value) {
+        $resolver->setAllowedValues('applicationKey', function($value) {
             return !empty($value);
         });
-        $optionsResolver->setAllowedValues('measurementSystem', MeasurementSystem::getList());
-        $optionsResolver->setAllowedValues('language', Language::getList());
+        $resolver->setAllowedValues('measurementSystem', MeasurementSystem::getList());
+        $resolver->setAllowedValues('language', Language::getList());
     }
 
     public function getApplicationKey(): string
@@ -92,6 +92,13 @@ class Config
     public function getHttpClientBuilder(): HttpClientBuilder
     {
         return $this->options['httpClientBuilder'];
+    }
+
+    public function setHttpClientBuilder(HttpClientBuilder $httpClientBuilder): self
+    {
+        $this->options['httpClientBuilder'] = $httpClientBuilder;
+
+        return $this;
     }
 
     public function getCache(): ?CacheItemPoolInterface

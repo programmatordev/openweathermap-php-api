@@ -80,7 +80,7 @@ class AbstractEndpoint
             // If cache does not exist...
             if (!$cacheItem->isHit()) {
                 $response = ResponseMediator::toArray(
-                    $this->handleSendRequest($method, $uri, $headers, $body)
+                    $this->handleRequest($method, $uri, $headers, $body)
                 );
 
                 $cacheItem->set($response);
@@ -93,7 +93,7 @@ class AbstractEndpoint
         }
 
         return ResponseMediator::toArray(
-            $this->handleSendRequest($method, $uri, $headers, $body)
+            $this->handleRequest($method, $uri, $headers, $body)
         );
     }
 
@@ -105,7 +105,7 @@ class AbstractEndpoint
      * @throws BadRequestException
      * @throws UnauthorizedException
      */
-    private function handleSendRequest(
+    private function handleRequest(
         string $method,
         string $uri,
         array $headers,
