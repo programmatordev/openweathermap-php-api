@@ -21,10 +21,9 @@ class Config
     {
         $resolver = new OptionsResolver();
         $this->configureOptions($resolver);
-
         $this->options = $resolver->resolve($options);
 
-        $this->configureAdapters();
+        $this->configureAware();
     }
 
     private function configureOptions(OptionsResolver $resolver): void
@@ -53,7 +52,7 @@ class Config
         $resolver->setAllowedValues('language', Language::getList());
     }
 
-    private function configureAdapters(): void
+    private function configureAware(): void
     {
         if ($this->getLogger() !== null) {
             $this->getHttpClientBuilder()->addPlugin(

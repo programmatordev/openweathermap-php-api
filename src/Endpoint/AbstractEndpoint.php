@@ -19,6 +19,7 @@ use Psr\Cache\InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
+use Psr\Log\LoggerInterface;
 
 class AbstractEndpoint
 {
@@ -26,6 +27,8 @@ class AbstractEndpoint
     use WithCacheInvalidationTrait;
 
     private HttpMethodsClient $httpClient;
+
+    private ?LoggerInterface $logger;
 
     private ?CacheItemPoolInterface $cache;
 
@@ -42,6 +45,7 @@ class AbstractEndpoint
         $config = $this->api->getConfig();
 
         $this->httpClient = $config->getHttpClientBuilder()->getHttpClient();
+        $this->logger = $config->getLogger();
         $this->cache = $config->getCache();
         $this->measurementSystem = $config->getMeasurementSystem();
         $this->language = $config->getLanguage();
@@ -70,15 +74,19 @@ class AbstractEndpoint
         if ($this->cache !== null) {
             $cacheKey = $this->getCacheKey($uri);
 
-            // Invalidate cache (if exists) to force renewal
+            // Invalidate cache to force new
             if ($this->cacheInvalidation === true) {
+                $this->logger?->info('Cache invalidated', ['key' => $cacheKey]);
+
                 $this->cache->deleteItem($cacheKey);
             }
 
             $cacheItem = $this->cache->getItem($cacheKey);
 
-            // If cache does not exist...
-            if (!$cacheItem->isHit()) {
+            if ($cacheItem->isHit()) {
+                $this->logger?->info(\sprintf('Cache hit: %s %s', $method, $uri), ['key' => $cacheKey]);
+            }
+            else {
                 $response = ResponseMediator::toArray(
                     $this->handleRequest($method, $uri, $headers, $body)
                 );
@@ -87,6 +95,8 @@ class AbstractEndpoint
                 $cacheItem->expiresAfter($this->cacheTtl);
 
                 $this->cache->save($cacheItem);
+
+                $this->logger?->info('Cached response', ['ttl' => $this->cacheTtl, 'key' => $cacheKey]);
             }
 
             return $cacheItem->get();
