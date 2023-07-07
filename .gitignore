@@ -3,5 +3,6 @@
 /phpunit.xml
 /.phpunit.result.cache
 /vendor/
+/logs/
 /.idea
 /index.php

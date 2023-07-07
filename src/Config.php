@@ -3,9 +3,11 @@
 namespace ProgrammatorDev\OpenWeatherMap;
 
 use ProgrammatorDev\OpenWeatherMap\HttpClient\HttpClientBuilder;
+use ProgrammatorDev\OpenWeatherMap\HttpClient\Plugin\LoggerPlugin;
 use ProgrammatorDev\OpenWeatherMap\Validator\BlankValidatorTrait;
 use ProgrammatorDev\OpenWeatherMap\Validator\ChoiceValidatorTrait;
 use Psr\Cache\CacheItemPoolInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class Config
@@ -19,8 +21,9 @@ class Config
     {
         $resolver = new OptionsResolver();
         $this->configureOptions($resolver);
-
         $this->options = $resolver->resolve($options);
+
+        $this->configureAware();
     }
 
     private function configureOptions(OptionsResolver $resolver): void
@@ -29,7 +32,8 @@ class Config
             'measurementSystem' => MeasurementSystem::METRIC,
             'language' => Language::ENGLISH,
             'httpClientBuilder' => new HttpClientBuilder(),
-            'cache' => null
+            'cache' => null,
+            'logger' => null
         ]);
 
         $resolver->setRequired('applicationKey');
@@ -39,12 +43,22 @@ class Config
         $resolver->setAllowedTypes('language', 'string');
         $resolver->setAllowedTypes('httpClientBuilder', HttpClientBuilder::class);
         $resolver->setAllowedTypes('cache', ['null', CacheItemPoolInterface::class]);
+        $resolver->setAllowedTypes('logger', ['null', LoggerInterface::class]);
 
         $resolver->setAllowedValues('applicationKey', function($value) {
             return !empty($value);
         });
         $resolver->setAllowedValues('measurementSystem', MeasurementSystem::getList());
         $resolver->setAllowedValues('language', Language::getList());
+    }
+
+    private function configureAware(): void
+    {
+        if ($this->getLogger() !== null) {
+            $this->getHttpClientBuilder()->addPlugin(
+                new LoggerPlugin($this->getLogger())
+            );
+        }
     }
 
     public function getApplicationKey(): string
@@ -109,6 +123,18 @@ class Config
     public function setCache(?CacheItemPoolInterface $cache): self
     {
         $this->options['cache'] = $cache;
+
+        return $this;
+    }
+
+    public function getLogger(): ?LoggerInterface
+    {
+        return $this->options['logger'];
+    }
+
+    public function setLogger(?LoggerInterface $logger): self
+    {
+        $this->options['logger'] = $logger;
 
         return $this;
     }

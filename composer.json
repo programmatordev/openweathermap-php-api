@@ -7,8 +7,7 @@
     "authors": [
         {
             "name": "André Pimpão",
-            "email": "a.pimpao@programmator.dev",
-            "homepage": "https://programmator.dev"
+            "email": "a.pimpao@programmator.dev"
         }
     ],
     "require": {
@@ -18,6 +17,7 @@
         "psr/cache": "^3.0",
         "psr/http-client": "^1.0",
         "psr/http-factory": "^1.0",
+        "psr/log": "^3.0",
         "symfony/options-resolver": "^6.3"
     },
     "provide": {
@@ -25,6 +25,7 @@
         "psr/http-factory-implementation": "^1.0"
     },
     "require-dev": {
+        "monolog/monolog": "^3.4",
         "nyholm/psr7": "^1.8",
         "php-http/mock-client": "^1.6",
         "phpunit/phpunit": "^10.0",
