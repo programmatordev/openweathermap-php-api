@@ -6,26 +6,26 @@ trait BetweenValidatorTrait
 {
     private function ValidateBetween(
         string $name,
-        \DateTimeImmutable|int|float $value,
-        \DateTimeImmutable|int|float $startConstraint,
-        \DateTimeImmutable|int|float $endConstraint
+        \DateTimeInterface|int|float $value,
+        \DateTimeInterface|int|float $startConstraint,
+        \DateTimeInterface|int|float $endConstraint
     ): void
     {
         if (
-            $value instanceof \DateTimeImmutable
-            && (!$startConstraint instanceof \DateTimeImmutable || !$endConstraint instanceof \DateTimeImmutable)
+            $value instanceof \DateTimeInterface
+            && (!$startConstraint instanceof \DateTimeInterface || !$endConstraint instanceof \DateTimeInterface)
         ) {
-            throw new \LogicException('Both $startConstraint and $endConstraint should be of type \DateTimeImmutable.');
+            throw new \LogicException('Both $startConstraint and $endConstraint should be of type \DateTimeInterface.');
         }
 
         if (
-            !$value instanceof \DateTimeImmutable
-            && ($startConstraint instanceof \DateTimeImmutable || $endConstraint instanceof \DateTimeImmutable)
+            !$value instanceof \DateTimeInterface
+            && ($startConstraint instanceof \DateTimeInterface || $endConstraint instanceof \DateTimeInterface)
         ) {
             throw new \LogicException('Both $startConstraint and $endConstraint should be of type int|float.');
         }
 
-        if ($value instanceof \DateTimeImmutable) {
+        if ($value instanceof \DateTimeInterface) {
             if ($value->getTimestamp() < $startConstraint->getTimestamp() || $value->getTimestamp() > $endConstraint->getTimestamp()) {
                 $dateFormat = 'Y-m-d H:i:s';
 

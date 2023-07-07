@@ -66,7 +66,7 @@ class OneCallEndpoint extends AbstractEndpoint
      * @throws UnexpectedErrorException
      * @throws InvalidArgumentException
      */
-    public function getHistoryMoment(float $latitude, float $longitude, \DateTimeImmutable $dateTime): HistoryMoment
+    public function getHistoryMoment(float $latitude, float $longitude, \DateTimeInterface $dateTime): HistoryMoment
     {
         $this->validateCoordinate($latitude, $longitude);
         $this->validateLessThan('dateTime', $dateTime, new \DateTimeImmutable('now'));
@@ -95,7 +95,7 @@ class OneCallEndpoint extends AbstractEndpoint
      * @throws UnexpectedErrorException
      * @throws InvalidArgumentException
      */
-    public function getHistoryDaySummary(float $latitude, float $longitude, \DateTimeImmutable $dateTime): HistoryDaySummary
+    public function getHistoryDaySummary(float $latitude, float $longitude, \DateTimeInterface $dateTime): HistoryDaySummary
     {
         $this->validateCoordinate($latitude, $longitude);
         $this->validateLessThan('dateTime', $dateTime, new \DateTimeImmutable('now'));

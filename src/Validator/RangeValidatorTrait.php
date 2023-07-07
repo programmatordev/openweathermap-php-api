@@ -9,22 +9,22 @@ trait RangeValidatorTrait
     public function validateRange(
         string $startName,
         string $endName,
-        \DateTimeImmutable|int|float $startValue,
-        \DateTimeImmutable|int|float $endValue
+        \DateTimeInterface|int|float $startValue,
+        \DateTimeInterface|int|float $endValue
     ): void
     {
         if (
-            ($startValue instanceof \DateTimeImmutable && !$endValue instanceof \DateTimeImmutable)
-            || (!$startValue instanceof \DateTimeImmutable && $endValue instanceof \DateTimeImmutable)
+            ($startValue instanceof \DateTimeInterface && !$endValue instanceof \DateTimeInterface)
+            || (!$startValue instanceof \DateTimeInterface && $endValue instanceof \DateTimeInterface)
         ) {
-            throw new \LogicException('Both $startValue and $endValue should be of type \DateTimeImmutable or int|float.');
+            throw new \LogicException('Both $startValue and $endValue should be of type \DateTimeInterface or int|float.');
         }
 
         try {
             $this->validateLessThan('startValue', $startValue, $endValue);
         }
         catch (\UnexpectedValueException) {
-            if ($startValue instanceof \DateTimeImmutable) {
+            if ($startValue instanceof \DateTimeInterface) {
                 $dateFormat = 'Y-m-d H:i:s';
 
                 throw new \UnexpectedValueException(

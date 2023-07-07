@@ -6,19 +6,19 @@ trait LessThanValidatorTrait
 {
     private function validateLessThan(
         string $name,
-        \DateTimeImmutable|int|float $value,
-        \DateTimeImmutable|int|float $constraint
+        \DateTimeInterface|int|float $value,
+        \DateTimeInterface|int|float $constraint
     ): void
     {
-        if ($value instanceof \DateTimeImmutable && !$constraint instanceof \DateTimeImmutable) {
-            throw new \LogicException('$constraint should be of type \DateTimeImmutable.');
+        if ($value instanceof \DateTimeInterface && !$constraint instanceof \DateTimeInterface) {
+            throw new \LogicException('$constraint should be of type \DateTimeInterface.');
         }
 
-        if (!$value instanceof \DateTimeImmutable && $constraint instanceof \DateTimeImmutable) {
+        if (!$value instanceof \DateTimeInterface && $constraint instanceof \DateTimeInterface) {
             throw new \LogicException('$constraint should be of type int|float.');
         }
 
-        if ($value instanceof \DateTimeImmutable) {
+        if ($value instanceof \DateTimeInterface) {
             if ($value->getTimestamp() >= $constraint->getTimestamp()) {
                 $dateFormat = 'Y-m-d H:i:s';
 
