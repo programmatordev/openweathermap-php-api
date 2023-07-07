@@ -89,8 +89,8 @@ class AirPollutionEndpoint extends AbstractEndpoint
     public function getHistory(
         float $latitude,
         float $longitude,
-        \DateTimeImmutable $startDate,
-        \DateTimeImmutable $endDate
+        \DateTimeInterface $startDate,
+        \DateTimeInterface $endDate
     ): AirPollutionList
     {
         $this->validateCoordinate($latitude, $longitude);
