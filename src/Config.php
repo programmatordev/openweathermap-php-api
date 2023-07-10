@@ -4,6 +4,8 @@ namespace ProgrammatorDev\OpenWeatherMap;
 
 use ProgrammatorDev\OpenWeatherMap\HttpClient\HttpClientBuilder;
 use ProgrammatorDev\OpenWeatherMap\HttpClient\Plugin\LoggerPlugin;
+use ProgrammatorDev\OpenWeatherMap\Language\Language;
+use ProgrammatorDev\OpenWeatherMap\MeasurementSystem\MeasurementSystem;
 use ProgrammatorDev\OpenWeatherMap\Validator\BlankValidatorTrait;
 use ProgrammatorDev\OpenWeatherMap\Validator\ChoiceValidatorTrait;
 use Psr\Cache\CacheItemPoolInterface;

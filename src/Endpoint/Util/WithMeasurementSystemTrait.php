@@ -2,7 +2,7 @@
 
 namespace ProgrammatorDev\OpenWeatherMap\Endpoint\Util;
 
-use ProgrammatorDev\OpenWeatherMap\MeasurementSystem;
+use ProgrammatorDev\OpenWeatherMap\MeasurementSystem\MeasurementSystem;
 use ProgrammatorDev\OpenWeatherMap\Validator\ChoiceValidatorTrait;
 
 trait WithMeasurementSystemTrait

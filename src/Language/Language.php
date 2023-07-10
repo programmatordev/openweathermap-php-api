@@ -1,6 +1,6 @@
 <?php
 
-namespace ProgrammatorDev\OpenWeatherMap;
+namespace ProgrammatorDev\OpenWeatherMap\Language;
 
 class Language
 {
