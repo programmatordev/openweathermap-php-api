@@ -7,7 +7,6 @@ use PHPUnit\Framework\Attributes\DataProviderExternal;
 use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\AirPollution;
 use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\AirPollutionList;
 use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\AirQuality;
-use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\Component;
 use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\CurrentAirPollution;
 use ProgrammatorDev\OpenWeatherMap\Entity\Coordinate;
 use ProgrammatorDev\OpenWeatherMap\Entity\Location;
@@ -131,6 +130,15 @@ class AirPollutionEndpointTest extends AbstractTest
     {
         $this->assertInstanceOf(CurrentAirPollution::class, $response);
 
+        $this->assertSame(196.93, $response->getCarbonMonoxide());
+        $this->assertSame(0.65, $response->getNitrogenMonoxide());
+        $this->assertSame(3.98, $response->getNitrogenDioxide());
+        $this->assertSame(107.29, $response->getOzone());
+        $this->assertSame(1.46, $response->getSulphurDioxide());
+        $this->assertSame(8.58, $response->getFineParticulateMatter());
+        $this->assertSame(13.5, $response->getCoarseParticulateMatter());
+        $this->assertSame(2.03, $response->getAmmonia());
+
         $location = $response->getLocation();
         $this->assertInstanceOf(Location::class, $location);
         $this->assertSame(null, $location->getId());
@@ -156,17 +164,6 @@ class AirPollutionEndpointTest extends AbstractTest
         $this->assertInstanceOf(AirQuality::class, $airQuality);
         $this->assertSame(3, $airQuality->getIndex());
         $this->assertSame('Moderate', $airQuality->getQualitativeName());
-
-        $components = $response->getComponents();
-        $this->assertInstanceOf(Component::class, $components);
-        $this->assertSame(196.93, $components->getCarbonMonoxide());
-        $this->assertSame(0.65, $components->getNitrogenMonoxide());
-        $this->assertSame(3.98, $components->getNitrogenDioxide());
-        $this->assertSame(107.29, $components->getOzone());
-        $this->assertSame(1.46, $components->getSulphurDioxide());
-        $this->assertSame(8.58, $components->getFineParticulateMatter());
-        $this->assertSame(13.5, $components->getCoarseParticulateMatter());
-        $this->assertSame(2.03, $components->getAmmonia());
     }
 
     private function assertForecastResponse(AirPollutionList $response): void
@@ -193,6 +190,15 @@ class AirPollutionEndpointTest extends AbstractTest
         $list = $response->getList();
         $this->assertContainsOnlyInstancesOf(AirPollution::class, $list);
 
+        $this->assertSame(196.93, $list[0]->getCarbonMonoxide());
+        $this->assertSame(0.65, $list[0]->getNitrogenMonoxide());
+        $this->assertSame(3.98, $list[0]->getNitrogenDioxide());
+        $this->assertSame(107.29, $list[0]->getOzone());
+        $this->assertSame(1.46, $list[0]->getSulphurDioxide());
+        $this->assertSame(8.58, $list[0]->getFineParticulateMatter());
+        $this->assertSame(13.5, $list[0]->getCoarseParticulateMatter());
+        $this->assertSame(2.03, $list[0]->getAmmonia());
+
         $dateTime = $list[0]->getDateTime();
         $this->assertInstanceOf(\DateTimeImmutable::class, $dateTime);
         $this->assertSame('2023-06-23 17:00:00', $dateTime->format('Y-m-d H:i:s'));
@@ -201,17 +207,6 @@ class AirPollutionEndpointTest extends AbstractTest
         $this->assertInstanceOf(AirQuality::class, $airQuality);
         $this->assertSame(3, $airQuality->getIndex());
         $this->assertSame('Moderate', $airQuality->getQualitativeName());
-
-        $components = $list[0]->getComponents();
-        $this->assertInstanceOf(Component::class, $components);
-        $this->assertSame(196.93, $components->getCarbonMonoxide());
-        $this->assertSame(0.65, $components->getNitrogenMonoxide());
-        $this->assertSame(3.98, $components->getNitrogenDioxide());
-        $this->assertSame(107.29, $components->getOzone());
-        $this->assertSame(1.46, $components->getSulphurDioxide());
-        $this->assertSame(8.58, $components->getFineParticulateMatter());
-        $this->assertSame(13.5, $components->getCoarseParticulateMatter());
-        $this->assertSame(2.03, $components->getAmmonia());
     }
 
     private function assertHistoryResponse(AirPollutionList $response): void
@@ -238,6 +233,15 @@ class AirPollutionEndpointTest extends AbstractTest
         $list = $response->getList();
         $this->assertContainsOnlyInstancesOf(AirPollution::class, $list);
 
+        $this->assertSame(220.3, $list[0]->getCarbonMonoxide());
+        $this->assertSame(0.12, $list[0]->getNitrogenMonoxide());
+        $this->assertSame(3.3, $list[0]->getNitrogenDioxide());
+        $this->assertSame(87.26, $list[0]->getOzone());
+        $this->assertSame(1.25, $list[0]->getSulphurDioxide());
+        $this->assertSame(1.62, $list[0]->getFineParticulateMatter());
+        $this->assertSame(2.94, $list[0]->getCoarseParticulateMatter());
+        $this->assertSame(0.38, $list[0]->getAmmonia());
+
         $dateTime = $list[0]->getDateTime();
         $this->assertInstanceOf(\DateTimeImmutable::class, $dateTime);
         $this->assertSame('2023-06-18 18:00:00', $dateTime->format('Y-m-d H:i:s'));
@@ -246,16 +250,5 @@ class AirPollutionEndpointTest extends AbstractTest
         $this->assertInstanceOf(AirQuality::class, $airQuality);
         $this->assertSame(2, $airQuality->getIndex());
         $this->assertSame('Fair', $airQuality->getQualitativeName());
-
-        $components = $list[0]->getComponents();
-        $this->assertInstanceOf(Component::class, $components);
-        $this->assertSame(220.3, $components->getCarbonMonoxide());
-        $this->assertSame(0.12, $components->getNitrogenMonoxide());
-        $this->assertSame(3.3, $components->getNitrogenDioxide());
-        $this->assertSame(87.26, $components->getOzone());
-        $this->assertSame(1.25, $components->getSulphurDioxide());
-        $this->assertSame(1.62, $components->getFineParticulateMatter());
-        $this->assertSame(2.94, $components->getCoarseParticulateMatter());
-        $this->assertSame(0.38, $components->getAmmonia());
     }
 }
