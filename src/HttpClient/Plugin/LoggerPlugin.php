@@ -6,14 +6,13 @@ use Http\Client\Common\Plugin;
 use Http\Client\Exception;
 use Http\Message\Formatter;
 use Http\Message\Formatter\SimpleFormatter;
+use Http\Promise\Promise;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 
 class LoggerPlugin implements Plugin
 {
-    use Plugin\VersionBridgePlugin;
-
     private LoggerInterface $logger;
 
     private Formatter $formatter;
@@ -27,7 +26,7 @@ class LoggerPlugin implements Plugin
     /**
      * @throws Exception
      */
-    protected function doHandleRequest(RequestInterface $request, callable $next, callable $first)
+    public function handleRequest(RequestInterface $request, callable $next, callable $first): Promise
     {
         $start = hrtime(true) / 1E6;
         $this->logger->info(
