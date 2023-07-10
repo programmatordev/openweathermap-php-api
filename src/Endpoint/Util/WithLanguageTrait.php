@@ -2,7 +2,7 @@
 
 namespace ProgrammatorDev\OpenWeatherMap\Endpoint\Util;
 
-use ProgrammatorDev\OpenWeatherMap\Language;
+use ProgrammatorDev\OpenWeatherMap\Language\Language;
 use ProgrammatorDev\OpenWeatherMap\Validator\ChoiceValidatorTrait;
 
 trait WithLanguageTrait
