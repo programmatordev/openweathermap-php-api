@@ -8,6 +8,7 @@ use PHPUnit\Framework\Attributes\DataProviderExternal;
 use ProgrammatorDev\OpenWeatherMap\Entity\Coordinate;
 use ProgrammatorDev\OpenWeatherMap\Entity\Geocoding\ZipCodeLocation;
 use ProgrammatorDev\OpenWeatherMap\Entity\Location;
+use ProgrammatorDev\OpenWeatherMap\Exception\ValidationException;
 use ProgrammatorDev\OpenWeatherMap\Test\DataProvider\InvalidParamDataProvider;
 
 class GeocodingEndpointTest extends AbstractTest
@@ -27,7 +28,7 @@ class GeocodingEndpointTest extends AbstractTest
 
     public function testGeocodingGetCoordinatesByLocationNameWithBlankValue()
     {
-        $this->expectException(\UnexpectedValueException::class);
+        $this->expectException(ValidationException::class);
         $this->getApi()->getGeocoding()->getCoordinatesByLocationName('');
     }
 
@@ -56,7 +57,7 @@ class GeocodingEndpointTest extends AbstractTest
     #[DataProvider('provideGeocodingGetCoordinatesByZipCodeWithBlankValueData')]
     public function testGeocodingGetCoordinatesByZipCodeWithBlankValue(string $zipCode, string $countryCode)
     {
-        $this->expectException(\UnexpectedValueException::class);
+        $this->expectException(ValidationException::class);
         $this->getApi()->getGeocoding()->getCoordinatesByZipCode($zipCode, $countryCode);
     }
 

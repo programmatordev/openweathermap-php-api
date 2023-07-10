@@ -2,10 +2,15 @@
 
 namespace ProgrammatorDev\OpenWeatherMap\Validator;
 
+use ProgrammatorDev\OpenWeatherMap\Exception\ValidationException;
+
 trait RangeValidatorTrait
 {
     use LessThanValidatorTrait;
 
+    /**
+     * @throws ValidationException
+     */
     public function validateRange(
         string $startName,
         string $endName,
@@ -23,11 +28,11 @@ trait RangeValidatorTrait
         try {
             $this->validateLessThan('startValue', $startValue, $endValue);
         }
-        catch (\UnexpectedValueException) {
+        catch (ValidationException) {
             if ($startValue instanceof \DateTimeInterface) {
                 $dateFormat = 'Y-m-d H:i:s';
 
-                throw new \UnexpectedValueException(
+                throw new ValidationException(
                     \sprintf(
                         'The "%s" value "%s" should be less than the "%s" value "%s".',
                         $startName,
@@ -38,7 +43,7 @@ trait RangeValidatorTrait
                 );
             }
 
-            throw new \UnexpectedValueException(
+            throw new ValidationException(
                 \sprintf(
                     'The "%s" value "%d" should be less than the "%s" value "%d".',
                     $startName,

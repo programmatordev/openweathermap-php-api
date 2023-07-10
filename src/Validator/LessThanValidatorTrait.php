@@ -2,8 +2,13 @@
 
 namespace ProgrammatorDev\OpenWeatherMap\Validator;
 
+use ProgrammatorDev\OpenWeatherMap\Exception\ValidationException;
+
 trait LessThanValidatorTrait
 {
+    /**
+     * @throws ValidationException
+     */
     private function validateLessThan(
         string $name,
         \DateTimeInterface|int|float $value,
@@ -22,7 +27,7 @@ trait LessThanValidatorTrait
             if ($value->getTimestamp() >= $constraint->getTimestamp()) {
                 $dateFormat = 'Y-m-d H:i:s';
 
-                throw new \UnexpectedValueException(
+                throw new ValidationException(
                     \sprintf(
                         'The "%s" value "%s" is invalid. Must be less than "%s".',
                         $name,
@@ -34,7 +39,7 @@ trait LessThanValidatorTrait
         }
 
         if ($value >= $constraint) {
-            throw new \UnexpectedValueException(
+            throw new ValidationException(
                 \sprintf(
                     'The "%s" value "%d" is invalid. Must be less than "%d".',
                     $name,

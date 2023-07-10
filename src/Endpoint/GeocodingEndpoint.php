@@ -10,6 +10,7 @@ use ProgrammatorDev\OpenWeatherMap\Exception\NotFoundException;
 use ProgrammatorDev\OpenWeatherMap\Exception\TooManyRequestsException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnauthorizedException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnexpectedErrorException;
+use ProgrammatorDev\OpenWeatherMap\Exception\ValidationException;
 use ProgrammatorDev\OpenWeatherMap\Util\CreateEntityListTrait;
 use ProgrammatorDev\OpenWeatherMap\Validator\BlankValidatorTrait;
 use ProgrammatorDev\OpenWeatherMap\Validator\CoordinateValidatorTrait;
@@ -42,6 +43,7 @@ class GeocodingEndpoint extends AbstractEndpoint
      * @throws UnauthorizedException
      * @throws UnexpectedErrorException
      * @throws InvalidArgumentException
+     * @throws ValidationException
      */
     public function getCoordinatesByLocationName(string $locationName, int $numResults = self::NUM_RESULTS): array
     {
@@ -68,6 +70,7 @@ class GeocodingEndpoint extends AbstractEndpoint
      * @throws UnauthorizedException
      * @throws UnexpectedErrorException
      * @throws InvalidArgumentException
+     * @throws ValidationException
      */
     public function getCoordinatesByZipCode(string $zipCode, string $countryCode): ZipCodeLocation
     {
@@ -94,6 +97,7 @@ class GeocodingEndpoint extends AbstractEndpoint
      * @throws UnauthorizedException
      * @throws UnexpectedErrorException
      * @throws InvalidArgumentException
+     * @throws ValidationException
      */
     public function getLocationNameByCoordinates(float $latitude, float $longitude, int $numResults = self::NUM_RESULTS): array
     {
