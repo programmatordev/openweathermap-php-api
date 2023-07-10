@@ -6,6 +6,7 @@ use Monolog\Logger;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\DataProviderExternal;
 use ProgrammatorDev\OpenWeatherMap\Config;
+use ProgrammatorDev\OpenWeatherMap\Exception\ValidationException;
 use ProgrammatorDev\OpenWeatherMap\HttpClient\HttpClientBuilder;
 use ProgrammatorDev\OpenWeatherMap\Test\DataProvider\InvalidParamDataProvider;
 use Psr\Cache\CacheItemPoolInterface;
@@ -100,7 +101,7 @@ class ConfigTest extends AbstractTest
 
     public function testConfigSetApplicationKeyWithBlankValue()
     {
-        $this->expectException(\UnexpectedValueException::class);
+        $this->expectException(ValidationException::class);
         $this->config->setApplicationKey('');
     }
 
