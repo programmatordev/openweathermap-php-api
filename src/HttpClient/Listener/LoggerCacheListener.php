@@ -33,7 +33,7 @@ class LoggerCacheListener implements CacheListener
                 ]
             );
         }
-        // If request was not cached (invalid method, etc.)
+        // If request is not cachable (invalid method, etc.)
         else {
             $this->logger->info(
                 $this->formatMessage($request, 'Request not cachable')
