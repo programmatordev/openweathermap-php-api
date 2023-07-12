@@ -57,13 +57,6 @@ class CachePlugin implements Plugin
         return $this;
     }
 
-    public function setCacheInvalidation(bool $cacheInvalidation): self
-    {
-        $this->cacheInvalidation = $cacheInvalidation;
-
-        return $this;
-    }
-
     private function createCacheKey(RequestInterface $request): string
     {
         $cacheKeyGenerator = new SimpleGenerator();

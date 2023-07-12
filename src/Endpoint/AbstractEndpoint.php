@@ -4,7 +4,6 @@ namespace ProgrammatorDev\OpenWeatherMap\Endpoint;
 
 use Http\Client\Exception;
 use ProgrammatorDev\OpenWeatherMap\Config;
-use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\WithCacheInvalidationTrait;
 use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\WithCacheTtlTrait;
 use ProgrammatorDev\OpenWeatherMap\Entity\Error;
 use ProgrammatorDev\OpenWeatherMap\Exception\BadRequestException;
@@ -25,7 +24,6 @@ use Psr\Log\LoggerInterface;
 class AbstractEndpoint
 {
     use WithCacheTtlTrait;
-    use WithCacheInvalidationTrait;
 
     private Config $config;
 
@@ -40,8 +38,6 @@ class AbstractEndpoint
     protected string $language;
 
     protected ?int $cacheTtl = 60 * 10; // 10 minutes
-
-    private bool $cacheInvalidation = false;
 
     public function __construct(protected OpenWeatherMap $api)
     {
@@ -75,7 +71,6 @@ class AbstractEndpoint
             $cachePlugin =  $this->httpClientBuilder->getPlugin(CachePlugin::class);
 
             $cachePlugin->setCacheTtl($this->cacheTtl);
-            $cachePlugin->setCacheInvalidation($this->cacheInvalidation);
         }
 
         $uri = $this->buildUrl($baseUrl, $query);
