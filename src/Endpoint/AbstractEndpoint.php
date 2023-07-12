@@ -3,6 +3,7 @@
 namespace ProgrammatorDev\OpenWeatherMap\Endpoint;
 
 use Http\Client\Common\Plugin\CachePlugin;
+use Http\Client\Common\Plugin\LoggerPlugin;
 use Http\Client\Exception;
 use ProgrammatorDev\OpenWeatherMap\Config;
 use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\WithCacheTtlTrait;
@@ -81,7 +82,6 @@ class AbstractEndpoint
     private function configurePlugins(): void
     {
         // Plugin order is important
-
         // CachePlugin should come first, otherwise the LoggerPlugin will log requests even if they are cached
         if ($this->cache !== null) {
             $this->httpClientBuilder->addPlugin(
@@ -89,6 +89,12 @@ class AbstractEndpoint
                     'default_ttl' => $this->cacheTtl,
                     'cache_lifetime' => 0
                 ])
+            );
+        }
+
+        if ($this->logger !== null) {
+            $this->httpClientBuilder->addPlugin(
+                new LoggerPlugin($this->logger)
             );
         }
     }

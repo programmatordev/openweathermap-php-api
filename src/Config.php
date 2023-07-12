@@ -4,8 +4,6 @@ namespace ProgrammatorDev\OpenWeatherMap;
 
 use ProgrammatorDev\OpenWeatherMap\Exception\ValidationException;
 use ProgrammatorDev\OpenWeatherMap\HttpClient\HttpClientBuilder;
-use ProgrammatorDev\OpenWeatherMap\HttpClient\Plugin\CachePlugin;
-use ProgrammatorDev\OpenWeatherMap\HttpClient\Plugin\LoggerPlugin;
 use ProgrammatorDev\OpenWeatherMap\Language\Language;
 use ProgrammatorDev\OpenWeatherMap\MeasurementSystem\MeasurementSystem;
 use ProgrammatorDev\OpenWeatherMap\Validator\BlankValidatorTrait;
@@ -26,8 +24,6 @@ class Config
         $resolver = new OptionsResolver();
         $this->configureOptions($resolver);
         $this->options = $resolver->resolve($options);
-
-        $this->configurePlugins();
     }
 
     private function configureOptions(OptionsResolver $resolver): void
@@ -54,15 +50,6 @@ class Config
         });
         $resolver->setAllowedValues('measurementSystem', MeasurementSystem::getList());
         $resolver->setAllowedValues('language', Language::getList());
-    }
-
-    private function configurePlugins(): void
-    {
-        if ($this->getLogger() !== null) {
-            $this->getHttpClientBuilder()->addPlugin(
-                new LoggerPlugin($this->getLogger())
-            );
-        }
     }
 
     public function getApplicationKey(): string
