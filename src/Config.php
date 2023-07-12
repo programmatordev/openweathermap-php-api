@@ -58,18 +58,6 @@ class Config
 
     private function configurePlugins(): void
     {
-        // Plugin order is important
-        // CachePlugin should come first, otherwise the LoggerPlugin will log requests even if they are cached
-        if ($this->getCache() !== null) {
-            $this->getHttpClientBuilder()->addPlugin(
-                new CachePlugin(
-                    $this->getCache(),
-                    $this->getHttpClientBuilder()->getStreamFactory(),
-                    $this->getLogger()
-                )
-            );
-        }
-
         if ($this->getLogger() !== null) {
             $this->getHttpClientBuilder()->addPlugin(
                 new LoggerPlugin($this->getLogger())

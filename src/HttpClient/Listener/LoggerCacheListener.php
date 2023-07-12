@@ -1,9 +1,8 @@
 <?php
 
-namespace ProgrammatorDev\OpenWeatherMap\HttpClient\Plugin\Listener;
+namespace ProgrammatorDev\OpenWeatherMap\HttpClient\Listener;
 
 use Http\Client\Common\Plugin\Cache\Listener\CacheListener;
-use Psr\Cache\CacheItemInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;

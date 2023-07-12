@@ -2,6 +2,7 @@
 
 namespace ProgrammatorDev\OpenWeatherMap\Endpoint;
 
+use Http\Client\Common\Plugin\CachePlugin;
 use Http\Client\Exception;
 use ProgrammatorDev\OpenWeatherMap\Config;
 use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\WithCacheTtlTrait;
@@ -12,7 +13,6 @@ use ProgrammatorDev\OpenWeatherMap\Exception\TooManyRequestsException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnauthorizedException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnexpectedErrorException;
 use ProgrammatorDev\OpenWeatherMap\HttpClient\HttpClientBuilder;
-use ProgrammatorDev\OpenWeatherMap\HttpClient\Plugin\CachePlugin;
 use ProgrammatorDev\OpenWeatherMap\HttpClient\ResponseMediator;
 use ProgrammatorDev\OpenWeatherMap\OpenWeatherMap;
 use Psr\Cache\CacheItemPoolInterface;
@@ -66,12 +66,7 @@ class AbstractEndpoint
         StreamInterface|string $body = null
     ): array
     {
-        if ($this->cache !== null) {
-            /** @var CachePlugin $cachePlugin */
-            $cachePlugin =  $this->httpClientBuilder->getPlugin(CachePlugin::class);
-
-            $cachePlugin->setCacheTtl($this->cacheTtl);
-        }
+        $this->configurePlugins();
 
         $uri = $this->buildUrl($baseUrl, $query);
         $response = $this->httpClientBuilder->getHttpClient()->send($method, $uri, $headers, $body);
@@ -81,6 +76,21 @@ class AbstractEndpoint
         }
 
         return ResponseMediator::toArray($response);
+    }
+
+    private function configurePlugins(): void
+    {
+        // Plugin order is important
+
+        // CachePlugin should come first, otherwise the LoggerPlugin will log requests even if they are cached
+        if ($this->cache !== null) {
+            $this->httpClientBuilder->addPlugin(
+                new CachePlugin($this->cache, $this->httpClientBuilder->getStreamFactory(), [
+                    'default_ttl' => $this->cacheTtl,
+                    'cache_lifetime' => 0
+                ])
+            );
+        }
     }
 
     /**
