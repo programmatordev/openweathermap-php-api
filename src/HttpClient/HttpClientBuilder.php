@@ -4,6 +4,7 @@ namespace ProgrammatorDev\OpenWeatherMap\HttpClient;
 
 use Http\Client\Common\HttpMethodsClient;
 use Http\Client\Common\Plugin;
+use Http\Client\Common\Plugin\HeaderDefaultsPlugin;
 use Http\Client\Common\PluginClientFactory;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Discovery\Psr18ClientDiscovery;
@@ -28,20 +29,17 @@ class HttpClientBuilder
 
     public function addPlugin(Plugin $plugin): void
     {
-        $this->plugins[] = $plugin;
+        $this->plugins[$plugin::class] = $plugin;
     }
 
-    /**
-     * @return Plugin[]
-     */
-    public function getPlugins(): array
+    public function getPlugin(string $className): Plugin
     {
-        return $this->plugins;
+        return $this->plugins[$className];
     }
 
     public function getHttpClient(): HttpMethodsClient
     {
-        $this->addPlugin(new Plugin\HeaderDefaultsPlugin([
+        $this->addPlugin(new HeaderDefaultsPlugin([
             'Content-Type' => 'application/json',
             'Accept' => 'application/json'
         ]));
@@ -54,5 +52,15 @@ class HttpClientBuilder
             $this->requestFactory,
             $this->streamFactory
         );
+    }
+
+    public function getRequestFactory(): ?RequestFactoryInterface
+    {
+        return $this->requestFactory;
+    }
+
+    public function getStreamFactory(): ?StreamFactoryInterface
+    {
+        return $this->streamFactory;
     }
 }

@@ -2,8 +2,8 @@
 
 namespace ProgrammatorDev\OpenWeatherMap;
 
+use ProgrammatorDev\OpenWeatherMap\Exception\ValidationException;
 use ProgrammatorDev\OpenWeatherMap\HttpClient\HttpClientBuilder;
-use ProgrammatorDev\OpenWeatherMap\HttpClient\Plugin\LoggerPlugin;
 use ProgrammatorDev\OpenWeatherMap\Language\Language;
 use ProgrammatorDev\OpenWeatherMap\MeasurementSystem\MeasurementSystem;
 use ProgrammatorDev\OpenWeatherMap\Validator\BlankValidatorTrait;
@@ -24,8 +24,6 @@ class Config
         $resolver = new OptionsResolver();
         $this->configureOptions($resolver);
         $this->options = $resolver->resolve($options);
-
-        $this->configureAware();
     }
 
     private function configureOptions(OptionsResolver $resolver): void
@@ -54,20 +52,14 @@ class Config
         $resolver->setAllowedValues('language', Language::getList());
     }
 
-    private function configureAware(): void
-    {
-        if ($this->getLogger() !== null) {
-            $this->getHttpClientBuilder()->addPlugin(
-                new LoggerPlugin($this->getLogger())
-            );
-        }
-    }
-
     public function getApplicationKey(): string
     {
         return $this->options['applicationKey'];
     }
 
+    /**
+     * @throws ValidationException
+     */
     public function setApplicationKey(string $applicationKey): self
     {
         $this->validateBlank('applicationKey', $applicationKey);
@@ -82,6 +74,9 @@ class Config
         return $this->options['measurementSystem'];
     }
 
+    /**
+     * @throws ValidationException
+     */
     public function setMeasurementSystem(string $measurementSystem): self
     {
         $this->validateChoice('measurementSystem', $measurementSystem, MeasurementSystem::getList());
@@ -96,6 +91,9 @@ class Config
         return $this->options['language'];
     }
 
+    /**
+     * @throws ValidationException
+     */
     public function setLanguage(string $language): self
     {
         $this->validateChoice('language', $language, Language::getList());

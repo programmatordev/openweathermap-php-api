@@ -14,7 +14,6 @@ use ProgrammatorDev\OpenWeatherMap\Exception\ValidationException;
 use ProgrammatorDev\OpenWeatherMap\Validator\CoordinateValidatorTrait;
 use ProgrammatorDev\OpenWeatherMap\Validator\LessThanValidatorTrait;
 use ProgrammatorDev\OpenWeatherMap\Validator\RangeValidatorTrait;
-use Psr\Cache\InvalidArgumentException;
 
 class AirPollutionEndpoint extends AbstractEndpoint
 {
@@ -35,7 +34,6 @@ class AirPollutionEndpoint extends AbstractEndpoint
      * @throws TooManyRequestsException
      * @throws UnauthorizedException
      * @throws UnexpectedErrorException
-     * @throws InvalidArgumentException
      * @throws ValidationException
      */
     public function getCurrent(float $latitude, float $longitude): CurrentAirPollution
@@ -61,7 +59,6 @@ class AirPollutionEndpoint extends AbstractEndpoint
      * @throws TooManyRequestsException
      * @throws UnauthorizedException
      * @throws UnexpectedErrorException
-     * @throws InvalidArgumentException
      * @throws ValidationException
      */
     public function getForecast(float $latitude, float $longitude): AirPollutionList
@@ -87,7 +84,6 @@ class AirPollutionEndpoint extends AbstractEndpoint
      * @throws TooManyRequestsException
      * @throws UnauthorizedException
      * @throws UnexpectedErrorException
-     * @throws InvalidArgumentException
      * @throws ValidationException
      */
     public function getHistory(

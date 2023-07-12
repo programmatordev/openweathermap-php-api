@@ -16,7 +16,6 @@ use ProgrammatorDev\OpenWeatherMap\Exception\UnexpectedErrorException;
 use ProgrammatorDev\OpenWeatherMap\Exception\ValidationException;
 use ProgrammatorDev\OpenWeatherMap\Validator\CoordinateValidatorTrait;
 use ProgrammatorDev\OpenWeatherMap\Validator\LessThanValidatorTrait;
-use Psr\Cache\InvalidArgumentException;
 
 class OneCallEndpoint extends AbstractEndpoint
 {
@@ -38,7 +37,6 @@ class OneCallEndpoint extends AbstractEndpoint
      * @throws TooManyRequestsException
      * @throws UnauthorizedException
      * @throws UnexpectedErrorException
-     * @throws InvalidArgumentException
      * @throws ValidationException
      */
     public function getWeather(float $latitude, float $longitude): OneCall
@@ -66,7 +64,6 @@ class OneCallEndpoint extends AbstractEndpoint
      * @throws TooManyRequestsException
      * @throws UnauthorizedException
      * @throws UnexpectedErrorException
-     * @throws InvalidArgumentException
      * @throws ValidationException
      */
     public function getHistoryMoment(float $latitude, float $longitude, \DateTimeInterface $dateTime): HistoryMoment
@@ -96,7 +93,6 @@ class OneCallEndpoint extends AbstractEndpoint
      * @throws TooManyRequestsException
      * @throws UnauthorizedException
      * @throws UnexpectedErrorException
-     * @throws InvalidArgumentException
      * @throws ValidationException
      */
     public function getHistoryDaySummary(float $latitude, float $longitude, \DateTimeInterface $dateTime): HistoryDaySummary
