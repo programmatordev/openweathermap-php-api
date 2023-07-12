@@ -14,6 +14,7 @@ use ProgrammatorDev\OpenWeatherMap\Exception\TooManyRequestsException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnauthorizedException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnexpectedErrorException;
 use ProgrammatorDev\OpenWeatherMap\HttpClient\HttpClientBuilder;
+use ProgrammatorDev\OpenWeatherMap\HttpClient\Listener\LoggerCacheListener;
 use ProgrammatorDev\OpenWeatherMap\HttpClient\ResponseMediator;
 use ProgrammatorDev\OpenWeatherMap\OpenWeatherMap;
 use Psr\Cache\CacheItemPoolInterface;
@@ -87,7 +88,10 @@ class AbstractEndpoint
             $this->httpClientBuilder->addPlugin(
                 new CachePlugin($this->cache, $this->httpClientBuilder->getStreamFactory(), [
                     'default_ttl' => $this->cacheTtl,
-                    'cache_lifetime' => 0
+                    'cache_lifetime' => 0,
+                    'cache_listeners' => ($this->logger !== null)
+                        ? [new LoggerCacheListener($this->logger)]
+                        : []
                 ])
             );
         }
