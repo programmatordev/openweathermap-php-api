@@ -4,7 +4,7 @@ namespace ProgrammatorDev\OpenWeatherMap\Endpoint\Util;
 
 trait WithCacheTtlTrait
 {
-    public function withCacheTtl(\DateInterval|int|null $time): static
+    public function withCacheTtl(?int $time): static
     {
         $clone = clone $this;
         $clone->cacheTtl = $time;
@@ -12,7 +12,7 @@ trait WithCacheTtlTrait
         return $clone;
     }
 
-    public function getCacheTtl(): \DateInterval|int|null
+    public function getCacheTtl(): ?int
     {
         return $this->cacheTtl;
     }

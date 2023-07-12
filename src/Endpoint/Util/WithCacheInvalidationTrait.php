@@ -12,7 +12,7 @@ trait WithCacheInvalidationTrait
         return $clone;
     }
 
-    public function getCacheInvalidation(): bool
+    public function isCacheInvalidation(): bool
     {
         return $this->cacheInvalidation;
     }

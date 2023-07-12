@@ -2,7 +2,9 @@
 
 namespace ProgrammatorDev\OpenWeatherMap;
 
+use ProgrammatorDev\OpenWeatherMap\Exception\ValidationException;
 use ProgrammatorDev\OpenWeatherMap\HttpClient\HttpClientBuilder;
+use ProgrammatorDev\OpenWeatherMap\HttpClient\Plugin\CachePlugin;
 use ProgrammatorDev\OpenWeatherMap\HttpClient\Plugin\LoggerPlugin;
 use ProgrammatorDev\OpenWeatherMap\Language\Language;
 use ProgrammatorDev\OpenWeatherMap\MeasurementSystem\MeasurementSystem;
@@ -25,7 +27,7 @@ class Config
         $this->configureOptions($resolver);
         $this->options = $resolver->resolve($options);
 
-        $this->configureAware();
+        $this->configurePlugins();
     }
 
     private function configureOptions(OptionsResolver $resolver): void
@@ -54,8 +56,20 @@ class Config
         $resolver->setAllowedValues('language', Language::getList());
     }
 
-    private function configureAware(): void
+    private function configurePlugins(): void
     {
+        // Plugin order is important
+        // CachePlugin should come first, otherwise the LoggerPlugin will log requests even if they are cached
+        if ($this->getCache() !== null) {
+            $this->getHttpClientBuilder()->addPlugin(
+                new CachePlugin(
+                    $this->getCache(),
+                    $this->getHttpClientBuilder()->getStreamFactory(),
+                    $this->getLogger()
+                )
+            );
+        }
+
         if ($this->getLogger() !== null) {
             $this->getHttpClientBuilder()->addPlugin(
                 new LoggerPlugin($this->getLogger())
@@ -68,6 +82,9 @@ class Config
         return $this->options['applicationKey'];
     }
 
+    /**
+     * @throws ValidationException
+     */
     public function setApplicationKey(string $applicationKey): self
     {
         $this->validateBlank('applicationKey', $applicationKey);
@@ -82,6 +99,9 @@ class Config
         return $this->options['measurementSystem'];
     }
 
+    /**
+     * @throws ValidationException
+     */
     public function setMeasurementSystem(string $measurementSystem): self
     {
         $this->validateChoice('measurementSystem', $measurementSystem, MeasurementSystem::getList());
@@ -96,6 +116,9 @@ class Config
         return $this->options['language'];
     }
 
+    /**
+     * @throws ValidationException
+     */
     public function setLanguage(string $language): self
     {
         $this->validateChoice('language', $language, Language::getList());

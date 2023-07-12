@@ -10,12 +10,12 @@ class WithCacheInvalidationTest extends AbstractTest
             true,
             $this->getApi()->getWeather()
                 ->withCacheInvalidation()
-                ->getCacheInvalidation()
+                ->isCacheInvalidation()
         );
     }
 
     public function testWithCacheInvalidationGetCacheInvalidation()
     {
-        $this->assertSame(false, $this->getApi()->getWeather()->getCacheInvalidation());
+        $this->assertSame(false, $this->getApi()->getWeather()->isCacheInvalidation());
     }
 }
