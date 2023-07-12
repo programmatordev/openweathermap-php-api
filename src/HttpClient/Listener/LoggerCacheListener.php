@@ -19,11 +19,12 @@ class LoggerCacheListener implements CacheListener
         if ($fromCache) {
             $this->logger->info(
                 $this->formatMessage($request, 'Cache hit'), [
+                    'expires' => $cacheItem->get()['expiresAt'],
                     'key' => $cacheItem->getKey()
                 ]
             );
         }
-        // If it is using a cached response
+        // If response was cached
         else if ($cacheItem !== null) {
             $this->logger->info(
                 $this->formatMessage($request, 'Response was cached'), [
