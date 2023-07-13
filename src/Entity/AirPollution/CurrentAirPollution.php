@@ -2,24 +2,21 @@
 
 namespace ProgrammatorDev\OpenWeatherMap\Entity\AirPollution;
 
-use ProgrammatorDev\OpenWeatherMap\Entity\Location;
+use ProgrammatorDev\OpenWeatherMap\Entity\Coordinate;
 
 class CurrentAirPollution extends AirPollution
 {
-    private Location $location;
+    private Coordinate $coordinate;
 
     public function __construct(array $data)
     {
         parent::__construct($data['list'][0]);
 
-        $this->location = new Location([
-            'lat' => $data['coord']['lat'],
-            'lon' => $data['coord']['lon']
-        ]);
+        $this->coordinate = new Coordinate($data['coord']);
     }
 
-    public function getLocation(): Location
+    public function getCoordinate(): Coordinate
     {
-        return $this->location;
+        return $this->coordinate;
     }
 }

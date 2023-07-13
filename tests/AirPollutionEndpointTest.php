@@ -139,19 +139,7 @@ class AirPollutionEndpointTest extends AbstractTest
         $this->assertSame(13.5, $response->getCoarseParticulateMatter());
         $this->assertSame(2.03, $response->getAmmonia());
 
-        $location = $response->getLocation();
-        $this->assertInstanceOf(Location::class, $location);
-        $this->assertSame(null, $location->getId());
-        $this->assertSame(null, $location->getName());
-        $this->assertSame(null, $location->getState());
-        $this->assertSame(null, $location->getCountryCode());
-        $this->assertSame(null, $location->getLocalNames());
-        $this->assertSame(null, $location->getPopulation());
-        $this->assertSame(null, $location->getTimezone());
-        $this->assertSame(null, $location->getSunriseAt());
-        $this->assertSame(null, $location->getSunsetAt());
-
-        $coordinate = $location->getCoordinate();
+        $coordinate = $response->getCoordinate();
         $this->assertInstanceOf(Coordinate::class, $coordinate);
         $this->assertSame(38.7078, $coordinate->getLatitude());
         $this->assertSame(-9.1366, $coordinate->getLongitude());
@@ -170,19 +158,7 @@ class AirPollutionEndpointTest extends AbstractTest
     {
         $this->assertInstanceOf(AirPollutionList::class, $response);
 
-        $location = $response->getLocation();
-        $this->assertInstanceOf(Location::class, $location);
-        $this->assertSame(null, $location->getId());
-        $this->assertSame(null, $location->getName());
-        $this->assertSame(null, $location->getState());
-        $this->assertSame(null, $location->getCountryCode());
-        $this->assertSame(null, $location->getLocalNames());
-        $this->assertSame(null, $location->getPopulation());
-        $this->assertSame(null, $location->getTimezone());
-        $this->assertSame(null, $location->getSunriseAt());
-        $this->assertSame(null, $location->getSunsetAt());
-
-        $coordinate = $location->getCoordinate();
+        $coordinate = $response->getCoordinate();
         $this->assertInstanceOf(Coordinate::class, $coordinate);
         $this->assertSame(38.7078, $coordinate->getLatitude());
         $this->assertSame(-9.1366, $coordinate->getLongitude());
@@ -213,19 +189,7 @@ class AirPollutionEndpointTest extends AbstractTest
     {
         $this->assertInstanceOf(AirPollutionList::class, $response);
 
-        $location = $response->getLocation();
-        $this->assertInstanceOf(Location::class, $location);
-        $this->assertSame(null, $location->getId());
-        $this->assertSame(null, $location->getName());
-        $this->assertSame(null, $location->getState());
-        $this->assertSame(null, $location->getCountryCode());
-        $this->assertSame(null, $location->getLocalNames());
-        $this->assertSame(null, $location->getPopulation());
-        $this->assertSame(null, $location->getTimezone());
-        $this->assertSame(null, $location->getSunriseAt());
-        $this->assertSame(null, $location->getSunsetAt());
-
-        $coordinate = $location->getCoordinate();
+        $coordinate = $response->getCoordinate();
         $this->assertInstanceOf(Coordinate::class, $coordinate);
         $this->assertSame(38.7078, $coordinate->getLatitude());
         $this->assertSame(-9.1366, $coordinate->getLongitude());
