@@ -9,7 +9,7 @@ Supports [PSR-18 HTTP clients](https://www.php-fig.org/psr/psr-18), [PSR-17 HTTP
 You can install the library via [Composer](https://getcomposer.org/). Run the following command:
 
 ```bash
-$ composer require programmatordev/openweathermap-php-api
+composer require programmatordev/openweathermap-php-api
 ```
 
 ## Basic Usage
