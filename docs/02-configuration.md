@@ -31,11 +31,11 @@ $openWeatherMap = new OpenWeatherMap(
 );
 ```
 
-## applicationKey
+## `applicationKey`
 
 Required for all requests. Check the [API Key](#api-key) section for more information.
 
-## measurementSystem
+## `measurementSystem`
 
 Measurement system used when retrieving data.
 Affects temperature and speed values.
@@ -58,7 +58,7 @@ $openWeatherMap = new OpenWeatherMap(
 );
 ```
 
-## language
+## `language`
 
 Language used when retrieving data.
 It seems to only affect weather conditions descriptions.
@@ -81,7 +81,7 @@ $openWeatherMap = new OpenWeatherMap(
 );
 ```
 
-## httpClientBuilder
+## `httpClientBuilder`
 
 Configure a PSR-18 HTTP client and PSR-17 HTTP factory adapters.
 
@@ -154,7 +154,7 @@ You can check their [plugin list](https://docs.php-http.org/en/latest/plugins/in
 > This library already uses HTTPlug's `CachePlugin` and `LoggerPlugin`.
 > Re-adding those may lead to an unexpected behaviour.
 
-## cache
+## `cache`
 
 Configure a PSR-6 cache adapter.
 
@@ -192,7 +192,7 @@ $currentWeather = $openWeatherMap->getWeather()
     ->getCurrent(50, 50);
 ```
 
-## logger
+## `logger`
 
 Configure a PSR-3 logger adapter.
 
