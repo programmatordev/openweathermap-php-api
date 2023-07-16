@@ -5,7 +5,7 @@ namespace ProgrammatorDev\OpenWeatherMap;
 use ProgrammatorDev\OpenWeatherMap\Exception\ValidationException;
 use ProgrammatorDev\OpenWeatherMap\HttpClient\HttpClientBuilder;
 use ProgrammatorDev\OpenWeatherMap\Language\Language;
-use ProgrammatorDev\OpenWeatherMap\MeasurementSystem\MeasurementSystem;
+use ProgrammatorDev\OpenWeatherMap\UnitSystem\UnitSystem;
 use ProgrammatorDev\OpenWeatherMap\Validator\BlankValidatorTrait;
 use ProgrammatorDev\OpenWeatherMap\Validator\ChoiceValidatorTrait;
 use Psr\Cache\CacheItemPoolInterface;
@@ -29,7 +29,7 @@ class Config
     private function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'measurementSystem' => MeasurementSystem::METRIC,
+            'unitSystem' => UnitSystem::METRIC,
             'language' => Language::ENGLISH,
             'httpClientBuilder' => new HttpClientBuilder(),
             'cache' => null,
@@ -39,7 +39,7 @@ class Config
         $resolver->setRequired('applicationKey');
 
         $resolver->setAllowedTypes('applicationKey', 'string');
-        $resolver->setAllowedTypes('measurementSystem', 'string');
+        $resolver->setAllowedTypes('unitSystem', 'string');
         $resolver->setAllowedTypes('language', 'string');
         $resolver->setAllowedTypes('httpClientBuilder', HttpClientBuilder::class);
         $resolver->setAllowedTypes('cache', ['null', CacheItemPoolInterface::class]);
@@ -48,7 +48,7 @@ class Config
         $resolver->setAllowedValues('applicationKey', function($value) {
             return !empty($value);
         });
-        $resolver->setAllowedValues('measurementSystem', MeasurementSystem::getList());
+        $resolver->setAllowedValues('unitSystem', UnitSystem::getList());
         $resolver->setAllowedValues('language', Language::getList());
     }
 
@@ -69,19 +69,19 @@ class Config
         return $this;
     }
 
-    public function getMeasurementSystem(): string
+    public function getUnitSystem(): string
     {
-        return $this->options['measurementSystem'];
+        return $this->options['unitSystem'];
     }
 
     /**
      * @throws ValidationException
      */
-    public function setMeasurementSystem(string $measurementSystem): self
+    public function setUnitSystem(string $unitSystem): self
     {
-        $this->validateChoice('measurementSystem', $measurementSystem, MeasurementSystem::getList());
+        $this->validateChoice('unitSystem', $unitSystem, UnitSystem::getList());
 
-        $this->options['measurementSystem'] = $measurementSystem;
+        $this->options['unitSystem'] = $unitSystem;
 
         return $this;
     }

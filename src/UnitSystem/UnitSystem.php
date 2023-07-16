@@ -1,8 +1,8 @@
 <?php
 
-namespace ProgrammatorDev\OpenWeatherMap\MeasurementSystem;
+namespace ProgrammatorDev\OpenWeatherMap\UnitSystem;
 
-class MeasurementSystem
+class UnitSystem
 {
     public const METRIC = 'metric';
     public const IMPERIAL = 'imperial';

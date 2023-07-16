@@ -4,7 +4,7 @@ namespace ProgrammatorDev\OpenWeatherMap\Endpoint;
 
 use Http\Client\Exception;
 use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\WithLanguageTrait;
-use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\WithMeasurementSystemTrait;
+use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\WithUnitSystemTrait;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\HistoryDaySummary;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\HistoryMoment;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\OneCall;
@@ -19,7 +19,7 @@ use ProgrammatorDev\OpenWeatherMap\Validator\LessThanValidatorTrait;
 
 class OneCallEndpoint extends AbstractEndpoint
 {
-    use WithMeasurementSystemTrait;
+    use WithUnitSystemTrait;
     use WithLanguageTrait;
     use CoordinateValidatorTrait;
     use LessThanValidatorTrait;
@@ -49,7 +49,7 @@ class OneCallEndpoint extends AbstractEndpoint
             query: [
                 'lat' => $latitude,
                 'lon' => $longitude,
-                'units' => $this->getMeasurementSystem(),
+                'units' => $this->getUnitSystem(),
                 'lang' => $this->getLanguage()
             ]
         );
@@ -78,7 +78,7 @@ class OneCallEndpoint extends AbstractEndpoint
                 'lat' => $latitude,
                 'lon' => $longitude,
                 'dt' => $dateTime->setTimezone(new \DateTimeZone('UTC'))->getTimestamp(),
-                'units' => $this->getMeasurementSystem(),
+                'units' => $this->getUnitSystem(),
                 'lang' => $this->getLanguage()
             ]
         );
@@ -107,7 +107,7 @@ class OneCallEndpoint extends AbstractEndpoint
                 'lat' => $latitude,
                 'lon' => $longitude,
                 'date' => $dateTime->format('Y-m-d'),
-                'units' => $this->getMeasurementSystem(),
+                'units' => $this->getUnitSystem(),
                 'lang' => $this->getLanguage()
             ]
         );
