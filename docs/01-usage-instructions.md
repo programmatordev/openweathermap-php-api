@@ -19,7 +19,7 @@ You must sign up for an [OpenWeatherMap account](https://openweathermap.org/appi
 You can install the library via [Composer](https://getcomposer.org/). Run the following command:
 
 ```bash
-$ composer require programmatordev/openweathermap-php-api
+composer require programmatordev/openweathermap-php-api
 ```
 
 To use the library, use Composer's [autoload](https://getcomposer.org/doc/01-basic-usage.md#autoloading):
