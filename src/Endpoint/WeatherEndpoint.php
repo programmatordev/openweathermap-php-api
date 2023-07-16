@@ -4,7 +4,7 @@ namespace ProgrammatorDev\OpenWeatherMap\Endpoint;
 
 use Http\Client\Exception;
 use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\WithLanguageTrait;
-use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\WithMeasurementSystemTrait;
+use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\WithUnitSystemTrait;
 use ProgrammatorDev\OpenWeatherMap\Entity\Weather\CurrentWeather;
 use ProgrammatorDev\OpenWeatherMap\Entity\Weather\WeatherList;
 use ProgrammatorDev\OpenWeatherMap\Exception\BadRequestException;
@@ -18,7 +18,7 @@ use ProgrammatorDev\OpenWeatherMap\Validator\GreaterThanValidatorTrait;
 
 class WeatherEndpoint extends AbstractEndpoint
 {
-    use WithMeasurementSystemTrait;
+    use WithUnitSystemTrait;
     use WithLanguageTrait;
     use CoordinateValidatorTrait;
     use GreaterThanValidatorTrait;
@@ -48,7 +48,7 @@ class WeatherEndpoint extends AbstractEndpoint
             query: [
                 'lat' => $latitude,
                 'lon' => $longitude,
-                'units' => $this->getMeasurementSystem(),
+                'units' => $this->getUnitSystem(),
                 'lang' => $this->getLanguage()
             ]
         );
@@ -77,7 +77,7 @@ class WeatherEndpoint extends AbstractEndpoint
                 'lat' => $latitude,
                 'lon' => $longitude,
                 'cnt' => $numResults,
-                'units' => $this->getMeasurementSystem(),
+                'units' => $this->getUnitSystem(),
                 'lang' => $this->getLanguage()
             ]
         );

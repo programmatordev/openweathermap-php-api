@@ -35,7 +35,7 @@ class AbstractEndpoint
 
     private ?LoggerInterface $logger;
 
-    protected string $measurementSystem;
+    protected string $unitSystem;
 
     protected string $language;
 
@@ -48,7 +48,7 @@ class AbstractEndpoint
         $this->httpClientBuilder = $this->config->getHttpClientBuilder();
         $this->cache = $this->config->getCache();
         $this->logger = $this->config->getLogger();
-        $this->measurementSystem = $this->config->getMeasurementSystem();
+        $this->unitSystem = $this->config->getUnitSystem();
         $this->language = $this->config->getLanguage();
     }
 

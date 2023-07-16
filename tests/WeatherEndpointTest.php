@@ -72,7 +72,7 @@ class WeatherEndpointTest extends AbstractTest
         $weatherEndpoint = $this->getApi()->getWeather();
 
         $this->assertSame(true, method_exists($weatherEndpoint, 'withLanguage'));
-        $this->assertSame(true, method_exists($weatherEndpoint, 'withMeasurementSystem'));
+        $this->assertSame(true, method_exists($weatherEndpoint, 'withUnitSystem'));
     }
 
     private function assertCurrentResponse(CurrentWeather $response): void
