@@ -1,18 +1,16 @@
 # Configuration
 
-- [Default Options](#default-options)
-- [applicationKey](#applicationkey)
-- [measurementSystem](#measurementsystem)
-- [language](#language)
-- [httpClientBuilder](#httpclientbuilder)
-  - [Plugin System](#plugin-system)
-- [cache](#cache)
-  - [Cache TTL](#cache-ttl)
-- [logger](#logger)
+- [Default Configuration](#default-configuration)
+- [Options](#options)
+  - [applicationKey](#applicationkey)
+  - [unitSystem](#unitsystem)
+  - [language](#language)
+  - [httpClientBuilder](#httpclientbuilder)
+  - [cache](#cache)
+  - [logger](#logger)
+- [Config Object](#config-object)
 
-## Default Options
-
-Full default configuration:
+## Default Configuration
 
 ```php
 use ProgrammatorDev\OpenWeatherMap\Config;
@@ -22,7 +20,7 @@ use ProgrammatorDev\OpenWeatherMap\OpenWeatherMap;
 $openWeatherMap = new OpenWeatherMap(
     new Config([
         'applicationKey' => 'yourappkey',
-        'measurementSystem' => 'metric',
+        'unitSystem' => 'metric',
         'language' => 'en',
         'httpClientBuilder' => new HttpClientBuilder(),
         'cache' => null,
@@ -31,34 +29,36 @@ $openWeatherMap = new OpenWeatherMap(
 );
 ```
 
-## `applicationKey`
+## Options
+
+### `applicationKey`
 
 Required for all requests. Check the [API Key](#api-key) section for more information.
 
-## `measurementSystem`
+### `unitSystem`
 
-Measurement system used when retrieving data.
+Unit system used when retrieving data.
 Affects temperature and speed values.
 
 Available options are `metric`, `imperial` and `standard`.
-Pre-defined [constants](src/MeasurementSystem/MeasurementSystem.php) are also available.
+Pre-defined [constants](src/UnitSystem/UnitSystem.php) are also available.
 
 Example:
 
 ```php
 use ProgrammatorDev\OpenWeatherMap\Config;
-use ProgrammatorDev\OpenWeatherMap\MeasurementSystem\MeasurementSystem;
+use ProgrammatorDev\OpenWeatherMap\UnitSystem\UnitSystem;
 use ProgrammatorDev\OpenWeatherMap\OpenWeatherMap;
 
 $openWeatherMap = new OpenWeatherMap(
     new Config([
         'applicationKey' => 'yourappkey',
-        'measurementSystem' => MeasurementSystem::IMPERIAL
+        'unitSystem' => UnitSystem::IMPERIAL
     ])
 );
 ```
 
-## `language`
+### `language`
 
 Language used when retrieving data.
 It seems to only affect weather conditions descriptions.
@@ -81,7 +81,7 @@ $openWeatherMap = new OpenWeatherMap(
 );
 ```
 
-## `httpClientBuilder`
+### `httpClientBuilder`
 
 Configure a PSR-18 HTTP client and PSR-17 HTTP factory adapters.
 
@@ -119,11 +119,12 @@ $openWeatherMap = new OpenWeatherMap(
 > All `HttpClientBuilder` parameters are optional.
 > If you only pass an HTTP client, an HTTP factory will still be discovered for you.
 
-### Plugin System
+#### Plugin System
 
 [HTTPlug's plugin system](https://docs.php-http.org/en/latest/plugins/index.html) is also implemented to give you full control of what happens during the request/response workflow.
 
-In the example below, the [RetryPlugin](https://docs.php-http.org/en/latest/plugins/retry.html) is added:
+For example, to attempt to re-send a request in case of failure (service temporarily down because of unreliable connections/servers, etc.), 
+the [RetryPlugin](https://docs.php-http.org/en/latest/plugins/retry.html) can be added:
 
 ```php
 use ProgrammatorDev\OpenWeatherMap\Config;
@@ -131,9 +132,6 @@ use ProgrammatorDev\OpenWeatherMap\HttpClient\HttpClientBuilder;
 use ProgrammatorDev\OpenWeatherMap\OpenWeatherMap;
 
 $httpClientBuilder = new HttpClientBuilder();
-
-// Plugin that will attempt to re-send a request in case of failure
-// (service temporarily down because of unreliable connections/servers, etc.)
 $httpClientBuilder->addPlugin(
     new \Http\Client\Common\Plugin\RetryPlugin([
         'retries' => 3
@@ -154,7 +152,7 @@ You can check their [plugin list](https://docs.php-http.org/en/latest/plugins/in
 > This library already uses HTTPlug's `CachePlugin` and `LoggerPlugin`.
 > Re-adding those may lead to an unexpected behaviour.
 
-## `cache`
+### `cache`
 
 Configure a PSR-6 cache adapter.
 
@@ -178,7 +176,7 @@ $openWeatherMap = new OpenWeatherMap(
 );
 ```
 
-### Cache TTL
+#### Cache TTL
 
 By default, all responses are cached for `10 minutes`, with the exception to `Geocoding` requests
 where responses are cached for `30 days` (due to the low update frequency, since location data doesn't change that often).
@@ -192,7 +190,7 @@ $currentWeather = $openWeatherMap->getWeather()
     ->getCurrent(50, 50);
 ```
 
-## `logger`
+### `logger`
 
 Configure a PSR-3 logger adapter.
 
@@ -227,3 +225,37 @@ $openWeatherMap = new OpenWeatherMap(
 
 > **Note**
 > If a `cache` implementation is configured, cache events will also be logged.
+
+## Config Object
+
+Configuration getters and setters for all options are available to access and change after initialization.
+
+```php
+use ProgrammatorDev\OpenWeatherMap\Config;
+use ProgrammatorDev\OpenWeatherMap\OpenWeatherMap;
+
+$openWeatherMap = new OpenWeatherMap(
+    new Config([
+        'applicationKey' => 'yourappkey'
+    ])
+);
+
+// Using applicationKey as an example,
+// but getters and setters are available for all options
+$openWeatherMap->getConfig()->getApplicationKey();
+$openWeatherMap->getConfig()->setApplicationKey('newappkey');
+```
+
+Just take into account that any change will affect any subsequent request globally:
+
+```php
+// Using default 'metric' unit system
+$openWeatherMap->getWeather()->getCurrent(50, 50); 
+
+// Set new unit system
+$openWeatherMap->getConfig()->setUnitSystem(UnitSystem::IMPERIAL);
+
+// Using 'imperial' unit system
+$openWeatherMap->getWeather()->getCurrent(50, 50);
+$openWeatherMap->getWeather()->getForecast(50, 50);
+```
