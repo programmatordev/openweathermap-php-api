@@ -1,8 +1,8 @@
 <?php
 
-namespace ProgrammatorDev\OpenWeatherMap\MeasurementSystem;
+namespace ProgrammatorDev\OpenWeatherMap\UnitSystem;
 
-class Imperial
+class Fahrenheit
 {
     public const ATMOSPHERIC_PRESSURE_UNIT = 'hPa';
     public const CLOUDINESS_UNIT = '%';
@@ -10,7 +10,7 @@ class Imperial
     public const POLLUTANT_CONCENTRATION_UNIT = 'μg/m3';
     public const PRECIPITATION_UNIT = 'mm';
     public const PRECIPITATION_PROBABILITY_UNIT = '%';
-    public const SPEED_UNIT = 'm/s';
-    public const TEMPERATURE_UNIT = '°C';
+    public const SPEED_UNIT = 'mph';
+    public const TEMPERATURE_UNIT = '°F';
     public const VISIBILITY_UNIT = 'km';
 }

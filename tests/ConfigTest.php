@@ -31,7 +31,7 @@ class ConfigTest extends AbstractTest
     public function testConfigDefaultOptions()
     {
         $this->assertSame(self::APPLICATION_KEY, $this->config->getApplicationKey());
-        $this->assertSame('metric', $this->config->getMeasurementSystem());
+        $this->assertSame('metric', $this->config->getUnitSystem());
         $this->assertSame('en', $this->config->getLanguage());
         $this->assertInstanceOf(HttpClientBuilder::class, $this->config->getHttpClientBuilder());
         $this->assertSame(null, $this->config->getCache());
@@ -42,7 +42,7 @@ class ConfigTest extends AbstractTest
     {
         $config = new Config([
             'applicationKey' => 'newtestappkey',
-            'measurementSystem' => 'imperial',
+            'unitSystem' => 'imperial',
             'language' => 'pt',
             'httpClientBuilder' => new HttpClientBuilder(),
             'cache' => new FilesystemAdapter(),
@@ -50,7 +50,7 @@ class ConfigTest extends AbstractTest
         ]);
 
         $this->assertSame('newtestappkey', $config->getApplicationKey());
-        $this->assertSame('imperial', $config->getMeasurementSystem());
+        $this->assertSame('imperial', $config->getUnitSystem());
         $this->assertSame('pt', $config->getLanguage());
         $this->assertInstanceOf(HttpClientBuilder::class, $config->getHttpClientBuilder());
         $this->assertInstanceOf(CacheItemPoolInterface::class, $config->getCache());
@@ -77,10 +77,10 @@ class ConfigTest extends AbstractTest
             ],
             InvalidOptionsException::class
         ];
-        yield 'invalid measurement system' => [
+        yield 'invalid unit system' => [
             [
                 'applicationKey' => self::APPLICATION_KEY,
-                'measurementSystem' => 'invalid'
+                'unitSystem' => 'invalid'
             ],
             InvalidOptionsException::class
         ];
@@ -105,17 +105,17 @@ class ConfigTest extends AbstractTest
         $this->config->setApplicationKey('');
     }
 
-    public function testConfigSetMeasurementSystem()
+    public function testConfigSetUnitSystem()
     {
-        $this->config->setMeasurementSystem('imperial');
-        $this->assertSame('imperial', $this->config->getMeasurementSystem());
+        $this->config->setUnitSystem('imperial');
+        $this->assertSame('imperial', $this->config->getUnitSystem());
     }
 
-    #[DataProviderExternal(InvalidParamDataProvider::class, 'provideInvalidMeasurementSystemData')]
-    public function testConfigSetMeasurementSystemWithInvalidValue(string $measurementSystem, string $expectedException)
+    #[DataProviderExternal(InvalidParamDataProvider::class, 'provideInvalidUnitSystemData')]
+    public function testConfigSetUnitSystemWithInvalidValue(string $unitSystem, string $expectedException)
     {
         $this->expectException($expectedException);
-        $this->config->setMeasurementSystem($measurementSystem);
+        $this->config->setUnitSystem($unitSystem);
     }
 
     public function testConfigSetLanguage()

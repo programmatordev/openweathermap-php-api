@@ -37,9 +37,9 @@ class InvalidParamDataProvider
         yield 'negative num results' => [-1,  ValidationException::class];
     }
 
-    public static function provideInvalidMeasurementSystemData(): \Generator
+    public static function provideInvalidUnitSystemData(): \Generator
     {
-        yield 'not allowed measurement system' => ['invalid', ValidationException::class];
+        yield 'not allowed unit system' => ['invalid', ValidationException::class];
     }
 
     public static function provideInvalidLanguageData(): \Generator
