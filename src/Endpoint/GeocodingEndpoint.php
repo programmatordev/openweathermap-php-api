@@ -43,7 +43,7 @@ class GeocodingEndpoint extends AbstractEndpoint
      * @throws UnexpectedErrorException
      * @throws ValidationException
      */
-    public function getCoordinatesByLocationName(string $locationName, int $numResults = self::NUM_RESULTS): array
+    public function getByLocationName(string $locationName, int $numResults = self::NUM_RESULTS): array
     {
         $this->validateBlank('locationName', $locationName);
         $this->validateGreaterThan('numResults', $numResults, 0);
@@ -69,7 +69,7 @@ class GeocodingEndpoint extends AbstractEndpoint
      * @throws UnexpectedErrorException
      * @throws ValidationException
      */
-    public function getCoordinatesByZipCode(string $zipCode, string $countryCode): ZipCodeLocation
+    public function getByZipCode(string $zipCode, string $countryCode): ZipCodeLocation
     {
         $this->validateBlank('zipCode', $zipCode);
         $this->validateBlank('countryCode', $countryCode);
@@ -95,7 +95,7 @@ class GeocodingEndpoint extends AbstractEndpoint
      * @throws UnexpectedErrorException
      * @throws ValidationException
      */
-    public function getLocationNameByCoordinates(float $latitude, float $longitude, int $numResults = self::NUM_RESULTS): array
+    public function getByCoordinate(float $latitude, float $longitude, int $numResults = self::NUM_RESULTS): array
     {
         $this->validateCoordinate($latitude, $longitude);
         $this->validateGreaterThan('numResults', $numResults, 0);
