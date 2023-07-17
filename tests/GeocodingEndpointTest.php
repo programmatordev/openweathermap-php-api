@@ -13,7 +13,7 @@ use ProgrammatorDev\OpenWeatherMap\Test\DataProvider\InvalidParamDataProvider;
 
 class GeocodingEndpointTest extends AbstractTest
 {
-    public function testGeocodingGetCoordinatesByLocationName()
+    public function testGeocodingGetByLocationName()
     {
         $this->mockHttpClient->addResponse(
             new Response(
@@ -22,17 +22,17 @@ class GeocodingEndpointTest extends AbstractTest
             )
         );
 
-        $response = $this->getApi()->getGeocoding()->getCoordinatesByLocationName('lisbon, pt');
+        $response = $this->getApi()->getGeocoding()->getByLocationName('lisbon, pt');
         $this->assertLocationListResponse($response);
     }
 
-    public function testGeocodingGetCoordinatesByLocationNameWithBlankValue()
+    public function testGeocodingGetByLocationNameWithBlankValue()
     {
         $this->expectException(ValidationException::class);
-        $this->getApi()->getGeocoding()->getCoordinatesByLocationName('');
+        $this->getApi()->getGeocoding()->getByLocationName('');
     }
 
-    public function testGeocodingGetCoordinatesByZipCode()
+    public function testGeocodingGetByZipCode()
     {
         $this->mockHttpClient->addResponse(
             new Response(
@@ -41,7 +41,7 @@ class GeocodingEndpointTest extends AbstractTest
             )
         );
 
-        $response = $this->getApi()->getGeocoding()->getCoordinatesByZipCode('1000-001', 'pt');
+        $response = $this->getApi()->getGeocoding()->getByZipCode('1000-001', 'pt');
         $this->assertInstanceOf(ZipCodeLocation::class, $response);
 
         $this->assertSame('1000-001', $response->getZipCode());
@@ -54,20 +54,20 @@ class GeocodingEndpointTest extends AbstractTest
         $this->assertSame(-9.1333, $coordinate->getLongitude());
     }
 
-    #[DataProvider('provideGeocodingGetCoordinatesByZipCodeWithBlankValueData')]
-    public function testGeocodingGetCoordinatesByZipCodeWithBlankValue(string $zipCode, string $countryCode)
+    #[DataProvider('provideGeocodingGetByZipCodeWithBlankValueData')]
+    public function testGeocodingGetByZipCodeWithBlankValue(string $zipCode, string $countryCode)
     {
         $this->expectException(ValidationException::class);
-        $this->getApi()->getGeocoding()->getCoordinatesByZipCode($zipCode, $countryCode);
+        $this->getApi()->getGeocoding()->getByZipCode($zipCode, $countryCode);
     }
 
-    public static function provideGeocodingGetCoordinatesByZipCodeWithBlankValueData(): \Generator
+    public static function provideGeocodingGetByZipCodeWithBlankValueData(): \Generator
     {
         yield 'blank zip code' => ['', 'pt'];
         yield 'blank country code' => ['1000-100', ''];
     }
 
-    public function testGeocodingGetLocationNameByCoordinates()
+    public function testGeocodingGetByCoordinate()
     {
         $this->mockHttpClient->addResponse(
             new Response(
@@ -76,29 +76,29 @@ class GeocodingEndpointTest extends AbstractTest
             )
         );
 
-        $response = $this->getApi()->getGeocoding()->getLocationNameByCoordinates(38.7077507, -9.1365919);
+        $response = $this->getApi()->getGeocoding()->getByCoordinate(38.7077507, -9.1365919);
         $this->assertLocationListResponse($response);
     }
 
     #[DataProviderExternal(InvalidParamDataProvider::class, 'provideInvalidCoordinateData')]
-    public function testGeocodingGetLocationNameByCoordinatesWithInvalidCoordinate(
+    public function testGeocodingGetByCoordinateWithInvalidCoordinate(
         float $latitude,
         float $longitude,
         string $expectedException
     )
     {
         $this->expectException($expectedException);
-        $this->getApi()->getGeocoding()->getLocationNameByCoordinates($latitude, $longitude);
+        $this->getApi()->getGeocoding()->getByCoordinate($latitude, $longitude);
     }
 
     #[DataProviderExternal(InvalidParamDataProvider::class, 'provideInvalidNumResultsData')]
-    public function testGeocodingGetLocationNameByCoordinatesWithInvalidNumResults(
+    public function testGeocodingGetByCoordinateWithInvalidNumResults(
         int $numResults,
         string $expectedException
     )
     {
         $this->expectException($expectedException);
-        $this->getApi()->getGeocoding()->getLocationNameByCoordinates(38.7077507, -9.1365919, $numResults);
+        $this->getApi()->getGeocoding()->getByCoordinate(38.7077507, -9.1365919, $numResults);
     }
 
     /**
