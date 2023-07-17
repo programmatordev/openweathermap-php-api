@@ -1,4 +1,4 @@
-# Objects
+# Entities
 
 - One Call
 - Weather
@@ -20,7 +20,75 @@
 
 ## Weather
 
+### CurrentWeather
+
+`getLocation()`: [`Location`](#location)
+
+`getTemperature()`: `float`
+
+`getTemperatureFeelsLike()`: `float`
+
+`getMinTemperature()`: `float`
+
+`getMaxTemperature()`: `float`
+
+`getHumidity()`: `int`
+
+`getCloudiness()`: `int`
+
+`getVisibility()`: `int`
+
+`getWeatherConditions()`: [`WeatherCondition[]`](#weathercondition)
+
+`getWind()`: [`Wind`](#wind)
+
+`getPrecipitationProbability()`: `?int`
+
+`getRain()`: [`?Rain`](#rain)
+
+`getSnow()`: [`?Snow`](#snow)
+
+`getAtmosphericPressure()`: [`AtmosphericPressure`](#atmosphericpressure)
+
+`getDateTime()`: `\DateTimeImmutable`
+
 ### Weather
+
+`getTemperature()`: `float`
+
+`getTemperatureFeelsLike()`: `float`
+
+`getMinTemperature()`: `float`
+
+`getMaxTemperature()`: `float`
+
+`getHumidity()`: `int`
+
+`getCloudiness()`: `int`
+
+`getVisibility()`: `int`
+
+`getWeatherConditions()`: [`WeatherCondition[]`](#weathercondition)
+
+`getWind()`: [`Wind`](#wind)
+
+`getPrecipitationProbability()`: `?int`
+
+`getRain()`: [`?Rain`](#rain)
+
+`getSnow()`: [`?Snow`](#snow)
+
+`getAtmosphericPressure()`: [`AtmosphericPressure`](#atmosphericpressure)
+
+`getDateTime()`: `\DateTimeImmutable`
+
+### WeatherList
+
+`getNumResults()`: `int`
+
+`getLocation()`: [`Location`](#location)
+
+`getList()`: [`Weather[]`](#weather-1)
 
 ## Common
 
