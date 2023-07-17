@@ -5,8 +5,8 @@ namespace ProgrammatorDev\OpenWeatherMap\Endpoint;
 use Http\Client\Exception;
 use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\WithLanguageTrait;
 use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\WithUnitSystemTrait;
-use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\HistoryDaySummary;
-use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\HistoryMoment;
+use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\WeatherAggregate;
+use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\WeatherMoment;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\OneCall;
 use ProgrammatorDev\OpenWeatherMap\Exception\BadRequestException;
 use ProgrammatorDev\OpenWeatherMap\Exception\NotFoundException;
@@ -28,7 +28,7 @@ class OneCallEndpoint extends AbstractEndpoint
 
     private string $urlOneCallHistoryMoment = 'https://api.openweathermap.org/data/3.0/onecall/timemachine';
 
-    private string $urlOneCallHistoryDaySummary = 'https://api.openweathermap.org/data/3.0/onecall/day_summary';
+    private string $urlOneCallHistoryAggregate = 'https://api.openweathermap.org/data/3.0/onecall/day_summary';
 
     /**
      * @throws Exception
@@ -66,7 +66,7 @@ class OneCallEndpoint extends AbstractEndpoint
      * @throws UnexpectedErrorException
      * @throws ValidationException
      */
-    public function getHistoryMoment(float $latitude, float $longitude, \DateTimeInterface $dateTime): HistoryMoment
+    public function getHistoryMoment(float $latitude, float $longitude, \DateTimeInterface $dateTime): WeatherMoment
     {
         $this->validateCoordinate($latitude, $longitude);
         $this->validateLessThan('dateTime', $dateTime, new \DateTimeImmutable('now'));
@@ -83,7 +83,7 @@ class OneCallEndpoint extends AbstractEndpoint
             ]
         );
 
-        return new HistoryMoment($data);
+        return new WeatherMoment($data);
     }
 
     /**
@@ -95,14 +95,14 @@ class OneCallEndpoint extends AbstractEndpoint
      * @throws UnexpectedErrorException
      * @throws ValidationException
      */
-    public function getHistoryDaySummary(float $latitude, float $longitude, \DateTimeInterface $dateTime): HistoryDaySummary
+    public function getHistoryAggregate(float $latitude, float $longitude, \DateTimeInterface $dateTime): WeatherAggregate
     {
         $this->validateCoordinate($latitude, $longitude);
         $this->validateLessThan('dateTime', $dateTime, new \DateTimeImmutable('now'));
 
         $data = $this->sendRequest(
             method: 'GET',
-            baseUrl: $this->urlOneCallHistoryDaySummary,
+            baseUrl: $this->urlOneCallHistoryAggregate,
             query: [
                 'lat' => $latitude,
                 'lon' => $longitude,
@@ -112,6 +112,6 @@ class OneCallEndpoint extends AbstractEndpoint
             ]
         );
 
-        return new HistoryDaySummary($data);
+        return new WeatherAggregate($data);
     }
 }

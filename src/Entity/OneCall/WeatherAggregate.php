@@ -6,7 +6,7 @@ use ProgrammatorDev\OpenWeatherMap\Entity\Coordinate;
 use ProgrammatorDev\OpenWeatherMap\Entity\Timezone;
 use ProgrammatorDev\OpenWeatherMap\Entity\Wind;
 
-class HistoryDaySummary
+class WeatherAggregate
 {
     private Coordinate $coordinate;
 
