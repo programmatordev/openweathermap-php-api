@@ -4,13 +4,13 @@ namespace ProgrammatorDev\OpenWeatherMap\Test;
 
 use Nyholm\Psr7\Response;
 use PHPUnit\Framework\Attributes\DataProviderExternal;
+use ProgrammatorDev\OpenWeatherMap\Entity\AtmosphericPressure;
 use ProgrammatorDev\OpenWeatherMap\Entity\Coordinate;
 use ProgrammatorDev\OpenWeatherMap\Entity\Icon;
 use ProgrammatorDev\OpenWeatherMap\Entity\Location;
 use ProgrammatorDev\OpenWeatherMap\Entity\Rain;
 use ProgrammatorDev\OpenWeatherMap\Entity\Snow;
 use ProgrammatorDev\OpenWeatherMap\Entity\Timezone;
-use ProgrammatorDev\OpenWeatherMap\Entity\Weather\AtmosphericPressure;
 use ProgrammatorDev\OpenWeatherMap\Entity\Weather\CurrentWeather;
 use ProgrammatorDev\OpenWeatherMap\Entity\Weather\Weather;
 use ProgrammatorDev\OpenWeatherMap\Entity\Weather\WeatherList;

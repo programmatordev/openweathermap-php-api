@@ -1,6 +1,6 @@
 <?php
 
-namespace ProgrammatorDev\OpenWeatherMap\Entity\Weather;
+namespace ProgrammatorDev\OpenWeatherMap\Entity;
 
 class AtmosphericPressure
 {
