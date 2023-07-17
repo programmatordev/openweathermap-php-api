@@ -95,10 +95,10 @@ class OneCallEndpoint extends AbstractEndpoint
      * @throws UnexpectedErrorException
      * @throws ValidationException
      */
-    public function getHistoryDaySummary(float $latitude, float $longitude, \DateTimeInterface $dateTime): HistoryDaySummary
+    public function getHistoryDaySummary(float $latitude, float $longitude, \DateTimeInterface $date): HistoryDaySummary
     {
         $this->validateCoordinate($latitude, $longitude);
-        $this->validateLessThan('dateTime', $dateTime, new \DateTimeImmutable('now'));
+        $this->validateLessThan('date', $date, new \DateTimeImmutable('now'));
 
         $data = $this->sendRequest(
             method: 'GET',
@@ -106,7 +106,7 @@ class OneCallEndpoint extends AbstractEndpoint
             query: [
                 'lat' => $latitude,
                 'lon' => $longitude,
-                'date' => $dateTime->format('Y-m-d'),
+                'date' => $date->format('Y-m-d'),
                 'units' => $this->getUnitSystem(),
                 'lang' => $this->getLanguage()
             ]

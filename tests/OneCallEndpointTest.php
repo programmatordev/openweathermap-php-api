@@ -70,10 +70,10 @@ class OneCallEndpointTest extends AbstractTest
     }
 
     #[DataProviderExternal(InvalidParamDataProvider::class, 'provideInvalidPastDateData')]
-    public function testOneCallGetHistoryMomentWithInvalidPastDate(\DateTimeImmutable $dateTime, string $expectedException)
+    public function testOneCallGetHistoryMomentWithInvalidPastDate(\DateTimeImmutable $date, string $expectedException)
     {
         $this->expectException($expectedException);
-        $this->getApi()->getOneCall()->getHistoryMoment(38.7077507, -9.1365919, $dateTime);
+        $this->getApi()->getOneCall()->getHistoryMoment(38.7077507, -9.1365919, $date);
     }
 
     public function testOneCallGetHistoryDaySummary()
@@ -105,10 +105,10 @@ class OneCallEndpointTest extends AbstractTest
     }
 
     #[DataProviderExternal(InvalidParamDataProvider::class, 'provideInvalidPastDateData')]
-    public function testOneCallGetHistoryDayMomentWithInvalidPastDate(\DateTimeImmutable $dateTime, string $expectedException)
+    public function testOneCallGetHistoryDayMomentWithInvalidPastDate(\DateTimeImmutable $date, string $expectedException)
     {
         $this->expectException($expectedException);
-        $this->getApi()->getOneCall()->getHistoryDaySummary(38.7077507, -9.1365919, $dateTime);
+        $this->getApi()->getOneCall()->getHistoryDaySummary(38.7077507, -9.1365919, $date);
     }
 
     public function testOneCallMethodsWithExist()
