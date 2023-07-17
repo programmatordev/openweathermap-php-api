@@ -12,6 +12,8 @@
 
 ## Default Configuration
 
+Only the `applicationKey` option is required:
+
 ```php
 use ProgrammatorDev\OpenWeatherMap\Config;
 use ProgrammatorDev\OpenWeatherMap\HttpClient\HttpClientBuilder;
@@ -19,7 +21,7 @@ use ProgrammatorDev\OpenWeatherMap\OpenWeatherMap;
 
 $openWeatherMap = new OpenWeatherMap(
     new Config([
-        'applicationKey' => 'yourappkey',
+        'applicationKey' => 'yourappkey', // required
         'unitSystem' => 'metric',
         'language' => 'en',
         'httpClientBuilder' => new HttpClientBuilder(),
