@@ -3,6 +3,7 @@
 namespace ProgrammatorDev\OpenWeatherMap\Entity\OneCall;
 
 use ProgrammatorDev\OpenWeatherMap\Entity\Coordinate;
+use ProgrammatorDev\OpenWeatherMap\Entity\Temperature;
 use ProgrammatorDev\OpenWeatherMap\Entity\Timezone;
 use ProgrammatorDev\OpenWeatherMap\Entity\Wind;
 
