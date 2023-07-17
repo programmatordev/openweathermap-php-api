@@ -7,13 +7,13 @@ use PHPUnit\Framework\Attributes\DataProviderExternal;
 use ProgrammatorDev\OpenWeatherMap\Entity\Coordinate;
 use ProgrammatorDev\OpenWeatherMap\Entity\Icon;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\Alert;
-use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\HistoryDaySummary;
-use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\HistoryMoment;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\MinuteForecast;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\MoonPhase;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\OneCall;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\Temperature;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\Weather;
+use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\WeatherAggregate;
+use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\WeatherMoment;
 use ProgrammatorDev\OpenWeatherMap\Entity\Timezone;
 use ProgrammatorDev\OpenWeatherMap\Entity\WeatherCondition;
 use ProgrammatorDev\OpenWeatherMap\Entity\Wind;
@@ -46,7 +46,7 @@ class OneCallEndpointTest extends AbstractTest
         $this->mockHttpClient->addResponse(
             new Response(
                 status: 200,
-                body: MockResponse::ONE_CALL_MOMENT
+                body: MockResponse::ONE_CALL_HISTORY_MOMENT
             )
         );
 
@@ -76,28 +76,28 @@ class OneCallEndpointTest extends AbstractTest
         $this->getApi()->getOneCall()->getHistoryMoment(38.7077507, -9.1365919, $date);
     }
 
-    public function testOneCallGetHistoryDaySummary()
+    public function testOneCallGetHistoryAggregate()
     {
         $this->mockHttpClient->addResponse(
             new Response(
                 status: 200,
-                body: MockResponse::ONE_CALL_DAY_SUMMARY
+                body: MockResponse::ONE_CALL_HISTORY_AGGREGATE
             )
         );
 
-        $response = $this->getApi()->getOneCall()->getHistoryDaySummary(
+        $response = $this->getApi()->getOneCall()->getHistoryAggregate(
             38.7077507,
             -9.1365919,
             new \DateTimeImmutable('2023-01-01')
         );
-        $this->assertHistoryDaySummary($response);
+        $this->assertHistoryAggregateResponse($response);
     }
 
     #[DataProviderExternal(InvalidParamDataProvider::class, 'provideInvalidCoordinateData')]
-    public function testOneCallGetHistoryDaySummaryWithInvalidCoordinate(float $latitude, float $longitude, string $expectedException)
+    public function testOneCallGetHistoryAggregateWithInvalidCoordinate(float $latitude, float $longitude, string $expectedException)
     {
         $this->expectException($expectedException);
-        $this->getApi()->getOneCall()->getHistoryDaySummary(
+        $this->getApi()->getOneCall()->getHistoryAggregate(
             $latitude,
             $longitude,
             new \DateTimeImmutable('2023-01-01')
@@ -105,10 +105,10 @@ class OneCallEndpointTest extends AbstractTest
     }
 
     #[DataProviderExternal(InvalidParamDataProvider::class, 'provideInvalidPastDateData')]
-    public function testOneCallGetHistoryDayMomentWithInvalidPastDate(\DateTimeImmutable $date, string $expectedException)
+    public function testOneCallGetHistoryAggregateWithInvalidPastDate(\DateTimeImmutable $date, string $expectedException)
     {
         $this->expectException($expectedException);
-        $this->getApi()->getOneCall()->getHistoryDaySummary(38.7077507, -9.1365919, $date);
+        $this->getApi()->getOneCall()->getHistoryAggregate(38.7077507, -9.1365919, $date);
     }
 
     public function testOneCallMethodsWithExist()
@@ -329,9 +329,9 @@ class OneCallEndpointTest extends AbstractTest
         $this->assertSame('2023-07-06 06:00:00', $alertsEndsAt->format('Y-m-d H:i:s'));
     }
 
-    private function assertHistoryMomentResponse(HistoryMoment $response): void
+    private function assertHistoryMomentResponse(WeatherMoment $response): void
     {
-        $this->assertInstanceOf(HistoryMoment::class, $response);
+        $this->assertInstanceOf(WeatherMoment::class, $response);
 
         $this->assertSame(null, $response->getMoonriseAt());
         $this->assertSame(null, $response->getMoonsetAt());
@@ -390,9 +390,9 @@ class OneCallEndpointTest extends AbstractTest
         $this->assertSame(0, $timezone->getOffset());
     }
 
-    private function assertHistoryDaySummary(HistoryDaySummary $response): void
+    private function assertHistoryAggregateResponse(WeatherAggregate $response): void
     {
-        $this->assertInstanceOf(HistoryDaySummary::class, $response);
+        $this->assertInstanceOf(WeatherAggregate::class, $response);
 
         $this->assertSame(75, $response->getCloudiness());
         $this->assertSame(71, $response->getHumidity());
