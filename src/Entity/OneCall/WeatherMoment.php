@@ -5,7 +5,7 @@ namespace ProgrammatorDev\OpenWeatherMap\Entity\OneCall;
 use ProgrammatorDev\OpenWeatherMap\Entity\Coordinate;
 use ProgrammatorDev\OpenWeatherMap\Entity\Timezone;
 
-class HistoryMoment extends Weather
+class WeatherMoment extends Weather
 {
     private Coordinate $coordinate;
 
