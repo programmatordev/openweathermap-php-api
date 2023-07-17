@@ -35,7 +35,7 @@ echo $currentWeather->getTemperature();
 
 ## Documentation
 
-- [Usage Instructions](docs/01-usage-instructions.md)
+- [Usage Instructions](docs/01-usage.md)
 - [Configuration](docs/02-configuration.md)
 - ...
 

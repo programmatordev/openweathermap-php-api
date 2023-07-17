@@ -1,12 +1,17 @@
-# Entities
+# Objects
 
 - One Call
 - Weather
   - CurrentWeather
-  - Weather
   - WeatherList
+  - Weather
 - Air Pollution
+  - CurrentAirPollution
+  - AirPollutionList
+  - AirPollution
+  - AirQuality
 - Geocoding
+  - ZipCodeLocation
 - Common
   - [AtmosphericPressure](#atmosphericpressure)
   - [Coordinate](#coordinate)
@@ -52,6 +57,14 @@
 
 `getDateTime()`: `\DateTimeImmutable`
 
+### WeatherList
+
+`getNumResults()`: `int`
+
+`getLocation()`: [`Location`](#location)
+
+`getList()`: [`Weather[]`](#weather-1)
+
 ### Weather
 
 `getTemperature()`: `float`
@@ -82,13 +95,77 @@
 
 `getDateTime()`: `\DateTimeImmutable`
 
-### WeatherList
+## Air Pollution
 
-`getNumResults()`: `int`
+### CurrentAirPollution
 
-`getLocation()`: [`Location`](#location)
+`getCoordinate()`: [`Coordinate`](#coordinate)
 
-`getList()`: [`Weather[]`](#weather-1)
+`getDateTime()`: `\DateTimeImmutable`
+
+`getAirQuality`: [`AirQuality`](#airquality)
+
+`getCarbonMonoxide()`: `float`
+
+`getNitrogenMonoxide()`: `float`
+
+`getNitrogenDioxide()`: `float`
+
+`getOzone()`: `float`
+
+`getSulphurDioxide()`: `float`
+
+`getFineParticulateMatter()`: `float`
+
+`getCoarseParticulateMatter()`: `float`
+
+`getAmmonia()`: `float`
+
+### AirPollutionList
+
+`getCoordinate()`: `float`
+
+`getList()`: [`AirPollution[]`](#airpollution)
+
+### AirPollution
+
+`getDateTime()`: `\DateTimeImmutable`
+
+`getAirQuality`: [`AirQuality`](#airquality)
+
+`getCarbonMonoxide()`: `float`
+
+`getNitrogenMonoxide()`: `float`
+
+`getNitrogenDioxide()`: `float`
+
+`getOzone()`: `float`
+
+`getSulphurDioxide()`: `float`
+
+`getFineParticulateMatter()`: `float`
+
+`getCoarseParticulateMatter()`: `float`
+
+`getAmmonia()`: `float`
+
+### AirQuality
+
+`getIndex()`: `int`
+
+`getQualitativeName()`: `string`
+
+## Geocoding
+
+### ZipCodeLocation
+
+`getZipCode()`: `string`
+
+`getName()`: `string`
+
+`getCoordinate()`: [`Coordinate`](#coordinate)
+
+`getCountryCode()`: `string`
 
 ## Common
 
