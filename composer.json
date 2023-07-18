@@ -1,13 +1,14 @@
 {
     "name": "programmatordev/openweathermap-php-api",
-    "description": "OpenWeatherMap PHP API library.",
+    "description": "OpenWeatherMap PHP library that provides convenient access to the OpenWeatherMap API",
     "type": "library",
-    "keywords": ["OpenWeatherMap", "API", "PHP"],
+    "keywords": ["OpenWeatherMap", "API", "PHP", "SDK", "PSR-18", "PSR-17", "PSR-6", "PSR-3"],
     "license": "MIT",
     "authors": [
         {
             "name": "André Pimpão",
-            "email": "a.pimpao@programmator.dev"
+            "email": "a.pimpao@programmator.dev",
+            "homepage": "https://programmator.dev/"
         }
     ],
     "require": {
