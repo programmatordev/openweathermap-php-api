@@ -35,7 +35,7 @@ $openWeatherMap = new OpenWeatherMap(
 
 ### `applicationKey`
 
-Required for all requests. Check the [API Key](#api-key) section for more information.
+Required for all requests. Check the [API Key](01-usage.md#api-key) section for more information.
 
 ### `unitSystem`
 
@@ -43,7 +43,7 @@ Unit system used when retrieving data.
 Affects temperature and speed values.
 
 Available options are `metric`, `imperial` and `standard`.
-Pre-defined [constants](src/UnitSystem/UnitSystem.php) are also available.
+Pre-defined [constants](../src/UnitSystem/UnitSystem.php) are also available.
 
 Example:
 
@@ -66,7 +66,7 @@ Language used when retrieving data.
 It seems to only affect weather conditions descriptions.
 
 List of all available languages can be found [here](https://openweathermap.org/api/one-call-3#multi).
-Pre-defined [constants](src/Language/Language.php) are also available.
+Pre-defined [constants](../src/Language/Language.php) are also available.
 
 Example:
 
