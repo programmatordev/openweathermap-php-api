@@ -5,8 +5,8 @@ namespace ProgrammatorDev\OpenWeatherMap\Endpoint;
 use Http\Client\Exception;
 use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\WithLanguageTrait;
 use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\WithUnitSystemTrait;
-use ProgrammatorDev\OpenWeatherMap\Entity\Weather\CurrentWeather;
-use ProgrammatorDev\OpenWeatherMap\Entity\Weather\WeatherList;
+use ProgrammatorDev\OpenWeatherMap\Entity\Weather\WeatherLocation;
+use ProgrammatorDev\OpenWeatherMap\Entity\Weather\WeatherLocationList;
 use ProgrammatorDev\OpenWeatherMap\Exception\BadRequestException;
 use ProgrammatorDev\OpenWeatherMap\Exception\NotFoundException;
 use ProgrammatorDev\OpenWeatherMap\Exception\TooManyRequestsException;
@@ -38,7 +38,7 @@ class WeatherEndpoint extends AbstractEndpoint
      * @throws UnexpectedErrorException
      * @throws ValidationException
      */
-    public function getCurrent(float $latitude, float $longitude): CurrentWeather
+    public function getCurrent(float $latitude, float $longitude): WeatherLocation
     {
         $this->validateCoordinate($latitude, $longitude);
 
@@ -53,7 +53,7 @@ class WeatherEndpoint extends AbstractEndpoint
             ]
         );
 
-        return new CurrentWeather($data);
+        return new WeatherLocation($data);
     }
 
     /**
@@ -65,7 +65,7 @@ class WeatherEndpoint extends AbstractEndpoint
      * @throws UnexpectedErrorException
      * @throws ValidationException
      */
-    public function getForecast(float $latitude, float $longitude, int $numResults = self::NUM_RESULTS): WeatherList
+    public function getForecast(float $latitude, float $longitude, int $numResults = self::NUM_RESULTS): WeatherLocationList
     {
         $this->validateCoordinate($latitude, $longitude);
         $this->validateGreaterThan('numResults', $numResults, 0);
@@ -82,6 +82,6 @@ class WeatherEndpoint extends AbstractEndpoint
             ]
         );
 
-        return new WeatherList($data);
+        return new WeatherLocationList($data);
     }
 }

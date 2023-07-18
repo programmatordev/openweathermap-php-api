@@ -11,9 +11,9 @@ use ProgrammatorDev\OpenWeatherMap\Entity\Location;
 use ProgrammatorDev\OpenWeatherMap\Entity\Rain;
 use ProgrammatorDev\OpenWeatherMap\Entity\Snow;
 use ProgrammatorDev\OpenWeatherMap\Entity\Timezone;
-use ProgrammatorDev\OpenWeatherMap\Entity\Weather\CurrentWeather;
+use ProgrammatorDev\OpenWeatherMap\Entity\Weather\WeatherLocation;
 use ProgrammatorDev\OpenWeatherMap\Entity\Weather\Weather;
-use ProgrammatorDev\OpenWeatherMap\Entity\Weather\WeatherList;
+use ProgrammatorDev\OpenWeatherMap\Entity\Weather\WeatherLocationList;
 use ProgrammatorDev\OpenWeatherMap\Entity\WeatherCondition;
 use ProgrammatorDev\OpenWeatherMap\Entity\Wind;
 use ProgrammatorDev\OpenWeatherMap\Test\DataProvider\InvalidParamDataProvider;
@@ -75,9 +75,9 @@ class WeatherEndpointTest extends AbstractTest
         $this->assertSame(true, method_exists($weatherEndpoint, 'withUnitSystem'));
     }
 
-    private function assertCurrentResponse(CurrentWeather $response): void
+    private function assertCurrentResponse(WeatherLocation $response): void
     {
-        $this->assertInstanceOf(CurrentWeather::class, $response);
+        $this->assertInstanceOf(WeatherLocation::class, $response);
 
         $this->assertSame(27.12, $response->getTemperature());
         $this->assertSame(28.16, $response->getTemperatureFeelsLike());
@@ -153,9 +153,9 @@ class WeatherEndpointTest extends AbstractTest
         $this->assertSame('2023-06-28 20:05:18', $sunsetAt->format('Y-m-d H:i:s'));
     }
 
-    private function assertForecastResponse(WeatherList $response): void
+    private function assertForecastResponse(WeatherLocationList $response): void
     {
-        $this->assertInstanceOf(WeatherList::class, $response);
+        $this->assertInstanceOf(WeatherLocationList::class, $response);
 
         $this->assertSame(1, $response->getNumResults());
 

@@ -5,7 +5,7 @@ namespace ProgrammatorDev\OpenWeatherMap\Entity\Weather;
 use ProgrammatorDev\OpenWeatherMap\Entity\Location;
 use ProgrammatorDev\OpenWeatherMap\Util\CreateEntityListTrait;
 
-class WeatherList
+class WeatherLocationList
 {
     use CreateEntityListTrait;
 
