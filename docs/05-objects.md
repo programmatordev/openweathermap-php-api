@@ -1,24 +1,24 @@
 # Objects
 
-- One Call
-  - Alert
-  - MinuteForecast
-  - OneCall
-  - Weather
-  - WeatherAggregate
-  - WeatherMoment
-- Weather
-  - CurrentWeather
-  - WeatherList
-  - Weather
-- Air Pollution
-  - CurrentAirPollution
-  - AirPollutionList
-  - AirPollution
-  - AirQuality
-- Geocoding
-  - ZipCodeLocation
-- Common
+- [One Call](#one-call)
+  - [Alert](#alert)
+  - [MinuteForecast](#minuteforecast)
+  - [OneCall](#onecall)
+  - [Weather](#weather)
+  - [WeatherAggregate](#weatheraggregate)
+  - [WeatherLocation](#weatherlocation)
+- [Weather](#weather-1)
+  - [Weather](#weather-2)
+  - [WeatherLocation](#weatherlocation-1)
+  - [WeatherLocationList](#weatherlocationlist)
+- [Air Pollution](#air-pollution)
+  - [AirPollution](#airpollution)
+  - [AirPollutionLocation](#airpollutionlocation)
+  - [AirPollutionLocationList](#airpollutionlocationlist)
+  - [AirQuality](#airquality)
+- [Geocoding](#geocoding)
+  - [ZipCodeLocation](#zipcodelocation)
+- [Common](#common)
   - [AtmosphericPressure](#atmosphericpressure)
   - [Coordinate](#coordinate)
   - [Icon](#icon)
@@ -131,7 +131,7 @@
 
 `getWind()`: [`Wind`](#wind)
 
-### WeatherMoment
+### WeatherLocation
 
 `getCoordinate()`: [`Coordinate`](#coordinate)
 
@@ -179,46 +179,6 @@
 
 ## Weather
 
-### CurrentWeather
-
-`getLocation()`: [`Location`](#location)
-
-`getTemperature()`: `float`
-
-`getTemperatureFeelsLike()`: `float`
-
-`getMinTemperature()`: `float`
-
-`getMaxTemperature()`: `float`
-
-`getHumidity()`: `int`
-
-`getCloudiness()`: `int`
-
-`getVisibility()`: `int`
-
-`getWeatherConditions()`: [`WeatherCondition[]`](#weathercondition)
-
-`getWind()`: [`Wind`](#wind)
-
-`getPrecipitationProbability()`: `?int`
-
-`getRain()`: [`?Rain`](#rain)
-
-`getSnow()`: [`?Snow`](#snow)
-
-`getAtmosphericPressure()`: [`AtmosphericPressure`](#atmosphericpressure)
-
-`getDateTime()`: `\DateTimeImmutable`
-
-### WeatherList
-
-`getNumResults()`: `int`
-
-`getLocation()`: [`Location`](#location)
-
-`getList()`: [`Weather[]`](#weather-1)
-
 ### Weather
 
 `getTemperature()`: `float`
@@ -249,9 +209,71 @@
 
 `getDateTime()`: `\DateTimeImmutable`
 
+### WeatherLocation
+
+`getLocation()`: [`Location`](#location)
+
+`getTemperature()`: `float`
+
+`getTemperatureFeelsLike()`: `float`
+
+`getMinTemperature()`: `float`
+
+`getMaxTemperature()`: `float`
+
+`getHumidity()`: `int`
+
+`getCloudiness()`: `int`
+
+`getVisibility()`: `int`
+
+`getWeatherConditions()`: [`WeatherCondition[]`](#weathercondition)
+
+`getWind()`: [`Wind`](#wind)
+
+`getPrecipitationProbability()`: `?int`
+
+`getRain()`: [`?Rain`](#rain)
+
+`getSnow()`: [`?Snow`](#snow)
+
+`getAtmosphericPressure()`: [`AtmosphericPressure`](#atmosphericpressure)
+
+`getDateTime()`: `\DateTimeImmutable`
+
+### WeatherLocationList
+
+`getNumResults()`: `int`
+
+`getLocation()`: [`Location`](#location)
+
+`getList()`: [`Weather[]`](#weather-2)
+
 ## Air Pollution
 
-### CurrentAirPollution
+### AirPollution
+
+`getDateTime()`: `\DateTimeImmutable`
+
+`getAirQuality`: [`AirQuality`](#airquality)
+
+`getCarbonMonoxide()`: `float`
+
+`getNitrogenMonoxide()`: `float`
+
+`getNitrogenDioxide()`: `float`
+
+`getOzone()`: `float`
+
+`getSulphurDioxide()`: `float`
+
+`getFineParticulateMatter()`: `float`
+
+`getCoarseParticulateMatter()`: `float`
+
+`getAmmonia()`: `float`
+
+### AirPollutionLocation
 
 `getCoordinate()`: [`Coordinate`](#coordinate)
 
@@ -275,33 +297,11 @@
 
 `getAmmonia()`: `float`
 
-### AirPollutionList
+### AirPollutionLocationList
 
 `getCoordinate()`: `float`
 
 `getList()`: [`AirPollution[]`](#airpollution)
-
-### AirPollution
-
-`getDateTime()`: `\DateTimeImmutable`
-
-`getAirQuality`: [`AirQuality`](#airquality)
-
-`getCarbonMonoxide()`: `float`
-
-`getNitrogenMonoxide()`: `float`
-
-`getNitrogenDioxide()`: `float`
-
-`getOzone()`: `float`
-
-`getSulphurDioxide()`: `float`
-
-`getFineParticulateMatter()`: `float`
-
-`getCoarseParticulateMatter()`: `float`
-
-`getAmmonia()`: `float`
 
 ### AirQuality
 
