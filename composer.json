@@ -1,13 +1,14 @@
 {
     "name": "programmatordev/openweathermap-php-api",
-    "description": "OpenWeatherMap PHP API library.",
+    "description": "OpenWeatherMap PHP library that provides convenient access to the OpenWeatherMap API",
     "type": "library",
-    "keywords": ["OpenWeatherMap", "API", "PHP"],
+    "keywords": ["OpenWeatherMap", "API", "PHP", "SDK", "PSR-18", "PSR-17", "PSR-6", "PSR-3"],
     "license": "MIT",
     "authors": [
         {
             "name": "André Pimpão",
-            "email": "a.pimpao@programmator.dev"
+            "email": "a.pimpao@programmator.dev",
+            "homepage": "https://programmator.dev/"
         }
     ],
     "require": {
@@ -16,15 +17,11 @@
         "php-http/client-common": "^2.7",
         "php-http/discovery": "^1.18",
         "php-http/logger-plugin": "^1.3",
-        "psr/cache": "^3.0",
+        "psr/cache": "^2.0 || ^3.0",
         "psr/http-client": "^1.0",
         "psr/http-factory": "^1.0",
-        "psr/log": "^3.0",
+        "psr/log": "^2.0 || ^3.0",
         "symfony/options-resolver": "^6.3"
-    },
-    "provide": {
-        "psr/http-client-implementation": "^1.0",
-        "psr/http-factory-implementation": "^1.0"
     },
     "require-dev": {
         "monolog/monolog": "^3.4",
@@ -34,6 +31,10 @@
         "symfony/cache": "^6.3",
         "symfony/http-client": "^6.3",
         "symfony/var-dumper": "^6.3"
+    },
+    "provide": {
+        "psr/http-client-implementation": "1.0",
+        "psr/http-factory-implementation": "1.0"
     },
     "autoload": {
         "psr-4": {

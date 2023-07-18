@@ -4,7 +4,7 @@ namespace ProgrammatorDev\OpenWeatherMap\Entity\Weather;
 
 use ProgrammatorDev\OpenWeatherMap\Entity\Location;
 
-class CurrentWeather extends Weather
+class WeatherLocation extends Weather
 {
     private Location $location;
 

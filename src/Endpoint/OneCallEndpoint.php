@@ -6,7 +6,7 @@ use Http\Client\Exception;
 use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\WithLanguageTrait;
 use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\WithUnitSystemTrait;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\WeatherAggregate;
-use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\WeatherMoment;
+use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\WeatherLocation;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\OneCall;
 use ProgrammatorDev\OpenWeatherMap\Exception\BadRequestException;
 use ProgrammatorDev\OpenWeatherMap\Exception\NotFoundException;
@@ -66,7 +66,7 @@ class OneCallEndpoint extends AbstractEndpoint
      * @throws UnexpectedErrorException
      * @throws ValidationException
      */
-    public function getHistoryMoment(float $latitude, float $longitude, \DateTimeInterface $dateTime): WeatherMoment
+    public function getHistoryMoment(float $latitude, float $longitude, \DateTimeInterface $dateTime): WeatherLocation
     {
         $this->validateCoordinate($latitude, $longitude);
         $this->validateLessThan('dateTime', $dateTime, new \DateTimeImmutable('now'));
@@ -83,7 +83,7 @@ class OneCallEndpoint extends AbstractEndpoint
             ]
         );
 
-        return new WeatherMoment($data);
+        return new WeatherLocation($data);
     }
 
     /**
@@ -98,7 +98,7 @@ class OneCallEndpoint extends AbstractEndpoint
     public function getHistoryAggregate(float $latitude, float $longitude, \DateTimeInterface $date): WeatherAggregate
     {
         $this->validateCoordinate($latitude, $longitude);
-        $this->validateLessThan('dateTime', $date, new \DateTimeImmutable('now'));
+        $this->validateLessThan('date', $date, new \DateTimeImmutable('now'));
 
         $data = $this->sendRequest(
             method: 'GET',

@@ -6,14 +6,14 @@ use Nyholm\Psr7\Response;
 use PHPUnit\Framework\Attributes\DataProviderExternal;
 use ProgrammatorDev\OpenWeatherMap\Entity\Coordinate;
 use ProgrammatorDev\OpenWeatherMap\Entity\Icon;
+use ProgrammatorDev\OpenWeatherMap\Entity\MoonPhase;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\Alert;
-use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\WeatherAggregate;
-use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\WeatherMoment;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\MinuteForecast;
-use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\MoonPhase;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\OneCall;
-use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\Temperature;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\Weather;
+use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\WeatherAggregate;
+use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\WeatherLocation;
+use ProgrammatorDev\OpenWeatherMap\Entity\Temperature;
 use ProgrammatorDev\OpenWeatherMap\Entity\Timezone;
 use ProgrammatorDev\OpenWeatherMap\Entity\WeatherCondition;
 use ProgrammatorDev\OpenWeatherMap\Entity\Wind;
@@ -70,10 +70,10 @@ class OneCallEndpointTest extends AbstractTest
     }
 
     #[DataProviderExternal(InvalidParamDataProvider::class, 'provideInvalidPastDateData')]
-    public function testOneCallGetHistoryMomentWithInvalidPastDate(\DateTimeImmutable $dateTime, string $expectedException)
+    public function testOneCallGetHistoryMomentWithInvalidPastDate(\DateTimeImmutable $date, string $expectedException)
     {
         $this->expectException($expectedException);
-        $this->getApi()->getOneCall()->getHistoryMoment(38.7077507, -9.1365919, $dateTime);
+        $this->getApi()->getOneCall()->getHistoryMoment(38.7077507, -9.1365919, $date);
     }
 
     public function testOneCallGetHistoryAggregate()
@@ -105,10 +105,10 @@ class OneCallEndpointTest extends AbstractTest
     }
 
     #[DataProviderExternal(InvalidParamDataProvider::class, 'provideInvalidPastDateData')]
-    public function testOneCallGetHistoryAggregateWithInvalidPastDate(\DateTimeImmutable $dateTime, string $expectedException)
+    public function testOneCallGetHistoryAggregateWithInvalidPastDate(\DateTimeImmutable $date, string $expectedException)
     {
         $this->expectException($expectedException);
-        $this->getApi()->getOneCall()->getHistoryAggregate(38.7077507, -9.1365919, $dateTime);
+        $this->getApi()->getOneCall()->getHistoryAggregate(38.7077507, -9.1365919, $date);
     }
 
     public function testOneCallMethodsWithExist()
@@ -329,9 +329,9 @@ class OneCallEndpointTest extends AbstractTest
         $this->assertSame('2023-07-06 06:00:00', $alertsEndsAt->format('Y-m-d H:i:s'));
     }
 
-    private function assertHistoryMomentResponse(WeatherMoment $response): void
+    private function assertHistoryMomentResponse(WeatherLocation $response): void
     {
-        $this->assertInstanceOf(WeatherMoment::class, $response);
+        $this->assertInstanceOf(WeatherLocation::class, $response);
 
         $this->assertSame(null, $response->getMoonriseAt());
         $this->assertSame(null, $response->getMoonsetAt());

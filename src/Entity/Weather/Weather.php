@@ -2,6 +2,7 @@
 
 namespace ProgrammatorDev\OpenWeatherMap\Entity\Weather;
 
+use ProgrammatorDev\OpenWeatherMap\Entity\AtmosphericPressure;
 use ProgrammatorDev\OpenWeatherMap\Entity\Rain;
 use ProgrammatorDev\OpenWeatherMap\Entity\Snow;
 use ProgrammatorDev\OpenWeatherMap\Entity\WeatherCondition;

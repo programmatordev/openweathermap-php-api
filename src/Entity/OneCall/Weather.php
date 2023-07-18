@@ -2,8 +2,10 @@
 
 namespace ProgrammatorDev\OpenWeatherMap\Entity\OneCall;
 
+use ProgrammatorDev\OpenWeatherMap\Entity\MoonPhase;
 use ProgrammatorDev\OpenWeatherMap\Entity\Rain;
 use ProgrammatorDev\OpenWeatherMap\Entity\Snow;
+use ProgrammatorDev\OpenWeatherMap\Entity\Temperature;
 use ProgrammatorDev\OpenWeatherMap\Entity\WeatherCondition;
 use ProgrammatorDev\OpenWeatherMap\Entity\Wind;
 use ProgrammatorDev\OpenWeatherMap\Util\CreateEntityListTrait;
