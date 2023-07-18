@@ -3,8 +3,8 @@
 namespace ProgrammatorDev\OpenWeatherMap\Endpoint;
 
 use Http\Client\Exception;
-use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\AirPollutionList;
-use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\CurrentAirPollution;
+use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\AirPollutionLocationList;
+use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\AirPollutionLocation;
 use ProgrammatorDev\OpenWeatherMap\Exception\BadRequestException;
 use ProgrammatorDev\OpenWeatherMap\Exception\NotFoundException;
 use ProgrammatorDev\OpenWeatherMap\Exception\TooManyRequestsException;
@@ -36,7 +36,7 @@ class AirPollutionEndpoint extends AbstractEndpoint
      * @throws UnexpectedErrorException
      * @throws ValidationException
      */
-    public function getCurrent(float $latitude, float $longitude): CurrentAirPollution
+    public function getCurrent(float $latitude, float $longitude): AirPollutionLocation
     {
         $this->validateCoordinate($latitude, $longitude);
 
@@ -49,7 +49,7 @@ class AirPollutionEndpoint extends AbstractEndpoint
             ]
         );
 
-        return new CurrentAirPollution($data);
+        return new AirPollutionLocation($data);
     }
 
     /**
@@ -61,7 +61,7 @@ class AirPollutionEndpoint extends AbstractEndpoint
      * @throws UnexpectedErrorException
      * @throws ValidationException
      */
-    public function getForecast(float $latitude, float $longitude): AirPollutionList
+    public function getForecast(float $latitude, float $longitude): AirPollutionLocationList
     {
         $this->validateCoordinate($latitude, $longitude);
 
@@ -74,7 +74,7 @@ class AirPollutionEndpoint extends AbstractEndpoint
             ]
         );
 
-        return new AirPollutionList($data);
+        return new AirPollutionLocationList($data);
     }
 
     /**
@@ -91,7 +91,7 @@ class AirPollutionEndpoint extends AbstractEndpoint
         float $longitude,
         \DateTimeInterface $startDate,
         \DateTimeInterface $endDate
-    ): AirPollutionList
+    ): AirPollutionLocationList
     {
         $this->validateCoordinate($latitude, $longitude);
         $this->validateLessThan('startDate', $startDate, new \DateTimeImmutable('now'));
@@ -111,6 +111,6 @@ class AirPollutionEndpoint extends AbstractEndpoint
             ]
         );
 
-        return new AirPollutionList($data);
+        return new AirPollutionLocationList($data);
     }
 }

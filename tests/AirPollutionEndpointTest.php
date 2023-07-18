@@ -5,9 +5,9 @@ namespace ProgrammatorDev\OpenWeatherMap\Test;
 use Nyholm\Psr7\Response;
 use PHPUnit\Framework\Attributes\DataProviderExternal;
 use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\AirPollution;
-use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\AirPollutionList;
+use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\AirPollutionLocationList;
 use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\AirQuality;
-use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\CurrentAirPollution;
+use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\AirPollutionLocation;
 use ProgrammatorDev\OpenWeatherMap\Entity\Coordinate;
 use ProgrammatorDev\OpenWeatherMap\Entity\Location;
 use ProgrammatorDev\OpenWeatherMap\Test\DataProvider\InvalidParamDataProvider;
@@ -126,9 +126,9 @@ class AirPollutionEndpointTest extends AbstractTest
         $this->getApi()->getAirPollution()->getHistory(38.7077507, -9.1365919, $startDate, $endDate);
     }
 
-    private function assertCurrentResponse(CurrentAirPollution $response): void
+    private function assertCurrentResponse(AirPollutionLocation $response): void
     {
-        $this->assertInstanceOf(CurrentAirPollution::class, $response);
+        $this->assertInstanceOf(AirPollutionLocation::class, $response);
 
         $this->assertSame(196.93, $response->getCarbonMonoxide());
         $this->assertSame(0.65, $response->getNitrogenMonoxide());
@@ -154,9 +154,9 @@ class AirPollutionEndpointTest extends AbstractTest
         $this->assertSame('Moderate', $airQuality->getQualitativeName());
     }
 
-    private function assertForecastResponse(AirPollutionList $response): void
+    private function assertForecastResponse(AirPollutionLocationList $response): void
     {
-        $this->assertInstanceOf(AirPollutionList::class, $response);
+        $this->assertInstanceOf(AirPollutionLocationList::class, $response);
 
         $coordinate = $response->getCoordinate();
         $this->assertInstanceOf(Coordinate::class, $coordinate);
@@ -185,9 +185,9 @@ class AirPollutionEndpointTest extends AbstractTest
         $this->assertSame('Moderate', $airQuality->getQualitativeName());
     }
 
-    private function assertHistoryResponse(AirPollutionList $response): void
+    private function assertHistoryResponse(AirPollutionLocationList $response): void
     {
-        $this->assertInstanceOf(AirPollutionList::class, $response);
+        $this->assertInstanceOf(AirPollutionLocationList::class, $response);
 
         $coordinate = $response->getCoordinate();
         $this->assertInstanceOf(Coordinate::class, $coordinate);

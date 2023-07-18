@@ -4,7 +4,7 @@ namespace ProgrammatorDev\OpenWeatherMap\Entity\AirPollution;
 
 use ProgrammatorDev\OpenWeatherMap\Entity\Coordinate;
 
-class CurrentAirPollution extends AirPollution
+class AirPollutionLocation extends AirPollution
 {
     private Coordinate $coordinate;
 

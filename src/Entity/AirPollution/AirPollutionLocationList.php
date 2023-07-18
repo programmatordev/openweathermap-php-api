@@ -5,7 +5,7 @@ namespace ProgrammatorDev\OpenWeatherMap\Entity\AirPollution;
 use ProgrammatorDev\OpenWeatherMap\Entity\Coordinate;
 use ProgrammatorDev\OpenWeatherMap\Util\CreateEntityListTrait;
 
-class AirPollutionList
+class AirPollutionLocationList
 {
     use CreateEntityListTrait;
 
