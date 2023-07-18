@@ -7,7 +7,7 @@
 
 ## Requirements
 
-PHP 8.1 and later.
+- PHP 8.1 and higher.
 
 ## API Key
 
