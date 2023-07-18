@@ -1,6 +1,10 @@
 # OpenWeatherMap PHP API
 
-OpenWeatherMap PHP library that provides convenient access to the OpenWeatherMap API. 
+[![Latest Version](https://img.shields.io/github/release/programmatordev/openweathermap-php-api.svg?style=flat-square)](https://github.com/programmatordev/openweathermap-php-api/releases)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
+[![Tests](https://github.com/programmatordev/openweathermap-php-api/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/programmatordev/openweathermap-php-api/actions/workflows/ci.yml?query=branch%3Amain)
+
+OpenWeatherMap PHP library that provides convenient access to the OpenWeatherMap API.
 
 Supports [PSR-18 HTTP clients](https://www.php-fig.org/psr/psr-18), [PSR-17 HTTP factories](https://www.php-fig.org/psr/psr-17), [PSR-6 caches](https://www.php-fig.org/psr/psr-6) and [PSR-3 logs](https://www.php-fig.org/psr/psr-3).
 
