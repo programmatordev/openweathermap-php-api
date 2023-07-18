@@ -55,19 +55,19 @@
 
 ### OneCall
 
-`getCoordinate()`: [`Coordinate`](#coordinate)
+`getCoordinate()`: [`Coordinate`](05-objects.md#coordinate)
 
-`getTimezone()`: [`Timezone`](#timezone)
+`getTimezone()`: [`Timezone`](05-objects.md#timezone)
 
-`getCurrent()`: [`Weather`](#weather)
+`getCurrent()`: [`Weather`](05-objects.md#weather)
 
-`getMinutelyForecast()`: [`?MinutelyForecast[]`](#minuteforecast)
+`getMinutelyForecast()`: [`?MinuteForecast[]`](05-objects.md#minuteforecast)
 
-`getHourlyForecast()`: [`Weather[]`](#weather)
+`getHourlyForecast()`: [`Weather[]`](05-objects.md#weather)
 
-`getDailyForecast()`: [`Weather[]`](#weather)
+`getDailyForecast()`: [`Weather[]`](05-objects.md#weather)
 
-`getAlerts()`: [`?Alert[]`](#alert)
+`getAlerts()`: [`?Alert[]`](05-objects.md#alert)
 
 ### Weather
 

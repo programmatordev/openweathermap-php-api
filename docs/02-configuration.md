@@ -230,7 +230,7 @@ $openWeatherMap = new OpenWeatherMap(
 
 ## Config Object
 
-Configuration getters and setters for all options are available to access and change after initialization.
+Configuration getters and setters for all options are available to access and change after initialization:
 
 ```php
 use ProgrammatorDev\OpenWeatherMap\Config;
