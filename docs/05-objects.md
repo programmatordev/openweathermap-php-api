@@ -61,13 +61,13 @@
 
 `getCurrent()`: [`Weather`](#weather)
 
-`getMinutelyForecast()`: `null`|[`MinutelyForecast[]`](#minuteforecast)
+`getMinutelyForecast()`: [`?MinutelyForecast[]`](#minuteforecast)
 
 `getHourlyForecast()`: [`Weather[]`](#weather)
 
 `getDailyForecast()`: [`Weather[]`](#weather)
 
-`getAlerts()`: `null`|[`Alert[]`](#alert)
+`getAlerts()`: [`?Alert[]`](#alert)
 
 ### Weather
 
