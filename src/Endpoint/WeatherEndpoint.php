@@ -12,8 +12,6 @@ use ProgrammatorDev\OpenWeatherMap\Exception\NotFoundException;
 use ProgrammatorDev\OpenWeatherMap\Exception\TooManyRequestsException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnauthorizedException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnexpectedErrorException;
-use ProgrammatorDev\OpenWeatherMap\Validator\CoordinateValidatorTrait;
-use ProgrammatorDev\OpenWeatherMap\Validator\GreaterThanValidatorTrait;
 use ProgrammatorDev\YetAnotherPhpValidator\Exception\ValidationException;
 use ProgrammatorDev\YetAnotherPhpValidator\Validator;
 
@@ -21,8 +19,6 @@ class WeatherEndpoint extends AbstractEndpoint
 {
     use WithUnitSystemTrait;
     use WithLanguageTrait;
-    use CoordinateValidatorTrait;
-    use GreaterThanValidatorTrait;
 
     private const NUM_RESULTS = 40;
 

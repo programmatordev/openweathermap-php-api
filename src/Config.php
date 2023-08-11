@@ -2,21 +2,17 @@
 
 namespace ProgrammatorDev\OpenWeatherMap;
 
-use ProgrammatorDev\OpenWeatherMap\Exception\ValidationException;
 use ProgrammatorDev\OpenWeatherMap\HttpClient\HttpClientBuilder;
 use ProgrammatorDev\OpenWeatherMap\Language\Language;
 use ProgrammatorDev\OpenWeatherMap\UnitSystem\UnitSystem;
-use ProgrammatorDev\OpenWeatherMap\Validator\BlankValidatorTrait;
-use ProgrammatorDev\OpenWeatherMap\Validator\ChoiceValidatorTrait;
+use ProgrammatorDev\YetAnotherPhpValidator\Exception\ValidationException;
+use ProgrammatorDev\YetAnotherPhpValidator\Validator;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class Config
 {
-    use BlankValidatorTrait;
-    use ChoiceValidatorTrait;
-
     private array $options;
 
     public function __construct(array $options = [])
@@ -62,7 +58,7 @@ class Config
      */
     public function setApplicationKey(string $applicationKey): self
     {
-        $this->validateBlank('applicationKey', $applicationKey);
+        Validator::notBlank()->assert($applicationKey, 'applicationKey');
 
         $this->options['applicationKey'] = $applicationKey;
 
@@ -79,7 +75,7 @@ class Config
      */
     public function setUnitSystem(string $unitSystem): self
     {
-        $this->validateChoice('unitSystem', $unitSystem, UnitSystem::getList());
+        Validator::choice(UnitSystem::getList())->assert($unitSystem, 'unitSystem');
 
         $this->options['unitSystem'] = $unitSystem;
 
@@ -96,7 +92,7 @@ class Config
      */
     public function setLanguage(string $language): self
     {
-        $this->validateChoice('language', $language, Language::getList());
+        Validator::choice(Language::getList())->assert($language, 'language');
 
         $this->options['language'] = $language;
 
