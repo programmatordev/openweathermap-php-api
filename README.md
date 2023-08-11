@@ -62,7 +62,7 @@ echo $currentWeather->getTemperature();
 
 ## Contributing
 
-Any form of contribution to improve this library will be welcome and appreciated.
+Any form of contribution to improve this library (including requests) will be welcome and appreciated.
 Make sure to open a pull request or issue.
 
 ## License
