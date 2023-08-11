@@ -2,7 +2,7 @@
 
 namespace ProgrammatorDev\OpenWeatherMap\Test\DataProvider;
 
-use ProgrammatorDev\OpenWeatherMap\Exception\ValidationException;
+use ProgrammatorDev\YetAnotherPhpValidator\Exception\ValidationException;
 
 class InvalidParamDataProvider
 {
