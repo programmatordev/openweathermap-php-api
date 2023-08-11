@@ -10,17 +10,11 @@ use ProgrammatorDev\OpenWeatherMap\Exception\NotFoundException;
 use ProgrammatorDev\OpenWeatherMap\Exception\TooManyRequestsException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnauthorizedException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnexpectedErrorException;
-use ProgrammatorDev\OpenWeatherMap\Exception\ValidationException;
-use ProgrammatorDev\OpenWeatherMap\Validator\CoordinateValidatorTrait;
-use ProgrammatorDev\OpenWeatherMap\Validator\LessThanValidatorTrait;
-use ProgrammatorDev\OpenWeatherMap\Validator\RangeValidatorTrait;
+use ProgrammatorDev\YetAnotherPhpValidator\Exception\ValidationException;
+use ProgrammatorDev\YetAnotherPhpValidator\Validator;
 
 class AirPollutionEndpoint extends AbstractEndpoint
 {
-    use CoordinateValidatorTrait;
-    use LessThanValidatorTrait;
-    use RangeValidatorTrait;
-
     private string $urlAirPollution = 'https://api.openweathermap.org/data/2.5/air_pollution';
 
     private string $urlAirPollutionForecast = 'https://api.openweathermap.org/data/2.5/air_pollution/forecast';
@@ -38,7 +32,8 @@ class AirPollutionEndpoint extends AbstractEndpoint
      */
     public function getCurrent(float $latitude, float $longitude): AirPollutionLocation
     {
-        $this->validateCoordinate($latitude, $longitude);
+        Validator::range(-90, 90)->assert($latitude, 'latitude');
+        Validator::range(-180, 180)->assert($longitude, 'longitude');
 
         $data = $this->sendRequest(
             method: 'GET',
@@ -63,7 +58,8 @@ class AirPollutionEndpoint extends AbstractEndpoint
      */
     public function getForecast(float $latitude, float $longitude): AirPollutionLocationList
     {
-        $this->validateCoordinate($latitude, $longitude);
+        Validator::range(-90, 90)->assert($latitude, 'latitude');
+        Validator::range(-180, 180)->assert($longitude, 'longitude');
 
         $data = $this->sendRequest(
             method: 'GET',
@@ -93,10 +89,10 @@ class AirPollutionEndpoint extends AbstractEndpoint
         \DateTimeInterface $endDate
     ): AirPollutionLocationList
     {
-        $this->validateCoordinate($latitude, $longitude);
-        $this->validateLessThan('startDate', $startDate, new \DateTimeImmutable('now'));
-        $this->validateLessThan('endDate', $endDate, new \DateTimeImmutable('now'));
-        $this->validateRange('startDate', 'endDate', $startDate, $endDate);
+        Validator::range(-90, 90)->assert($latitude, 'latitude');
+        Validator::range(-180, 180)->assert($longitude, 'longitude');
+        Validator::lessThan(new \DateTime('now'))->assert($endDate, 'endDate');
+        Validator::lessThan($endDate)->assert($startDate, 'startDate');
 
         $timezoneUtc = new \DateTimeZone('UTC');
 
