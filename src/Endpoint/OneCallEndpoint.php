@@ -13,9 +13,10 @@ use ProgrammatorDev\OpenWeatherMap\Exception\NotFoundException;
 use ProgrammatorDev\OpenWeatherMap\Exception\TooManyRequestsException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnauthorizedException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnexpectedErrorException;
-use ProgrammatorDev\OpenWeatherMap\Exception\ValidationException;
 use ProgrammatorDev\OpenWeatherMap\Validator\CoordinateValidatorTrait;
 use ProgrammatorDev\OpenWeatherMap\Validator\LessThanValidatorTrait;
+use ProgrammatorDev\YetAnotherPhpValidator\Exception\ValidationException;
+use ProgrammatorDev\YetAnotherPhpValidator\Validator;
 
 class OneCallEndpoint extends AbstractEndpoint
 {
@@ -41,7 +42,8 @@ class OneCallEndpoint extends AbstractEndpoint
      */
     public function getWeather(float $latitude, float $longitude): OneCall
     {
-        $this->validateCoordinate($latitude, $longitude);
+        Validator::range(-90, 90)->assert($latitude, 'latitude');
+        Validator::range(-180, 180)->assert($longitude, 'longitude');
 
         $data = $this->sendRequest(
             method: 'GET',
@@ -68,8 +70,9 @@ class OneCallEndpoint extends AbstractEndpoint
      */
     public function getHistoryMoment(float $latitude, float $longitude, \DateTimeInterface $dateTime): WeatherLocation
     {
-        $this->validateCoordinate($latitude, $longitude);
-        $this->validateLessThan('dateTime', $dateTime, new \DateTimeImmutable('now'));
+        Validator::range(-90, 90)->assert($latitude, 'latitude');
+        Validator::range(-180, 180)->assert($longitude, 'longitude');
+        Validator::lessThan(new \DateTime('now'))->assert($dateTime, 'dateTime');
 
         $data = $this->sendRequest(
             method: 'GET',
@@ -97,8 +100,9 @@ class OneCallEndpoint extends AbstractEndpoint
      */
     public function getHistoryAggregate(float $latitude, float $longitude, \DateTimeInterface $date): WeatherAggregate
     {
-        $this->validateCoordinate($latitude, $longitude);
-        $this->validateLessThan('date', $date, new \DateTimeImmutable('now'));
+        Validator::range(-90, 90)->assert($latitude, 'latitude');
+        Validator::range(-180, 180)->assert($longitude, 'longitude');
+        Validator::lessThan(new \DateTime('now'))->assert($date, 'date');
 
         $data = $this->sendRequest(
             method: 'GET',
