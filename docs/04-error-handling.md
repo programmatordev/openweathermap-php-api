@@ -73,11 +73,10 @@ catch (ApiErrorException $exception) {
 
 ## Validation Errors
 
-To catch invalid input data (like an out of range coordinate, blank location name, etc.), 
-the `ValidationException` is available:
+To catch invalid input data (like an out of range coordinate, blank location name, etc.), the `ValidationException` is available:
 
 ```php
-use ProgrammatorDev\OpenWeatherMap\Exception\ValidationException;
+use ProgrammatorDev\YetAnotherPhpValidator\Exception\ValidationException;
 
 try {
     // An invalid latitude value is given
@@ -85,7 +84,7 @@ try {
 }
 catch (ValidationException $exception) {
     // Should print:
-    // The "latitude" value "999" is invalid. Must be between "-90" and "90".
+    // The "latitude" value should be between "-90" and "90", "999" given.
     echo $exception->getMessage();
 }
 ```

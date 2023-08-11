@@ -8,8 +8,8 @@ use PHPUnit\Framework\Attributes\DataProviderExternal;
 use ProgrammatorDev\OpenWeatherMap\Entity\Coordinate;
 use ProgrammatorDev\OpenWeatherMap\Entity\Geocoding\ZipCodeLocation;
 use ProgrammatorDev\OpenWeatherMap\Entity\Location;
-use ProgrammatorDev\OpenWeatherMap\Exception\ValidationException;
 use ProgrammatorDev\OpenWeatherMap\Test\DataProvider\InvalidParamDataProvider;
+use ProgrammatorDev\YetAnotherPhpValidator\Exception\ValidationException;
 
 class GeocodingEndpointTest extends AbstractTest
 {
