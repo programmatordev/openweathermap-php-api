@@ -10,18 +10,13 @@ use ProgrammatorDev\OpenWeatherMap\Exception\NotFoundException;
 use ProgrammatorDev\OpenWeatherMap\Exception\TooManyRequestsException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnauthorizedException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnexpectedErrorException;
-use ProgrammatorDev\OpenWeatherMap\Exception\ValidationException;
 use ProgrammatorDev\OpenWeatherMap\Util\CreateEntityListTrait;
-use ProgrammatorDev\OpenWeatherMap\Validator\BlankValidatorTrait;
-use ProgrammatorDev\OpenWeatherMap\Validator\CoordinateValidatorTrait;
-use ProgrammatorDev\OpenWeatherMap\Validator\GreaterThanValidatorTrait;
+use ProgrammatorDev\YetAnotherPhpValidator\Exception\ValidationException;
+use ProgrammatorDev\YetAnotherPhpValidator\Validator;
 
 class GeocodingEndpoint extends AbstractEndpoint
 {
     use CreateEntityListTrait;
-    use BlankValidatorTrait;
-    use CoordinateValidatorTrait;
-    use GreaterThanValidatorTrait;
 
     private const NUM_RESULTS = 5;
 
@@ -45,8 +40,8 @@ class GeocodingEndpoint extends AbstractEndpoint
      */
     public function getByLocationName(string $locationName, int $numResults = self::NUM_RESULTS): array
     {
-        $this->validateBlank('locationName', $locationName);
-        $this->validateGreaterThan('numResults', $numResults, 0);
+        Validator::notBlank()->assert($locationName, 'locationName');
+        Validator::greaterThan(0)->assert($numResults, 'numResults');
 
         $data = $this->sendRequest(
             method: 'GET',
@@ -71,8 +66,8 @@ class GeocodingEndpoint extends AbstractEndpoint
      */
     public function getByZipCode(string $zipCode, string $countryCode): ZipCodeLocation
     {
-        $this->validateBlank('zipCode', $zipCode);
-        $this->validateBlank('countryCode', $countryCode);
+        Validator::notBlank()->assert($zipCode, 'zipCode');
+        Validator::notBlank()->assert($countryCode, 'countryCode');
 
         $data = $this->sendRequest(
             method: 'GET',
@@ -97,8 +92,9 @@ class GeocodingEndpoint extends AbstractEndpoint
      */
     public function getByCoordinate(float $latitude, float $longitude, int $numResults = self::NUM_RESULTS): array
     {
-        $this->validateCoordinate($latitude, $longitude);
-        $this->validateGreaterThan('numResults', $numResults, 0);
+        Validator::range(-90, 90)->assert($latitude, 'latitude');
+        Validator::range(-180, 180)->assert($longitude, 'longitude');
+        Validator::greaterThan(0)->assert($numResults, 'numResults');
 
         $data = $this->sendRequest(
             method: 'GET',
