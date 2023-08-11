@@ -92,7 +92,7 @@ class AirPollutionEndpoint extends AbstractEndpoint
         Validator::range(-90, 90)->assert($latitude, 'latitude');
         Validator::range(-180, 180)->assert($longitude, 'longitude');
         Validator::lessThan(new \DateTime('now'))->assert($endDate, 'endDate');
-        Validator::lessThan($endDate)->assert($startDate, 'startDate');
+        Validator::greaterThan($startDate)->assert($endDate, 'endDate');
 
         $timezoneUtc = new \DateTimeZone('UTC');
 
