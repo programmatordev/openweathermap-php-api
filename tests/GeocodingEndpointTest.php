@@ -54,17 +54,18 @@ class GeocodingEndpointTest extends AbstractTest
         $this->assertSame(-9.1333, $coordinate->getLongitude());
     }
 
-    #[DataProvider('provideGeocodingGetByZipCodeWithBlankValueData')]
-    public function testGeocodingGetByZipCodeWithBlankValue(string $zipCode, string $countryCode)
+    #[DataProvider('provideGeocodingGetByZipCodeWithInvalidValueData')]
+    public function testGeocodingGetByZipCodeWithInvalidValue(string $zipCode, string $countryCode)
     {
         $this->expectException(ValidationException::class);
         $this->getApi()->getGeocoding()->getByZipCode($zipCode, $countryCode);
     }
 
-    public static function provideGeocodingGetByZipCodeWithBlankValueData(): \Generator
+    public static function provideGeocodingGetByZipCodeWithInvalidValueData(): \Generator
     {
         yield 'blank zip code' => ['', 'pt'];
         yield 'blank country code' => ['1000-100', ''];
+        yield 'invalid country code' => ['1000-100', 'invalid'];
     }
 
     public function testGeocodingGetByCoordinate()

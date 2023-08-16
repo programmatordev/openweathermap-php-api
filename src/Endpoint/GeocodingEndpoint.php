@@ -67,7 +67,7 @@ class GeocodingEndpoint extends AbstractEndpoint
     public function getByZipCode(string $zipCode, string $countryCode): ZipCodeLocation
     {
         Validator::notBlank()->assert($zipCode, 'zipCode');
-        Validator::notBlank()->assert($countryCode, 'countryCode');
+        Validator::country()->assert($countryCode, 'countryCode');
 
         $data = $this->sendRequest(
             method: 'GET',

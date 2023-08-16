@@ -133,7 +133,7 @@ class AbstractEndpoint
 
         // Add application key to all requests
         $query = $query + [
-            'appid' => $this->api->getConfig()->getApplicationKey()
+            'appid' => $this->config->getApplicationKey()
         ];
 
         return \sprintf('%s?%s', $baseUrl, http_build_query($query));
