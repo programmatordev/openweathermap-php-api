@@ -17,13 +17,13 @@ class Config
 
     public function __construct(array $options = [])
     {
-        $resolver = new OptionsResolver();
-        $this->configureOptions($resolver);
-        $this->options = $resolver->resolve($options);
+        $this->options = $this->resolveOptions($options);
     }
 
-    private function configureOptions(OptionsResolver $resolver): void
+    private function resolveOptions(array $options): array
     {
+        $resolver = new OptionsResolver();
+
         $resolver->setDefaults([
             'unitSystem' => UnitSystem::METRIC,
             'language' => Language::ENGLISH,
@@ -46,6 +46,8 @@ class Config
         });
         $resolver->setAllowedValues('unitSystem', UnitSystem::getList());
         $resolver->setAllowedValues('language', Language::getList());
+
+        return $resolver->resolve($options);
     }
 
     public function getApplicationKey(): string
