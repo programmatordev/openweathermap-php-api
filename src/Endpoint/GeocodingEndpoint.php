@@ -26,7 +26,7 @@ class GeocodingEndpoint extends AbstractEndpoint
 
     private string $urlGeocodingReverse = 'https://api.openweathermap.org/geo/1.0/reverse';
 
-    protected ?int $cacheTtl = 60 * 60 * 24 * 30; // 30 days
+    protected int $cacheTtl = 60 * 60 * 24 * 30; // 30 days
 
     /**
      * @return Location[]

@@ -39,7 +39,7 @@ class AbstractEndpoint
 
     protected string $language;
 
-    protected ?int $cacheTtl = 60 * 10; // 10 minutes
+    protected int $cacheTtl = 60 * 10; // 10 minutes
 
     public function __construct(protected OpenWeatherMap $api)
     {
