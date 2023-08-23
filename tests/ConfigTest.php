@@ -2,7 +2,6 @@
 
 namespace ProgrammatorDev\OpenWeatherMap\Test;
 
-use Monolog\Logger;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\DataProviderExternal;
 use ProgrammatorDev\OpenWeatherMap\Config;
@@ -11,7 +10,6 @@ use ProgrammatorDev\OpenWeatherMap\Test\DataProvider\InvalidParamDataProvider;
 use ProgrammatorDev\YetAnotherPhpValidator\Exception\ValidationException;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
 
@@ -45,8 +43,8 @@ class ConfigTest extends AbstractTest
             'unitSystem' => 'imperial',
             'language' => 'pt',
             'httpClientBuilder' => new HttpClientBuilder(),
-            'cache' => new FilesystemAdapter(),
-            'logger' => new Logger('test')
+            'cache' => $this->createMock(CacheItemPoolInterface::class),
+            'logger' => $this->createMock(LoggerInterface::class)
         ]);
 
         $this->assertSame('newtestappkey', $config->getApplicationKey());
@@ -139,13 +137,13 @@ class ConfigTest extends AbstractTest
 
     public function testConfigSetCache()
     {
-        $this->config->setCache(new FilesystemAdapter());
+        $this->config->setCache($this->createMock(CacheItemPoolInterface::class));
         $this->assertInstanceOf(CacheItemPoolInterface::class, $this->config->getCache());
     }
 
     public function testConfigSetLogger()
     {
-        $this->config->setLogger(new Logger('test'));
+        $this->config->setLogger($this->createMock(LoggerInterface::class));
         $this->assertInstanceOf(LoggerInterface::class, $this->config->getLogger());
     }
 }

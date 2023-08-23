@@ -29,7 +29,7 @@ class WeatherEndpointTest extends AbstractTest
             )
         );
 
-        $response = $this->getApi()->getWeather()->getCurrent(38.7077507, -9.1365919);
+        $response = $this->givenApi()->getWeather()->getCurrent(50, 50);
         $this->assertCurrentResponse($response);
     }
 
@@ -37,7 +37,7 @@ class WeatherEndpointTest extends AbstractTest
     public function testWeatherGetCurrentWithInvalidCoordinate(float $latitude, float $longitude, string $expectedException)
     {
         $this->expectException($expectedException);
-        $this->getApi()->getWeather()->getCurrent($latitude, $longitude);
+        $this->givenApi()->getWeather()->getCurrent($latitude, $longitude);
     }
 
     public function testWeatherGetForecast()
@@ -49,7 +49,7 @@ class WeatherEndpointTest extends AbstractTest
             )
         );
 
-        $response = $this->getApi()->getWeather()->getForecast(38.7077507, -9.1365919, 1);
+        $response = $this->givenApi()->getWeather()->getForecast(50, 50, 1);
         $this->assertForecastResponse($response);
     }
 
@@ -57,19 +57,19 @@ class WeatherEndpointTest extends AbstractTest
     public function testWeatherGetForecastWithInvalidCoordinate(float $latitude, float $longitude, string $expectedException)
     {
         $this->expectException($expectedException);
-        $this->getApi()->getWeather()->getForecast($latitude, $longitude, 10);
+        $this->givenApi()->getWeather()->getForecast($latitude, $longitude, 10);
     }
 
     #[DataProviderExternal(InvalidParamDataProvider::class, 'provideInvalidNumResultsData')]
     public function testWeatherGetForecastWithInvalidNumResults(int $numResults, string $expectedException)
     {
         $this->expectException($expectedException);
-        $this->getApi()->getWeather()->getForecast(38.7077507, -9.1365919, $numResults);
+        $this->givenApi()->getWeather()->getForecast(50, 50, $numResults);
     }
 
     public function testWeatherMethodsWithExist()
     {
-        $weatherEndpoint = $this->getApi()->getWeather();
+        $weatherEndpoint = $this->givenApi()->getWeather();
 
         $this->assertSame(true, method_exists($weatherEndpoint, 'withLanguage'));
         $this->assertSame(true, method_exists($weatherEndpoint, 'withUnitSystem'));

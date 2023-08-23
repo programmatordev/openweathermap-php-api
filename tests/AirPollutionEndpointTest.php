@@ -23,7 +23,7 @@ class AirPollutionEndpointTest extends AbstractTest
             )
         );
 
-        $response = $this->getApi()->getAirPollution()->getCurrent(38.7077507, -9.1365919);
+        $response = $this->givenApi()->getAirPollution()->getCurrent(50, 50);
         $this->assertCurrentResponse($response);
     }
 
@@ -31,7 +31,7 @@ class AirPollutionEndpointTest extends AbstractTest
     public function testAirPollutionGetCurrentWithInvalidCoordinate(float $latitude, float $longitude, string $expectedException)
     {
         $this->expectException($expectedException);
-        $this->getApi()->getAirPollution()->getCurrent($latitude, $longitude);
+        $this->givenApi()->getAirPollution()->getCurrent($latitude, $longitude);
     }
 
     public function testAirPollutionGetForecast()
@@ -43,7 +43,7 @@ class AirPollutionEndpointTest extends AbstractTest
             )
         );
 
-        $response = $this->getApi()->getAirPollution()->getForecast(38.7077507, -9.1365919);
+        $response = $this->givenApi()->getAirPollution()->getForecast(50, 50);
         $this->assertForecastResponse($response);
     }
 
@@ -51,7 +51,7 @@ class AirPollutionEndpointTest extends AbstractTest
     public function testAirPollutionGetForecastWithInvalidCoordinate(float $latitude, float $longitude, string $expectedException)
     {
         $this->expectException($expectedException);
-        $this->getApi()->getAirPollution()->getForecast($latitude, $longitude);
+        $this->givenApi()->getAirPollution()->getForecast($latitude, $longitude);
     }
 
     public function testAirPollutionGetHistory()
@@ -65,9 +65,9 @@ class AirPollutionEndpointTest extends AbstractTest
 
         $utcTimezone = new \DateTimeZone('UTC');
 
-        $response = $this->getApi()->getAirPollution()->getHistory(
-            38.7077507,
-            -9.1365919,
+        $response = $this->givenApi()->getAirPollution()->getHistory(
+            50,
+            50,
             new \DateTimeImmutable('-5 days', $utcTimezone),
             new \DateTimeImmutable('-4 days', $utcTimezone)
         );
@@ -82,7 +82,7 @@ class AirPollutionEndpointTest extends AbstractTest
         $startDate = new \DateTimeImmutable('-5 days');
         $endDate = new \DateTimeImmutable('-4 days');
 
-        $this->getApi()->getAirPollution()->getHistory($latitude, $longitude, $startDate, $endDate);
+        $this->givenApi()->getAirPollution()->getHistory($latitude, $longitude, $startDate, $endDate);
     }
 
     #[DataProviderExternal(InvalidParamDataProvider::class, 'provideInvalidPastDateData')]
@@ -92,9 +92,9 @@ class AirPollutionEndpointTest extends AbstractTest
     )
     {
         $this->expectException($expectedException);
-        $this->getApi()->getAirPollution()->getHistory(
-            38.7077507,
-            -9.1365919,
+        $this->givenApi()->getAirPollution()->getHistory(
+            50,
+            50,
             $startDate,
             new \DateTimeImmutable('-5 days', new \DateTimeZone('UTC'))
         );
@@ -107,9 +107,9 @@ class AirPollutionEndpointTest extends AbstractTest
     )
     {
         $this->expectException($expectedException);
-        $this->getApi()->getAirPollution()->getHistory(
-            38.7077507,
-            -9.1365919,
+        $this->givenApi()->getAirPollution()->getHistory(
+            50,
+            50,
             new \DateTimeImmutable('-5 days', new \DateTimeZone('UTC')),
             $endDate
         );
@@ -123,7 +123,7 @@ class AirPollutionEndpointTest extends AbstractTest
     )
     {
         $this->expectException($expectedException);
-        $this->getApi()->getAirPollution()->getHistory(38.7077507, -9.1365919, $startDate, $endDate);
+        $this->givenApi()->getAirPollution()->getHistory(50, 50, $startDate, $endDate);
     }
 
     private function assertCurrentResponse(AirPollutionLocation $response): void
