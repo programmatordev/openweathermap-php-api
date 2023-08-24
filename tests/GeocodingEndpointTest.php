@@ -15,6 +15,7 @@ use ProgrammatorDev\YetAnotherPhpValidator\Exception\ValidationException;
 class GeocodingEndpointTest extends AbstractTest
 {
     // --- BY LOCATION NAME ---
+
     public function testGeocodingGetByLocationName()
     {
         $this->mockHttpClient->addResponse(
