@@ -4,16 +4,18 @@ namespace ProgrammatorDev\OpenWeatherMap\Test;
 
 use Nyholm\Psr7\Response;
 use PHPUnit\Framework\Attributes\DataProviderExternal;
+use ProgrammatorDev\OpenWeatherMap\Endpoint\AirPollutionEndpoint;
 use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\AirPollution;
 use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\AirPollutionLocationList;
 use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\AirQuality;
 use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\AirPollutionLocation;
 use ProgrammatorDev\OpenWeatherMap\Entity\Coordinate;
-use ProgrammatorDev\OpenWeatherMap\Entity\Location;
 use ProgrammatorDev\OpenWeatherMap\Test\DataProvider\InvalidParamDataProvider;
 
 class AirPollutionEndpointTest extends AbstractTest
 {
+    // --- CURRENT ---
+
     public function testAirPollutionGetCurrent()
     {
         $this->mockHttpClient->addResponse(
@@ -34,6 +36,8 @@ class AirPollutionEndpointTest extends AbstractTest
         $this->givenApi()->getAirPollution()->getCurrent($latitude, $longitude);
     }
 
+    // --- FORECAST ---
+
     public function testAirPollutionGetForecast()
     {
         $this->mockHttpClient->addResponse(
@@ -53,6 +57,8 @@ class AirPollutionEndpointTest extends AbstractTest
         $this->expectException($expectedException);
         $this->givenApi()->getAirPollution()->getForecast($latitude, $longitude);
     }
+
+    // --- HISTORY ---
 
     public function testAirPollutionGetHistory()
     {
@@ -125,6 +131,17 @@ class AirPollutionEndpointTest extends AbstractTest
         $this->expectException($expectedException);
         $this->givenApi()->getAirPollution()->getHistory(50, 50, $startDate, $endDate);
     }
+
+    // --- ASSERT METHODS EXIST ---
+
+    public function testAirPollutionMethodsExist()
+    {
+        $this->assertSame(false, method_exists(AirPollutionEndpoint::class, 'withUnitSystem'));
+        $this->assertSame(false, method_exists(AirPollutionEndpoint::class, 'withLanguage'));
+        $this->assertSame(true, method_exists(AirPollutionEndpoint::class, 'withCacheTtl'));
+    }
+
+    // --- ASSERT RESPONSES ---
 
     private function assertCurrentResponse(AirPollutionLocation $response): void
     {

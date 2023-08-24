@@ -5,6 +5,7 @@ namespace ProgrammatorDev\OpenWeatherMap\Test;
 use Nyholm\Psr7\Response;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\DataProviderExternal;
+use ProgrammatorDev\OpenWeatherMap\Endpoint\GeocodingEndpoint;
 use ProgrammatorDev\OpenWeatherMap\Entity\Coordinate;
 use ProgrammatorDev\OpenWeatherMap\Entity\Geocoding\ZipCodeLocation;
 use ProgrammatorDev\OpenWeatherMap\Entity\Location;
@@ -13,6 +14,7 @@ use ProgrammatorDev\YetAnotherPhpValidator\Exception\ValidationException;
 
 class GeocodingEndpointTest extends AbstractTest
 {
+    // --- BY LOCATION NAME ---
     public function testGeocodingGetByLocationName()
     {
         $this->mockHttpClient->addResponse(
@@ -31,6 +33,8 @@ class GeocodingEndpointTest extends AbstractTest
         $this->expectException(ValidationException::class);
         $this->givenApi()->getGeocoding()->getByLocationName('');
     }
+
+    // --- BY ZIP CODE ---
 
     public function testGeocodingGetByZipCode()
     {
@@ -68,6 +72,8 @@ class GeocodingEndpointTest extends AbstractTest
         yield 'invalid country code' => ['1000-100', 'invalid'];
     }
 
+    // --- BY COORDINATE ---
+
     public function testGeocodingGetByCoordinate()
     {
         $this->mockHttpClient->addResponse(
@@ -101,6 +107,17 @@ class GeocodingEndpointTest extends AbstractTest
         $this->expectException($expectedException);
         $this->givenApi()->getGeocoding()->getByCoordinate(50, 50, $numResults);
     }
+
+    // --- ASSERT METHODS EXIST ---
+
+    public function testGeocodingMethodsExist()
+    {
+        $this->assertSame(false, method_exists(GeocodingEndpoint::class, 'withUnitSystem'));
+        $this->assertSame(false, method_exists(GeocodingEndpoint::class, 'withLanguage'));
+        $this->assertSame(true, method_exists(GeocodingEndpoint::class, 'withCacheTtl'));
+    }
+
+    // --- ASSERT RESPONSES ---
 
     /**
      * @param Location[] $response

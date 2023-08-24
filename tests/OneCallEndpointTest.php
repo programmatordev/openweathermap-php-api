@@ -4,6 +4,7 @@ namespace ProgrammatorDev\OpenWeatherMap\Test;
 
 use Nyholm\Psr7\Response;
 use PHPUnit\Framework\Attributes\DataProviderExternal;
+use ProgrammatorDev\OpenWeatherMap\Endpoint\OneCallEndpoint;
 use ProgrammatorDev\OpenWeatherMap\Entity\Coordinate;
 use ProgrammatorDev\OpenWeatherMap\Entity\Icon;
 use ProgrammatorDev\OpenWeatherMap\Entity\MoonPhase;
@@ -21,6 +22,8 @@ use ProgrammatorDev\OpenWeatherMap\Test\DataProvider\InvalidParamDataProvider;
 
 class OneCallEndpointTest extends AbstractTest
 {
+    // --- WEATHER ---
+
     public function testOneCallGetWeather()
     {
         $this->mockHttpClient->addResponse(
@@ -40,6 +43,8 @@ class OneCallEndpointTest extends AbstractTest
         $this->expectException($expectedException);
         $this->givenApi()->getOneCall()->getWeather($latitude, $longitude);
     }
+
+    // --- HISTORY MOMENT ---
 
     public function testOneCallGetHistoryMoment()
     {
@@ -76,6 +81,8 @@ class OneCallEndpointTest extends AbstractTest
         $this->givenApi()->getOneCall()->getHistoryMoment(50, 50, $date);
     }
 
+    // --- HISTORY AGGREGATE ---
+
     public function testOneCallGetHistoryAggregate()
     {
         $this->mockHttpClient->addResponse(
@@ -111,13 +118,16 @@ class OneCallEndpointTest extends AbstractTest
         $this->givenApi()->getOneCall()->getHistoryAggregate(50, 50, $date);
     }
 
-    public function testOneCallMethodsWithExist()
-    {
-        $weatherEndpoint = $this->givenApi()->getWeather();
+    // --- ASSERT METHODS EXIST ---
 
-        $this->assertSame(true, method_exists($weatherEndpoint, 'withLanguage'));
-        $this->assertSame(true, method_exists($weatherEndpoint, 'withUnitSystem'));
+    public function testOneCallMethodsExist()
+    {
+        $this->assertSame(true, method_exists(OneCallEndpoint::class, 'withUnitSystem'));
+        $this->assertSame(true, method_exists(OneCallEndpoint::class, 'withLanguage'));
+        $this->assertSame(true, method_exists(OneCallEndpoint::class, 'withCacheTtl'));
     }
+
+    // --- ASSERT RESPONSES ---
 
     private function assertWeatherResponse(OneCall $response): void
     {

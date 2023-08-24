@@ -4,6 +4,7 @@ namespace ProgrammatorDev\OpenWeatherMap\Test;
 
 use Nyholm\Psr7\Response;
 use PHPUnit\Framework\Attributes\DataProviderExternal;
+use ProgrammatorDev\OpenWeatherMap\Endpoint\WeatherEndpoint;
 use ProgrammatorDev\OpenWeatherMap\Entity\AtmosphericPressure;
 use ProgrammatorDev\OpenWeatherMap\Entity\Coordinate;
 use ProgrammatorDev\OpenWeatherMap\Entity\Icon;
@@ -20,6 +21,8 @@ use ProgrammatorDev\OpenWeatherMap\Test\DataProvider\InvalidParamDataProvider;
 
 class WeatherEndpointTest extends AbstractTest
 {
+    // --- CURRENT ---
+
     public function testWeatherGetCurrent()
     {
         $this->mockHttpClient->addResponse(
@@ -39,6 +42,8 @@ class WeatherEndpointTest extends AbstractTest
         $this->expectException($expectedException);
         $this->givenApi()->getWeather()->getCurrent($latitude, $longitude);
     }
+
+    // --- FORECAST ---
 
     public function testWeatherGetForecast()
     {
@@ -67,13 +72,16 @@ class WeatherEndpointTest extends AbstractTest
         $this->givenApi()->getWeather()->getForecast(50, 50, $numResults);
     }
 
-    public function testWeatherMethodsWithExist()
-    {
-        $weatherEndpoint = $this->givenApi()->getWeather();
+    // --- ASSERT METHODS EXIST ---
 
-        $this->assertSame(true, method_exists($weatherEndpoint, 'withLanguage'));
-        $this->assertSame(true, method_exists($weatherEndpoint, 'withUnitSystem'));
+    public function testWeatherMethodsExist()
+    {
+        $this->assertSame(true, method_exists(WeatherEndpoint::class, 'withUnitSystem'));
+        $this->assertSame(true, method_exists(WeatherEndpoint::class, 'withLanguage'));
+        $this->assertSame(true, method_exists(WeatherEndpoint::class, 'withCacheTtl'));
     }
+
+    // --- ASSERT RESPONSES ---
 
     private function assertCurrentResponse(WeatherLocation $response): void
     {
