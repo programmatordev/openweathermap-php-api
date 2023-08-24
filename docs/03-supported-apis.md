@@ -281,7 +281,7 @@ $openWeatherMap->getWeather()
 withCacheTtl(int $seconds): self
 ```
 
-Makes a request and saves into cache with the provided value in seconds. 
+Makes a request and saves into cache for the provided duration in seconds. 
 
 If `0` seconds is provided, the request will not be cached.
 
