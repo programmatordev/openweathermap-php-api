@@ -299,7 +299,7 @@
 
 ### AirPollutionLocationList
 
-`getCoordinate()`: `float`
+`getCoordinate()`: [`Coordinate`](#coordinate)
 
 `getList()`: [`AirPollution[]`](#airpollution)
 

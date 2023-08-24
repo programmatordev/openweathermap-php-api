@@ -278,10 +278,16 @@ $openWeatherMap->getWeather()
 #### `withCacheTtl`
 
 ```php
-withCacheTtl(?int $time): self
+withCacheTtl(int $seconds): self
 ```
 
-Makes a request and saves into cache with the provided time duration value (in seconds). 
+Makes a request and saves into cache for the provided duration in seconds. 
+
+If `0` seconds is provided, the request will not be cached.
+
+> **Note**
+> Setting cache to `0` seconds will **not** invalidate any existing cache.
+
 Check the [Cache TTL](02-configuration.md#cache-ttl) section for more information regarding default values.
 
 Available for all APIs if `cache` is enabled in the [configuration](02-configuration.md#cache).
