@@ -24,7 +24,7 @@ class ApiErrorTest extends AbstractTest
         );
 
         $this->expectException($expectedException);
-        $this->getApi()->getWeather()->getCurrent(38.7077507, -9.1365919);
+        $this->givenApi()->getWeather()->getCurrent(38.7077507, -9.1365919);
     }
 
     public static function provideApiErrorData(): \Generator

@@ -2,7 +2,7 @@
     "name": "programmatordev/openweathermap-php-api",
     "description": "OpenWeatherMap PHP library that provides convenient access to the OpenWeatherMap API",
     "type": "library",
-    "keywords": ["OpenWeatherMap", "API", "PHP", "SDK", "PSR-18", "PSR-17", "PSR-6", "PSR-3"],
+    "keywords": ["OpenWeatherMap", "API", "PHP", "PHP8", "SDK", "PSR-18", "PSR-17", "PSR-6", "PSR-3"],
     "license": "MIT",
     "authors": [
         {

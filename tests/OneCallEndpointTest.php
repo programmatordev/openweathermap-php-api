@@ -4,6 +4,7 @@ namespace ProgrammatorDev\OpenWeatherMap\Test;
 
 use Nyholm\Psr7\Response;
 use PHPUnit\Framework\Attributes\DataProviderExternal;
+use ProgrammatorDev\OpenWeatherMap\Endpoint\OneCallEndpoint;
 use ProgrammatorDev\OpenWeatherMap\Entity\Coordinate;
 use ProgrammatorDev\OpenWeatherMap\Entity\Icon;
 use ProgrammatorDev\OpenWeatherMap\Entity\MoonPhase;
@@ -21,6 +22,8 @@ use ProgrammatorDev\OpenWeatherMap\Test\DataProvider\InvalidParamDataProvider;
 
 class OneCallEndpointTest extends AbstractTest
 {
+    // --- WEATHER ---
+
     public function testOneCallGetWeather()
     {
         $this->mockHttpClient->addResponse(
@@ -30,7 +33,7 @@ class OneCallEndpointTest extends AbstractTest
             )
         );
 
-        $response = $this->getApi()->getOneCall()->getWeather(38.7077507, -9.1365919);
+        $response = $this->givenApi()->getOneCall()->getWeather(50, 50);
         $this->assertWeatherResponse($response);
     }
 
@@ -38,8 +41,10 @@ class OneCallEndpointTest extends AbstractTest
     public function testOneCallGetWeatherWithInvalidCoordinate(float $latitude, float $longitude, string $expectedException)
     {
         $this->expectException($expectedException);
-        $this->getApi()->getOneCall()->getWeather($latitude, $longitude);
+        $this->givenApi()->getOneCall()->getWeather($latitude, $longitude);
     }
+
+    // --- HISTORY MOMENT ---
 
     public function testOneCallGetHistoryMoment()
     {
@@ -50,9 +55,9 @@ class OneCallEndpointTest extends AbstractTest
             )
         );
 
-        $response = $this->getApi()->getOneCall()->getHistoryMoment(
-            38.7077507,
-            -9.1365919,
+        $response = $this->givenApi()->getOneCall()->getHistoryMoment(
+            50,
+            50,
             new \DateTimeImmutable('2023-01-01 00:00:00')
         );
         $this->assertHistoryMomentResponse($response);
@@ -62,7 +67,7 @@ class OneCallEndpointTest extends AbstractTest
     public function testOneCallGetHistoryMomentWithInvalidCoordinate(float $latitude, float $longitude, string $expectedException)
     {
         $this->expectException($expectedException);
-        $this->getApi()->getOneCall()->getHistoryMoment(
+        $this->givenApi()->getOneCall()->getHistoryMoment(
             $latitude,
             $longitude,
             new \DateTimeImmutable('2023-01-01 00:00:00')
@@ -73,8 +78,10 @@ class OneCallEndpointTest extends AbstractTest
     public function testOneCallGetHistoryMomentWithInvalidPastDate(\DateTimeImmutable $date, string $expectedException)
     {
         $this->expectException($expectedException);
-        $this->getApi()->getOneCall()->getHistoryMoment(38.7077507, -9.1365919, $date);
+        $this->givenApi()->getOneCall()->getHistoryMoment(50, 50, $date);
     }
+
+    // --- HISTORY AGGREGATE ---
 
     public function testOneCallGetHistoryAggregate()
     {
@@ -85,9 +92,9 @@ class OneCallEndpointTest extends AbstractTest
             )
         );
 
-        $response = $this->getApi()->getOneCall()->getHistoryAggregate(
-            38.7077507,
-            -9.1365919,
+        $response = $this->givenApi()->getOneCall()->getHistoryAggregate(
+            50,
+            50,
             new \DateTimeImmutable('2023-01-01')
         );
         $this->assertHistoryAggregateResponse($response);
@@ -97,7 +104,7 @@ class OneCallEndpointTest extends AbstractTest
     public function testOneCallGetHistoryAggregateWithInvalidCoordinate(float $latitude, float $longitude, string $expectedException)
     {
         $this->expectException($expectedException);
-        $this->getApi()->getOneCall()->getHistoryAggregate(
+        $this->givenApi()->getOneCall()->getHistoryAggregate(
             $latitude,
             $longitude,
             new \DateTimeImmutable('2023-01-01')
@@ -108,16 +115,19 @@ class OneCallEndpointTest extends AbstractTest
     public function testOneCallGetHistoryAggregateWithInvalidPastDate(\DateTimeImmutable $date, string $expectedException)
     {
         $this->expectException($expectedException);
-        $this->getApi()->getOneCall()->getHistoryAggregate(38.7077507, -9.1365919, $date);
+        $this->givenApi()->getOneCall()->getHistoryAggregate(50, 50, $date);
     }
 
-    public function testOneCallMethodsWithExist()
+    // --- ASSERT METHODS EXIST ---
+
+    public function testOneCallMethodsExist()
     {
-        $weatherEndpoint = $this->getApi()->getWeather();
-
-        $this->assertSame(true, method_exists($weatherEndpoint, 'withLanguage'));
-        $this->assertSame(true, method_exists($weatherEndpoint, 'withUnitSystem'));
+        $this->assertSame(true, method_exists(OneCallEndpoint::class, 'withUnitSystem'));
+        $this->assertSame(true, method_exists(OneCallEndpoint::class, 'withLanguage'));
+        $this->assertSame(true, method_exists(OneCallEndpoint::class, 'withCacheTtl'));
     }
+
+    // --- ASSERT RESPONSES ---
 
     private function assertWeatherResponse(OneCall $response): void
     {

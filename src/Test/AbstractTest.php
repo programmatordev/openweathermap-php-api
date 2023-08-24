@@ -21,7 +21,7 @@ class AbstractTest extends TestCase
         $this->mockHttpClient = new Client();
     }
 
-    protected function getApi(): OpenWeatherMap
+    protected function givenApi(): OpenWeatherMap
     {
         return new OpenWeatherMap(
             new Config([
