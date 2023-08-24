@@ -70,8 +70,12 @@ class AbstractEndpoint
     {
         $this->configurePlugins();
 
-        $uri = $this->buildUrl($baseUrl, $query);
-        $response = $this->httpClientBuilder->getHttpClient()->send($method, $uri, $headers, $body);
+        $response = $this->httpClientBuilder->getHttpClient()->send(
+            $method,
+            $this->buildUrl($baseUrl, $query),
+            $headers,
+            $body
+        );
 
         if (($statusCode = $response->getStatusCode()) >= 400) {
             $this->handleResponseErrors($response, $statusCode);
@@ -84,14 +88,13 @@ class AbstractEndpoint
     {
         // Plugin order is important
         // CachePlugin should come first, otherwise the LoggerPlugin will log requests even if they are cached
+
         if ($this->cache !== null) {
             $this->httpClientBuilder->addPlugin(
                 new CachePlugin($this->cache, $this->httpClientBuilder->getStreamFactory(), [
                     'default_ttl' => $this->cacheTtl,
                     'cache_lifetime' => 0,
-                    'cache_listeners' => ($this->logger !== null)
-                        ? [new LoggerCacheListener($this->logger)]
-                        : []
+                    'cache_listeners' => ($this->logger !== null) ? [new LoggerCacheListener($this->logger)] : []
                 ])
             );
         }
