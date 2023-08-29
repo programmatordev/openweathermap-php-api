@@ -47,6 +47,6 @@ class AbstractEndpointTest extends AbstractTest
         $endpoint = new AbstractEndpoint($api);
         $reflectionClass = new \ReflectionClass($endpoint);
         $sendRequest = $reflectionClass->getMethod('sendRequest');
-        $sendRequest->invokeArgs($endpoint, ['GET', 'https://mock.test']);
+        $sendRequest->invokeArgs($endpoint, ['GET', '/test']);
     }
 }
