@@ -3,8 +3,8 @@
 namespace ProgrammatorDev\OpenWeatherMap\Endpoint;
 
 use Http\Client\Exception;
-use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\WithLanguageTrait;
-use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\WithUnitSystemTrait;
+use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\LanguageTrait;
+use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\UnitSystemTrait;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\WeatherAggregate;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\WeatherLocation;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\OneCall;
@@ -18,8 +18,8 @@ use ProgrammatorDev\YetAnotherPhpValidator\Validator;
 
 class OneCallEndpoint extends AbstractEndpoint
 {
-    use WithUnitSystemTrait;
-    use WithLanguageTrait;
+    use UnitSystemTrait;
+    use LanguageTrait;
 
     /**
      * @throws Exception

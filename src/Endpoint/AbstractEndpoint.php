@@ -6,7 +6,7 @@ use Http\Client\Common\Plugin\CachePlugin;
 use Http\Client\Common\Plugin\LoggerPlugin;
 use Http\Client\Exception;
 use ProgrammatorDev\OpenWeatherMap\Config;
-use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\WithCacheTtlTrait;
+use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\CacheTtlTrait;
 use ProgrammatorDev\OpenWeatherMap\Entity\Error;
 use ProgrammatorDev\OpenWeatherMap\Exception\BadRequestException;
 use ProgrammatorDev\OpenWeatherMap\Exception\NotFoundException;
@@ -24,7 +24,7 @@ use Psr\Log\LoggerInterface;
 
 class AbstractEndpoint
 {
-    use WithCacheTtlTrait;
+    use CacheTtlTrait;
 
     private Config $config;
 

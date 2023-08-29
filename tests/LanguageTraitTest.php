@@ -5,7 +5,7 @@ namespace ProgrammatorDev\OpenWeatherMap\Test;
 use PHPUnit\Framework\Attributes\DataProviderExternal;
 use ProgrammatorDev\OpenWeatherMap\Test\DataProvider\InvalidParamDataProvider;
 
-class WithLanguageTest extends AbstractTest
+class LanguageTraitTest extends AbstractTest
 {
     public function testWithLanguage()
     {

@@ -2,7 +2,7 @@
 
 namespace ProgrammatorDev\OpenWeatherMap\Test;
 
-class WithCacheTtlTest extends AbstractTest
+class CacheTtlTraitTest extends AbstractTest
 {
     public function testWithCacheTtl()
     {

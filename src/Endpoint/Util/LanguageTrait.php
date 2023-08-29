@@ -6,7 +6,7 @@ use ProgrammatorDev\OpenWeatherMap\Language\Language;
 use ProgrammatorDev\YetAnotherPhpValidator\Exception\ValidationException;
 use ProgrammatorDev\YetAnotherPhpValidator\Validator;
 
-trait WithLanguageTrait
+trait LanguageTrait
 {
     /**
      * @throws ValidationException

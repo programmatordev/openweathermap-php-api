@@ -3,8 +3,8 @@
 namespace ProgrammatorDev\OpenWeatherMap\Endpoint;
 
 use Http\Client\Exception;
-use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\WithLanguageTrait;
-use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\WithUnitSystemTrait;
+use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\LanguageTrait;
+use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\UnitSystemTrait;
 use ProgrammatorDev\OpenWeatherMap\Entity\Weather\WeatherLocation;
 use ProgrammatorDev\OpenWeatherMap\Entity\Weather\WeatherLocationList;
 use ProgrammatorDev\OpenWeatherMap\Exception\BadRequestException;
@@ -17,8 +17,8 @@ use ProgrammatorDev\YetAnotherPhpValidator\Validator;
 
 class WeatherEndpoint extends AbstractEndpoint
 {
-    use WithUnitSystemTrait;
-    use WithLanguageTrait;
+    use UnitSystemTrait;
+    use LanguageTrait;
 
     private const NUM_RESULTS = 40;
 
