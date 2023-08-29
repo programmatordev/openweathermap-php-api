@@ -6,7 +6,7 @@ use ProgrammatorDev\OpenWeatherMap\UnitSystem\UnitSystem;
 use ProgrammatorDev\YetAnotherPhpValidator\Exception\ValidationException;
 use ProgrammatorDev\YetAnotherPhpValidator\Validator;
 
-trait WithUnitSystemTrait
+trait UnitSystemTrait
 {
     /**
      * @throws ValidationException

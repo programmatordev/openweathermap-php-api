@@ -5,7 +5,7 @@ namespace ProgrammatorDev\OpenWeatherMap\Test;
 use PHPUnit\Framework\Attributes\DataProviderExternal;
 use ProgrammatorDev\OpenWeatherMap\Test\DataProvider\InvalidParamDataProvider;
 
-class WithUnitSystemTest extends AbstractTest
+class UnitSystemTraitTest extends AbstractTest
 {
     public function testWithUnitSystem()
     {
