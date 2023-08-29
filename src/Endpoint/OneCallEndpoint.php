@@ -21,12 +21,6 @@ class OneCallEndpoint extends AbstractEndpoint
     use WithUnitSystemTrait;
     use WithLanguageTrait;
 
-    private string $urlOneCall = 'https://api.openweathermap.org/data/3.0/onecall';
-
-    private string $urlOneCallHistoryMoment = 'https://api.openweathermap.org/data/3.0/onecall/timemachine';
-
-    private string $urlOneCallHistoryAggregate = 'https://api.openweathermap.org/data/3.0/onecall/day_summary';
-
     /**
      * @throws Exception
      * @throws BadRequestException
@@ -43,7 +37,7 @@ class OneCallEndpoint extends AbstractEndpoint
 
         $data = $this->sendRequest(
             method: 'GET',
-            baseUrl: $this->urlOneCall,
+            path: '/data/3.0/onecall',
             query: [
                 'lat' => $latitude,
                 'lon' => $longitude,
@@ -72,7 +66,7 @@ class OneCallEndpoint extends AbstractEndpoint
 
         $data = $this->sendRequest(
             method: 'GET',
-            baseUrl: $this->urlOneCallHistoryMoment,
+            path: '/data/3.0/onecall/timemachine',
             query: [
                 'lat' => $latitude,
                 'lon' => $longitude,
@@ -102,7 +96,7 @@ class OneCallEndpoint extends AbstractEndpoint
 
         $data = $this->sendRequest(
             method: 'GET',
-            baseUrl: $this->urlOneCallHistoryAggregate,
+            path: '/data/3.0/onecall/day_summary',
             query: [
                 'lat' => $latitude,
                 'lon' => $longitude,

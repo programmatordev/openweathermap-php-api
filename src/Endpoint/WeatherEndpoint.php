@@ -22,10 +22,6 @@ class WeatherEndpoint extends AbstractEndpoint
 
     private const NUM_RESULTS = 40;
 
-    private string $urlWeather = 'https://api.openweathermap.org/data/2.5/weather';
-
-    private string $urlWeatherForecast = 'https://api.openweathermap.org/data/2.5/forecast';
-
     /**
      * @throws Exception
      * @throws BadRequestException
@@ -42,7 +38,7 @@ class WeatherEndpoint extends AbstractEndpoint
 
         $data = $this->sendRequest(
             method: 'GET',
-            baseUrl: $this->urlWeather,
+            path: '/data/2.5/weather',
             query: [
                 'lat' => $latitude,
                 'lon' => $longitude,
@@ -71,7 +67,7 @@ class WeatherEndpoint extends AbstractEndpoint
 
         $data = $this->sendRequest(
             method: 'GET',
-            baseUrl: $this->urlWeatherForecast,
+            path: '/data/2.5/forecast',
             query: [
                 'lat' => $latitude,
                 'lon' => $longitude,

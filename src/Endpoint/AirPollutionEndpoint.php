@@ -15,12 +15,6 @@ use ProgrammatorDev\YetAnotherPhpValidator\Validator;
 
 class AirPollutionEndpoint extends AbstractEndpoint
 {
-    private string $urlAirPollution = 'https://api.openweathermap.org/data/2.5/air_pollution';
-
-    private string $urlAirPollutionForecast = 'https://api.openweathermap.org/data/2.5/air_pollution/forecast';
-
-    private string $urlAirPollutionHistory = 'https://api.openweathermap.org/data/2.5/air_pollution/history';
-
     /**
      * @throws Exception
      * @throws BadRequestException
@@ -37,7 +31,7 @@ class AirPollutionEndpoint extends AbstractEndpoint
 
         $data = $this->sendRequest(
             method: 'GET',
-            baseUrl: $this->urlAirPollution,
+            path: '/data/2.5/air_pollution',
             query: [
                 'lat' => $latitude,
                 'lon' => $longitude
@@ -63,7 +57,7 @@ class AirPollutionEndpoint extends AbstractEndpoint
 
         $data = $this->sendRequest(
             method: 'GET',
-            baseUrl: $this->urlAirPollutionForecast,
+            path: '/data/2.5/air_pollution/forecast',
             query: [
                 'lat' => $latitude,
                 'lon' => $longitude
@@ -98,7 +92,7 @@ class AirPollutionEndpoint extends AbstractEndpoint
 
         $data = $this->sendRequest(
             method: 'GET',
-            baseUrl: $this->urlAirPollutionHistory,
+            path: '/data/2.5/air_pollution/history',
             query: [
                 'lat' => $latitude,
                 'lon' => $longitude,
