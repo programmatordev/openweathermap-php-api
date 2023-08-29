@@ -36,7 +36,7 @@ Get current and forecast (minutely, hourly and daily) weather data.
 Returns a [`OneCall`](05-objects.md#onecall) object:
 
 ```php
-$weather = $openWeatherMap->getOneCall()->getWeather(50, 50);
+$weather = $openWeatherMap->oneCall->getWeather(50, 50);
 
 echo $weather->getCurrent()->getTemperature();
 ```
@@ -52,7 +52,7 @@ Get weather data from a single moment in the past.
 Returns a [`WeatherLocation`](05-objects.md#weatherlocation) object:
 
 ```php
-$weather = $openWeatherMap->getOneCall()->getHistoryMoment(50, 50, new \DateTime('2023-01-01 12:00:00'));
+$weather = $openWeatherMap->oneCall->getHistoryMoment(50, 50, new \DateTime('2023-01-01 12:00:00'));
 
 echo $weather->getTemperature();
 ```
@@ -68,7 +68,7 @@ Get aggregated weather data from a single day in the past.
 Returns a [`WeatherAggregate`](05-objects.md#weatheraggregate) object:
 
 ```php
-$weather = $openWeatherMap->getOneCall()->getHistoryAggregate(50, 50, new \DateTime('1985-07-19'));
+$weather = $openWeatherMap->oneCall->getHistoryAggregate(50, 50, new \DateTime('1985-07-19'));
 
 echo $weather->getTemperature();
 ```
@@ -86,7 +86,7 @@ Get current weather data.
 Returns a [`WeatherLocation`](05-objects.md#weatherlocation-1) object:
 
 ```php
-$weather = $openWeatherMap->getWeather()->getCurrent(50, 50);
+$weather = $openWeatherMap->weather->getCurrent(50, 50);
 
 echo $weather->getTemperature();
 ```
@@ -104,7 +104,7 @@ Returns a [`WeatherLocationList`](05-objects.md#weatherlocationlist) object:
 ```php
 // Since it returns 3-hour steps,
 // passing 8 as the numResults means it will return results for the next 24 hours
-$weatherForecast = $openWeatherMap->getWeather()->getForecast(50, 50, 8);
+$weatherForecast = $openWeatherMap->weather->getForecast(50, 50, 8);
 
 foreach ($weatherForecast->getList() as $weather) {
     echo $weather->getDateTime()->format('Y-m-d H:i:s');
@@ -125,7 +125,7 @@ Get current air pollution data.
 Returns a [`AirPollutionLocation`](05-objects.md#airpollutionlocation) object:
 
 ```php
-$airPollution = $openWeatherMap->getAirPollution()->getCurrent(50, 50);
+$airPollution = $openWeatherMap->airPollution->getCurrent(50, 50);
 
 echo $airPollution->getAirQuality()->getQualitativeName();
 echo $airPollution->getCarbonMonoxide();
@@ -142,7 +142,7 @@ Get air pollution forecast data per 1-hour for the next 24 hours.
 Returns a [`AirPollutionLocationList`](05-objects.md#airpollutionlocationlist) object:
 
 ```php
-$airPollutionForecast = $openWeatherMap->getAirPollution()->getForecast(50, 50);
+$airPollutionForecast = $openWeatherMap->airPollution->getForecast(50, 50);
 
 foreach ($airPollutionForecast->getList() as $airPollution) {
     echo $airPollution->getDateTime()->format('Y-m-d H:i:s');
@@ -164,7 +164,7 @@ Returns a [`AirPollutionLocationList`](05-objects.md#airpollutionlocationlist) o
 ```php
 $startDate = new \DateTime('-7 days'); // 7 days ago
 $endDate = new \DateTime('-6 days'); // 6 days ago
-$airPollutionHistory = $openWeatherMap->getAirPollution()->getHistory(50, 50, $startDate, $endDate);
+$airPollutionHistory = $openWeatherMap->airPollution->getHistory(50, 50, $startDate, $endDate);
 
 foreach ($airPollutionHistory->getList() as $airPollution) {
     echo $airPollution->getDateTime()->format('Y-m-d H:i:s');
@@ -189,7 +189,7 @@ Get locations data by location name.
 Returns an array of [`Location`](05-objects.md#location) objects:
 
 ```php
-$locations = $openWeatherMap->getGeocoding()->getByLocationName('lisbon');
+$locations = $openWeatherMap->geocoding->getByLocationName('lisbon');
 
 foreach ($locations as $location) {
     echo $location->getName();
@@ -208,7 +208,7 @@ Get location data by zip/post code.
 Returns a [`ZipCodeLocation`](05-objects.md#zipcodelocation) object:
 
 ```php
-$location = $openWeatherMap->getGeocoding()->getByZipCode('1000-001', 'pt');
+$location = $openWeatherMap->geocoding->getByZipCode('1000-001', 'pt');
 
 echo $location->getName();
 ```
@@ -227,7 +227,7 @@ Get locations data by coordinate.
 Returns an array of [`Location`](05-objects.md#location) objects:
 
 ```php
-$locations = $openWeatherMap->getGeocoding()->getByCoordinate(50, 50);
+$locations = $openWeatherMap->geocoding->getByCoordinate(50, 50);
 
 foreach ($locations as $location) {
     echo $location->getName();
@@ -251,7 +251,7 @@ Only available for [`OneCall`](#one-call) and [`Weather`](#weather) APIs.
 use ProgrammatorDev\OpenWeatherMap\UnitSystem\UnitSystem;
 
 // Uses 'imperial' unit system for this request alone
-$openWeatherMap->getWeather()
+$openWeatherMap->weather
     ->withUnitSystem(UnitSystem::IMPERIAL)
     ->getCurrent(50, 50);
 ```
@@ -270,7 +270,7 @@ Only available for [`OneCall`](#one-call) and [`Weather`](#weather) APIs.
 use ProgrammatorDev\OpenWeatherMap\Language\Language
 
 // Uses 'pt' language for this request alone
-$openWeatherMap->getWeather()
+$openWeatherMap->weather
     ->withLanguage(Language::PORTUGUESE)
     ->getCurrent(50, 50);
 ```
@@ -296,7 +296,7 @@ Available for all APIs if `cache` is enabled in the [configuration](02-configura
 use ProgrammatorDev\OpenWeatherMap\Language\Language
 
 // Cache will be saved for 1 hour for this request alone
-$openWeatherMap->getWeather()
+$openWeatherMap->weather
     ->withCacheTtl(3600)
     ->getCurrent(50, 50);
 ```
