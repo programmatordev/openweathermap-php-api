@@ -4,7 +4,7 @@ namespace ProgrammatorDev\OpenWeatherMap\Test;
 
 class CacheTtlTraitTest extends AbstractTest
 {
-    public function testWithCacheTtl()
+    public function testCacheTtlTraitWithCacheTtl()
     {
         $this->assertSame(
             60 * 60,

@@ -7,7 +7,7 @@ use ProgrammatorDev\OpenWeatherMap\Test\DataProvider\InvalidParamDataProvider;
 
 class UnitSystemTraitTest extends AbstractTest
 {
-    public function testWithUnitSystem()
+    public function testUnitSystemTraitWithUnitSystem()
     {
         $this->assertSame(
             'imperial',
@@ -16,7 +16,7 @@ class UnitSystemTraitTest extends AbstractTest
     }
 
     #[DataProviderExternal(InvalidParamDataProvider::class, 'provideInvalidUnitSystemData')]
-    public function testWithUnitSystemWithInvalidValue(string $unitSystem, string $expectedException)
+    public function testUnitSystemTraitWithUnitSystemWithInvalidValue(string $unitSystem, string $expectedException)
     {
         $this->expectException($expectedException);
         $this->givenApi()->weather()->withUnitSystem($unitSystem);

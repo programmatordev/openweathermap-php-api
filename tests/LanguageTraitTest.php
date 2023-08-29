@@ -7,7 +7,7 @@ use ProgrammatorDev\OpenWeatherMap\Test\DataProvider\InvalidParamDataProvider;
 
 class LanguageTraitTest extends AbstractTest
 {
-    public function testWithLanguage()
+    public function testLanguageTraitWithLanguage()
     {
         $this->assertSame(
             'pt',
@@ -16,7 +16,7 @@ class LanguageTraitTest extends AbstractTest
     }
 
     #[DataProviderExternal(InvalidParamDataProvider::class, 'provideInvalidLanguageData')]
-    public function testWithLanguageWithInvalidValue(string $language, string $expectedException)
+    public function testLanguageTraitWithLanguageWithInvalidValue(string $language, string $expectedException)
     {
         $this->expectException($expectedException);
         $this->givenApi()->weather()->withLanguage($language);
