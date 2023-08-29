@@ -43,7 +43,7 @@ class AbstractEndpoint
 
     public function __construct(protected OpenWeatherMap $api)
     {
-        $this->config = $this->api->getConfig();
+        $this->config = $this->api->config;
 
         $this->httpClientBuilder = $this->config->getHttpClientBuilder();
         $this->cache = $this->config->getCache();
