@@ -3,8 +3,8 @@
 namespace ProgrammatorDev\OpenWeatherMap\Endpoint;
 
 use Http\Client\Exception;
-use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\WithLanguageTrait;
-use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\WithUnitSystemTrait;
+use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\LanguageTrait;
+use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\UnitSystemTrait;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\WeatherAggregate;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\WeatherLocation;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\OneCall;
@@ -18,14 +18,8 @@ use ProgrammatorDev\YetAnotherPhpValidator\Validator;
 
 class OneCallEndpoint extends AbstractEndpoint
 {
-    use WithUnitSystemTrait;
-    use WithLanguageTrait;
-
-    private string $urlOneCall = 'https://api.openweathermap.org/data/3.0/onecall';
-
-    private string $urlOneCallHistoryMoment = 'https://api.openweathermap.org/data/3.0/onecall/timemachine';
-
-    private string $urlOneCallHistoryAggregate = 'https://api.openweathermap.org/data/3.0/onecall/day_summary';
+    use UnitSystemTrait;
+    use LanguageTrait;
 
     /**
      * @throws Exception
@@ -43,7 +37,7 @@ class OneCallEndpoint extends AbstractEndpoint
 
         $data = $this->sendRequest(
             method: 'GET',
-            baseUrl: $this->urlOneCall,
+            path: '/data/3.0/onecall',
             query: [
                 'lat' => $latitude,
                 'lon' => $longitude,
@@ -72,7 +66,7 @@ class OneCallEndpoint extends AbstractEndpoint
 
         $data = $this->sendRequest(
             method: 'GET',
-            baseUrl: $this->urlOneCallHistoryMoment,
+            path: '/data/3.0/onecall/timemachine',
             query: [
                 'lat' => $latitude,
                 'lon' => $longitude,
@@ -102,7 +96,7 @@ class OneCallEndpoint extends AbstractEndpoint
 
         $data = $this->sendRequest(
             method: 'GET',
-            baseUrl: $this->urlOneCallHistoryAggregate,
+            path: '/data/3.0/onecall/day_summary',
             query: [
                 'lat' => $latitude,
                 'lon' => $longitude,

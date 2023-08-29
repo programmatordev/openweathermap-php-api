@@ -3,8 +3,8 @@
 namespace ProgrammatorDev\OpenWeatherMap\Endpoint;
 
 use Http\Client\Exception;
-use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\WithLanguageTrait;
-use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\WithUnitSystemTrait;
+use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\LanguageTrait;
+use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\UnitSystemTrait;
 use ProgrammatorDev\OpenWeatherMap\Entity\Weather\WeatherLocation;
 use ProgrammatorDev\OpenWeatherMap\Entity\Weather\WeatherLocationList;
 use ProgrammatorDev\OpenWeatherMap\Exception\BadRequestException;
@@ -17,14 +17,10 @@ use ProgrammatorDev\YetAnotherPhpValidator\Validator;
 
 class WeatherEndpoint extends AbstractEndpoint
 {
-    use WithUnitSystemTrait;
-    use WithLanguageTrait;
+    use UnitSystemTrait;
+    use LanguageTrait;
 
     private const NUM_RESULTS = 40;
-
-    private string $urlWeather = 'https://api.openweathermap.org/data/2.5/weather';
-
-    private string $urlWeatherForecast = 'https://api.openweathermap.org/data/2.5/forecast';
 
     /**
      * @throws Exception
@@ -42,7 +38,7 @@ class WeatherEndpoint extends AbstractEndpoint
 
         $data = $this->sendRequest(
             method: 'GET',
-            baseUrl: $this->urlWeather,
+            path: '/data/2.5/weather',
             query: [
                 'lat' => $latitude,
                 'lon' => $longitude,
@@ -71,7 +67,7 @@ class WeatherEndpoint extends AbstractEndpoint
 
         $data = $this->sendRequest(
             method: 'GET',
-            baseUrl: $this->urlWeatherForecast,
+            path: '/data/2.5/forecast',
             query: [
                 'lat' => $latitude,
                 'lon' => $longitude,

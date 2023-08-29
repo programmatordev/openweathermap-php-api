@@ -13,6 +13,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class Config
 {
+    private string $baseUrl = 'https://api.openweathermap.org';
+
     private array $options;
 
     public function __construct(array $options = [])
@@ -48,6 +50,11 @@ class Config
         $resolver->setAllowedValues('language', Language::getList());
 
         return $resolver->resolve($options);
+    }
+
+    public function getBaseUrl(): string
+    {
+        return $this->baseUrl;
     }
 
     public function getApplicationKey(): string

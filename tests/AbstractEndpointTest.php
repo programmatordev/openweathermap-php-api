@@ -20,7 +20,7 @@ class AbstractEndpointTest extends AbstractTest
         $cache->expects($this->once())->method('save');
 
         $api = $this->givenApi();
-        $api->config->setCache($cache);
+        $api->config()->setCache($cache);
 
         $this->mockSendRequest($api);
     }
@@ -35,7 +35,7 @@ class AbstractEndpointTest extends AbstractTest
         $logger->expects($this->atLeastOnce())->method('info');
 
         $api = $this->givenApi();
-        $api->config->setLogger($logger);
+        $api->config()->setLogger($logger);
 
         $this->mockSendRequest($api);
     }
@@ -47,6 +47,6 @@ class AbstractEndpointTest extends AbstractTest
         $endpoint = new AbstractEndpoint($api);
         $reflectionClass = new \ReflectionClass($endpoint);
         $sendRequest = $reflectionClass->getMethod('sendRequest');
-        $sendRequest->invokeArgs($endpoint, ['GET', 'https://mock.test']);
+        $sendRequest->invokeArgs($endpoint, ['GET', '/test']);
     }
 }

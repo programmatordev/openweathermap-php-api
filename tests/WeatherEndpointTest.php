@@ -32,7 +32,7 @@ class WeatherEndpointTest extends AbstractTest
             )
         );
 
-        $response = $this->givenApi()->weather->getCurrent(50, 50);
+        $response = $this->givenApi()->weather()->getCurrent(50, 50);
         $this->assertCurrentResponse($response);
     }
 
@@ -40,7 +40,7 @@ class WeatherEndpointTest extends AbstractTest
     public function testWeatherGetCurrentWithInvalidCoordinate(float $latitude, float $longitude, string $expectedException)
     {
         $this->expectException($expectedException);
-        $this->givenApi()->weather->getCurrent($latitude, $longitude);
+        $this->givenApi()->weather()->getCurrent($latitude, $longitude);
     }
 
     // --- FORECAST ---
@@ -54,7 +54,7 @@ class WeatherEndpointTest extends AbstractTest
             )
         );
 
-        $response = $this->givenApi()->weather->getForecast(50, 50, 1);
+        $response = $this->givenApi()->weather()->getForecast(50, 50, 1);
         $this->assertForecastResponse($response);
     }
 
@@ -62,14 +62,14 @@ class WeatherEndpointTest extends AbstractTest
     public function testWeatherGetForecastWithInvalidCoordinate(float $latitude, float $longitude, string $expectedException)
     {
         $this->expectException($expectedException);
-        $this->givenApi()->weather->getForecast($latitude, $longitude, 10);
+        $this->givenApi()->weather()->getForecast($latitude, $longitude, 10);
     }
 
     #[DataProviderExternal(InvalidParamDataProvider::class, 'provideInvalidNumResultsData')]
     public function testWeatherGetForecastWithInvalidNumResults(int $numResults, string $expectedException)
     {
         $this->expectException($expectedException);
-        $this->givenApi()->weather->getForecast(50, 50, $numResults);
+        $this->givenApi()->weather()->getForecast(50, 50, $numResults);
     }
 
     // --- ASSERT METHODS EXIST ---

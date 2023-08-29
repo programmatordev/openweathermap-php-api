@@ -9,19 +9,30 @@ use ProgrammatorDev\OpenWeatherMap\Endpoint\WeatherEndpoint;
 
 class OpenWeatherMap
 {
-    public OneCallEndpoint $oneCall;
+    public function __construct(private readonly Config $config) {}
 
-    public WeatherEndpoint $weather;
-
-    public AirPollutionEndpoint $airPollution;
-
-    public GeocodingEndpoint $geocoding;
-
-    public function __construct(public readonly Config $config)
+    public function config(): Config
     {
-        $this->oneCall = new OneCallEndpoint($this);
-        $this->weather = new WeatherEndpoint($this);
-        $this->airPollution = new AirPollutionEndpoint($this);
-        $this->geocoding = new GeocodingEndpoint($this);
+        return $this->config;
+    }
+
+    public function oneCall(): OneCallEndpoint
+    {
+        return new OneCallEndpoint($this);
+    }
+
+    public function weather(): WeatherEndpoint
+    {
+        return new WeatherEndpoint($this);
+    }
+
+    public function airPollution(): AirPollutionEndpoint
+    {
+        return new AirPollutionEndpoint($this);
+    }
+
+    public function geocoding(): GeocodingEndpoint
+    {
+        return new GeocodingEndpoint($this);
     }
 }

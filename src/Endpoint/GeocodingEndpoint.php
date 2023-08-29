@@ -20,12 +20,6 @@ class GeocodingEndpoint extends AbstractEndpoint
 
     private const NUM_RESULTS = 5;
 
-    private string $urlGeocodingDirect = 'https://api.openweathermap.org/geo/1.0/direct';
-
-    private string $urlGeocodingZipCode = 'https://api.openweathermap.org/geo/1.0/zip';
-
-    private string $urlGeocodingReverse = 'https://api.openweathermap.org/geo/1.0/reverse';
-
     protected int $cacheTtl = 60 * 60 * 24 * 30; // 30 days
 
     /**
@@ -45,7 +39,7 @@ class GeocodingEndpoint extends AbstractEndpoint
 
         $data = $this->sendRequest(
             method: 'GET',
-            baseUrl: $this->urlGeocodingDirect,
+            path: '/geo/1.0/direct',
             query: [
                 'q' => $locationName,
                 'limit' => $numResults
@@ -71,7 +65,7 @@ class GeocodingEndpoint extends AbstractEndpoint
 
         $data = $this->sendRequest(
             method: 'GET',
-            baseUrl: $this->urlGeocodingZipCode,
+            path: '/geo/1.0/zip',
             query: [
                 'zip' => \sprintf('%s,%s', $zipCode, $countryCode)
             ]
@@ -98,7 +92,7 @@ class GeocodingEndpoint extends AbstractEndpoint
 
         $data = $this->sendRequest(
             method: 'GET',
-            baseUrl: $this->urlGeocodingReverse,
+            path: '/geo/1.0/reverse',
             query: [
                 'lat' => $latitude,
                 'lon' => $longitude,

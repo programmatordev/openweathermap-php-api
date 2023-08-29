@@ -44,7 +44,7 @@ $openWeatherMap = new OpenWeatherMap(
 );
 
 // Get current weather by coordinate (latitude, longitude)
-$currentWeather = $openWeatherMap->weather->getCurrent(50, 50);
+$currentWeather = $openWeatherMap->weather()->getCurrent(50, 50);
 // Show current temperature
 echo $currentWeather->getTemperature();
 ```
