@@ -8,14 +8,12 @@ class WithCacheTtl extends AbstractTest
     {
         $this->assertSame(
             60 * 60,
-            $this->givenApi()->getWeather()
-                ->withCacheTtl(60 * 60)
-                ->getCacheTtl()
+            $this->givenApi()->weather->withCacheTtl(60 * 60)->getCacheTtl()
         );
     }
 
     public function testWithCacheTtlGetCacheTtl()
     {
-        $this->assertSame(60 * 10, $this->givenApi()->getWeather()->getCacheTtl());
+        $this->assertSame(60 * 10, $this->givenApi()->weather->getCacheTtl());
     }
 }
