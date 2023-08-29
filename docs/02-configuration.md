@@ -187,7 +187,7 @@ It is possible to change the cache duration per request:
 
 ```php
 // Response will be cached for 1 hour
-$currentWeather = $openWeatherMap->weather
+$currentWeather = $openWeatherMap->weather()
     ->withCacheTtl(3600)
     ->getCurrent(50, 50);
 ```
@@ -244,20 +244,20 @@ $openWeatherMap = new OpenWeatherMap(
 
 // Using applicationKey as an example,
 // but getters and setters are available for all options
-$openWeatherMap->config->getApplicationKey();
-$openWeatherMap->config->setApplicationKey('newappkey');
+$openWeatherMap->config()->getApplicationKey();
+$openWeatherMap->config()->setApplicationKey('newappkey');
 ```
 
 Just take into account that any change will affect any subsequent request globally:
 
 ```php
 // Using default 'metric' unit system
-$openWeatherMap->weather->getCurrent(50, 50); 
+$openWeatherMap->weather()->getCurrent(50, 50); 
 
 // Set new unit system
-$openWeatherMap->config->setUnitSystem(UnitSystem::IMPERIAL);
+$openWeatherMap->config()->setUnitSystem(UnitSystem::IMPERIAL);
 
 // Using 'imperial' unit system
-$openWeatherMap->weather->getCurrent(50, 50);
-$openWeatherMap->weather->getForecast(50, 50);
+$openWeatherMap->weather()->getCurrent(50, 50);
+$openWeatherMap->weather()->getForecast(50, 50);
 ```

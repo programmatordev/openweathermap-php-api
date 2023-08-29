@@ -8,7 +8,7 @@ class CacheTtlTraitTest extends AbstractTest
     {
         $this->assertSame(
             60 * 60,
-            $this->givenApi()->weather->withCacheTtl(60 * 60)->getCacheTtl()
+            $this->givenApi()->weather()->withCacheTtl(60 * 60)->getCacheTtl()
         );
     }
 }

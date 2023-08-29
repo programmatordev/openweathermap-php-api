@@ -11,7 +11,7 @@ class UnitSystemTraitTest extends AbstractTest
     {
         $this->assertSame(
             'imperial',
-            $this->givenApi()->weather->withUnitSystem('imperial')->getUnitSystem()
+            $this->givenApi()->weather()->withUnitSystem('imperial')->getUnitSystem()
         );
     }
 
@@ -19,6 +19,6 @@ class UnitSystemTraitTest extends AbstractTest
     public function testWithUnitSystemWithInvalidValue(string $unitSystem, string $expectedException)
     {
         $this->expectException($expectedException);
-        $this->givenApi()->weather->withUnitSystem($unitSystem);
+        $this->givenApi()->weather()->withUnitSystem($unitSystem);
     }
 }
