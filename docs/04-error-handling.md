@@ -15,9 +15,9 @@ use ProgrammatorDev\OpenWeatherMap\Exception\UnauthorizedException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnexpectedErrorException;
 
 try {
-    $location = $openWeatherMap->geocoding->getByZipCode('1000-001', 'pt');
+    $location = $openWeatherMap->geocoding()->getByZipCode('1000-001', 'pt');
     
-    $weather = $openWeatherMap->oneCall->getWeather(
+    $weather = $openWeatherMap->oneCall()->getWeather(
         $location->getCoordinate()->getLatitude(),
         $location->getCoordinate()->getLongitude()
     );
@@ -57,9 +57,9 @@ To catch all API errors with a single exception, `ApiErrorException` is availabl
 use ProgrammatorDev\OpenWeatherMap\Exception\ApiErrorException;
 
 try {
-    $location = $openWeatherMap->geocoding->getByZipCode('1000-001', 'pt');
+    $location = $openWeatherMap->geocoding()->getByZipCode('1000-001', 'pt');
     
-    $weather = $openWeatherMap->oneCall->getWeather(
+    $weather = $openWeatherMap->oneCall()->getWeather(
         $location->getCoordinate()->getLatitude(),
         $location->getCoordinate()->getLongitude()
     );
@@ -80,7 +80,7 @@ use ProgrammatorDev\YetAnotherPhpValidator\Exception\ValidationException;
 
 try {
     // An invalid latitude value is given
-    $weather = $openWeatherMap->weather->getCurrent(999, 50);
+    $weather = $openWeatherMap->weather()->getCurrent(999, 50);
 }
 catch (ValidationException $exception) {
     // Should print:
