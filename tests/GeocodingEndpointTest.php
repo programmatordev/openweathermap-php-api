@@ -25,14 +25,14 @@ class GeocodingEndpointTest extends AbstractTest
             )
         );
 
-        $response = $this->givenApi()->getGeocoding()->getByLocationName('lisbon, pt');
+        $response = $this->givenApi()->geocoding->getByLocationName('lisbon, pt');
         $this->assertLocationListResponse($response);
     }
 
     public function testGeocodingGetByLocationNameWithBlankValue()
     {
         $this->expectException(ValidationException::class);
-        $this->givenApi()->getGeocoding()->getByLocationName('');
+        $this->givenApi()->geocoding->getByLocationName('');
     }
 
     // --- BY ZIP CODE ---
@@ -46,7 +46,7 @@ class GeocodingEndpointTest extends AbstractTest
             )
         );
 
-        $response = $this->givenApi()->getGeocoding()->getByZipCode('1000-001', 'pt');
+        $response = $this->givenApi()->geocoding->getByZipCode('1000-001', 'pt');
         $this->assertInstanceOf(ZipCodeLocation::class, $response);
 
         $this->assertSame('1000-001', $response->getZipCode());
@@ -63,7 +63,7 @@ class GeocodingEndpointTest extends AbstractTest
     public function testGeocodingGetByZipCodeWithInvalidValue(string $zipCode, string $countryCode)
     {
         $this->expectException(ValidationException::class);
-        $this->givenApi()->getGeocoding()->getByZipCode($zipCode, $countryCode);
+        $this->givenApi()->geocoding->getByZipCode($zipCode, $countryCode);
     }
 
     public static function provideGeocodingGetByZipCodeWithInvalidValueData(): \Generator
@@ -84,7 +84,7 @@ class GeocodingEndpointTest extends AbstractTest
             )
         );
 
-        $response = $this->givenApi()->getGeocoding()->getByCoordinate(50, 50);
+        $response = $this->givenApi()->geocoding->getByCoordinate(50, 50);
         $this->assertLocationListResponse($response);
     }
 
@@ -96,7 +96,7 @@ class GeocodingEndpointTest extends AbstractTest
     )
     {
         $this->expectException($expectedException);
-        $this->givenApi()->getGeocoding()->getByCoordinate($latitude, $longitude);
+        $this->givenApi()->geocoding->getByCoordinate($latitude, $longitude);
     }
 
     #[DataProviderExternal(InvalidParamDataProvider::class, 'provideInvalidNumResultsData')]
@@ -106,7 +106,7 @@ class GeocodingEndpointTest extends AbstractTest
     )
     {
         $this->expectException($expectedException);
-        $this->givenApi()->getGeocoding()->getByCoordinate(50, 50, $numResults);
+        $this->givenApi()->geocoding->getByCoordinate(50, 50, $numResults);
     }
 
     // --- ASSERT METHODS EXIST ---
