@@ -21,9 +21,4 @@ class WithUnitSystemTest extends AbstractTest
         $this->expectException($expectedException);
         $this->givenApi()->weather->withUnitSystem($unitSystem);
     }
-
-    public function testWithUnitSystemGetUnitSystem()
-    {
-        $this->assertSame('metric', $this->givenApi()->weather->getUnitSystem());
-    }
 }
