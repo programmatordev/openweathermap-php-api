@@ -5,11 +5,7 @@ namespace ProgrammatorDev\OpenWeatherMap\Endpoint;
 use Http\Client\Exception;
 use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\AirPollutionLocationList;
 use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\AirPollutionLocation;
-use ProgrammatorDev\OpenWeatherMap\Exception\BadRequestException;
-use ProgrammatorDev\OpenWeatherMap\Exception\NotFoundException;
-use ProgrammatorDev\OpenWeatherMap\Exception\TooManyRequestsException;
-use ProgrammatorDev\OpenWeatherMap\Exception\UnauthorizedException;
-use ProgrammatorDev\OpenWeatherMap\Exception\UnexpectedErrorException;
+use ProgrammatorDev\OpenWeatherMap\Exception\ApiErrorException;
 use ProgrammatorDev\YetAnotherPhpValidator\Exception\ValidationException;
 use ProgrammatorDev\YetAnotherPhpValidator\Validator;
 
@@ -17,11 +13,7 @@ class AirPollutionEndpoint extends AbstractEndpoint
 {
     /**
      * @throws Exception
-     * @throws BadRequestException
-     * @throws NotFoundException
-     * @throws TooManyRequestsException
-     * @throws UnauthorizedException
-     * @throws UnexpectedErrorException
+     * @throws ApiErrorException
      * @throws ValidationException
      */
     public function getCurrent(float $latitude, float $longitude): AirPollutionLocation
@@ -43,11 +35,7 @@ class AirPollutionEndpoint extends AbstractEndpoint
 
     /**
      * @throws Exception
-     * @throws BadRequestException
-     * @throws NotFoundException
-     * @throws TooManyRequestsException
-     * @throws UnauthorizedException
-     * @throws UnexpectedErrorException
+     * @throws ApiErrorException
      * @throws ValidationException
      */
     public function getForecast(float $latitude, float $longitude): AirPollutionLocationList
@@ -69,11 +57,7 @@ class AirPollutionEndpoint extends AbstractEndpoint
 
     /**
      * @throws Exception
-     * @throws BadRequestException
-     * @throws NotFoundException
-     * @throws TooManyRequestsException
-     * @throws UnauthorizedException
-     * @throws UnexpectedErrorException
+     * @throws ApiErrorException
      * @throws ValidationException
      */
     public function getHistory(

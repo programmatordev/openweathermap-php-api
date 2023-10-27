@@ -5,11 +5,7 @@ namespace ProgrammatorDev\OpenWeatherMap\Endpoint;
 use Http\Client\Exception;
 use ProgrammatorDev\OpenWeatherMap\Entity\Geocoding\ZipCodeLocation;
 use ProgrammatorDev\OpenWeatherMap\Entity\Location;
-use ProgrammatorDev\OpenWeatherMap\Exception\BadRequestException;
-use ProgrammatorDev\OpenWeatherMap\Exception\NotFoundException;
-use ProgrammatorDev\OpenWeatherMap\Exception\TooManyRequestsException;
-use ProgrammatorDev\OpenWeatherMap\Exception\UnauthorizedException;
-use ProgrammatorDev\OpenWeatherMap\Exception\UnexpectedErrorException;
+use ProgrammatorDev\OpenWeatherMap\Exception\ApiErrorException;
 use ProgrammatorDev\OpenWeatherMap\Util\CreateEntityListTrait;
 use ProgrammatorDev\YetAnotherPhpValidator\Exception\ValidationException;
 use ProgrammatorDev\YetAnotherPhpValidator\Validator;
@@ -25,11 +21,7 @@ class GeocodingEndpoint extends AbstractEndpoint
     /**
      * @return Location[]
      * @throws Exception
-     * @throws BadRequestException
-     * @throws NotFoundException
-     * @throws TooManyRequestsException
-     * @throws UnauthorizedException
-     * @throws UnexpectedErrorException
+     * @throws ApiErrorException
      * @throws ValidationException
      */
     public function getByLocationName(string $locationName, int $numResults = self::NUM_RESULTS): array
@@ -51,11 +43,7 @@ class GeocodingEndpoint extends AbstractEndpoint
 
     /**
      * @throws Exception
-     * @throws BadRequestException
-     * @throws NotFoundException
-     * @throws TooManyRequestsException
-     * @throws UnauthorizedException
-     * @throws UnexpectedErrorException
+     * @throws ApiErrorException
      * @throws ValidationException
      */
     public function getByZipCode(string $zipCode, string $countryCode): ZipCodeLocation
@@ -77,11 +65,7 @@ class GeocodingEndpoint extends AbstractEndpoint
     /**
      * @return Location[]
      * @throws Exception
-     * @throws BadRequestException
-     * @throws NotFoundException
-     * @throws TooManyRequestsException
-     * @throws UnauthorizedException
-     * @throws UnexpectedErrorException
+     * @throws ApiErrorException
      * @throws ValidationException
      */
     public function getByCoordinate(float $latitude, float $longitude, int $numResults = self::NUM_RESULTS): array
