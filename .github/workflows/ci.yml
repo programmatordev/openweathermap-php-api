@@ -5,6 +5,9 @@ on:
     branches:
       - "*.x"
   pull_request:
+    branches:
+      - main
+      - "*.x"
 
 jobs:
   tests:
