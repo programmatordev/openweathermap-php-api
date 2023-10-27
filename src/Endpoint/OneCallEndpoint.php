@@ -8,11 +8,7 @@ use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\UnitSystemTrait;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\WeatherAggregate;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\WeatherLocation;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\OneCall;
-use ProgrammatorDev\OpenWeatherMap\Exception\BadRequestException;
-use ProgrammatorDev\OpenWeatherMap\Exception\NotFoundException;
-use ProgrammatorDev\OpenWeatherMap\Exception\TooManyRequestsException;
-use ProgrammatorDev\OpenWeatherMap\Exception\UnauthorizedException;
-use ProgrammatorDev\OpenWeatherMap\Exception\UnexpectedErrorException;
+use ProgrammatorDev\OpenWeatherMap\Exception\ApiErrorException;
 use ProgrammatorDev\YetAnotherPhpValidator\Exception\ValidationException;
 use ProgrammatorDev\YetAnotherPhpValidator\Validator;
 
@@ -23,11 +19,7 @@ class OneCallEndpoint extends AbstractEndpoint
 
     /**
      * @throws Exception
-     * @throws BadRequestException
-     * @throws NotFoundException
-     * @throws TooManyRequestsException
-     * @throws UnauthorizedException
-     * @throws UnexpectedErrorException
+     * @throws ApiErrorException
      * @throws ValidationException
      */
     public function getWeather(float $latitude, float $longitude): OneCall
@@ -51,11 +43,7 @@ class OneCallEndpoint extends AbstractEndpoint
 
     /**
      * @throws Exception
-     * @throws BadRequestException
-     * @throws NotFoundException
-     * @throws TooManyRequestsException
-     * @throws UnauthorizedException
-     * @throws UnexpectedErrorException
+     * @throws ApiErrorException
      * @throws ValidationException
      */
     public function getHistoryMoment(float $latitude, float $longitude, \DateTimeInterface $dateTime): WeatherLocation
@@ -81,11 +69,7 @@ class OneCallEndpoint extends AbstractEndpoint
 
     /**
      * @throws Exception
-     * @throws BadRequestException
-     * @throws NotFoundException
-     * @throws TooManyRequestsException
-     * @throws UnauthorizedException
-     * @throws UnexpectedErrorException
+     * @throws ApiErrorException
      * @throws ValidationException
      */
     public function getHistoryAggregate(float $latitude, float $longitude, \DateTimeInterface $date): WeatherAggregate

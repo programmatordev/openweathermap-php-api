@@ -7,11 +7,7 @@ use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\LanguageTrait;
 use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\UnitSystemTrait;
 use ProgrammatorDev\OpenWeatherMap\Entity\Weather\WeatherLocation;
 use ProgrammatorDev\OpenWeatherMap\Entity\Weather\WeatherLocationList;
-use ProgrammatorDev\OpenWeatherMap\Exception\BadRequestException;
-use ProgrammatorDev\OpenWeatherMap\Exception\NotFoundException;
-use ProgrammatorDev\OpenWeatherMap\Exception\TooManyRequestsException;
-use ProgrammatorDev\OpenWeatherMap\Exception\UnauthorizedException;
-use ProgrammatorDev\OpenWeatherMap\Exception\UnexpectedErrorException;
+use ProgrammatorDev\OpenWeatherMap\Exception\ApiErrorException;
 use ProgrammatorDev\YetAnotherPhpValidator\Exception\ValidationException;
 use ProgrammatorDev\YetAnotherPhpValidator\Validator;
 
@@ -24,11 +20,7 @@ class WeatherEndpoint extends AbstractEndpoint
 
     /**
      * @throws Exception
-     * @throws BadRequestException
-     * @throws NotFoundException
-     * @throws TooManyRequestsException
-     * @throws UnauthorizedException
-     * @throws UnexpectedErrorException
+     * @throws ApiErrorException
      * @throws ValidationException
      */
     public function getCurrent(float $latitude, float $longitude): WeatherLocation
@@ -52,11 +44,7 @@ class WeatherEndpoint extends AbstractEndpoint
 
     /**
      * @throws Exception
-     * @throws BadRequestException
-     * @throws NotFoundException
-     * @throws TooManyRequestsException
-     * @throws UnauthorizedException
-     * @throws UnexpectedErrorException
+     * @throws ApiErrorException
      * @throws ValidationException
      */
     public function getForecast(float $latitude, float $longitude, int $numResults = self::NUM_RESULTS): WeatherLocationList

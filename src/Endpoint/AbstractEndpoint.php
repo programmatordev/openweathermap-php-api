@@ -8,6 +8,7 @@ use Http\Client\Exception;
 use ProgrammatorDev\OpenWeatherMap\Config;
 use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\CacheTtlTrait;
 use ProgrammatorDev\OpenWeatherMap\Entity\Error;
+use ProgrammatorDev\OpenWeatherMap\Exception\ApiErrorException;
 use ProgrammatorDev\OpenWeatherMap\Exception\BadRequestException;
 use ProgrammatorDev\OpenWeatherMap\Exception\NotFoundException;
 use ProgrammatorDev\OpenWeatherMap\Exception\TooManyRequestsException;
@@ -53,11 +54,7 @@ class AbstractEndpoint
 
     /**
      * @throws Exception
-     * @throws BadRequestException
-     * @throws NotFoundException
-     * @throws TooManyRequestsException
-     * @throws UnauthorizedException
-     * @throws UnexpectedErrorException
+     * @throws ApiErrorException
      */
     protected function sendRequest(
         string $method,
@@ -106,11 +103,7 @@ class AbstractEndpoint
     }
 
     /**
-     * @throws NotFoundException
-     * @throws UnexpectedErrorException
-     * @throws TooManyRequestsException
-     * @throws UnauthorizedException
-     * @throws BadRequestException
+     * @throws ApiErrorException
      */
     private function handleResponseErrors(ResponseInterface $response): void
     {
