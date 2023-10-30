@@ -3,6 +3,7 @@
 namespace ProgrammatorDev\OpenWeatherMap\Endpoint;
 
 use Http\Client\Exception;
+use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\ValidationTrait;
 use ProgrammatorDev\OpenWeatherMap\Entity\Geocoding\ZipCodeLocation;
 use ProgrammatorDev\OpenWeatherMap\Entity\Location;
 use ProgrammatorDev\OpenWeatherMap\Exception\ApiErrorException;
@@ -12,6 +13,7 @@ use ProgrammatorDev\YetAnotherPhpValidator\Validator;
 
 class GeocodingEndpoint extends AbstractEndpoint
 {
+    use ValidationTrait;
     use CreateEntityListTrait;
 
     private const NUM_RESULTS = 5;
@@ -26,8 +28,8 @@ class GeocodingEndpoint extends AbstractEndpoint
      */
     public function getByLocationName(string $locationName, int $numResults = self::NUM_RESULTS): array
     {
-        Validator::notBlank()->assert($locationName, 'locationName');
-        Validator::greaterThan(0)->assert($numResults, 'numResults');
+        $this->validateSearchQuery($locationName, 'locationName');
+        $this->validateNumResults($numResults);
 
         $data = $this->sendRequest(
             method: 'GET',
@@ -48,8 +50,8 @@ class GeocodingEndpoint extends AbstractEndpoint
      */
     public function getByZipCode(string $zipCode, string $countryCode): ZipCodeLocation
     {
-        Validator::notBlank()->assert($zipCode, 'zipCode');
-        Validator::country()->assert($countryCode, 'countryCode');
+        $this->validateSearchQuery($zipCode, 'zipCode');
+        $this->validateCountryCode($countryCode);
 
         $data = $this->sendRequest(
             method: 'GET',
@@ -70,9 +72,8 @@ class GeocodingEndpoint extends AbstractEndpoint
      */
     public function getByCoordinate(float $latitude, float $longitude, int $numResults = self::NUM_RESULTS): array
     {
-        Validator::range(-90, 90)->assert($latitude, 'latitude');
-        Validator::range(-180, 180)->assert($longitude, 'longitude');
-        Validator::greaterThan(0)->assert($numResults, 'numResults');
+        $this->validateCoordinate($latitude, $longitude);
+        $this->validateNumResults($numResults);
 
         $data = $this->sendRequest(
             method: 'GET',
