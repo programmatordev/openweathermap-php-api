@@ -7,14 +7,13 @@ use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\ValidationTrait;
 use ProgrammatorDev\OpenWeatherMap\Entity\Geocoding\ZipCodeLocation;
 use ProgrammatorDev\OpenWeatherMap\Entity\Location;
 use ProgrammatorDev\OpenWeatherMap\Exception\ApiErrorException;
-use ProgrammatorDev\OpenWeatherMap\Util\CreateEntityListTrait;
+use ProgrammatorDev\OpenWeatherMap\Util\EntityListTrait;
 use ProgrammatorDev\YetAnotherPhpValidator\Exception\ValidationException;
-use ProgrammatorDev\YetAnotherPhpValidator\Validator;
 
 class GeocodingEndpoint extends AbstractEndpoint
 {
     use ValidationTrait;
-    use CreateEntityListTrait;
+    use EntityListTrait;
 
     private const NUM_RESULTS = 5;
 
@@ -40,7 +39,7 @@ class GeocodingEndpoint extends AbstractEndpoint
             ]
         );
 
-        return $this->createEntityList($data, Location::class);
+        return $this->createEntityList(Location::class, $data);
     }
 
     /**
@@ -85,6 +84,6 @@ class GeocodingEndpoint extends AbstractEndpoint
             ]
         );
 
-        return $this->createEntityList($data, Location::class);
+        return $this->createEntityList(Location::class, $data);
     }
 }

@@ -8,7 +8,6 @@ use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\AirPollutionLocationList;
 use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\AirPollutionLocation;
 use ProgrammatorDev\OpenWeatherMap\Exception\ApiErrorException;
 use ProgrammatorDev\YetAnotherPhpValidator\Exception\ValidationException;
-use ProgrammatorDev\YetAnotherPhpValidator\Validator;
 
 class AirPollutionEndpoint extends AbstractEndpoint
 {

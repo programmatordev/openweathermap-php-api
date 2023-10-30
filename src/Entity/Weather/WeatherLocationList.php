@@ -3,22 +3,22 @@
 namespace ProgrammatorDev\OpenWeatherMap\Entity\Weather;
 
 use ProgrammatorDev\OpenWeatherMap\Entity\Location;
-use ProgrammatorDev\OpenWeatherMap\Util\CreateEntityListTrait;
+use ProgrammatorDev\OpenWeatherMap\Util\EntityListTrait;
 
 class WeatherLocationList
 {
-    use CreateEntityListTrait;
+    use EntityListTrait;
 
     private int $numResults;
 
     private Location $location;
 
+    /** @var Weather[] */
     private array $list;
 
     public function __construct(array $data)
     {
         $this->numResults = $data['cnt'];
-
         $this->location = new Location([
             'id' => $data['city']['id'],
             'name' => $data['city']['name'],
@@ -30,8 +30,7 @@ class WeatherLocationList
             'sunset' => $data['city']['sunset'],
             'timezone_offset' => $data['city']['timezone']
         ]);
-
-        $this->list = $this->createEntityList($data['list'], Weather::class);
+        $this->list = $this->createEntityList(Weather::class, $data['list']);
     }
 
     public function getNumResults(): int
@@ -44,9 +43,6 @@ class WeatherLocationList
         return $this->location;
     }
 
-    /**
-     * @return Weather[]
-     */
     public function getList(): array
     {
         return $this->list;

@@ -11,7 +11,6 @@ use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\WeatherLocation;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\OneCall;
 use ProgrammatorDev\OpenWeatherMap\Exception\ApiErrorException;
 use ProgrammatorDev\YetAnotherPhpValidator\Exception\ValidationException;
-use ProgrammatorDev\YetAnotherPhpValidator\Validator;
 
 class OneCallEndpoint extends AbstractEndpoint
 {

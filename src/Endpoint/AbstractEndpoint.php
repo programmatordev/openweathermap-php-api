@@ -123,9 +123,7 @@ class AbstractEndpoint
     private function buildUrl(string $path, array $query): string
     {
         // Add application key to all requests
-        $query = $query + [
-            'appid' => $this->config->getApplicationKey()
-        ];
+        $query['appid'] = $this->config->getApplicationKey();
 
         return \sprintf('%s%s?%s', $this->config->getBaseUrl(), $path, http_build_query($query));
     }

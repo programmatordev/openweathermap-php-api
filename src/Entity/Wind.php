@@ -14,7 +14,6 @@ class Wind
     {
         $this->speed = $data['speed'];
         $this->direction = $data['deg'];
-
         $this->gust = $data['gust'] ?? null;
     }
 
