@@ -4,11 +4,11 @@ namespace ProgrammatorDev\OpenWeatherMap\Entity\OneCall;
 
 use ProgrammatorDev\OpenWeatherMap\Entity\Coordinate;
 use ProgrammatorDev\OpenWeatherMap\Entity\Timezone;
-use ProgrammatorDev\OpenWeatherMap\Util\CreateEntityListTrait;
+use ProgrammatorDev\OpenWeatherMap\Util\EntityListTrait;
 
 class OneCall
 {
-    use CreateEntityListTrait;
+    use EntityListTrait;
 
     private Coordinate $coordinate;
 
@@ -16,12 +16,16 @@ class OneCall
 
     private Weather $current;
 
+    /** @var ?MinuteForecast[] */
     private ?array $minutelyForecast;
 
+    /** @var Weather[] */
     private array $hourlyForecast;
 
+    /** @var Weather[] */
     private array $dailyForecast;
 
+    /** @var ?Alert[] */
     private ?array $alerts;
 
     public function __construct(array $data)
@@ -29,14 +33,10 @@ class OneCall
         $this->coordinate = new Coordinate($data);
         $this->timezone = new Timezone($data);
         $this->current = new Weather($data['current']);
-        $this->minutelyForecast = !empty($data['minutely'])
-            ? $this->createEntityList($data['minutely'], MinuteForecast::class)
-            : null;
-        $this->hourlyForecast = $this->createEntityList($data['hourly'], Weather::class);
-        $this->dailyForecast = $this->createEntityList($data['daily'], Weather::class);
-        $this->alerts = !empty($data['alerts'])
-            ? $this->createEntityList($data['alerts'], Alert::class)
-            : null;
+        $this->minutelyForecast = !empty($data['minutely']) ? $this->createEntityList(MinuteForecast::class, $data['minutely']) : null;
+        $this->hourlyForecast = $this->createEntityList(Weather::class, $data['hourly']);
+        $this->dailyForecast = $this->createEntityList(Weather::class, $data['daily']);
+        $this->alerts = !empty($data['alerts']) ? $this->createEntityList(Alert::class, $data['alerts']) : null;
     }
 
     public function getCoordinate(): Coordinate
@@ -54,33 +54,21 @@ class OneCall
         return $this->current;
     }
 
-    /**
-     * @return MinuteForecast[]|null
-     */
     public function getMinutelyForecast(): ?array
     {
         return $this->minutelyForecast;
     }
 
-    /**
-     * @return Weather[]
-     */
     public function getHourlyForecast(): array
     {
         return $this->hourlyForecast;
     }
 
-    /**
-     * @return Weather[]
-     */
     public function getDailyForecast(): array
     {
         return $this->dailyForecast;
     }
 
-    /**
-     * @return Alert[]|null
-     */
     public function getAlerts(): ?array
     {
         return $this->alerts;

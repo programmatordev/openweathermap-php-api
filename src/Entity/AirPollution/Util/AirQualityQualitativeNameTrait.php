@@ -2,7 +2,7 @@
 
 namespace ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\Util;
 
-trait GetAirQualityQualitativeNameTrait
+trait AirQualityQualitativeNameTrait
 {
     // Levels based on https://openweathermap.org/api/air-pollution
     private array $airQualityIndex = [

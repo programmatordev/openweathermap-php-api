@@ -13,7 +13,6 @@ class AtmosphericPressure
     public function __construct(array $data)
     {
         $this->pressure = $data['pressure'];
-
         $this->seaLevelPressure = $data['sea_level'] ?? null;
         $this->groundLevelPressure = $data['grnd_level'] ?? null;
     }

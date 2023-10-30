@@ -7,11 +7,11 @@ use ProgrammatorDev\OpenWeatherMap\Entity\Rain;
 use ProgrammatorDev\OpenWeatherMap\Entity\Snow;
 use ProgrammatorDev\OpenWeatherMap\Entity\WeatherCondition;
 use ProgrammatorDev\OpenWeatherMap\Entity\Wind;
-use ProgrammatorDev\OpenWeatherMap\Util\CreateEntityListTrait;
+use ProgrammatorDev\OpenWeatherMap\Util\EntityListTrait;
 
 class Weather
 {
-    use CreateEntityListTrait;
+    use EntityListTrait;
 
     private float $temperature;
 
@@ -27,6 +27,7 @@ class Weather
 
     private int $visibility;
 
+    /** @var WeatherCondition[] */
     private array $weatherConditions;
 
     private Wind $wind;
@@ -51,18 +52,12 @@ class Weather
         $this->humidity = $data['main']['humidity'];
         $this->cloudiness = $data['clouds']['all'];
         $this->visibility = $data['visibility'];
-        $this->weatherConditions = $this->createEntityList($data['weather'], WeatherCondition::class);
+        $this->weatherConditions = $this->createEntityList(WeatherCondition::class, $data['weather']);
         $this->atmosphericPressure = new AtmosphericPressure($data['main']);
         $this->wind = new Wind($data['wind']);
-        $this->precipitationProbability = isset($data['pop'])
-            ? round($data['pop'] * 100)
-            : null;
-        $this->rain = !empty($data['rain'])
-            ? new Rain($data['rain'])
-            : null;
-        $this->snow = !empty($data['snow'])
-            ? new Snow($data['snow'])
-            : null;
+        $this->precipitationProbability = isset($data['pop']) ? round($data['pop'] * 100) : null;
+        $this->rain = !empty($data['rain']) ? new Rain($data['rain']) : null;
+        $this->snow = !empty($data['snow']) ? new Snow($data['snow']) : null;
     }
 
     public function getTemperature(): float
@@ -100,9 +95,6 @@ class Weather
         return $this->visibility;
     }
 
-    /**
-     * @return WeatherCondition[]
-     */
     public function getWeatherConditions(): array
     {
         return $this->weatherConditions;

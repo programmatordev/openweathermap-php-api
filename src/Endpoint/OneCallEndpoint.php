@@ -5,17 +5,18 @@ namespace ProgrammatorDev\OpenWeatherMap\Endpoint;
 use Http\Client\Exception;
 use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\LanguageTrait;
 use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\UnitSystemTrait;
+use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\ValidationTrait;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\WeatherAggregate;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\WeatherLocation;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\OneCall;
 use ProgrammatorDev\OpenWeatherMap\Exception\ApiErrorException;
 use ProgrammatorDev\YetAnotherPhpValidator\Exception\ValidationException;
-use ProgrammatorDev\YetAnotherPhpValidator\Validator;
 
 class OneCallEndpoint extends AbstractEndpoint
 {
     use UnitSystemTrait;
     use LanguageTrait;
+    use ValidationTrait;
 
     /**
      * @throws Exception
@@ -24,8 +25,7 @@ class OneCallEndpoint extends AbstractEndpoint
      */
     public function getWeather(float $latitude, float $longitude): OneCall
     {
-        Validator::range(-90, 90)->assert($latitude, 'latitude');
-        Validator::range(-180, 180)->assert($longitude, 'longitude');
+        $this->validateCoordinate($latitude, $longitude);
 
         $data = $this->sendRequest(
             method: 'GET',
@@ -48,9 +48,8 @@ class OneCallEndpoint extends AbstractEndpoint
      */
     public function getHistoryMoment(float $latitude, float $longitude, \DateTimeInterface $dateTime): WeatherLocation
     {
-        Validator::range(-90, 90)->assert($latitude, 'latitude');
-        Validator::range(-180, 180)->assert($longitude, 'longitude');
-        Validator::lessThan(new \DateTime('now'))->assert($dateTime, 'dateTime');
+        $this->validateCoordinate($latitude, $longitude);
+        $this->validatePastDate($dateTime, 'dateTime');
 
         $data = $this->sendRequest(
             method: 'GET',
@@ -74,9 +73,8 @@ class OneCallEndpoint extends AbstractEndpoint
      */
     public function getHistoryAggregate(float $latitude, float $longitude, \DateTimeInterface $date): WeatherAggregate
     {
-        Validator::range(-90, 90)->assert($latitude, 'latitude');
-        Validator::range(-180, 180)->assert($longitude, 'longitude');
-        Validator::lessThan(new \DateTime('now'))->assert($date, 'date');
+        $this->validateCoordinate($latitude, $longitude);
+        $this->validatePastDate($date, 'date');
 
         $data = $this->sendRequest(
             method: 'GET',

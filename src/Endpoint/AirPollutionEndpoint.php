@@ -3,14 +3,16 @@
 namespace ProgrammatorDev\OpenWeatherMap\Endpoint;
 
 use Http\Client\Exception;
+use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\ValidationTrait;
 use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\AirPollutionLocationList;
 use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\AirPollutionLocation;
 use ProgrammatorDev\OpenWeatherMap\Exception\ApiErrorException;
 use ProgrammatorDev\YetAnotherPhpValidator\Exception\ValidationException;
-use ProgrammatorDev\YetAnotherPhpValidator\Validator;
 
 class AirPollutionEndpoint extends AbstractEndpoint
 {
+    use ValidationTrait;
+
     /**
      * @throws Exception
      * @throws ApiErrorException
@@ -18,8 +20,7 @@ class AirPollutionEndpoint extends AbstractEndpoint
      */
     public function getCurrent(float $latitude, float $longitude): AirPollutionLocation
     {
-        Validator::range(-90, 90)->assert($latitude, 'latitude');
-        Validator::range(-180, 180)->assert($longitude, 'longitude');
+        $this->validateCoordinate($latitude, $longitude);
 
         $data = $this->sendRequest(
             method: 'GET',
@@ -40,8 +41,7 @@ class AirPollutionEndpoint extends AbstractEndpoint
      */
     public function getForecast(float $latitude, float $longitude): AirPollutionLocationList
     {
-        Validator::range(-90, 90)->assert($latitude, 'latitude');
-        Validator::range(-180, 180)->assert($longitude, 'longitude');
+        $this->validateCoordinate($latitude, $longitude);
 
         $data = $this->sendRequest(
             method: 'GET',
@@ -67,10 +67,8 @@ class AirPollutionEndpoint extends AbstractEndpoint
         \DateTimeInterface $endDate
     ): AirPollutionLocationList
     {
-        Validator::range(-90, 90)->assert($latitude, 'latitude');
-        Validator::range(-180, 180)->assert($longitude, 'longitude');
-        Validator::lessThan(new \DateTime('now'))->assert($endDate, 'endDate');
-        Validator::greaterThan($startDate)->assert($endDate, 'endDate');
+        $this->validateCoordinate($latitude, $longitude);
+        $this->validateDateRange($startDate, $endDate);
 
         $timezoneUtc = new \DateTimeZone('UTC');
 

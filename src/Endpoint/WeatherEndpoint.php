@@ -5,16 +5,17 @@ namespace ProgrammatorDev\OpenWeatherMap\Endpoint;
 use Http\Client\Exception;
 use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\LanguageTrait;
 use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\UnitSystemTrait;
+use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\ValidationTrait;
 use ProgrammatorDev\OpenWeatherMap\Entity\Weather\WeatherLocation;
 use ProgrammatorDev\OpenWeatherMap\Entity\Weather\WeatherLocationList;
 use ProgrammatorDev\OpenWeatherMap\Exception\ApiErrorException;
 use ProgrammatorDev\YetAnotherPhpValidator\Exception\ValidationException;
-use ProgrammatorDev\YetAnotherPhpValidator\Validator;
 
 class WeatherEndpoint extends AbstractEndpoint
 {
     use UnitSystemTrait;
     use LanguageTrait;
+    use ValidationTrait;
 
     private const NUM_RESULTS = 40;
 
@@ -25,8 +26,7 @@ class WeatherEndpoint extends AbstractEndpoint
      */
     public function getCurrent(float $latitude, float $longitude): WeatherLocation
     {
-        Validator::range(-90, 90)->assert($latitude, 'latitude');
-        Validator::range(-180, 180)->assert($longitude, 'longitude');
+        $this->validateCoordinate($latitude, $longitude);
 
         $data = $this->sendRequest(
             method: 'GET',
@@ -49,9 +49,8 @@ class WeatherEndpoint extends AbstractEndpoint
      */
     public function getForecast(float $latitude, float $longitude, int $numResults = self::NUM_RESULTS): WeatherLocationList
     {
-        Validator::range(-90, 90)->assert($latitude, 'latitude');
-        Validator::range(-180, 180)->assert($longitude, 'longitude');
-        Validator::greaterThan(0)->assert($numResults, 'numResults');
+        $this->validateCoordinate($latitude, $longitude);
+        $this->validateNumResults($numResults);
 
         $data = $this->sendRequest(
             method: 'GET',
