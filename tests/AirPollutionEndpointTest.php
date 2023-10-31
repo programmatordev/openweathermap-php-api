@@ -65,7 +65,7 @@ class AirPollutionEndpointTest extends AbstractTest
         yield 'get history, longitude greater than 180' => ['airPollution', 'getHistory',
             [50, 181, new \DateTime('yesterday'), new \DateTime('today')]
         ];
-        yield 'get history, future end date' => ['airPollution', 'getHistory',
+        yield 'get history, invalid past end date' => ['airPollution', 'getHistory',
             [50, 50, new \DateTime('yesterday'), new \DateTime('tomorrow')]
         ];
         yield 'get history, end date before start date' => ['airPollution', 'getHistory',
