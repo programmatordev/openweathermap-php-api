@@ -42,6 +42,8 @@ class GeocodingEndpointTest extends AbstractTest
     public static function provideEndpointInvalidResponseData(): \Generator
     {
         yield 'get by location name, blank value' => ['geocoding', 'getByLocationName', ['']];
+        yield 'get by location name, zero num results' => ['geocoding', 'getByLocationName', ['test', 0]];
+        yield 'get by location name, negative num results' => ['geocoding', 'getByLocationName', ['test', -1]];
 
         yield 'get by zip code, blank zip code' => ['geocoding', 'getByZipCode', ['', 'pt']];
         yield 'get by zip code, blank country code' => ['geocoding', 'getByZipCode', ['1234-567', '']];
