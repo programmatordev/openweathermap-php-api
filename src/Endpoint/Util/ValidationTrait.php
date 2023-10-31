@@ -21,8 +21,19 @@ trait ValidationTrait
      */
     private function validateDateRange(\DateTimeInterface $startDate, \DateTimeInterface $endDate): void
     {
-        Validator::lessThan(new \DateTime('now'))->assert($endDate, 'endDate');
-        Validator::greaterThan($startDate)->assert($endDate, 'endDate');
+        $nowDate = new \DateTime('now');
+        $nowDate->setTime($nowDate->format('H'), 0);
+
+        // Start date must be less or equal to end date
+        Validator::lessThanOrEqual(
+            constraint: $endDate,
+            message: 'The "{{ name }}" value should be less than or equal to the "endDate"'
+        )->assert($startDate, 'startDate');
+
+        // End date must be less or equal to today date
+        Validator::lessThanOrEqual(
+            constraint: $nowDate
+        )->assert($endDate, 'endDate');
     }
 
     /**
