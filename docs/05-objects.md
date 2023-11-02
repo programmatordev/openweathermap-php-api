@@ -35,392 +35,250 @@
 
 ### Alert
 
-`getSenderName()`: `string`
-
-`getEventName()`: `string`
-
-`getStartsAt()`: `\DateTimeImmutable`
-
-`getEndsAt()`: `\DateTimeImmutable`
-
-`getDescription()`: `string`
-
-`getTags()`: `array`
+- `getSenderName()`: `string`
+- `getEventName()`: `string`
+- `getStartsAt()`: `\DateTimeImmutable`
+- `getEndsAt()`: `\DateTimeImmutable`
+- `getDescription()`: `string`
+- `getTags()`: `array`
 
 ### MinuteForecast
 
-`getDateTime()`: `\DateTimeImmutable`
-
-`getPrecipitation()`: `float`
+- `getDateTime()`: `\DateTimeImmutable`
+- `getPrecipitation()`: `float`
 
 ### OneCall
 
-`getCoordinate()`: [`Coordinate`](#coordinate)
-
-`getTimezone()`: [`Timezone`](#timezone)
-
-`getCurrent()`: [`Weather`](#weather)
-
-`getMinutelyForecast()`: [`?MinuteForecast[]`](#minuteforecast)
-
-`getHourlyForecast()`: [`Weather[]`](#weather)
-
-`getDailyForecast()`: [`Weather[]`](#weather)
-
-`getAlerts()`: [`?Alert[]`](#alert)
+- `getCoordinate()`: [`Coordinate`](#coordinate)
+- `getTimezone()`: [`Timezone`](#timezone)
+- `getCurrent()`: [`Weather`](#weather)
+- `getMinutelyForecast()`: [`?MinuteForecast[]`](#minuteforecast)
+- `getHourlyForecast()`: [`Weather[]`](#weather)
+- `getDailyForecast()`: [`Weather[]`](#weather)
+- `getAlerts()`: [`?Alert[]`](#alert)
 
 ### Weather
 
-`getDateTime()`: `\DateTimeImmutable`
-
-`getSunriseAt()`: `?\DateTimeImmutable`
-
-`getSunsetAt()`: `?\DateTimeImmutable`
-
-`getMoonriseAt()`: `?\DateTimeImmutable`
-
-`getMoonsetAt()`: `?\DateTimeImmutable`
-
-`getMoonPhase()`: [`?MoonPhase`](#moonphase)
-
-`getTemperature()`: `float`|[`Temperature`](#temperature)
-
-`getTemperatureFeelsLike()`: `float`|[`Temperature`](#temperature)
-
-`getDescription()`: `?string`
-
-`getAtmosphericPressure()`: `int`
-
-`getHumidity()`: `int`
-
-`getDewPoint()`: `?float`
-
-`getUltraVioletIndex()`: `?float`
-
-`getCloudiness()`: `int`
-
-`getVisibility()`: `?int`
-
-`getWind()`: [`Wind`](#wind)
-
-`getPrecipitationProbability()`: `?int`
-
-`getRain()`: `null`|`float`|[`Rain`](#rain)
-
-`getSnow()`: `null`|`float`|[`Snow`](#snow)
-
-`getWeatherConditions()`: [`WeatherCondition[]`](#weathercondition)
+- `getDateTime()`: `\DateTimeImmutable`
+- `getSunriseAt()`: `?\DateTimeImmutable`
+- `getSunsetAt()`: `?\DateTimeImmutable`
+- `getMoonriseAt()`: `?\DateTimeImmutable`
+- `getMoonsetAt()`: `?\DateTimeImmutable`
+- `getMoonPhase()`: [`?MoonPhase`](#moonphase)
+- `getTemperature()`: `float`|[`Temperature`](#temperature)
+- `getTemperatureFeelsLike()`: `float`|[`Temperature`](#temperature)
+- `getDescription()`: `?string`
+- `getAtmosphericPressure()`: `int`
+- `getHumidity()`: `int`
+- `getDewPoint()`: `?float`
+- `getUltraVioletIndex()`: `?float`
+- `getCloudiness()`: `int`
+- `getVisibility()`: `?int`
+- `getWind()`: [`Wind`](#wind)
+- `getPrecipitationProbability()`: `?int`
+- `getRain()`: `null`|`float`|[`Rain`](#rain)
+- `getSnow()`: `null`|`float`|[`Snow`](#snow)
+- `getWeatherConditions()`: [`WeatherCondition[]`](#weathercondition)
 
 ### WeatherAggregate
 
-`getCoordinate()`: [`Coordinate`](#coordinate)
-
-`getTimezone()`: [`Timezone`](#timezone)
-
-`getDateTime()`: `\DateTimeImmutable`
-
-`getCloudiness()`: `int`
-
-`getHumidity()`: `int`
-
-`getPrecipitation()`: `float`
-
-`getTemperature()`: [`Temperature`](#temperature)
-
-`getAtmosphericPressure()`: `int`
-
-`getWind()`: [`Wind`](#wind)
+- `getCoordinate()`: [`Coordinate`](#coordinate)
+- `getTimezone()`: [`Timezone`](#timezone)
+- `getDateTime()`: `\DateTimeImmutable`
+- `getCloudiness()`: `int`
+- `getHumidity()`: `int`
+- `getPrecipitation()`: `float`
+- `getTemperature()`: [`Temperature`](#temperature)
+- `getAtmosphericPressure()`: `int`
+- `getWind()`: [`Wind`](#wind)
 
 ### WeatherLocation
 
-`getCoordinate()`: [`Coordinate`](#coordinate)
-
-`getTimezone()`: [`Timezone`](#timezone)
-
-`getDateTime()`: `\DateTimeImmutable`
-
-`getSunriseAt()`: `?\DateTimeImmutable`
-
-`getSunsetAt()`: `?\DateTimeImmutable`
-
-`getMoonriseAt()`: `?\DateTimeImmutable`
-
-`getMoonsetAt()`: `?\DateTimeImmutable`
-
-`getMoonPhase()`: [`?MoonPhase`](#moonphase)
-
-`getTemperature()`: `float`|[`Temperature`](#temperature)
-
-`getTemperatureFeelsLike()`: `float`|[`Temperature`](#temperature)
-
-`getDescription()`: `?string`
-
-`getAtmosphericPressure()`: `int`
-
-`getHumidity()`: `int`
-
-`getDewPoint()`: `?float`
-
-`getUltraVioletIndex()`: `?float`
-
-`getCloudiness()`: `int`
-
-`getVisibility()`: `?int`
-
-`getWind()`: [`Wind`](#wind)
-
-`getPrecipitationProbability()`: `?int`
-
-`getRain()`: `null`|`float`|[`Rain`](#rain)
-
-`getSnow()`: `null`|`float`|[`Snow`](#snow)
-
-`getWeatherConditions()`: [`WeatherCondition[]`](#weathercondition)
+- `getCoordinate()`: [`Coordinate`](#coordinate)
+- `getTimezone()`: [`Timezone`](#timezone)
+- `getDateTime()`: `\DateTimeImmutable`
+- `getSunriseAt()`: `?\DateTimeImmutable`
+- `getSunsetAt()`: `?\DateTimeImmutable`
+- `getMoonriseAt()`: `?\DateTimeImmutable`
+- `getMoonsetAt()`: `?\DateTimeImmutable`
+- `getMoonPhase()`: [`?MoonPhase`](#moonphase)
+- `getTemperature()`: `float`|[`Temperature`](#temperature)
+- `getTemperatureFeelsLike()`: `float`|[`Temperature`](#temperature)
+- `getDescription()`: `?string`
+- `getAtmosphericPressure()`: `int`
+- `getHumidity()`: `int`
+- `getDewPoint()`: `?float`
+- `getUltraVioletIndex()`: `?float`
+- `getCloudiness()`: `int`
+- `getVisibility()`: `?int`
+- `getWind()`: [`Wind`](#wind)
+- `getPrecipitationProbability()`: `?int`
+- `getRain()`: `null`|`float`|[`Rain`](#rain)
+- `getSnow()`: `null`|`float`|[`Snow`](#snow)
+- `getWeatherConditions()`: [`WeatherCondition[]`](#weathercondition)
 
 ## Weather
 
 ### Weather
 
-`getTemperature()`: `float`
-
-`getTemperatureFeelsLike()`: `float`
-
-`getMinTemperature()`: `float`
-
-`getMaxTemperature()`: `float`
-
-`getHumidity()`: `int`
-
-`getCloudiness()`: `int`
-
-`getVisibility()`: `int`
-
-`getWeatherConditions()`: [`WeatherCondition[]`](#weathercondition)
-
-`getWind()`: [`Wind`](#wind)
-
-`getPrecipitationProbability()`: `?int`
-
-`getRain()`: [`?Rain`](#rain)
-
-`getSnow()`: [`?Snow`](#snow)
-
-`getAtmosphericPressure()`: [`AtmosphericPressure`](#atmosphericpressure)
-
-`getDateTime()`: `\DateTimeImmutable`
+- `getTemperature()`: `float`
+- `getTemperatureFeelsLike()`: `float`
+- `getMinTemperature()`: `float`
+- `getMaxTemperature()`: `float`
+- `getHumidity()`: `int`
+- `getCloudiness()`: `int`
+- `getVisibility()`: `int`
+- `getWeatherConditions()`: [`WeatherCondition[]`](#weathercondition)
+- `getWind()`: [`Wind`](#wind)
+- `getPrecipitationProbability()`: `?int`
+- `getRain()`: [`?Rain`](#rain)
+- `getSnow()`: [`?Snow`](#snow)
+- `getAtmosphericPressure()`: [`AtmosphericPressure`](#atmosphericpressure)
+- `getDateTime()`: `\DateTimeImmutable`
 
 ### WeatherLocation
 
-`getLocation()`: [`Location`](#location)
-
-`getTemperature()`: `float`
-
-`getTemperatureFeelsLike()`: `float`
-
-`getMinTemperature()`: `float`
-
-`getMaxTemperature()`: `float`
-
-`getHumidity()`: `int`
-
-`getCloudiness()`: `int`
-
-`getVisibility()`: `int`
-
-`getWeatherConditions()`: [`WeatherCondition[]`](#weathercondition)
-
-`getWind()`: [`Wind`](#wind)
-
-`getPrecipitationProbability()`: `?int`
-
-`getRain()`: [`?Rain`](#rain)
-
-`getSnow()`: [`?Snow`](#snow)
-
-`getAtmosphericPressure()`: [`AtmosphericPressure`](#atmosphericpressure)
-
-`getDateTime()`: `\DateTimeImmutable`
+- `getLocation()`: [`Location`](#location)
+- `getTemperature()`: `float`
+- `getTemperatureFeelsLike()`: `float`
+- `getMinTemperature()`: `float`
+- `getMaxTemperature()`: `float`
+- `getHumidity()`: `int`
+- `getCloudiness()`: `int`
+- `getVisibility()`: `int`
+- `getWeatherConditions()`: [`WeatherCondition[]`](#weathercondition)
+- `getWind()`: [`Wind`](#wind)
+- `getPrecipitationProbability()`: `?int`
+- `getRain()`: [`?Rain`](#rain)
+- `getSnow()`: [`?Snow`](#snow)
+- `getAtmosphericPressure()`: [`AtmosphericPressure`](#atmosphericpressure)
+- `getDateTime()`: `\DateTimeImmutable`
 
 ### WeatherLocationList
 
-`getNumResults()`: `int`
-
-`getLocation()`: [`Location`](#location)
-
-`getList()`: [`Weather[]`](#weather-2)
+- `getNumResults()`: `int`
+- `getLocation()`: [`Location`](#location)
+- `getList()`: [`Weather[]`](#weather-2)
 
 ## Air Pollution
 
 ### AirPollution
 
-`getDateTime()`: `\DateTimeImmutable`
-
-`getAirQuality`: [`AirQuality`](#airquality)
-
-`getCarbonMonoxide()`: `float`
-
-`getNitrogenMonoxide()`: `float`
-
-`getNitrogenDioxide()`: `float`
-
-`getOzone()`: `float`
-
-`getSulphurDioxide()`: `float`
-
-`getFineParticulateMatter()`: `float`
-
-`getCoarseParticulateMatter()`: `float`
-
-`getAmmonia()`: `float`
+- `getDateTime()`: `\DateTimeImmutable`
+- `getAirQuality`: [`AirQuality`](#airquality)
+- `getCarbonMonoxide()`: `float`
+- `getNitrogenMonoxide()`: `float`
+- `getNitrogenDioxide()`: `float`
+- `getOzone()`: `float`
+- `getSulphurDioxide()`: `float`
+- `getFineParticulateMatter()`: `float`
+- `getCoarseParticulateMatter()`: `float`
+- `getAmmonia()`: `float`
 
 ### AirPollutionLocation
 
-`getCoordinate()`: [`Coordinate`](#coordinate)
-
-`getDateTime()`: `\DateTimeImmutable`
-
-`getAirQuality`: [`AirQuality`](#airquality)
-
-`getCarbonMonoxide()`: `float`
-
-`getNitrogenMonoxide()`: `float`
-
-`getNitrogenDioxide()`: `float`
-
-`getOzone()`: `float`
-
-`getSulphurDioxide()`: `float`
-
-`getFineParticulateMatter()`: `float`
-
-`getCoarseParticulateMatter()`: `float`
-
-`getAmmonia()`: `float`
+- `getCoordinate()`: [`Coordinate`](#coordinate)
+- `getDateTime()`: `\DateTimeImmutable`
+- `getAirQuality`: [`AirQuality`](#airquality)
+- `getCarbonMonoxide()`: `float`
+- `getNitrogenMonoxide()`: `float`
+- `getNitrogenDioxide()`: `float`
+- `getOzone()`: `float`
+- `getSulphurDioxide()`: `float`
+- `getFineParticulateMatter()`: `float`
+- `getCoarseParticulateMatter()`: `float`
+- `getAmmonia()`: `float`
 
 ### AirPollutionLocationList
 
-`getCoordinate()`: [`Coordinate`](#coordinate)
-
-`getList()`: [`AirPollution[]`](#airpollution)
+- `getCoordinate()`: [`Coordinate`](#coordinate)
+- `getList()`: [`AirPollution[]`](#airpollution)
 
 ### AirQuality
 
-`getIndex()`: `int`
-
-`getQualitativeName()`: `string`
+- `getIndex()`: `int`
+- `getQualitativeName()`: `string`
 
 ## Geocoding
 
 ### ZipCodeLocation
 
-`getZipCode()`: `string`
-
-`getName()`: `string`
-
-`getCoordinate()`: [`Coordinate`](#coordinate)
-
-`getCountryCode()`: `string`
+- `getZipCode()`: `string`
+- `getName()`: `string`
+- `getCoordinate()`: [`Coordinate`](#coordinate)
+- `getCountryCode()`: `string`
 
 ## Common
 
 ### AtmosphericPressure
 
-`getPressure()`: `int`
-
-`getSeaLevelPressure()`: `?int`
-
-`getGroundLevelPressure()`: `?int`
+- `getPressure()`: `int`
+- `getSeaLevelPressure()`: `?int`
+- `getGroundLevelPressure()`: `?int`
 
 ### Coordinate
 
-`getLatitude()`: `float`
-
-`getLongitude()`: `float`
+- `getLatitude()`: `float`
+- `getLongitude()`: `float`
 
 ### Icon
 
-`getId()`: `string`
-
-`getImageUrl()`: `string`
+- `getId()`: `string`
+- `getImageUrl()`: `string`
 
 ### Location
 
-`getId()`: `?int`
-
-`getName()`: `?string`
-
-`getState()`: `?string`
-
-`getCountryCode()`: `?string`
-
-`getLocalNames()`: `?array`
-
-`getPopulation()`: `?int`
-
-`getCoordinate()`: [`Coordinate`](#coordinate)
-
-`getTimezone()`: [`?Timezone`](#timezone)
-
-`getSunriseAt()`: `?\DateTimeImmutable`
-
-`getSunsetAt()`: `?\DateTimeImmutable`
+- `getId()`: `?int`
+- `getName()`: `?string`
+- `getState()`: `?string`
+- `getCountryCode()`: `?string`
+- `getLocalNames()`: `?array`
+- `getPopulation()`: `?int`
+- `getCoordinate()`: [`Coordinate`](#coordinate)
+- `getTimezone()`: [`?Timezone`](#timezone)
+- `getSunriseAt()`: `?\DateTimeImmutable`
+- `getSunsetAt()`: `?\DateTimeImmutable`
 
 ### MoonPhase
 
-`getValue()`: `float`
-
-`getName()`: `string`
-
-`getSysName()`: `string`
+- `getValue()`: `float`
+- `getName()`: `string`
+- `getSysName()`: `string`
 
 ### Rain
 
-`getLastOneHourVolume()`: `?float`
-
-`getLastThreeHoursVolume()`: `?float`
+- `getLastOneHourVolume()`: `?float`
+- `getLastThreeHoursVolume()`: `?float`
 
 ### Snow
 
-`getLastOneHourVolume()`: `?float`
-
-`getLastThreeHoursVolume()`: `?float`
+- `getLastOneHourVolume()`: `?float`
+- `getLastThreeHoursVolume()`: `?float`
 
 ### Temperature
 
-`getMorning()`: `float`
-
-`getDay()`: `float`
-
-`getEvening()`: `float`
-
-`getNight()`: `float`
-
-`getMin()`: `?float`
-
-`getMax()`: `?float`
+- `getMorning()`: `float`
+- `getDay()`: `float`
+- `getEvening()`: `float`
+- `getNight()`: `float`
+- `getMin()`: `?float`
+- `getMax()`: `?float`
 
 ### Timezone
 
-`getIdentifier()`: `?string`
-
-`getOffset()`: `int`
+- `getIdentifier()`: `?string`
+- `getOffset()`: `int`
 
 ### WeatherCondition
 
-`getId()`: `int`
-
-`getName()`: `string`
-
-`getDescription()`: `string`
-
-`getIcon()`: [`Icon`](#icon)
-
-`getSysName()`: `string`
+- `getId()`: `int`
+- `getName()`: `string`
+- `getDescription()`: `string`
+- `getIcon()`: [`Icon`](#icon)
+- `getSysName()`: `string`
 
 ### Wind
 
-`getSpeed()`: `float`
-
-`getDirection()`: `int`
-
-`getGust()`: `?float`
+- `getSpeed()`: `float`
+- `getDirection()`: `int`
+- `getGust()`: `?float`

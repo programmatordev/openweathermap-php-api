@@ -3,20 +3,17 @@
 namespace ProgrammatorDev\OpenWeatherMap\Endpoint;
 
 use Http\Client\Exception;
+use ProgrammatorDev\OpenWeatherMap\Endpoint\Util\ValidationTrait;
 use ProgrammatorDev\OpenWeatherMap\Entity\Geocoding\ZipCodeLocation;
 use ProgrammatorDev\OpenWeatherMap\Entity\Location;
-use ProgrammatorDev\OpenWeatherMap\Exception\BadRequestException;
-use ProgrammatorDev\OpenWeatherMap\Exception\NotFoundException;
-use ProgrammatorDev\OpenWeatherMap\Exception\TooManyRequestsException;
-use ProgrammatorDev\OpenWeatherMap\Exception\UnauthorizedException;
-use ProgrammatorDev\OpenWeatherMap\Exception\UnexpectedErrorException;
-use ProgrammatorDev\OpenWeatherMap\Util\CreateEntityListTrait;
+use ProgrammatorDev\OpenWeatherMap\Exception\ApiErrorException;
+use ProgrammatorDev\OpenWeatherMap\Util\EntityListTrait;
 use ProgrammatorDev\YetAnotherPhpValidator\Exception\ValidationException;
-use ProgrammatorDev\YetAnotherPhpValidator\Validator;
 
 class GeocodingEndpoint extends AbstractEndpoint
 {
-    use CreateEntityListTrait;
+    use ValidationTrait;
+    use EntityListTrait;
 
     private const NUM_RESULTS = 5;
 
@@ -25,17 +22,13 @@ class GeocodingEndpoint extends AbstractEndpoint
     /**
      * @return Location[]
      * @throws Exception
-     * @throws BadRequestException
-     * @throws NotFoundException
-     * @throws TooManyRequestsException
-     * @throws UnauthorizedException
-     * @throws UnexpectedErrorException
+     * @throws ApiErrorException
      * @throws ValidationException
      */
     public function getByLocationName(string $locationName, int $numResults = self::NUM_RESULTS): array
     {
-        Validator::notBlank()->assert($locationName, 'locationName');
-        Validator::greaterThan(0)->assert($numResults, 'numResults');
+        $this->validateSearchQuery($locationName, 'locationName');
+        $this->validateNumResults($numResults);
 
         $data = $this->sendRequest(
             method: 'GET',
@@ -46,22 +39,18 @@ class GeocodingEndpoint extends AbstractEndpoint
             ]
         );
 
-        return $this->createEntityList($data, Location::class);
+        return $this->createEntityList(Location::class, $data);
     }
 
     /**
      * @throws Exception
-     * @throws BadRequestException
-     * @throws NotFoundException
-     * @throws TooManyRequestsException
-     * @throws UnauthorizedException
-     * @throws UnexpectedErrorException
+     * @throws ApiErrorException
      * @throws ValidationException
      */
     public function getByZipCode(string $zipCode, string $countryCode): ZipCodeLocation
     {
-        Validator::notBlank()->assert($zipCode, 'zipCode');
-        Validator::country()->assert($countryCode, 'countryCode');
+        $this->validateSearchQuery($zipCode, 'zipCode');
+        $this->validateCountryCode($countryCode);
 
         $data = $this->sendRequest(
             method: 'GET',
@@ -77,18 +66,13 @@ class GeocodingEndpoint extends AbstractEndpoint
     /**
      * @return Location[]
      * @throws Exception
-     * @throws BadRequestException
-     * @throws NotFoundException
-     * @throws TooManyRequestsException
-     * @throws UnauthorizedException
-     * @throws UnexpectedErrorException
+     * @throws ApiErrorException
      * @throws ValidationException
      */
     public function getByCoordinate(float $latitude, float $longitude, int $numResults = self::NUM_RESULTS): array
     {
-        Validator::range(-90, 90)->assert($latitude, 'latitude');
-        Validator::range(-180, 180)->assert($longitude, 'longitude');
-        Validator::greaterThan(0)->assert($numResults, 'numResults');
+        $this->validateCoordinate($latitude, $longitude);
+        $this->validateNumResults($numResults);
 
         $data = $this->sendRequest(
             method: 'GET',
@@ -100,6 +84,6 @@ class GeocodingEndpoint extends AbstractEndpoint
             ]
         );
 
-        return $this->createEntityList($data, Location::class);
+        return $this->createEntityList(Location::class, $data);
     }
 }

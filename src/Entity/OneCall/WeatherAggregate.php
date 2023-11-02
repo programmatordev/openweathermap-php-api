@@ -33,8 +33,7 @@ class WeatherAggregate
         $this->timezone = new Timezone([
             'timezone_offset' => \DateTimeImmutable::createFromFormat('P', $data['tz'])->getOffset()
         ]);
-        $this->dateTime = \DateTimeImmutable::createFromFormat('Y-m-d', $data['date'], new \DateTimeZone('UTC'))
-            ->setTime(0, 0);
+        $this->dateTime = \DateTimeImmutable::createFromFormat('Y-m-d', $data['date'], new \DateTimeZone('UTC'))->setTime(0, 0);
         $this->cloudiness = round($data['cloud_cover']['afternoon']);
         $this->humidity = round($data['humidity']['afternoon']);
         $this->precipitation = $data['precipitation']['total'];

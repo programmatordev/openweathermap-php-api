@@ -43,9 +43,7 @@ class Config
         $resolver->setAllowedTypes('cache', ['null', CacheItemPoolInterface::class]);
         $resolver->setAllowedTypes('logger', ['null', LoggerInterface::class]);
 
-        $resolver->setAllowedValues('applicationKey', function($value) {
-            return !empty($value);
-        });
+        $resolver->setAllowedValues('applicationKey', fn($value) => !empty($value));
         $resolver->setAllowedValues('unitSystem', UnitSystem::getList());
         $resolver->setAllowedValues('language', Language::getList());
 

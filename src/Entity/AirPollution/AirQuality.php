@@ -2,11 +2,11 @@
 
 namespace ProgrammatorDev\OpenWeatherMap\Entity\AirPollution;
 
-use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\Util\GetAirQualityQualitativeNameTrait;
+use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\Util\AirQualityQualitativeNameTrait;
 
 class AirQuality
 {
-    use GetAirQualityQualitativeNameTrait;
+    use AirQualityQualitativeNameTrait;
 
     private int $index;
 

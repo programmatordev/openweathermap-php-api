@@ -2,8 +2,12 @@
 
 namespace ProgrammatorDev\OpenWeatherMap\Language;
 
+use ProgrammatorDev\OpenWeatherMap\Util\ClassConstantsTrait;
+
 class Language
 {
+    use ClassConstantsTrait;
+
     public const AFRIKAANS = 'af';
     public const ALBANIAN = 'al';
     public const ARABIC = 'ar';
@@ -53,53 +57,6 @@ class Language
 
     public static function getList(): array
     {
-        return [
-            self::AFRIKAANS,
-            self::ALBANIAN,
-            self::ARABIC,
-            self::AZERBAIJANI,
-            self::BULGARIAN,
-            self::CATALAN,
-            self::CZECH,
-            self::DANISH,
-            self::GERMAN,
-            self::GREEK,
-            self::ENGLISH,
-            self::SPANISH,
-            self::BASQUE,
-            self::PERSIAN_FARSI,
-            self::FINNISH,
-            self::FRENCH,
-            self::GALICIAN,
-            self::HEBREW,
-            self::HINDI,
-            self::CROATIAN,
-            self::HUNGARIAN,
-            self::INDONESIAN,
-            self::ITALIAN,
-            self::JAPANESE,
-            self::KOREAN,
-            self::LATVIAN,
-            self::LITHUANIAN,
-            self::MACEDONIAN,
-            self::NORWEGIAN,
-            self::DUTCH,
-            self::POLISH,
-            self::PORTUGUESE,
-            self::PORTUGUESE_BRAZIL,
-            self::ROMANIAN,
-            self::RUSSIAN,
-            self::SWEDISH,
-            self::SLOVAK,
-            self::SLOVENIAN,
-            self::SERBIAN,
-            self::THAI,
-            self::TURKISH,
-            self::UKRAINIAN,
-            self::VIETNAMESE,
-            self::CHINESE_SIMPLIFIED,
-            self::CHINESE_TRADITIONAL,
-            self::ZULU
-        ];
+        return (new Language)->getClassConstants(self::class);
     }
 }

@@ -8,11 +8,11 @@ use ProgrammatorDev\OpenWeatherMap\Entity\Snow;
 use ProgrammatorDev\OpenWeatherMap\Entity\Temperature;
 use ProgrammatorDev\OpenWeatherMap\Entity\WeatherCondition;
 use ProgrammatorDev\OpenWeatherMap\Entity\Wind;
-use ProgrammatorDev\OpenWeatherMap\Util\CreateEntityListTrait;
+use ProgrammatorDev\OpenWeatherMap\Util\EntityListTrait;
 
 class Weather
 {
-    use CreateEntityListTrait;
+    use EntityListTrait;
 
     private \DateTimeImmutable $dateTime;
 
@@ -52,6 +52,7 @@ class Weather
 
     private Snow|float|null $snow;
 
+    /** @var WeatherCondition[] */
     private array $weatherConditions;
 
     public function __construct(array $data)
@@ -59,27 +60,13 @@ class Weather
         $timezoneUtc = new \DateTimeZone('UTC');
 
         $this->dateTime = \DateTimeImmutable::createFromFormat('U', $data['dt'], $timezoneUtc);
-        $this->sunriseAt = !empty($data['sunrise'])
-            ? \DateTimeImmutable::createFromFormat('U', $data['sunrise'], $timezoneUtc)
-            : null;
-        $this->sunsetAt = !empty($data['sunset'])
-            ? \DateTimeImmutable::createFromFormat('U', $data['sunset'], $timezoneUtc)
-            : null;
-        $this->moonriseAt = !empty($data['moonrise'])
-            ? \DateTimeImmutable::createFromFormat('U', $data['moonrise'], $timezoneUtc)
-            : null;
-        $this->moonsetAt = !empty($data['moonset'])
-            ? \DateTimeImmutable::createFromFormat('U', $data['moonset'], $timezoneUtc)
-            : null;
-        $this->moonPhase = !empty($data['moon_phase'])
-            ? new MoonPhase($data)
-            : null;
-        $this->temperature = is_array($data['temp'])
-            ? new Temperature($data['temp'])
-            : $data['temp'];
-        $this->temperatureFeelsLike = is_array($data['feels_like'])
-            ? new Temperature($data['feels_like'])
-            : $data['feels_like'];
+        $this->sunriseAt = !empty($data['sunrise']) ? \DateTimeImmutable::createFromFormat('U', $data['sunrise'], $timezoneUtc) : null;
+        $this->sunsetAt = !empty($data['sunset']) ? \DateTimeImmutable::createFromFormat('U', $data['sunset'], $timezoneUtc) : null;
+        $this->moonriseAt = !empty($data['moonrise']) ? \DateTimeImmutable::createFromFormat('U', $data['moonrise'], $timezoneUtc) : null;
+        $this->moonsetAt = !empty($data['moonset']) ? \DateTimeImmutable::createFromFormat('U', $data['moonset'], $timezoneUtc) : null;
+        $this->moonPhase = !empty($data['moon_phase']) ? new MoonPhase($data) : null;
+        $this->temperature = is_array($data['temp']) ? new Temperature($data['temp']) : $data['temp'];
+        $this->temperatureFeelsLike = is_array($data['feels_like']) ? new Temperature($data['feels_like']) : $data['feels_like'];
         $this->description = $data['summary'] ?? null;
         $this->atmosphericPressure = $data['pressure'];
         $this->humidity = $data['humidity'];
@@ -92,16 +79,14 @@ class Weather
             'deg' => $data['wind_deg'],
             'gust' => $data['wind_gust'] ?? null
         ]);
-        $this->precipitationProbability = isset($data['pop'])
-            ? round($data['pop'] * 100)
-            : null;
+        $this->precipitationProbability = isset($data['pop']) ? round($data['pop'] * 100) : null;
         $this->rain = !empty($data['rain'])
             ? is_array($data['rain']) ? new Rain($data['rain']) : $data['rain']
             : null;
         $this->snow = !empty($data['snow'])
             ? is_array($data['snow']) ? new Snow($data['snow']) : $data['snow']
             : null;
-        $this->weatherConditions = $this->createEntityList($data['weather'], WeatherCondition::class);
+        $this->weatherConditions = $this->createEntityList(WeatherCondition::class, $data['weather']);
     }
 
     public function getDateTime(): \DateTimeImmutable
@@ -199,9 +184,6 @@ class Weather
         return $this->snow;
     }
 
-    /**
-     * @return WeatherCondition[]
-     */
     public function getWeatherConditions(): array
     {
         return $this->weatherConditions;

@@ -2,6 +2,7 @@
 
 namespace ProgrammatorDev\OpenWeatherMap\Test;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use ProgrammatorDev\OpenWeatherMap\Config;
 use ProgrammatorDev\OpenWeatherMap\Endpoint\AirPollutionEndpoint;
 use ProgrammatorDev\OpenWeatherMap\Endpoint\GeocodingEndpoint;
@@ -10,28 +11,18 @@ use ProgrammatorDev\OpenWeatherMap\Endpoint\WeatherEndpoint;
 
 class OpenWeatherMapTest extends AbstractTest
 {
-    public function testOpenWeatherMapConfig()
+    #[DataProvider('provideMethodsData')]
+    public function testOpenWeatherMapMethods(string $instance, string $methodName)
     {
-        $this->assertInstanceOf(Config::class, $this->givenApi()->config());
+        $this->assertInstanceOf($instance, $this->givenApi()->$methodName());
     }
 
-    public function testOpenWeatherMapOneCall()
+    public static function provideMethodsData(): \Generator
     {
-        $this->assertInstanceOf(OneCallEndpoint::class, $this->givenApi()->oneCall());
-    }
-
-    public function testOpenWeatherMapWeather()
-    {
-        $this->assertInstanceOf(WeatherEndpoint::class, $this->givenApi()->weather());
-    }
-
-    public function testOpenWeatherMapAirPollution()
-    {
-        $this->assertInstanceOf(AirPollutionEndpoint::class, $this->givenApi()->airPollution());
-    }
-
-    public function testOpenWeatherMapGeocoding()
-    {
-        $this->assertInstanceOf(GeocodingEndpoint::class, $this->givenApi()->geocoding());
+        yield 'config' => [Config::class, 'config'];
+        yield 'air pollution' => [AirPollutionEndpoint::class, 'airPollution'];
+        yield 'geocoding' => [GeocodingEndpoint::class, 'geocoding'];
+        yield 'one call' => [OneCallEndpoint::class, 'oneCall'];
+        yield 'weather' => [WeatherEndpoint::class, 'weather'];
     }
 }
