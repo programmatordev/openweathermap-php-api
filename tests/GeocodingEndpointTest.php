@@ -2,114 +2,60 @@
 
 namespace ProgrammatorDev\OpenWeatherMap\Test;
 
-use Nyholm\Psr7\Response;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\DataProviderExternal;
 use ProgrammatorDev\OpenWeatherMap\Endpoint\GeocodingEndpoint;
 use ProgrammatorDev\OpenWeatherMap\Entity\Coordinate;
 use ProgrammatorDev\OpenWeatherMap\Entity\Geocoding\ZipCodeLocation;
 use ProgrammatorDev\OpenWeatherMap\Entity\Location;
-use ProgrammatorDev\OpenWeatherMap\Test\DataProvider\InvalidParamDataProvider;
-use ProgrammatorDev\YetAnotherPhpValidator\Exception\ValidationException;
+use ProgrammatorDev\OpenWeatherMap\Test\Util\TestEndpointInvalidResponseTrait;
+use ProgrammatorDev\OpenWeatherMap\Test\Util\TestEndpointSuccessResponseTrait;
 
 class GeocodingEndpointTest extends AbstractTest
 {
-    // --- BY LOCATION NAME ---
+    use TestEndpointSuccessResponseTrait;
+    use TestEndpointInvalidResponseTrait;
 
-    public function testGeocodingGetByLocationName()
+    public static function provideEndpointSuccessResponseData(): \Generator
     {
-        $this->mockHttpClient->addResponse(
-            new Response(
-                status: 200,
-                body: MockResponse::GEOCODING_DIRECT
-            )
-        );
-
-        $response = $this->givenApi()->geocoding()->getByLocationName('lisbon, pt');
-        $this->assertLocationListResponse($response);
+        yield 'get by location name' => [
+            MockResponse::GEOCODING_DIRECT,
+            'geocoding',
+            'getByLocationName',
+            ['test'],
+            'assertGetByLocationResponse'
+        ];
+        yield 'get by coordinate' => [
+            MockResponse::GEOCODING_REVERSE,
+            'geocoding',
+            'getByCoordinate',
+            [50, 50],
+            'assertGetByLocationResponse'
+        ];
+        yield 'get by zip code' => [
+            MockResponse::GEOCODING_ZIP,
+            'geocoding',
+            'getByZipCode',
+            ['1234-567', 'pt'],
+            'assertGetByZipCodeResponse'
+        ];
     }
 
-    public function testGeocodingGetByLocationNameWithBlankValue()
+    public static function provideEndpointInvalidResponseData(): \Generator
     {
-        $this->expectException(ValidationException::class);
-        $this->givenApi()->geocoding()->getByLocationName('');
+        yield 'get by location name, blank value' => ['geocoding', 'getByLocationName', ['']];
+        yield 'get by location name, zero num results' => ['geocoding', 'getByLocationName', ['test', 0]];
+        yield 'get by location name, negative num results' => ['geocoding', 'getByLocationName', ['test', -1]];
+
+        yield 'get by zip code, blank zip code' => ['geocoding', 'getByZipCode', ['', 'pt']];
+        yield 'get by zip code, blank country code' => ['geocoding', 'getByZipCode', ['1234-567', '']];
+        yield 'get by zip code, invalid country code' => ['geocoding', 'getByZipCode', ['1234-567', 'invalid']];
+
+        yield 'get by coordinate, latitude lower than -90' => ['geocoding', 'getByCoordinate', [-91, 50]];
+        yield 'get by coordinate, latitude greater than 90' => ['geocoding', 'getByCoordinate', [91, 50]];
+        yield 'get by coordinate, longitude lower than -180' => ['geocoding', 'getByCoordinate', [50, -181]];
+        yield 'get by coordinate, longitude greater than 180' => ['geocoding', 'getByCoordinate', [50, 181]];
+        yield 'get by coordinate, zero num results' => ['geocoding', 'getByCoordinate', [50, 50, 0]];
+        yield 'get by coordinate, negative num results' => ['geocoding', 'getByCoordinate', [50, 50, -1]];
     }
-
-    // --- BY ZIP CODE ---
-
-    public function testGeocodingGetByZipCode()
-    {
-        $this->mockHttpClient->addResponse(
-            new Response(
-                status: 200,
-                body: MockResponse::GEOCODING_ZIP
-            )
-        );
-
-        $response = $this->givenApi()->geocoding()->getByZipCode('1000-001', 'pt');
-        $this->assertInstanceOf(ZipCodeLocation::class, $response);
-
-        $this->assertSame('1000-001', $response->getZipCode());
-        $this->assertSame('Lisbon', $response->getName());
-        $this->assertSame('PT', $response->getCountryCode());
-
-        $coordinate = $response->getCoordinate();
-        $this->assertInstanceOf(Coordinate::class, $coordinate);
-        $this->assertSame(38.7167, $coordinate->getLatitude());
-        $this->assertSame(-9.1333, $coordinate->getLongitude());
-    }
-
-    #[DataProvider('provideGeocodingGetByZipCodeWithInvalidValueData')]
-    public function testGeocodingGetByZipCodeWithInvalidValue(string $zipCode, string $countryCode)
-    {
-        $this->expectException(ValidationException::class);
-        $this->givenApi()->geocoding()->getByZipCode($zipCode, $countryCode);
-    }
-
-    public static function provideGeocodingGetByZipCodeWithInvalidValueData(): \Generator
-    {
-        yield 'blank zip code' => ['', 'pt'];
-        yield 'blank country code' => ['1000-100', ''];
-        yield 'invalid country code' => ['1000-100', 'invalid'];
-    }
-
-    // --- BY COORDINATE ---
-
-    public function testGeocodingGetByCoordinate()
-    {
-        $this->mockHttpClient->addResponse(
-            new Response(
-                status: 200,
-                body: MockResponse::GEOCODING_REVERSE
-            )
-        );
-
-        $response = $this->givenApi()->geocoding()->getByCoordinate(50, 50);
-        $this->assertLocationListResponse($response);
-    }
-
-    #[DataProviderExternal(InvalidParamDataProvider::class, 'provideInvalidCoordinateData')]
-    public function testGeocodingGetByCoordinateWithInvalidCoordinate(
-        float $latitude,
-        float $longitude,
-        string $expectedException
-    )
-    {
-        $this->expectException($expectedException);
-        $this->givenApi()->geocoding()->getByCoordinate($latitude, $longitude);
-    }
-
-    #[DataProviderExternal(InvalidParamDataProvider::class, 'provideInvalidNumResultsData')]
-    public function testGeocodingGetByCoordinateWithInvalidNumResults(
-        int $numResults,
-        string $expectedException
-    )
-    {
-        $this->expectException($expectedException);
-        $this->givenApi()->geocoding()->getByCoordinate(50, 50, $numResults);
-    }
-
-    // --- ASSERT METHODS EXIST ---
 
     public function testGeocodingMethodsExist()
     {
@@ -118,16 +64,12 @@ class GeocodingEndpointTest extends AbstractTest
         $this->assertSame(true, method_exists(GeocodingEndpoint::class, 'withCacheTtl'));
     }
 
-    // --- ASSERT RESPONSES ---
-
-    /**
-     * @param Location[] $response
-     */
-    private function assertLocationListResponse(array $response): void
+    /**  @param Location[] $locations */
+    private function assertGetByLocationResponse(array $locations): void
     {
-        $this->assertContainsOnlyInstancesOf(Location::class, $response);
+        $this->assertContainsOnlyInstancesOf(Location::class, $locations);
 
-        $location = $response[0];
+        $location = $locations[0];
         $this->assertSame(null, $location->getId());
         $this->assertSame('Lisbon', $location->getName());
         $this->assertSame(null, $location->getState());
@@ -139,9 +81,21 @@ class GeocodingEndpointTest extends AbstractTest
         $this->assertSame(null, $location->getSunriseAt());
         $this->assertSame(null, $location->getSunsetAt());
 
-        $coordinate = $response[0]->getCoordinate();
+        $coordinate = $locations[0]->getCoordinate();
         $this->assertInstanceOf(Coordinate::class, $coordinate);
         $this->assertSame(38.7077507, $coordinate->getLatitude());
         $this->assertSame(-9.1365919, $coordinate->getLongitude());
+    }
+
+    private function assertGetByZipCodeResponse(ZipCodeLocation $zipCodeLocation): void
+    {
+        $this->assertSame('1000-001', $zipCodeLocation->getZipCode());
+        $this->assertSame('Lisbon', $zipCodeLocation->getName());
+        $this->assertSame('PT', $zipCodeLocation->getCountryCode());
+
+        $coordinate = $zipCodeLocation->getCoordinate();
+        $this->assertInstanceOf(Coordinate::class, $coordinate);
+        $this->assertSame(38.7167, $coordinate->getLatitude());
+        $this->assertSame(-9.1333, $coordinate->getLongitude());
     }
 }

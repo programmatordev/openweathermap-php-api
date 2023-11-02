@@ -2,137 +2,76 @@
 
 namespace ProgrammatorDev\OpenWeatherMap\Test;
 
-use Nyholm\Psr7\Response;
-use PHPUnit\Framework\Attributes\DataProviderExternal;
 use ProgrammatorDev\OpenWeatherMap\Endpoint\AirPollutionEndpoint;
 use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\AirPollution;
 use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\AirPollutionLocationList;
 use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\AirQuality;
 use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\AirPollutionLocation;
 use ProgrammatorDev\OpenWeatherMap\Entity\Coordinate;
-use ProgrammatorDev\OpenWeatherMap\Test\DataProvider\InvalidParamDataProvider;
+use ProgrammatorDev\OpenWeatherMap\Test\Util\TestEndpointInvalidResponseTrait;
+use ProgrammatorDev\OpenWeatherMap\Test\Util\TestEndpointSuccessResponseTrait;
 
 class AirPollutionEndpointTest extends AbstractTest
 {
-    // --- CURRENT ---
+    use TestEndpointSuccessResponseTrait;
+    use TestEndpointInvalidResponseTrait;
 
-    public function testAirPollutionGetCurrent()
+    public static function provideEndpointSuccessResponseData(): \Generator
     {
-        $this->mockHttpClient->addResponse(
-            new Response(
-                status: 200,
-                body: MockResponse::AIR_POLLUTION_CURRENT
-            )
-        );
-
-        $response = $this->givenApi()->airPollution()->getCurrent(50, 50);
-        $this->assertCurrentResponse($response);
+        yield 'get current' => [
+            MockResponse::AIR_POLLUTION_CURRENT,
+            'airPollution',
+            'getCurrent',
+            [50, 50],
+            'assertGetCurrentResponse'
+        ];
+        yield 'get forecast' => [
+            MockResponse::AIR_POLLUTION_FORECAST,
+            'airPollution',
+            'getForecast',
+            [50, 50],
+            'assertGetForecastResponse'
+        ];
+        yield 'get history' => [
+            MockResponse::AIR_POLLUTION_HISTORY,
+            'airPollution',
+            'getHistory',
+            [50, 50, new \DateTime('yesterday'), new \DateTime('today')],
+            'assertGetHistoryResponse'
+        ];
     }
 
-    #[DataProviderExternal(InvalidParamDataProvider::class, 'provideInvalidCoordinateData')]
-    public function testAirPollutionGetCurrentWithInvalidCoordinate(float $latitude, float $longitude, string $expectedException)
+    public static function provideEndpointInvalidResponseData(): \Generator
     {
-        $this->expectException($expectedException);
-        $this->givenApi()->airPollution()->getCurrent($latitude, $longitude);
+        yield 'get current, latitude lower than -90' => ['airPollution', 'getCurrent', [-91, 50]];
+        yield 'get current, latitude greater than 90' => ['airPollution', 'getCurrent', [91, 50]];
+        yield 'get current, longitude lower than -180' => ['airPollution', 'getCurrent', [50, -181]];
+        yield 'get current, longitude greater than 180' => ['airPollution', 'getCurrent', [50, 181]];
+
+        yield 'get forecast, latitude lower than -90' => ['airPollution', 'getForecast', [-91, 50]];
+        yield 'get forecast, latitude greater than 90' => ['airPollution', 'getForecast', [91, 50]];
+        yield 'get forecast, longitude lower than -180' => ['airPollution', 'getForecast', [50, -181]];
+        yield 'get forecast, longitude greater than 180' => ['airPollution', 'getForecast', [50, 181]];
+
+        yield 'get history, latitude lower than -90' => ['airPollution', 'getHistory',
+            [-91, 50, new \DateTime('yesterday'), new \DateTime('today')]
+        ];
+        yield 'get history, latitude greater than 90' => ['airPollution', 'getHistory',
+            [91, 50, new \DateTime('yesterday'), new \DateTime('today')]
+        ];
+        yield 'get history, longitude lower than -180' => ['airPollution', 'getHistory',
+            [50, -181, new \DateTime('yesterday'), new \DateTime('today')]
+        ];
+        yield 'get history, longitude greater than 180' => ['airPollution', 'getHistory',
+            [50, 181, new \DateTime('yesterday'), new \DateTime('today')]
+        ];
+        yield 'get history, invalid past end date' => ['airPollution', 'getHistory',
+            [50, 50, new \DateTime('yesterday'), new \DateTime('tomorrow')]
+        ];
+        yield 'get history, end date before start date' => ['airPollution', 'getHistory',
+            [50, 50, new \DateTime('yesterday'), new \DateTime('-2 days')]
+        ];
     }
-
-    // --- FORECAST ---
-
-    public function testAirPollutionGetForecast()
-    {
-        $this->mockHttpClient->addResponse(
-            new Response(
-                status: 200,
-                body: MockResponse::AIR_POLLUTION_FORECAST
-            )
-        );
-
-        $response = $this->givenApi()->airPollution()->getForecast(50, 50);
-        $this->assertForecastResponse($response);
-    }
-
-    #[DataProviderExternal(InvalidParamDataProvider::class, 'provideInvalidCoordinateData')]
-    public function testAirPollutionGetForecastWithInvalidCoordinate(float $latitude, float $longitude, string $expectedException)
-    {
-        $this->expectException($expectedException);
-        $this->givenApi()->airPollution()->getForecast($latitude, $longitude);
-    }
-
-    // --- HISTORY ---
-
-    public function testAirPollutionGetHistory()
-    {
-        $this->mockHttpClient->addResponse(
-            new Response(
-                status: 200,
-                body: MockResponse::AIR_POLLUTION_HISTORY
-            )
-        );
-
-        $utcTimezone = new \DateTimeZone('UTC');
-
-        $response = $this->givenApi()->airPollution()->getHistory(
-            50,
-            50,
-            new \DateTimeImmutable('-5 days', $utcTimezone),
-            new \DateTimeImmutable('-4 days', $utcTimezone)
-        );
-        $this->assertHistoryResponse($response);
-    }
-
-    #[DataProviderExternal(InvalidParamDataProvider::class, 'provideInvalidCoordinateData')]
-    public function testAirPollutionGetHistoryWithInvalidCoordinate(float $latitude, float $longitude, string $expectedException)
-    {
-        $this->expectException($expectedException);
-
-        $startDate = new \DateTimeImmutable('-5 days');
-        $endDate = new \DateTimeImmutable('-4 days');
-
-        $this->givenApi()->airPollution()->getHistory($latitude, $longitude, $startDate, $endDate);
-    }
-
-    #[DataProviderExternal(InvalidParamDataProvider::class, 'provideInvalidPastDateData')]
-    public function testAirPollutionGetHistoryWithInvalidPastStartDate(
-        \DateTimeImmutable $startDate,
-        string $expectedException
-    )
-    {
-        $this->expectException($expectedException);
-        $this->givenApi()->airPollution()->getHistory(
-            50,
-            50,
-            $startDate,
-            new \DateTimeImmutable('-5 days', new \DateTimeZone('UTC'))
-        );
-    }
-
-    #[DataProviderExternal(InvalidParamDataProvider::class, 'provideInvalidPastDateData')]
-    public function testAirPollutionGetHistoryWithInvalidPastEndDate(
-        \DateTimeImmutable $endDate,
-        string $expectedException
-    )
-    {
-        $this->expectException($expectedException);
-        $this->givenApi()->airPollution()->getHistory(
-            50,
-            50,
-            new \DateTimeImmutable('-5 days', new \DateTimeZone('UTC')),
-            $endDate
-        );
-    }
-
-    #[DataProviderExternal(InvalidParamDataProvider::class, 'provideInvalidDateRangeData')]
-    public function testAirPollutionGetHistoryWithInvalidDateRange(
-        \DateTimeImmutable $startDate,
-        \DateTimeImmutable $endDate,
-        string $expectedException
-    )
-    {
-        $this->expectException($expectedException);
-        $this->givenApi()->airPollution()->getHistory(50, 50, $startDate, $endDate);
-    }
-
-    // --- ASSERT METHODS EXIST ---
 
     public function testAirPollutionMethodsExist()
     {
@@ -141,48 +80,38 @@ class AirPollutionEndpointTest extends AbstractTest
         $this->assertSame(true, method_exists(AirPollutionEndpoint::class, 'withCacheTtl'));
     }
 
-    // --- ASSERT RESPONSES ---
-
-    private function assertCurrentResponse(AirPollutionLocation $response): void
+    private function assertGetCurrentResponse(AirPollutionLocation $airPollutionLocation): void
     {
-        $this->assertInstanceOf(AirPollutionLocation::class, $response);
+        $this->assertSame(196.93, $airPollutionLocation->getCarbonMonoxide());
+        $this->assertSame(0.65, $airPollutionLocation->getNitrogenMonoxide());
+        $this->assertSame(3.98, $airPollutionLocation->getNitrogenDioxide());
+        $this->assertSame(107.29, $airPollutionLocation->getOzone());
+        $this->assertSame(1.46, $airPollutionLocation->getSulphurDioxide());
+        $this->assertSame(8.58, $airPollutionLocation->getFineParticulateMatter());
+        $this->assertSame(13.5, $airPollutionLocation->getCoarseParticulateMatter());
+        $this->assertSame(2.03, $airPollutionLocation->getAmmonia());
+        $this->assertSame('2023-06-23 17:21:57', $airPollutionLocation->getDateTime()->format('Y-m-d H:i:s'));
 
-        $this->assertSame(196.93, $response->getCarbonMonoxide());
-        $this->assertSame(0.65, $response->getNitrogenMonoxide());
-        $this->assertSame(3.98, $response->getNitrogenDioxide());
-        $this->assertSame(107.29, $response->getOzone());
-        $this->assertSame(1.46, $response->getSulphurDioxide());
-        $this->assertSame(8.58, $response->getFineParticulateMatter());
-        $this->assertSame(13.5, $response->getCoarseParticulateMatter());
-        $this->assertSame(2.03, $response->getAmmonia());
-
-        $coordinate = $response->getCoordinate();
+        $coordinate = $airPollutionLocation->getCoordinate();
         $this->assertInstanceOf(Coordinate::class, $coordinate);
         $this->assertSame(38.7078, $coordinate->getLatitude());
         $this->assertSame(-9.1366, $coordinate->getLongitude());
 
-        $dateTime = $response->getDateTime();
-        $this->assertInstanceOf(\DateTimeImmutable::class, $dateTime);
-        $this->assertSame('2023-06-23 17:21:57', $dateTime->format('Y-m-d H:i:s'));
-
-        $airQuality = $response->getAirQuality();
+        $airQuality = $airPollutionLocation->getAirQuality();
         $this->assertInstanceOf(AirQuality::class, $airQuality);
         $this->assertSame(3, $airQuality->getIndex());
         $this->assertSame('Moderate', $airQuality->getQualitativeName());
     }
 
-    private function assertForecastResponse(AirPollutionLocationList $response): void
+    private function assertGetForecastResponse(AirPollutionLocationList $airPollutionLocationList): void
     {
-        $this->assertInstanceOf(AirPollutionLocationList::class, $response);
-
-        $coordinate = $response->getCoordinate();
+        $coordinate = $airPollutionLocationList->getCoordinate();
         $this->assertInstanceOf(Coordinate::class, $coordinate);
         $this->assertSame(38.7078, $coordinate->getLatitude());
         $this->assertSame(-9.1366, $coordinate->getLongitude());
 
-        $list = $response->getList();
+        $list = $airPollutionLocationList->getList();
         $this->assertContainsOnlyInstancesOf(AirPollution::class, $list);
-
         $this->assertSame(196.93, $list[0]->getCarbonMonoxide());
         $this->assertSame(0.65, $list[0]->getNitrogenMonoxide());
         $this->assertSame(3.98, $list[0]->getNitrogenDioxide());
@@ -191,10 +120,7 @@ class AirPollutionEndpointTest extends AbstractTest
         $this->assertSame(8.58, $list[0]->getFineParticulateMatter());
         $this->assertSame(13.5, $list[0]->getCoarseParticulateMatter());
         $this->assertSame(2.03, $list[0]->getAmmonia());
-
-        $dateTime = $list[0]->getDateTime();
-        $this->assertInstanceOf(\DateTimeImmutable::class, $dateTime);
-        $this->assertSame('2023-06-23 17:00:00', $dateTime->format('Y-m-d H:i:s'));
+        $this->assertSame('2023-06-23 17:00:00', $list[0]->getDateTime()->format('Y-m-d H:i:s'));
 
         $airQuality = $list[0]->getAirQuality();
         $this->assertInstanceOf(AirQuality::class, $airQuality);
@@ -202,18 +128,15 @@ class AirPollutionEndpointTest extends AbstractTest
         $this->assertSame('Moderate', $airQuality->getQualitativeName());
     }
 
-    private function assertHistoryResponse(AirPollutionLocationList $response): void
+    private function assertGetHistoryResponse(AirPollutionLocationList $airPollutionLocationList): void
     {
-        $this->assertInstanceOf(AirPollutionLocationList::class, $response);
-
-        $coordinate = $response->getCoordinate();
+        $coordinate = $airPollutionLocationList->getCoordinate();
         $this->assertInstanceOf(Coordinate::class, $coordinate);
         $this->assertSame(38.7078, $coordinate->getLatitude());
         $this->assertSame(-9.1366, $coordinate->getLongitude());
 
-        $list = $response->getList();
+        $list = $airPollutionLocationList->getList();
         $this->assertContainsOnlyInstancesOf(AirPollution::class, $list);
-
         $this->assertSame(220.3, $list[0]->getCarbonMonoxide());
         $this->assertSame(0.12, $list[0]->getNitrogenMonoxide());
         $this->assertSame(3.3, $list[0]->getNitrogenDioxide());
@@ -222,10 +145,7 @@ class AirPollutionEndpointTest extends AbstractTest
         $this->assertSame(1.62, $list[0]->getFineParticulateMatter());
         $this->assertSame(2.94, $list[0]->getCoarseParticulateMatter());
         $this->assertSame(0.38, $list[0]->getAmmonia());
-
-        $dateTime = $list[0]->getDateTime();
-        $this->assertInstanceOf(\DateTimeImmutable::class, $dateTime);
-        $this->assertSame('2023-06-18 18:00:00', $dateTime->format('Y-m-d H:i:s'));
+        $this->assertSame('2023-06-18 18:00:00', $list[0]->getDateTime()->format('Y-m-d H:i:s'));
 
         $airQuality = $list[0]->getAirQuality();
         $this->assertInstanceOf(AirQuality::class, $airQuality);
