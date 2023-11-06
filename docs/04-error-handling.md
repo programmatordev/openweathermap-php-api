@@ -84,7 +84,7 @@ try {
 }
 catch (ValidationException $exception) {
     // Should print:
-    // The "latitude" value should be between "-90" and "90", "999" given.
+    // The latitude value should be between -90 and 90, 999 given.
     echo $exception->getMessage();
 }
 ```

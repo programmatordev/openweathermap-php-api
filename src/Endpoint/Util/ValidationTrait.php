@@ -27,13 +27,11 @@ trait ValidationTrait
         // Start date must be less or equal to end date
         Validator::lessThanOrEqual(
             constraint: $endDate,
-            message: 'The "{{ name }}" value should be less than or equal to the "endDate"'
-        )->assert($startDate, 'startDate');
+            message: 'The startDate value should be less than or equal to the endDate.'
+        )->assert($startDate);
 
         // End date must be less or equal to today date
-        Validator::lessThanOrEqual(
-            constraint: $nowDate
-        )->assert($endDate, 'endDate');
+        Validator::lessThanOrEqual($nowDate)->assert($endDate, 'endDate');
     }
 
     /**
