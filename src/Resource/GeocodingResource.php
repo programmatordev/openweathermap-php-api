@@ -6,7 +6,6 @@ use ProgrammatorDev\Api\Method;
 use ProgrammatorDev\OpenWeatherMap\Entity\Geocoding\ZipLocation;
 use ProgrammatorDev\OpenWeatherMap\Entity\Location;
 use ProgrammatorDev\OpenWeatherMap\Util\EntityTrait;
-use ProgrammatorDev\Validator\Exception\ValidationException;
 use Psr\Http\Client\ClientExceptionInterface;
 
 class GeocodingResource extends Resource
@@ -19,14 +18,10 @@ class GeocodingResource extends Resource
      * Get geographical coordinates (latitude, longitude) by using the name of the location (city name or area name)
      *
      * @return Location[]
-     * @throws ValidationException
      * @throws ClientExceptionInterface
      */
     public function getByLocationName(string $locationName, int $numResults = self::NUM_RESULTS): array
     {
-        $this->validateQuery($locationName, 'locationName');
-        $this->validatePositive($numResults, 'numResults');
-
         $data = $this->api->request(
             method: Method::GET,
             path: '/geo/1.0/direct',
@@ -42,16 +37,12 @@ class GeocodingResource extends Resource
     /**
      * Get geographical coordinates (latitude, longitude) by using the zip/postal code
      *
-     * @throws ValidationException
      * @throws ClientExceptionInterface
      */
     public function getByZipCode(string $zipCode, string $countryCode): ZipLocation
     {
-        $this->validateQuery($zipCode, 'zipCode');
-        $this->validateCountryCode($countryCode);
-
         $data = $this->api->request(
-            method: 'GET',
+            method: Method::GET,
             path: '/geo/1.0/zip',
             query: [
                 'zip' => \sprintf('%s,%s', $zipCode, $countryCode)
@@ -62,17 +53,13 @@ class GeocodingResource extends Resource
     }
 
     /**
-     * Get name of the location (city name or area name) by using geographical coordinates (latitude, longitude)
+     * Get the name of the location (city name or area name) by using geographical coordinates (latitude, longitude)
      *
      * @return Location[]
-     * @throws ValidationException
      * @throws ClientExceptionInterface
      */
     public function getByCoordinate(float $latitude, float $longitude, int $numResults = self::NUM_RESULTS): array
     {
-        $this->validateCoordinate($latitude, $longitude);
-        $this->validatePositive($numResults, 'numResults');
-
         $data = $this->api->request(
             method: Method::GET,
             path: '/geo/1.0/reverse',

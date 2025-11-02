@@ -11,7 +11,7 @@ trait ReflectionTrait
 
         // Sort by alphabetical order
         // to be more intuitive when listing values for error messages
-        \asort($constants);
+        asort($constants);
 
         return $constants;
     }

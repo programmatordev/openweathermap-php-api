@@ -5,7 +5,6 @@ namespace ProgrammatorDev\OpenWeatherMap\Resource;
 use ProgrammatorDev\Api\Method;
 use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\AirPollution;
 use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\AirPollutionCollection;
-use ProgrammatorDev\Validator\Exception\ValidationException;
 use Psr\Http\Client\ClientExceptionInterface;
 
 class AirPollutionResource extends Resource
@@ -13,13 +12,10 @@ class AirPollutionResource extends Resource
     /**
      * Get access to current air pollution data
      *
-     * @throws ValidationException
      * @throws ClientExceptionInterface
      */
     public function getCurrent(float $latitude, float $longitude): AirPollution
     {
-        $this->validateCoordinate($latitude, $longitude);
-
         $data = $this->api->request(
             method: Method::GET,
             path: '/data/2.5/air_pollution',
@@ -35,13 +31,10 @@ class AirPollutionResource extends Resource
     /**
      * Get access to air pollution forecast data per hour
      *
-     * @throws ValidationException
      * @throws ClientExceptionInterface
      */
     public function getForecast(float $latitude, float $longitude): AirPollutionCollection
     {
-        $this->validateCoordinate($latitude, $longitude);
-
         $data = $this->api->request(
             method: Method::GET,
             path: '/data/2.5/air_pollution/forecast',
@@ -57,7 +50,6 @@ class AirPollutionResource extends Resource
     /**
      * Get access to historical air pollution data per hour between two dates
      *
-     * @throws ValidationException
      * @throws ClientExceptionInterface
      */
     public function getHistory(
@@ -67,9 +59,6 @@ class AirPollutionResource extends Resource
         \DateTimeInterface $endDate
     ): AirPollutionCollection
     {
-        $this->validateCoordinate($latitude, $longitude);
-        $this->validateDateOrder($startDate, $endDate);
-
         $utcTimezone = new \DateTimeZone('UTC');
 
         $data = $this->api->request(

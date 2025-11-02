@@ -11,7 +11,7 @@ class Icon
     public function __construct(array $data)
     {
         $this->id = $data['icon'];
-        $this->url = \sprintf('https://openweathermap.org/img/wn/%s@4x.png', $this->id);
+        $this->url = sprintf('https://openweathermap.org/img/wn/%s@4x.png', $this->id);
     }
 
     public function getId(): string
