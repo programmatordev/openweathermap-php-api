@@ -17,17 +17,22 @@ use ProgrammatorDev\OpenWeatherMap\Resource\GeocodingResource;
 use ProgrammatorDev\OpenWeatherMap\Resource\OneCallResource;
 use ProgrammatorDev\OpenWeatherMap\Resource\WeatherResource;
 use ProgrammatorDev\OpenWeatherMap\UnitSystem\UnitSystem;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class OpenWeatherMap extends Api
 {
     private array $options;
 
+    private OptionsResolver $optionsResolver;
+
     public function __construct(
-        #[\SensitiveParameter] private string $apiKey,
+        #[\SensitiveParameter] private readonly string $apiKey,
         array $options = []
     )
     {
         parent::__construct();
+
+        $this->optionsResolver = new OptionsResolver();
 
         $this->options = $this->configureOptions($options);
         $this->configureApi();
