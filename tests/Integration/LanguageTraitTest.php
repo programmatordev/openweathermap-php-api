@@ -26,6 +26,7 @@ class LanguageTraitTest extends AbstractTest
 
     public function testMethods(): void
     {
+        $this->assertSame('en', $this->resource->getLanguage());
         $this->assertSame('pt', $this->resource->withLanguage('pt')->getLanguage());
         $this->assertSame('en', $this->resource->getLanguage()); // back to default value
     }

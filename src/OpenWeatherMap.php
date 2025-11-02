@@ -86,7 +86,7 @@ class OpenWeatherMap extends Api
 
             // if there was a response with an error status code
             if ($statusCode >= 400) {
-                $error = \json_decode($response->getBody()->getContents(), true);
+                $error = json_decode($response->getBody()->getContents(), true);
 
                 match ($statusCode) {
                     400 => throw new BadRequestException($error),
@@ -101,7 +101,7 @@ class OpenWeatherMap extends Api
         $this->addResponseContentsListener(function(ResponseContentsEvent $event) {
             // decode json string response into an array
             $contents = $event->getContents();
-            $contents = \json_decode($contents, true);
+            $contents = json_decode($contents, true);
 
             $event->setContents($contents);
         });
