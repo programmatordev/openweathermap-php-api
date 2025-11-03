@@ -54,7 +54,7 @@ class WeatherData
         $this->wind = new Wind($data['wind']);
 
         $this->precipitationProbability = isset($data['pop'])
-            ? \round($data['pop'] * 100)
+            ? round($data['pop'] * 100)
             : null;
 
         $this->rainVolume = $data['rain']['1h'] ?? $data['rain']['3h'] ?? null;

@@ -19,7 +19,7 @@ class HourData extends BaseWeather
         $this->temperature = $data['temp'];
         $this->temperatureFeelsLike = $data['feels_like'];
         $this->visibility = $data['visibility'];
-        $this->precipitationProbability = \round($data['pop'] * 100);
+        $this->precipitationProbability = round($data['pop'] * 100);
     }
 
     public function getTemperature(): float

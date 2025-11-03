@@ -23,7 +23,7 @@ class MoonPhase
     {
         $this->value = $data['moon_phase'];
         $this->systemName = $this->findSystemName($this->value);
-        $this->name = \ucwords(\strtolower(\str_replace('_', ' ', $this->systemName)));
+        $this->name = ucwords(strtolower(str_replace('_', ' ', $this->systemName)));
     }
 
     public function getValue(): float

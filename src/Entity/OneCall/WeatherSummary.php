@@ -36,7 +36,7 @@ class WeatherSummary
 
         $this->dateTime = \DateTimeImmutable::createFromFormat(
             'Y-m-d H:i:s P',
-            \sprintf('%s 00:00:00 %s', $data['date'], $data['tz'])
+            sprintf('%s 00:00:00 %s', $data['date'], $data['tz'])
         );
 
         $this->cloudiness = \round($data['cloud_cover']['afternoon']);
@@ -52,11 +52,11 @@ class WeatherSummary
             'max' => $data['temperature']['max']
         ]);
 
-        $this->atmosphericPressure = \round($data['pressure']['afternoon']);
+        $this->atmosphericPressure = round($data['pressure']['afternoon']);
 
         $this->wind = new Wind([
             'speed' => $data['wind']['max']['speed'],
-            'deg' => \round($data['wind']['max']['direction'])
+            'deg' => round($data['wind']['max']['direction'])
         ]);
     }
 
@@ -70,9 +70,6 @@ class WeatherSummary
         return $this->timezone;
     }
 
-    /**
-     * DateTime in UTC
-     */
     public function getDateTime(): \DateTimeImmutable
     {
         return $this->dateTime;
