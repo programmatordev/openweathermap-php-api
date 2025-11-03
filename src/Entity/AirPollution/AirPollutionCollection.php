@@ -18,7 +18,7 @@ class AirPollutionCollection
 
     public function __construct(array $data)
     {
-        $this->numResults = \count($data['list']);
+        $this->numResults = count($data['list']);
         $this->coordinate = new Coordinate($data['coord']);
         $this->data = $this->createEntityList(AirPollutionData::class, $data['list']);
     }

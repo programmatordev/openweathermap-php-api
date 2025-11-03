@@ -78,6 +78,13 @@
 - `getAtmosphericPressure()`: `int`
 - `getWind()`: [`Wind`](#wind)
 
+### WeatherOverview
+
+- `getCoordinate()`: [`Coordinate`](#coordinate)
+- `getTimezone()`: [`Timezone`](#timezone)
+- `getDateTime()`: `\DateTimeImmutable`
+- `getOverview()`: `string`
+
 ### WeatherData
 
 - `getDateTime()`: `\DateTimeImmutable`

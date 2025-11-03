@@ -5,6 +5,7 @@
     - [getWeather](#getweather)
     - [getWeatherByDate](#getweatherbydate)
     - [getWeatherSummaryByDate](#getweathersummarybydate)
+    - [getWeatherOverviewByDate](#getweatheroverviewbydate)
   - [Weather](#weather)
     - [getCurrent](#getcurrent)
     - [getForecast](#getforecast)
@@ -66,6 +67,21 @@ Returns a [`WeatherSummary`](05-entities.md#weathersummary) object:
 
 ```php
 $weatherSummary = $api->oneCall()->getWeatherSummaryByDate(50, 50, new \DateTime('1985-07-19'));
+```
+
+#### `getWeatherOverviewByDate`
+
+```php
+getWeatherOverviewByDate(float $latitude, float $longitude, \DateTimeInterface $date): WeatherOverview
+```
+
+Get the weather overview with a human-readable summary for today and tomorrow's forecast, 
+using OpenWeather AI.
+
+Returns a [`WeatherOverview`](05-entities.md#weatheroverview) object:
+
+```php
+$weatherOverview = $api->oneCall()->getWeatherOverviewByDate(50, 50, new \DateTime('today'));
 ```
 
 ### Weather
