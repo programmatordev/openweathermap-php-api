@@ -4,6 +4,7 @@ namespace ProgrammatorDev\OpenWeatherMap\Test\Integration;
 
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\Weather;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\WeatherMoment;
+use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\WeatherOverview;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\WeatherSummary;
 use ProgrammatorDev\OpenWeatherMap\Test\AbstractTest;
 use ProgrammatorDev\OpenWeatherMap\Test\MockResponse;
@@ -34,6 +35,13 @@ class OneCallResourceTest extends AbstractTest
             MockResponse::ONE_CALL_DAY_SUMMARY,
             'oneCall',
             'getWeatherSummaryByDate',
+            [50, 50, new \DateTime()]
+        ];
+        yield 'get weather overview by date' => [
+            WeatherOverview::class,
+            MockResponse::ONE_CALL_OVERVIEW,
+            'oneCall',
+            'getWeatherOverviewByDate',
             [50, 50, new \DateTime()]
         ];
     }
