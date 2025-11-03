@@ -5,6 +5,7 @@ namespace ProgrammatorDev\OpenWeatherMap\Resource;
 use ProgrammatorDev\Api\Method;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\Weather;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\WeatherMoment;
+use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\WeatherOverview;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\WeatherSummary;
 use ProgrammatorDev\OpenWeatherMap\Resource\Util\LanguageTrait;
 use ProgrammatorDev\OpenWeatherMap\Resource\Util\UnitSystemTrait;
@@ -76,5 +77,25 @@ class OneCallResource extends Resource
         );
 
         return new WeatherSummary($data);
+    }
+
+    /**
+     * Get the weather overview with a human-readable summary for today and tomorrow's forecast, using OpenWeather AI
+     *
+     * @throws ClientExceptionInterface
+     */
+    public function getWeatherOverviewByDate(float $latitude, float $longitude, \DateTimeInterface $date): WeatherOverview
+    {
+        $data = $this->api->request(
+            method: Method::GET,
+            path: '/data/3.0/onecall/overview',
+            query: [
+                'lat' => $latitude,
+                'lon' => $longitude,
+                'date' => $date->format('Y-m-d')
+            ]
+        );
+
+        return new WeatherOverview($data);
     }
 }
