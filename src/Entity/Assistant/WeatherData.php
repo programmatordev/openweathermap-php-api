@@ -18,11 +18,11 @@ class WeatherData extends BaseWeather
 
     private \DateTimeImmutable $sunsetAt;
 
-    public function __construct(string $location, array $data)
+    public function __construct(string $locationName, array $data)
     {
         parent::__construct($data);
 
-        $this->locationName = $location;
+        $this->locationName = $locationName;
         $this->temperature = $data['temp'];
         $this->temperatureFeelsLike = $data['feels_like'];
         $this->visibility = $data['visibility'];
