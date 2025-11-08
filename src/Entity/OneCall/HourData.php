@@ -2,6 +2,8 @@
 
 namespace ProgrammatorDev\OpenWeatherMap\Entity\OneCall;
 
+use ProgrammatorDev\OpenWeatherMap\Entity\BaseWeather;
+
 class HourData extends BaseWeather
 {
     private float $temperature;

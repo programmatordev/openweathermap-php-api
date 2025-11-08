@@ -1,9 +1,7 @@
 <?php
 
-namespace ProgrammatorDev\OpenWeatherMap\Entity\OneCall;
+namespace ProgrammatorDev\OpenWeatherMap\Entity;
 
-use ProgrammatorDev\OpenWeatherMap\Entity\Condition;
-use ProgrammatorDev\OpenWeatherMap\Entity\Wind;
 use ProgrammatorDev\OpenWeatherMap\Util\EntityTrait;
 
 class BaseWeather

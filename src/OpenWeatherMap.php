@@ -13,6 +13,7 @@ use ProgrammatorDev\OpenWeatherMap\Exception\UnauthorizedException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnexpectedErrorException;
 use ProgrammatorDev\OpenWeatherMap\Language\Language;
 use ProgrammatorDev\OpenWeatherMap\Resource\AirPollutionResource;
+use ProgrammatorDev\OpenWeatherMap\Resource\AssistantResource;
 use ProgrammatorDev\OpenWeatherMap\Resource\GeocodingResource;
 use ProgrammatorDev\OpenWeatherMap\Resource\OneCallResource;
 use ProgrammatorDev\OpenWeatherMap\Resource\WeatherResource;
@@ -21,12 +22,12 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class OpenWeatherMap extends Api
 {
-    private array $options;
+    public readonly array $options;
 
     private OptionsResolver $optionsResolver;
 
     public function __construct(
-        #[\SensitiveParameter] private readonly string $apiKey,
+        #[\SensitiveParameter] public readonly string $apiKey,
         array $options = []
     )
     {
@@ -36,6 +37,11 @@ class OpenWeatherMap extends Api
 
         $this->options = $this->configureOptions($options);
         $this->configureApi();
+    }
+
+    public function assistant(): AssistantResource
+    {
+        return new AssistantResource($this);
     }
 
     public function oneCall(): OneCallResource
