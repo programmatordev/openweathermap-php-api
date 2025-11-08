@@ -2,12 +2,10 @@
 
 namespace ProgrammatorDev\OpenWeatherMap\Entity\Assistant;
 
-use ProgrammatorDev\OpenWeatherMap\Util\EntityTrait;
+use ProgrammatorDev\OpenWeatherMap\Helper\EntityHelper;
 
 class Answer
 {
-    use EntityTrait;
-
     private string $answer;
 
     private string $sessionId;
@@ -21,7 +19,7 @@ class Answer
         $this->sessionId = $data['session_id'];
 
         if (!empty($data['data'])) {
-            $this->data = $this->createEntityKeyList(WeatherData::class, $data['data']);
+            $this->data = EntityHelper::createEntityKeyList(WeatherData::class, $data['data']);
         }
     }
 

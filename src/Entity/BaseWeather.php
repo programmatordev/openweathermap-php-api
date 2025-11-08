@@ -2,12 +2,10 @@
 
 namespace ProgrammatorDev\OpenWeatherMap\Entity;
 
-use ProgrammatorDev\OpenWeatherMap\Util\EntityTrait;
+use ProgrammatorDev\OpenWeatherMap\Helper\EntityHelper;
 
 class BaseWeather
 {
-    use EntityTrait;
-
     private \DateTimeImmutable $dateTime;
 
     private int $atmosphericPressure;
@@ -44,7 +42,7 @@ class BaseWeather
             'gust' => $data['wind_gust'] ?? null
         ]);
 
-        $this->conditions = $this->createEntityList(Condition::class, $data['weather']);
+        $this->conditions = EntityHelper::createEntityList(Condition::class, $data['weather']);
         $this->rainVolume = $data['rain']['1h'] ?? $data['rain']['3h'] ?? $data['rain'] ?? null;
         $this->snowVolume = $data['snow']['1h'] ?? $data['snow']['3h'] ?? $data['snow'] ?? null;
     }

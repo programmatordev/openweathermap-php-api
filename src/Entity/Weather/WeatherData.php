@@ -4,12 +4,10 @@ namespace ProgrammatorDev\OpenWeatherMap\Entity\Weather;
 
 use ProgrammatorDev\OpenWeatherMap\Entity\Condition;
 use ProgrammatorDev\OpenWeatherMap\Entity\Wind;
-use ProgrammatorDev\OpenWeatherMap\Util\EntityTrait;
+use ProgrammatorDev\OpenWeatherMap\Helper\EntityHelper;
 
 class WeatherData
 {
-    use EntityTrait;
-
     private \DateTimeImmutable $dateTime;
 
     private float $temperature;
@@ -50,7 +48,7 @@ class WeatherData
         $this->cloudiness = $data['clouds']['all'];
         $this->visibility = $data['visibility'];
         $this->atmosphericPressure = $data['main']['pressure'];
-        $this->conditions = $this->createEntityList(Condition::class, $data['weather']);
+        $this->conditions = EntityHelper::createEntityList(Condition::class, $data['weather']);
         $this->wind = new Wind($data['wind']);
 
         $this->precipitationProbability = isset($data['pop'])

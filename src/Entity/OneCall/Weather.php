@@ -4,12 +4,10 @@ namespace ProgrammatorDev\OpenWeatherMap\Entity\OneCall;
 
 use ProgrammatorDev\OpenWeatherMap\Entity\Coordinate;
 use ProgrammatorDev\OpenWeatherMap\Entity\Timezone;
-use ProgrammatorDev\OpenWeatherMap\Util\EntityTrait;
+use ProgrammatorDev\OpenWeatherMap\Helper\EntityHelper;
 
 class Weather
 {
-    use EntityTrait;
-
     private Coordinate $coordinate;
 
     private Timezone $timezone;
@@ -43,14 +41,14 @@ class Weather
         $this->current = new WeatherData($data['current']);
 
         $this->minutelyForecast = isset($data['minutely'])
-            ? $this->createEntityList(MinuteData::class, $data['minutely'])
+            ? EntityHelper::createEntityList(MinuteData::class, $data['minutely'])
             : null;
 
-        $this->hourlyForecast = $this->createEntityList(HourData::class, $data['hourly']);
-        $this->dailyForecast = $this->createEntityList(DayData::class, $data['daily']);
+        $this->hourlyForecast = EntityHelper::createEntityList(HourData::class, $data['hourly']);
+        $this->dailyForecast = EntityHelper::createEntityList(DayData::class, $data['daily']);
 
         $this->alerts = isset($data['alerts'])
-            ? $this->createEntityList(Alert::class, $data['alerts'])
+            ? EntityHelper::createEntityList(Alert::class, $data['alerts'])
             : null;
     }
 

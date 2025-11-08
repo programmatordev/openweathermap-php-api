@@ -3,12 +3,10 @@
 namespace ProgrammatorDev\OpenWeatherMap\Entity\Weather;
 
 use ProgrammatorDev\OpenWeatherMap\Entity\Location;
-use ProgrammatorDev\OpenWeatherMap\Util\EntityTrait;
+use ProgrammatorDev\OpenWeatherMap\Helper\EntityHelper;
 
 class WeatherCollection
 {
-    use EntityTrait;
-
     private int $numResults;
 
     private Location $location;
@@ -32,7 +30,7 @@ class WeatherCollection
             'timezone_offset' => $data['city']['timezone']
         ]);
 
-        $this->data = $this->createEntityList(WeatherData::class, $data['list']);
+        $this->data = EntityHelper::createEntityList(WeatherData::class, $data['list']);
     }
 
     public function getNumResults(): int

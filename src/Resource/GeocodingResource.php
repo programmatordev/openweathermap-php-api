@@ -5,13 +5,11 @@ namespace ProgrammatorDev\OpenWeatherMap\Resource;
 use ProgrammatorDev\Api\Method;
 use ProgrammatorDev\OpenWeatherMap\Entity\Geocoding\ZipLocation;
 use ProgrammatorDev\OpenWeatherMap\Entity\Location;
-use ProgrammatorDev\OpenWeatherMap\Util\EntityTrait;
+use ProgrammatorDev\OpenWeatherMap\Helper\EntityHelper;
 use Psr\Http\Client\ClientExceptionInterface;
 
 class GeocodingResource extends Resource
 {
-    use EntityTrait;
-
     private const NUM_RESULTS = 5;
 
     /**
@@ -31,7 +29,7 @@ class GeocodingResource extends Resource
             ]
         );
 
-        return $this->createEntityList(Location::class, $data);
+        return EntityHelper::createEntityList(Location::class, $data);
     }
 
     /**
@@ -70,6 +68,6 @@ class GeocodingResource extends Resource
             ]
         );
 
-        return $this->createEntityList(Location::class, $data);
+        return EntityHelper::createEntityList(Location::class, $data);
     }
 }
