@@ -2,6 +2,8 @@
 
 namespace ProgrammatorDev\OpenWeatherMap\Entity\OneCall;
 
+use ProgrammatorDev\OpenWeatherMap\Entity\BaseWeather;
+
 class DayData extends BaseWeather
 {
     private Temperature $temperature;
