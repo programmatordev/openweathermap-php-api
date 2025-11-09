@@ -2,10 +2,8 @@
 
 namespace ProgrammatorDev\OpenWeatherMap\Test\Unit\OneCall;
 
-use ProgrammatorDev\OpenWeatherMap\Entity\Condition;
 use ProgrammatorDev\OpenWeatherMap\Entity\Coordinate;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\Temperature;
-use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\WeatherData;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\WeatherSummary;
 use ProgrammatorDev\OpenWeatherMap\Entity\Timezone;
 use ProgrammatorDev\OpenWeatherMap\Entity\Wind;

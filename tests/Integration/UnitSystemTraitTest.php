@@ -5,7 +5,6 @@ namespace ProgrammatorDev\OpenWeatherMap\Test\Integration;
 use ProgrammatorDev\OpenWeatherMap\Resource\Resource;
 use ProgrammatorDev\OpenWeatherMap\Resource\Util\UnitSystemTrait;
 use ProgrammatorDev\OpenWeatherMap\Test\AbstractTest;
-use ProgrammatorDev\Validator\Exception\ValidationException;
 
 class UnitSystemTraitTest extends AbstractTest
 {
@@ -27,13 +26,8 @@ class UnitSystemTraitTest extends AbstractTest
 
     public function testMethods(): void
     {
+        $this->assertSame('metric', $this->resource->getUnitSystem());
         $this->assertSame('imperial', $this->resource->withUnitSystem('imperial')->getUnitSystem());
         $this->assertSame('metric', $this->resource->getUnitSystem()); // back to default value
-    }
-
-    public function testValidationException(): void
-    {
-        $this->expectException(ValidationException::class);
-        $this->resource->withUnitSystem('invalid');
     }
 }

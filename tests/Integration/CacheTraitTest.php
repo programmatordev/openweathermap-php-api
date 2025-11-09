@@ -33,6 +33,7 @@ class CacheTraitTest extends AbstractTest
 
     public function testMethods(): void
     {
+        $this->assertSame(60, $this->resource->getCacheTtl());
         $this->assertSame(600, $this->resource->withCacheTtl(600)->getCacheTtl());
         $this->assertSame(60, $this->resource->getCacheTtl()); // back to default value
     }

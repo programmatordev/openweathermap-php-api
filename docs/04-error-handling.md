@@ -1,8 +1,5 @@
 # Error Handling
 
-- [API Errors](#api-errors)
-- [Validation Errors](#validation-errors)
-
 ## API Errors
 
 To handle API response errors, multiple exceptions are provided. You can see all available in the following example:
@@ -15,13 +12,9 @@ use ProgrammatorDev\OpenWeatherMap\Exception\UnauthorizedException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnexpectedErrorException;
 
 try {
-    $location = $api->geocoding()->getByZipCode('1000-001', 'pt');
-    $coordinate = $location->getCoordinate();
+    // ...
     
-    $weather = $api->oneCall()->getWeather(
-        $coordinate->getLatitude(), 
-        $coordinate->getLongitude()
-    );
+    $weather = $api->oneCall()->getWeather($latitude, $longitude);
 }
 // bad request to the API
 catch (BadRequestException $exception) {
@@ -33,7 +26,7 @@ catch (UnauthorizedException $exception) {
     echo $exception->getCode(); // 401
     echo $exception->getMessage();
 }
-// resource not found
+// resource not found,
 // for example, when trying to get a location with a zip code that does not exist
 catch (NotFoundException $exception) {
     echo $exception->getCode(); // 404
@@ -57,35 +50,13 @@ To catch all API errors with a single exception, `ApiErrorException` is availabl
 use ProgrammatorDev\OpenWeatherMap\Exception\ApiErrorException;
 
 try {
-    $location = $api->geocoding()->getByZipCode('1000-001', 'pt');
-    $coordinate = $location->getCoordinate();
-    
-    $weather = $api->oneCall()->getWeather(
-        $coordinate->getLatitude(), 
-        $coordinate->getLongitude()
-    );
+    // ...
+
+    $weather = $api->oneCall()->getWeather($latitude, $longitude);
 }
 // catches all API response errors
 catch (ApiErrorException $exception) {
     echo $exception->getCode();
-    echo $exception->getMessage();
-}
-```
-
-## Validation Errors
-
-To catch invalid input data (like an out of range coordinate, blank location name, etc.), the `ValidationException` is available:
-
-```php
-use ProgrammatorDev\Validator\Exception\ValidationException;
-
-try {
-    // an invalid latitude value is given
-    $weather = $api->weather()->getCurrent(999, 50);
-}
-catch (ValidationException $exception) {
-    // should print:
-    // The latitude value should be between -90 and 90, 999 given.
     echo $exception->getMessage();
 }
 ```

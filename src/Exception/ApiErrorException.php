@@ -8,7 +8,9 @@ class ApiErrorException extends \Exception
 
     public function __construct(array $error)
     {
-        parent::__construct($error['message'], $error['cod']);
+        $code = $error['cod'] ?? $error['code'];
+
+        parent::__construct($error['message'], $code);
 
         $this->parameters = $error['parameters'] ?? null;
     }

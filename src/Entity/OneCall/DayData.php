@@ -2,6 +2,8 @@
 
 namespace ProgrammatorDev\OpenWeatherMap\Entity\OneCall;
 
+use ProgrammatorDev\OpenWeatherMap\Entity\BaseWeather;
+
 class DayData extends BaseWeather
 {
     private Temperature $temperature;
@@ -28,7 +30,7 @@ class DayData extends BaseWeather
 
         $this->temperature = new Temperature($data['temp']);
         $this->temperatureFeelsLike = new Temperature($data['feels_like']);
-        $this->precipitationProbability = \round($data['pop'] * 100);
+        $this->precipitationProbability = round($data['pop'] * 100);
         $this->summary = $data['summary'];
         $this->moonPhase = new MoonPhase($data);
         $this->moonriseAt = \DateTimeImmutable::createFromFormat('U', $data['moonrise']);

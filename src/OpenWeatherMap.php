@@ -13,21 +13,27 @@ use ProgrammatorDev\OpenWeatherMap\Exception\UnauthorizedException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnexpectedErrorException;
 use ProgrammatorDev\OpenWeatherMap\Language\Language;
 use ProgrammatorDev\OpenWeatherMap\Resource\AirPollutionResource;
+use ProgrammatorDev\OpenWeatherMap\Resource\AssistantResource;
 use ProgrammatorDev\OpenWeatherMap\Resource\GeocodingResource;
 use ProgrammatorDev\OpenWeatherMap\Resource\OneCallResource;
 use ProgrammatorDev\OpenWeatherMap\Resource\WeatherResource;
 use ProgrammatorDev\OpenWeatherMap\UnitSystem\UnitSystem;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class OpenWeatherMap extends Api
 {
-    private array $options;
+    public readonly array $options;
+
+    private OptionsResolver $optionsResolver;
 
     public function __construct(
-        #[\SensitiveParameter] private string $apiKey,
+        #[\SensitiveParameter] public readonly string $apiKey,
         array $options = []
     )
     {
         parent::__construct();
+
+        $this->optionsResolver = new OptionsResolver();
 
         $this->options = $this->configureOptions($options);
         $this->configureApi();
@@ -36,6 +42,11 @@ class OpenWeatherMap extends Api
     public function oneCall(): OneCallResource
     {
         return new OneCallResource($this);
+    }
+
+    public function assistant(): AssistantResource
+    {
+        return new AssistantResource($this);
     }
 
     public function weather(): WeatherResource
@@ -81,7 +92,7 @@ class OpenWeatherMap extends Api
 
             // if there was a response with an error status code
             if ($statusCode >= 400) {
-                $error = \json_decode($response->getBody()->getContents(), true);
+                $error = json_decode($response->getBody()->getContents(), true);
 
                 match ($statusCode) {
                     400 => throw new BadRequestException($error),
@@ -96,7 +107,7 @@ class OpenWeatherMap extends Api
         $this->addResponseContentsListener(function(ResponseContentsEvent $event) {
             // decode json string response into an array
             $contents = $event->getContents();
-            $contents = \json_decode($contents, true);
+            $contents = json_decode($contents, true);
 
             $event->setContents($contents);
         });

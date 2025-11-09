@@ -3,12 +3,10 @@
 namespace ProgrammatorDev\OpenWeatherMap\Entity\AirPollution;
 
 use ProgrammatorDev\OpenWeatherMap\Entity\Coordinate;
-use ProgrammatorDev\OpenWeatherMap\Util\EntityTrait;
+use ProgrammatorDev\OpenWeatherMap\Helper\EntityHelper;
 
 class AirPollutionCollection
 {
-    use EntityTrait;
-
     private int $numResults;
 
     private Coordinate $coordinate;
@@ -18,9 +16,9 @@ class AirPollutionCollection
 
     public function __construct(array $data)
     {
-        $this->numResults = \count($data['list']);
+        $this->numResults = count($data['list']);
         $this->coordinate = new Coordinate($data['coord']);
-        $this->data = $this->createEntityList(AirPollutionData::class, $data['list']);
+        $this->data = EntityHelper::createEntityList(AirPollutionData::class, $data['list']);
     }
 
     public function getNumResults(): int

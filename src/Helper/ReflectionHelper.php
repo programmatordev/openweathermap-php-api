@@ -1,17 +1,17 @@
 <?php
 
-namespace ProgrammatorDev\OpenWeatherMap\Util;
+namespace ProgrammatorDev\OpenWeatherMap\Helper;
 
-trait ReflectionTrait
+class ReflectionHelper
 {
-    private function getClassConstants(string $className): array
+    public static function getClassConstants(string $className): array
     {
         $class = new \ReflectionClass($className);
         $constants = $class->getConstants();
 
         // Sort by alphabetical order
         // to be more intuitive when listing values for error messages
-        \asort($constants);
+        asort($constants);
 
         return $constants;
     }

@@ -5,6 +5,10 @@
     - [getWeather](#getweather)
     - [getWeatherByDate](#getweatherbydate)
     - [getWeatherSummaryByDate](#getweathersummarybydate)
+    - [getWeatherOverviewByDate](#getweatheroverviewbydate)
+  - [AI Assistant](#ai-assistant)
+    - [startSession](#startsession)
+    - [resumeSession](#resumesession)
   - [Weather](#weather)
     - [getCurrent](#getcurrent)
     - [getForecast](#getforecast)
@@ -66,6 +70,51 @@ Returns a [`WeatherSummary`](05-entities.md#weathersummary) object:
 
 ```php
 $weatherSummary = $api->oneCall()->getWeatherSummaryByDate(50, 50, new \DateTime('1985-07-19'));
+```
+
+#### `getWeatherOverviewByDate`
+
+```php
+getWeatherOverviewByDate(float $latitude, float $longitude, \DateTimeInterface $date): WeatherOverview
+```
+
+Get the weather overview with a human-readable summary for today and tomorrow's forecast, 
+using OpenWeather AI.
+
+Returns a [`WeatherOverview`](05-entities.md#weatheroverview) object:
+
+```php
+$weatherOverview = $api->oneCall()->getWeatherOverviewByDate(50, 50, new \DateTime('today'));
+```
+
+### AI Assistant
+
+#### `startSession`
+
+```php
+startSession(string $prompt): Answer
+```
+
+Start a new session (create a new conversation) with the Weather AI Assistant.
+
+Returns a [`Answer`](05-entities.md#answer) object:
+
+```php
+$answer = $api->assistant()->startSession('How is the weather today in Lisbon?');
+```
+
+#### `resumeSession`
+
+```php
+resumeSession(string $sessionId, string $prompt): Answer
+```
+
+Resume a session (continue a conversation) with the Weather AI Assistant.
+
+Returns a [`Answer`](05-entities.md#answer) object:
+
+```php
+$answer = $api->assistant()->resumeSession('session-id', 'Do I need an umbrella?');
 ```
 
 ### Weather
@@ -176,7 +225,7 @@ $locations = $api->geocoding()->getByLocationName('lisbon');
 getByCoordinate(float $latitude, float $longitude, int $numResults = 5): array
 ```
 
-Get name of the location (city name or area name) by using geographical coordinates (latitude, longitude). 
+Get the name of the location (city name or area name) by using geographical coordinates (latitude, longitude). 
 
 Returns an array of [`Location`](05-entities.md#location) objects.
 
@@ -245,7 +294,7 @@ withCacheTtl(?int $ttl): self
 Makes a request and saves into cache for the provided duration in seconds. 
 
 Semantics of values:
-- `0`, the response will not be cached (if the servers specifies no `max-age`).
+- `0`, the response will not be cached (if the server specifies no `max-age`).
 - `null`, the response will be cached for as long as it can (forever).
 
 > [!NOTE]
