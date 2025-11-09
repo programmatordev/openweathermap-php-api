@@ -20,5 +20,12 @@ class AssistantResourceTest extends AbstractTest
             'startSession',
             ['prompt']
         ];
+        yield 'resume session' => [
+            Answer::class,
+            MockResponse::ASSISTANT_RESUME_SESSION,
+            'assistant',
+            'resumeSession',
+            ['session-id', 'prompt']
+        ];
     }
 }
