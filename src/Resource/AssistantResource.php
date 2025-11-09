@@ -10,7 +10,7 @@ use Psr\Http\Client\ClientExceptionInterface;
 class AssistantResource extends Resource
 {
     /**
-     * Start a new session (create a news conversation) with the Weather AI Assistant
+     * Start a new session (create a new conversation) with the Weather AI Assistant
      *
      * @throws ClientExceptionInterface
      */

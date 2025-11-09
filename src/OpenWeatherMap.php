@@ -39,14 +39,14 @@ class OpenWeatherMap extends Api
         $this->configureApi();
     }
 
-    public function assistant(): AssistantResource
-    {
-        return new AssistantResource($this);
-    }
-
     public function oneCall(): OneCallResource
     {
         return new OneCallResource($this);
+    }
+
+    public function assistant(): AssistantResource
+    {
+        return new AssistantResource($this);
     }
 
     public function weather(): WeatherResource

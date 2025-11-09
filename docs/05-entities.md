@@ -4,6 +4,7 @@
   - [Weather](#weather)
   - [WeatherMoment](#weathermoment)
   - [WeatherSummary](#weathersummary)
+  - [WeatherOverview](#weatheroverview)
   - [WeatherData](#weatherdata)
   - [MinuteData](#minutedata)
   - [HourData](#hourdata)
@@ -11,10 +12,13 @@
   - [Alert](#alert)
   - [MoonPhase](#moonphase)
   - [Temperature](#temperature)
+- [AI Assistant](#ai-assistant)
+  - [Answer](#answer)
+  - [WeatherData](#weatherdata-1)
 - [Weather](#weather-1)
   - [Weather](#weather-2)
   - [WeatherCollection](#weathercollection)
-  - [WeatherData](#weatherdata)
+  - [WeatherData](#weatherdata-2)
 - [Air Pollution](#air-pollution)
   - [AirPollution](#airpollution)
   - [AirPollutionCollection](#airpollutioncollection)
@@ -170,6 +174,33 @@
 - `getNight()`: `float`
 - `getMin()`: `?float`
 - `getMax()`: `?float`
+
+## AI Assistant
+
+### Answer
+
+- `getAnswer()`: `string`
+- `getSessionId()`: `string`
+- `getData()`: [`WeatherData[]`](#weatherdata-1)
+
+### WeatherData
+
+- `getLocationName()`: `string`
+- `getDateTime()`: `\DateTimeImmutable`
+- `getTemperature()`: `float`
+- `getTemperatureFeelsLike()`: `float`
+- `getAtmosphericPressure()`: `int`
+- `getVisibility()`: `?int`
+- `getHumidity()`: `int`
+- `getDewPoint()`: `float`
+- `getUltraVioletIndex()`: `?float`
+- `getCloudiness()`: `int`
+- `getWind()`: [`Wind`](#wind)
+- `getConditions()`: [`Condition[]`](#condition)
+- `getRainVolume()`: `?float`
+- `getSnowVolume()`: `?float`
+- `getSunriseAt()`: `?\DateTimeImmutable`
+- `getSunsetAt()`: `?\DateTimeImmutable`
 
 ## Weather
 
