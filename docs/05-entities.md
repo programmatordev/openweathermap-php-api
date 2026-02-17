@@ -117,7 +117,7 @@
 - `getDateTime()`: `\DateTimeImmutable`
 - `getTemperature()`: `float`
 - `getTemperatureFeelsLike()`: `float`
-- `getVisibility()`: `int`
+- `getVisibility()`: `?int`
 - `getPrecipitationProbability()`: `int`
 - `getAtmosphericPressure()`: `int`
 - `getHumidity()`: `int`
@@ -214,7 +214,7 @@
 - `getMaxTemperature()`: `float`
 - `getHumidity()`: `int`
 - `getCloudiness()`: `int`
-- `getVisibility()`: `int`
+- `getVisibility()`: `?int`
 - `getAtmosphericPressure()`: `int`
 - `getConditions()`: [`Condition[]`](#condition)
 - `getWind()`: [`Wind`](#wind)
@@ -237,7 +237,7 @@
 - `getMaxTemperature()`: `float`
 - `getHumidity()`: `int`
 - `getCloudiness()`: `int`
-- `getVisibility()`: `int`
+- `getVisibility()`: `?int`
 - `getAtmosphericPressure()`: `int`
 - `getConditions()`: [`Condition[]`](#condition)
 - `getWind()`: [`Wind`](#wind)

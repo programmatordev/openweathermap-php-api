@@ -10,7 +10,7 @@ class HourData extends BaseWeather
 
     private float $temperatureFeelsLike;
 
-    private int $visibility;
+    private ?int $visibility;
 
     private int $precipitationProbability;
 
@@ -20,7 +20,7 @@ class HourData extends BaseWeather
 
         $this->temperature = $data['temp'];
         $this->temperatureFeelsLike = $data['feels_like'];
-        $this->visibility = $data['visibility'];
+        $this->visibility = $data['visibility'] ?? null;
         $this->precipitationProbability = round($data['pop'] * 100);
     }
 
@@ -34,7 +34,7 @@ class HourData extends BaseWeather
         return $this->temperatureFeelsLike;
     }
 
-    public function getVisibility(): int
+    public function getVisibility(): ?int
     {
         return $this->visibility;
     }
