@@ -12,7 +12,7 @@ class WeatherData extends BaseWeather
 
     private float $temperatureFeelsLike;
 
-    private int $visibility;
+    private ?int $visibility;
 
     private \DateTimeImmutable $sunriseAt;
 
@@ -25,7 +25,7 @@ class WeatherData extends BaseWeather
         $this->locationName = $locationName;
         $this->temperature = $data['temp'];
         $this->temperatureFeelsLike = $data['feels_like'];
-        $this->visibility = $data['visibility'];
+        $this->visibility = $data['visibility'] ?? null;
         $this->sunriseAt = \DateTimeImmutable::createFromFormat('U', $data['sunrise']);
         $this->sunsetAt = \DateTimeImmutable::createFromFormat('U', $data['sunset']);
     }
@@ -45,7 +45,7 @@ class WeatherData extends BaseWeather
         return $this->temperatureFeelsLike;
     }
 
-    public function getVisibility(): int
+    public function getVisibility(): ?int
     {
         return $this->visibility;
     }
