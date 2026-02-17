@@ -22,7 +22,7 @@ class WeatherData
 
     private int $cloudiness;
 
-    private int $visibility;
+    private ?int $visibility;
 
     private int $atmosphericPressure;
 
@@ -46,15 +46,11 @@ class WeatherData
         $this->maxTemperature = $data['main']['temp_max'];
         $this->humidity = $data['main']['humidity'];
         $this->cloudiness = $data['clouds']['all'];
-        $this->visibility = $data['visibility'];
+        $this->visibility = $data['visibility'] ?? null;
         $this->atmosphericPressure = $data['main']['pressure'];
         $this->conditions = EntityHelper::createEntityList(Condition::class, $data['weather']);
         $this->wind = new Wind($data['wind']);
-
-        $this->precipitationProbability = isset($data['pop'])
-            ? round($data['pop'] * 100)
-            : null;
-
+        $this->precipitationProbability = isset($data['pop']) ? round($data['pop'] * 100) : null;
         $this->rainVolume = $data['rain']['1h'] ?? $data['rain']['3h'] ?? null;
         $this->snowVolume = $data['snow']['1h'] ?? $data['snow']['3h'] ?? null;
     }
@@ -101,7 +97,7 @@ class WeatherData
      * Visibility, meters
      * Maximum value is 10000
      */
-    public function getVisibility(): int
+    public function getVisibility(): ?int
     {
         return $this->visibility;
     }
