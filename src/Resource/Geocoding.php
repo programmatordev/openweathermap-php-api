@@ -14,7 +14,9 @@ final class Geocoding extends Resource
      */
     public function byName(string $name, ?int $limit = null): array
     {
-        if (trim($name) === '') {
+        $name = trim($name);
+
+        if ($name === '') {
             throw new \InvalidArgumentException('The location name must be a non-empty string.');
         }
 

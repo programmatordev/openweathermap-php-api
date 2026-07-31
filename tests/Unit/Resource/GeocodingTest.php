@@ -2,34 +2,19 @@
 
 namespace ProgrammatorDev\OpenWeatherMap\Test\Unit\Resource;
 
-use Http\Mock\Client;
-use Nyholm\Psr7\Response;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use ProgrammatorDev\OpenWeatherMap\Entity\Geocoding\Location;
 use ProgrammatorDev\OpenWeatherMap\Entity\Geocoding\PostalLocation;
-use ProgrammatorDev\OpenWeatherMap\OpenWeatherMap;
-use ProgrammatorDev\OpenWeatherMap\Test\Support\Fixture;
+use ProgrammatorDev\OpenWeatherMap\Test\Support\ApiTestCase;
 
-final class GeocodingTest extends TestCase
+final class GeocodingTest extends ApiTestCase
 {
     public function testLooksUpLocationsByName(): void
     {
-        $client = new Client();
-        $client->addResponse(new Response(
-            body: json_encode(
-                Fixture::json('geocoding/direct/success.json'),
-                JSON_THROW_ON_ERROR,
-            ),
-        ));
+        $this->respondWithFixture('geocoding/direct/success.json');
 
-        $api = new OpenWeatherMap('api-key');
-        $api->setup()->client($client);
-
-        $locations = $api->geocoding()->byName('Springfield,US', limit: 5);
-        $request = $client->getLastRequest();
-
-        parse_str($request->getUri()->getQuery(), $query);
+        $locations = $this->api->geocoding()->byName(' Springfield,US ', limit: 5);
+        $request = $this->client->getLastRequest();
 
         self::assertCount(5, $locations);
         self::assertContainsOnlyInstancesOf(Location::class, $locations);
@@ -40,51 +25,29 @@ final class GeocodingTest extends TestCase
             'q' => 'Springfield,US',
             'limit' => '5',
             'appid' => 'api-key',
-        ], $query);
+        ], $this->query($request));
     }
 
     public function testAllowsAnOmittedLimitAndHydratesAnEmptyResult(): void
     {
-        $client = new Client();
-        $client->addResponse(new Response(
-            body: json_encode(
-                Fixture::json('geocoding/direct/empty.json'),
-                JSON_THROW_ON_ERROR,
-            ),
-        ));
+        $this->respondWithFixture('geocoding/direct/empty.json');
 
-        $api = new OpenWeatherMap('api-key');
-        $api->setup()->client($client);
-
-        $locations = $api->geocoding()->byName('Unknown location');
-        $request = $client->getLastRequest();
-
-        parse_str($request->getUri()->getQuery(), $query);
+        $locations = $this->api->geocoding()->byName('Unknown location');
+        $request = $this->client->getLastRequest();
 
         self::assertSame([], $locations);
         self::assertSame([
             'q' => 'Unknown location',
             'appid' => 'api-key',
-        ], $query);
+        ], $this->query($request));
     }
 
     public function testLooksUpALocationByPostalCode(): void
     {
-        $client = new Client();
-        $client->addResponse(new Response(
-            body: json_encode(
-                Fixture::json('geocoding/zip/success.json'),
-                JSON_THROW_ON_ERROR,
-            ),
-        ));
+        $this->respondWithFixture('geocoding/zip/success.json');
 
-        $api = new OpenWeatherMap('api-key');
-        $api->setup()->client($client);
-
-        $location = $api->geocoding()->byPostalCode(' 1000-001 ', 'pt');
-        $request = $client->getLastRequest();
-
-        parse_str($request->getUri()->getQuery(), $query);
+        $location = $this->api->geocoding()->byPostalCode(' 1000-001 ', 'pt');
+        $request = $this->client->getLastRequest();
 
         self::assertInstanceOf(PostalLocation::class, $location);
         self::assertSame('1000-001', $location->postalCode());
@@ -94,30 +57,19 @@ final class GeocodingTest extends TestCase
         self::assertSame([
             'zip' => '1000-001,PT',
             'appid' => 'api-key',
-        ], $query);
+        ], $this->query($request));
     }
 
     public function testLooksUpLocationsByCoordinates(): void
     {
-        $client = new Client();
-        $client->addResponse(new Response(
-            body: json_encode(
-                Fixture::json('geocoding/reverse/success.json'),
-                JSON_THROW_ON_ERROR,
-            ),
-        ));
+        $this->respondWithFixture('geocoding/reverse/success.json');
 
-        $api = new OpenWeatherMap('api-key');
-        $api->setup()->client($client);
-
-        $locations = $api->geocoding()->byCoordinates(
+        $locations = $this->api->geocoding()->byCoordinates(
             latitude: 40.7128,
             longitude: -74.006,
             limit: 5,
         );
-        $request = $client->getLastRequest();
-
-        parse_str($request->getUri()->getQuery(), $query);
+        $request = $this->client->getLastRequest();
 
         self::assertCount(1, $locations);
         self::assertContainsOnlyInstancesOf(Location::class, $locations);
@@ -129,39 +81,28 @@ final class GeocodingTest extends TestCase
             'lon' => '-74.006',
             'limit' => '5',
             'appid' => 'api-key',
-        ], $query);
+        ], $this->query($request));
     }
 
     public function testAllowsAnOmittedReverseLimit(): void
     {
-        $client = new Client();
-        $client->addResponse(new Response(
-            body: json_encode(
-                Fixture::json('geocoding/reverse/success.json'),
-                JSON_THROW_ON_ERROR,
-            ),
-        ));
+        $this->respondWithFixture('geocoding/reverse/success.json');
 
-        $api = new OpenWeatherMap('api-key');
-        $api->setup()->client($client);
-
-        $api->geocoding()->byCoordinates(
+        $this->api->geocoding()->byCoordinates(
             latitude: 40.7128,
             longitude: -74.006,
         );
-        $request = $client->getLastRequest();
-
-        parse_str($request->getUri()->getQuery(), $query);
+        $request = $this->client->getLastRequest();
 
         self::assertSame([
             'lat' => '40.7128',
             'lon' => '-74.006',
             'appid' => 'api-key',
-        ], $query);
+        ], $this->query($request));
     }
 
-    #[DataProvider('invalidArguments')]
-    public function testRejectsInvalidArguments(
+    #[DataProvider('invalidNameArguments')]
+    public function testRejectsInvalidNameArguments(
         string $name,
         ?int $limit,
         string $message,
@@ -169,10 +110,10 @@ final class GeocodingTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage($message);
 
-        (new OpenWeatherMap('api-key'))->geocoding()->byName($name, $limit);
+        $this->api->geocoding()->byName($name, $limit);
     }
 
-    public static function invalidArguments(): iterable
+    public static function invalidNameArguments(): iterable
     {
         yield 'blank name' => ['   ', null, 'The location name must be a non-empty string.'];
         yield 'limit below minimum' => ['Lisbon', 0, 'The result limit must be between 1 and 5.'];
@@ -188,8 +129,7 @@ final class GeocodingTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage($message);
 
-        (new OpenWeatherMap('api-key'))
-            ->geocoding()
+        $this->api->geocoding()
             ->byPostalCode($postalCode, $countryCode);
     }
 
@@ -222,8 +162,7 @@ final class GeocodingTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('The result limit must be at least 1.');
 
-        (new OpenWeatherMap('api-key'))
-            ->geocoding()
+        $this->api->geocoding()
             ->byCoordinates(
                 latitude: 40.7128,
                 longitude: -74.006,
