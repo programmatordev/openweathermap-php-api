@@ -7,31 +7,16 @@
 OpenWeather PHP library built on
 [`programmatordev/php-api-sdk`](https://github.com/programmatordev/php-api-sdk).
 
-Version 4 is currently under development as a complete, breaking rewrite. The
-legacy API has been removed and the new public API is not ready for use yet.
+The library is currently under development and the public API is not ready for
+use yet.
 
 ## Requirements
 
 - PHP 8.1 or higher.
 
-## Geocoding
+## Documentation
 
-Direct geocoding accepts a location name and an optional result limit from one
-to five:
-
-```php
-use ProgrammatorDev\OpenWeatherMap\OpenWeatherMap;
-
-$api = new OpenWeatherMap($_ENV['OPENWEATHERMAP_API_KEY']);
-
-$locations = $api->geocoding()->byName('Springfield,US', limit: 5);
-
-foreach ($locations as $location) {
-    echo $location->name();
-    echo $location->state();
-    echo $location->countryCode();
-}
-```
+- [Geocoding](docs/geocoding.md)
 
 ## License
 
