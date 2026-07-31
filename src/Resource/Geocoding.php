@@ -4,6 +4,7 @@ namespace ProgrammatorDev\OpenWeatherMap\Resource;
 
 use ProgrammatorDev\Api\Resource;
 use ProgrammatorDev\OpenWeatherMap\Entity\Geocoding\Location;
+use ProgrammatorDev\OpenWeatherMap\Entity\Geocoding\PostalLocation;
 
 final class Geocoding extends Resource
 {
@@ -31,5 +32,28 @@ final class Geocoding extends Resource
             ->queries($query)
             ->get('/geo/1.0/direct')
             ->collection(Location::class);
+    }
+
+    public function byPostalCode(string $postalCode, string $countryCode): PostalLocation
+    {
+        $postalCode = trim($postalCode);
+
+        if ($postalCode === '') {
+            throw new \InvalidArgumentException('The postal code must be a non-empty string.');
+        }
+
+        $countryCode = strtoupper(trim($countryCode));
+
+        if (preg_match('/^[A-Z]{2}$/D', $countryCode) !== 1) {
+            throw new \InvalidArgumentException(
+                'The country code must contain exactly two ASCII letters.',
+            );
+        }
+
+        return $this
+            ->endpoint()
+            ->query('zip', sprintf('%s,%s', $postalCode, $countryCode))
+            ->get('/geo/1.0/zip')
+            ->entity(PostalLocation::class);
     }
 }

@@ -34,3 +34,24 @@ foreach ($locations as $location) {
 
 `localNames()` returns all available localized names as an associative array.
 The available language codes depend on the returned location.
+
+## Lookup By Postal Code
+
+Use `byPostalCode()` with a postal code and a two-letter ISO 3166 country code.
+Country codes are case-insensitive.
+
+```php
+$location = $api->geocoding()->byPostalCode(
+    postalCode: '1000-001',
+    countryCode: 'PT',
+);
+
+echo $location->postalCode();
+echo $location->name();
+echo $location->coordinates()?->latitude();
+echo $location->coordinates()?->longitude();
+echo $location->countryCode();
+```
+
+The method returns a `PostalLocation`. Every response property may be absent or
+`null`.
