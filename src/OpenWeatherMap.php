@@ -12,6 +12,7 @@ use ProgrammatorDev\OpenWeatherMap\Exception\NotFoundException;
 use ProgrammatorDev\OpenWeatherMap\Exception\TooManyRequestsException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnauthorizedException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnexpectedErrorException;
+use ProgrammatorDev\OpenWeatherMap\Resource\Geocoding;
 
 class OpenWeatherMap extends Api
 {
@@ -48,6 +49,11 @@ class OpenWeatherMap extends Api
             $context->statusCode() >= 400 && $context->statusCode() <= 599 => UnexpectedErrorException::fromContext($context),
             default => null,
         });
+    }
+
+    public function geocoding(): Geocoding
+    {
+        return $this->resource(Geocoding::class);
     }
 
     private function validateApiKey(string $apiKey): void

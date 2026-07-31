@@ -14,6 +14,25 @@ legacy API has been removed and the new public API is not ready for use yet.
 
 - PHP 8.1 or higher.
 
+## Geocoding
+
+Direct geocoding accepts a location name and an optional result limit from one
+to five:
+
+```php
+use ProgrammatorDev\OpenWeatherMap\OpenWeatherMap;
+
+$api = new OpenWeatherMap($_ENV['OPENWEATHERMAP_API_KEY']);
+
+$locations = $api->geocoding()->byName('Springfield,US', limit: 5);
+
+foreach ($locations as $location) {
+    echo $location->name();
+    echo $location->state();
+    echo $location->countryCode();
+}
+```
+
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
