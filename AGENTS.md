@@ -23,6 +23,9 @@ Composer with PSR-4 autoloading under the
 - Prefer focused changes that follow the architecture and naming conventions
   documented for the active target version. Do not preserve legacy patterns
   when the active public contract intentionally replaces them.
+- Organize source files by clear responsibility or domain and mirror that
+  structure in tests. Keep the root namespace focused on primary entry points;
+  avoid both unrelated root-level classes and arbitrary one-file folders.
 - Reuse shared entities, helpers, resource behavior, test utilities, and
   constants when they fit.
 - Keep endpoint construction in resource classes and response mapping in typed
