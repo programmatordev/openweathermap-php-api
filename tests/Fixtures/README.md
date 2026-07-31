@@ -35,6 +35,7 @@ response sidecar follows this shape:
     "endpoint": "Direct geocoding",
     "apiVersion": "1.0",
     "capturedAt": "2026-07-31T12:00:00Z",
+    "httpStatus": 200,
     "request": {
         "method": "GET",
         "path": "/geo/1.0/direct",

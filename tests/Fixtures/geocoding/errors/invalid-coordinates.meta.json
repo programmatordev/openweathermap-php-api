@@ -1,0 +1,17 @@
+{
+    "provenance": "captured",
+    "product": "Geocoding API",
+    "endpoint": "Reverse geocoding",
+    "apiVersion": "1.0",
+    "capturedAt": "2026-07-31T17:19:23Z",
+    "httpStatus": 400,
+    "request": {
+        "method": "GET",
+        "path": "/geo/1.0/reverse",
+        "query": {
+            "lat": 91,
+            "lon": 0
+        }
+    },
+    "sanitization": []
+}

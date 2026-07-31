@@ -1,0 +1,16 @@
+{
+    "provenance": "captured",
+    "product": "Geocoding API",
+    "endpoint": "ZIP/postcode geocoding",
+    "apiVersion": "1.0",
+    "capturedAt": "2026-07-31T17:19:23Z",
+    "httpStatus": 200,
+    "request": {
+        "method": "GET",
+        "path": "/geo/1.0/zip",
+        "query": {
+            "zip": "1000-001,PT"
+        }
+    },
+    "sanitization": []
+}

@@ -1,0 +1,16 @@
+{
+    "provenance": "captured",
+    "product": "Geocoding API",
+    "endpoint": "Direct geocoding",
+    "apiVersion": "1.0",
+    "capturedAt": "2026-07-31T17:19:23Z",
+    "httpStatus": 400,
+    "request": {
+        "method": "GET",
+        "path": "/geo/1.0/direct",
+        "query": {
+            "limit": 5
+        }
+    },
+    "sanitization": []
+}
