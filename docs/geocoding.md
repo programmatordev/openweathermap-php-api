@@ -55,3 +55,18 @@ echo $location->countryCode();
 
 The method returns a `PostalLocation`. Every response property may be absent or
 `null`.
+
+## Lookup By Coordinates
+
+Use `byCoordinates()` for reverse geocoding. The optional result limit must be
+at least one; omit it to use the API default.
+
+```php
+$locations = $api->geocoding()->byCoordinates(
+    latitude: 40.7128,
+    longitude: -74.006,
+    limit: 5,
+);
+```
+
+The method returns an array of `Location` entities.

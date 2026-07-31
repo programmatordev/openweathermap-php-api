@@ -97,6 +97,69 @@ final class GeocodingTest extends TestCase
         ], $query);
     }
 
+    public function testLooksUpLocationsByCoordinates(): void
+    {
+        $client = new Client();
+        $client->addResponse(new Response(
+            body: json_encode(
+                Fixture::json('geocoding/reverse/success.json'),
+                JSON_THROW_ON_ERROR,
+            ),
+        ));
+
+        $api = new OpenWeatherMap('api-key');
+        $api->setup()->client($client);
+
+        $locations = $api->geocoding()->byCoordinates(
+            latitude: 40.7128,
+            longitude: -74.006,
+            limit: 5,
+        );
+        $request = $client->getLastRequest();
+
+        parse_str($request->getUri()->getQuery(), $query);
+
+        self::assertCount(1, $locations);
+        self::assertContainsOnlyInstancesOf(Location::class, $locations);
+        self::assertSame('New York County', $locations[0]->name());
+        self::assertSame('GET', $request->getMethod());
+        self::assertSame('/geo/1.0/reverse', $request->getUri()->getPath());
+        self::assertSame([
+            'lat' => '40.7128',
+            'lon' => '-74.006',
+            'limit' => '5',
+            'appid' => 'api-key',
+        ], $query);
+    }
+
+    public function testAllowsAnOmittedReverseLimit(): void
+    {
+        $client = new Client();
+        $client->addResponse(new Response(
+            body: json_encode(
+                Fixture::json('geocoding/reverse/success.json'),
+                JSON_THROW_ON_ERROR,
+            ),
+        ));
+
+        $api = new OpenWeatherMap('api-key');
+        $api->setup()->client($client);
+
+        $api->geocoding()->byCoordinates(
+            latitude: 40.7128,
+            longitude: -74.006,
+        );
+        $request = $client->getLastRequest();
+
+        parse_str($request->getUri()->getQuery(), $query);
+
+        self::assertSame([
+            'lat' => '40.7128',
+            'lon' => '-74.006',
+            'appid' => 'api-key',
+        ], $query);
+    }
+
     #[DataProvider('invalidArguments')]
     public function testRejectsInvalidArguments(
         string $name,
@@ -152,5 +215,19 @@ final class GeocodingTest extends TestCase
             'P1',
             'The country code must contain exactly two ASCII letters.',
         ];
+    }
+
+    public function testRejectsAReverseLimitBelowOne(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The result limit must be at least 1.');
+
+        (new OpenWeatherMap('api-key'))
+            ->geocoding()
+            ->byCoordinates(
+                latitude: 40.7128,
+                longitude: -74.006,
+                limit: 0,
+            );
     }
 }
