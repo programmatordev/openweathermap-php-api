@@ -3,8 +3,15 @@
 namespace ProgrammatorDev\OpenWeatherMap;
 
 use ProgrammatorDev\Api\Api;
+use ProgrammatorDev\Api\Context\ErrorContext;
 use ProgrammatorDev\OpenWeatherMap\Enum\Language;
 use ProgrammatorDev\OpenWeatherMap\Enum\Units;
+use ProgrammatorDev\OpenWeatherMap\Exception\ApiException;
+use ProgrammatorDev\OpenWeatherMap\Exception\BadRequestException;
+use ProgrammatorDev\OpenWeatherMap\Exception\NotFoundException;
+use ProgrammatorDev\OpenWeatherMap\Exception\TooManyRequestsException;
+use ProgrammatorDev\OpenWeatherMap\Exception\UnauthorizedException;
+use ProgrammatorDev\OpenWeatherMap\Exception\UnexpectedErrorException;
 
 class OpenWeatherMap extends Api
 {
@@ -28,6 +35,19 @@ class OpenWeatherMap extends Api
         $this->baseUrl(self::BASE_URL);
         $this->auth()->query('appid', $apiKey);
         $this->responses()->json();
+
+        // Exact status handlers run first.
+        // SDK conditional handlers run for every response,
+        // so null explicitly means that no API error matched.
+        $this->errors()->statuses([
+            400 => static fn (ErrorContext $context): BadRequestException => BadRequestException::fromContext($context),
+            401 => static fn (ErrorContext $context): UnauthorizedException => UnauthorizedException::fromContext($context),
+            404 => static fn (ErrorContext $context): NotFoundException => NotFoundException::fromContext($context),
+            429 => static fn (ErrorContext $context): TooManyRequestsException => TooManyRequestsException::fromContext($context),
+        ])->when(static fn (ErrorContext $context): ?ApiException => match (true) {
+            $context->statusCode() >= 400 && $context->statusCode() <= 599 => UnexpectedErrorException::fromContext($context),
+            default => null,
+        });
     }
 
     private function validateApiKey(string $apiKey): void
