@@ -3,6 +3,7 @@
 namespace ProgrammatorDev\OpenWeatherMap\Resource\Concern;
 
 use ProgrammatorDev\OpenWeatherMap\Enum\Language;
+use ProgrammatorDev\OpenWeatherMap\OpenWeatherMap;
 
 trait WithLanguage
 {
@@ -22,8 +23,10 @@ trait WithLanguage
         return $clone;
     }
 
-    protected function languageOverride(): Language|string|null
+    protected function resolvedLanguage(): string
     {
-        return $this->languageOverride;
+        $language = $this->languageOverride ?? $this->runtime->config()->get(OpenWeatherMap::OPTION_LANGUAGE);
+
+        return $language instanceof Language ? $language->value : $language;
     }
 }

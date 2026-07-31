@@ -3,6 +3,7 @@
 namespace ProgrammatorDev\OpenWeatherMap\Resource\Concern;
 
 use ProgrammatorDev\OpenWeatherMap\Enum\Units;
+use ProgrammatorDev\OpenWeatherMap\OpenWeatherMap;
 
 trait WithUnits
 {
@@ -17,8 +18,8 @@ trait WithUnits
         return $clone;
     }
 
-    protected function unitsOverride(): ?Units
+    protected function resolvedUnits(): Units
     {
-        return $this->unitsOverride;
+        return $this->unitsOverride ?? $this->runtime->config()->get(OpenWeatherMap::OPTION_UNITS);
     }
 }
