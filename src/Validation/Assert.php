@@ -42,6 +42,19 @@ final class Assert
         return $longitude;
     }
 
+    public static function countryCode(string $countryCode): string
+    {
+        $countryCode = strtoupper(trim($countryCode));
+
+        if (preg_match('/^[A-Z]{2}$/D', $countryCode) !== 1) {
+            throw new \InvalidArgumentException(
+                'The country code must contain exactly two ASCII letters.',
+            );
+        }
+
+        return $countryCode;
+    }
+
     public static function positiveInteger(int $value, string $name): int
     {
         if ($value < 1) {

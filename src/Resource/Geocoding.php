@@ -35,14 +35,7 @@ final class Geocoding extends Resource
     public function byPostalCode(string $postalCode, string $countryCode): PostalLocation
     {
         $postalCode = Assert::notBlank($postalCode, 'postal code');
-
-        $countryCode = strtoupper(trim($countryCode));
-
-        if (preg_match('/^[A-Z]{2}$/D', $countryCode) !== 1) {
-            throw new \InvalidArgumentException(
-                'The country code must contain exactly two ASCII letters.',
-            );
-        }
+        $countryCode = Assert::countryCode($countryCode);
 
         /** @var PostalLocation $location */
         $location = $this
