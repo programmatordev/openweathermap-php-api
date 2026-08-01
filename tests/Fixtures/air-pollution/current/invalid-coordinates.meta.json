@@ -1,0 +1,17 @@
+{
+    "provenance": "captured",
+    "product": "Air Pollution API",
+    "endpoint": "Current air pollution by coordinates",
+    "apiVersion": "2.5",
+    "capturedAt": "2026-08-01T20:49:47Z",
+    "httpStatus": 400,
+    "request": {
+        "method": "GET",
+        "path": "/data/2.5/air_pollution",
+        "query": {
+            "lat": 91,
+            "lon": 0
+        }
+    },
+    "sanitization": []
+}
