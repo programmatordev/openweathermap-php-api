@@ -10,14 +10,14 @@ final class HydrationExceptionTest extends TestCase
     public function testItDescribesTheInvalidPayloadValue(): void
     {
         $exception = HydrationException::invalidType(
-            entity: 'CurrentWeather',
+            entity: 'Current',
             path: 'main.temp',
             expectedType: 'int|float',
             value: 'warm'
         );
 
         self::assertSame(
-            'Cannot hydrate CurrentWeather: "main.temp" expected int|float, string received.',
+            'Cannot hydrate Current: "main.temp" expected int|float, string received.',
             $exception->getMessage()
         );
     }

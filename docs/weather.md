@@ -21,7 +21,7 @@ $current = $api->weather()->current(
 );
 ```
 
-The method returns a `CurrentWeather` entity. Every response property may be
+The method returns a `Current` entity. Every response property may be
 absent or explicitly `null`; missing or `null` condition lists become empty
 arrays.
 

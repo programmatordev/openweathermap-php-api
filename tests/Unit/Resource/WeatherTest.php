@@ -4,7 +4,7 @@ namespace ProgrammatorDev\OpenWeatherMap\Test\Unit\Resource;
 
 use Nyholm\Psr7\Response;
 use PHPUnit\Framework\Attributes\DataProvider;
-use ProgrammatorDev\OpenWeatherMap\Entity\Weather\CurrentWeather;
+use ProgrammatorDev\OpenWeatherMap\Entity\Weather\Current;
 use ProgrammatorDev\OpenWeatherMap\Enum\Language;
 use ProgrammatorDev\OpenWeatherMap\Enum\Unit;
 use ProgrammatorDev\OpenWeatherMap\Enum\Units;
@@ -23,7 +23,7 @@ final class WeatherTest extends ApiTestCase
         );
         $request = $this->client->getLastRequest();
 
-        self::assertInstanceOf(CurrentWeather::class, $weather);
+        self::assertInstanceOf(Current::class, $weather);
         self::assertSame('Socorro', $weather->name());
         self::assertSame(Unit::CELSIUS, $weather->temperatureUnit());
         self::assertSame('GET', $request->getMethod());

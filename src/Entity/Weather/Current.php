@@ -11,7 +11,7 @@ use ProgrammatorDev\OpenWeatherMap\Exception\HydrationException;
 use ProgrammatorDev\OpenWeatherMap\Hydration\PayloadReader;
 use ProgrammatorDev\OpenWeatherMap\Hydration\UnitsResolver;
 
-final class CurrentWeather implements EntityInterface
+final class Current implements EntityInterface
 {
     use HasWeatherMeasurements;
 

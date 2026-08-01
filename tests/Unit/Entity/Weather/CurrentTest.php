@@ -6,18 +6,18 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ProgrammatorDev\Api\Config\Config;
 use ProgrammatorDev\Api\Context\Context;
-use ProgrammatorDev\OpenWeatherMap\Entity\Weather\CurrentWeather;
+use ProgrammatorDev\OpenWeatherMap\Entity\Weather\Current;
 use ProgrammatorDev\OpenWeatherMap\Enum\Unit;
 use ProgrammatorDev\OpenWeatherMap\Enum\Units;
 use ProgrammatorDev\OpenWeatherMap\Exception\HydrationException;
 use ProgrammatorDev\OpenWeatherMap\OpenWeatherMap;
 use ProgrammatorDev\OpenWeatherMap\Test\Support\Fixture;
 
-final class CurrentWeatherTest extends TestCase
+final class CurrentTest extends TestCase
 {
     public function testHydratesCapturedCurrentWeather(): void
     {
-        $weather = CurrentWeather::fromArray(
+        $weather = Current::fromArray(
             Fixture::json('weather/current/success.json'),
         );
 
@@ -83,7 +83,7 @@ final class CurrentWeatherTest extends TestCase
 
     public function testHydratesConditionalRain(): void
     {
-        $weather = CurrentWeather::fromArray(
+        $weather = Current::fromArray(
             Fixture::json('weather/current/rain.json'),
         );
 
@@ -96,7 +96,7 @@ final class CurrentWeatherTest extends TestCase
 
     public function testHydratesConditionalSnowAndMissingFields(): void
     {
-        $weather = CurrentWeather::fromArray(
+        $weather = Current::fromArray(
             Fixture::json('weather/current/snow.json'),
         );
 
@@ -116,7 +116,7 @@ final class CurrentWeatherTest extends TestCase
             OpenWeatherMap::OPTION_UNITS => Units::IMPERIAL,
         ]));
 
-        $weather = CurrentWeather::fromArray([
+        $weather = Current::fromArray([
             'main' => ['temp' => 72.5],
             'wind' => ['speed' => 10, 'gust' => 15],
         ], $context);
@@ -130,9 +130,9 @@ final class CurrentWeatherTest extends TestCase
 
     public function testToleratesMissingNullUnknownAndPartialFields(): void
     {
-        self::assertSame([], CurrentWeather::fromArray(['weather' => null])->conditions());
+        self::assertSame([], Current::fromArray(['weather' => null])->conditions());
 
-        $weather = CurrentWeather::fromArray([
+        $weather = Current::fromArray([
             'coord' => ['lat' => null, 'unknown' => true],
             'weather' => [['icon' => null]],
             'main' => ['temp' => null],
@@ -181,7 +181,7 @@ final class CurrentWeatherTest extends TestCase
             $receivedType,
         ));
 
-        CurrentWeather::fromArray($data);
+        Current::fromArray($data);
     }
 
     public static function invalidFields(): iterable
