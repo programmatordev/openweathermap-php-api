@@ -22,15 +22,12 @@ final class Geocoding extends Resource
             $limit = Assert::integerBetween($limit, 1, 5, 'result limit');
         }
 
-        $query = ['q' => $name];
-
-        if ($limit !== null) {
-            $query['limit'] = $limit;
-        }
-
         return $this
             ->endpoint()
-            ->queries($query)
+            ->queries([
+                'q' => $name,
+                'limit' => $limit,
+            ])
             ->get('/geo/1.0/direct')
             ->collection(Location::class);
     }
@@ -74,18 +71,13 @@ final class Geocoding extends Resource
             $limit = Assert::positiveInteger($limit, 'result limit');
         }
 
-        $query = [
-            'lat' => $latitude,
-            'lon' => $longitude,
-        ];
-
-        if ($limit !== null) {
-            $query['limit'] = $limit;
-        }
-
         return $this
             ->endpoint()
-            ->queries($query)
+            ->queries([
+                'lat' => $latitude,
+                'lon' => $longitude,
+                'limit' => $limit,
+            ])
             ->get('/geo/1.0/reverse')
             ->collection(Location::class);
     }
