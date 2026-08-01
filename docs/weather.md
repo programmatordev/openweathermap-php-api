@@ -1,11 +1,11 @@
 # Weather
 
+## Current
+
 The Current Weather API is available on OpenWeather's standard free and paid
 subscriptions. See the
 [official Current Weather API documentation](https://openweathermap.org/api/current)
 for the upstream endpoint contract.
-
-## Current Weather
 
 Use `current()` with a latitude and longitude. Both coordinates are validated
 before the request is sent.
