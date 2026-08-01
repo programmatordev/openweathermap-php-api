@@ -16,6 +16,7 @@ use yet.
 
 ## Documentation
 
+- [Weather](docs/weather.md)
 - [Geocoding](docs/geocoding.md)
 
 ## License

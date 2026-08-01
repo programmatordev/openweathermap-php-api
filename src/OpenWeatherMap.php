@@ -13,6 +13,7 @@ use ProgrammatorDev\OpenWeatherMap\Exception\TooManyRequestsException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnauthorizedException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnexpectedErrorException;
 use ProgrammatorDev\OpenWeatherMap\Resource\Geocoding;
+use ProgrammatorDev\OpenWeatherMap\Resource\Weather;
 use ProgrammatorDev\OpenWeatherMap\Validation\Assert;
 
 class OpenWeatherMap extends Api
@@ -51,6 +52,11 @@ class OpenWeatherMap extends Api
     public function geocoding(): Geocoding
     {
         return $this->resource(Geocoding::class);
+    }
+
+    public function weather(): Weather
+    {
+        return $this->resource(Weather::class);
     }
 
     private function validateApiKey(string $apiKey): string

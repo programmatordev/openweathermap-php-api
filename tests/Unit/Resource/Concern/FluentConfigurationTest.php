@@ -27,9 +27,9 @@ final class FluentConfigurationTest extends TestCase
 
         self::assertNotSame($this->resource, $configured);
         self::assertSame(Units::METRIC, $this->resource->resolvedUnitsValue());
-        self::assertSame('en', $this->resource->resolvedLanguageValue());
+        self::assertSame(Language::ENGLISH, $this->resource->resolvedLanguageValue());
         self::assertSame(Units::IMPERIAL, $configured->resolvedUnitsValue());
-        self::assertSame('pt', $configured->resolvedLanguageValue());
+        self::assertSame(Language::PORTUGUESE, $configured->resolvedLanguageValue());
     }
 
     public function testLaterOverridesDoNotMutateEarlierClones(): void
@@ -64,7 +64,7 @@ final class FluentConfigurationTest extends TestCase
         ]))->configurableResource();
 
         self::assertSame(Units::STANDARD, $resource->resolvedUnitsValue());
-        self::assertSame('pt', $resource->resolvedLanguageValue());
+        self::assertSame(Language::PORTUGUESE, $resource->resolvedLanguageValue());
     }
 
     public function testOverridesTakePrecedenceWhenResolvingConfiguration(): void
@@ -74,7 +74,7 @@ final class FluentConfigurationTest extends TestCase
             ->withLanguage(Language::PORTUGUESE);
 
         self::assertSame(Units::IMPERIAL, $configured->resolvedUnitsValue());
-        self::assertSame('pt', $configured->resolvedLanguageValue());
+        self::assertSame(Language::PORTUGUESE, $configured->resolvedLanguageValue());
     }
 }
 
@@ -92,7 +92,7 @@ final class ConfigurableResource extends Resource
     use WithLanguage;
     use WithUnits;
 
-    public function resolvedLanguageValue(): string
+    public function resolvedLanguageValue(): Language|string
     {
         return $this->resolvedLanguage();
     }
