@@ -1,17 +1,21 @@
 <?php
 
-namespace ProgrammatorDev\OpenWeatherMap\Entity\Weather;
+namespace ProgrammatorDev\OpenWeatherMap\Entity\Weather\Forecast;
 
 use ProgrammatorDev\Api\Context\Context;
 use ProgrammatorDev\Api\Contract\EntityInterface;
+use ProgrammatorDev\OpenWeatherMap\Entity\Weather\Clouds;
 use ProgrammatorDev\OpenWeatherMap\Entity\Weather\Concern\HasWeatherMeasurements;
-use ProgrammatorDev\OpenWeatherMap\Entity\Weather\Current\Precipitation;
+use ProgrammatorDev\OpenWeatherMap\Entity\Weather\Condition;
+use ProgrammatorDev\OpenWeatherMap\Entity\Weather\Wind;
+use ProgrammatorDev\OpenWeatherMap\Enum\Unit;
 use ProgrammatorDev\OpenWeatherMap\Enum\Units;
 use ProgrammatorDev\OpenWeatherMap\Exception\HydrationException;
+use ProgrammatorDev\OpenWeatherMap\Formatting\MeasurementFormatter;
 use ProgrammatorDev\OpenWeatherMap\Hydration\PayloadReader;
 use ProgrammatorDev\OpenWeatherMap\Hydration\UnitsResolver;
 
-final class CurrentWeather implements EntityInterface
+final class Period implements EntityInterface
 {
     use HasWeatherMeasurements;
 
@@ -19,10 +23,7 @@ final class CurrentWeather implements EntityInterface
      * @param list<Condition> $conditions
      */
     private function __construct(
-        private readonly ?float $latitude,
-        private readonly ?float $longitude,
-        private readonly array $conditions,
-        private readonly ?string $base,
+        private readonly ?\DateTimeImmutable $forecastAt,
         private readonly ?float $temperature,
         private readonly ?float $feelsLikeTemperature,
         private readonly ?float $minimumTemperature,
@@ -31,21 +32,16 @@ final class CurrentWeather implements EntityInterface
         private readonly ?int $humidity,
         private readonly ?int $seaLevelPressure,
         private readonly ?int $groundLevelPressure,
-        private readonly ?int $visibility,
-        private readonly ?Wind $wind,
+        private readonly ?float $dewPoint,
+        private readonly array $conditions,
         private readonly ?Clouds $clouds,
+        private readonly ?Wind $wind,
+        private readonly ?int $visibility,
+        private readonly ?float $precipitationProbability,
         private readonly ?Precipitation $rain,
         private readonly ?Precipitation $snow,
-        private readonly ?\DateTimeImmutable $observedAt,
-        private readonly ?int $systemType,
-        private readonly ?int $systemId,
-        private readonly ?string $countryCode,
-        private readonly ?\DateTimeImmutable $sunriseAt,
-        private readonly ?\DateTimeImmutable $sunsetAt,
-        private readonly ?int $timezoneOffset,
-        private readonly ?int $id,
-        private readonly ?string $name,
-        private readonly ?int $code,
+        private readonly ?string $partOfDay,
+        private readonly ?string $forecastAtText,
         private readonly Units $units,
     ) {}
 
@@ -67,16 +63,13 @@ final class CurrentWeather implements EntityInterface
             $conditions[] = Condition::fromArray($condition, $context);
         }
 
-        $wind = $reader->nullableArray('wind');
         $clouds = $reader->nullableArray('clouds');
+        $wind = $reader->nullableArray('wind');
         $rain = $reader->nullableArray('rain');
         $snow = $reader->nullableArray('snow');
 
         return new self(
-            latitude: $reader->nullableFloat('coord.lat'),
-            longitude: $reader->nullableFloat('coord.lon'),
-            conditions: $conditions,
-            base: $reader->nullableString('base'),
+            forecastAt: $reader->nullableTimestamp('dt'),
             temperature: $reader->nullableFloat('main.temp'),
             feelsLikeTemperature: $reader->nullableFloat('main.feels_like'),
             minimumTemperature: $reader->nullableFloat('main.temp_min'),
@@ -85,33 +78,45 @@ final class CurrentWeather implements EntityInterface
             humidity: $reader->nullableInt('main.humidity'),
             seaLevelPressure: $reader->nullableInt('main.sea_level'),
             groundLevelPressure: $reader->nullableInt('main.grnd_level'),
-            visibility: $reader->nullableInt('visibility'),
-            wind: $wind === null ? null : Wind::fromArray($wind, $context),
+            // Captured 5 Day Forecast responses include dew_point even though its field table omits it.
+            // The related Hourly Forecast contract documents the field and its unit behavior.
+            // https://openweathermap.org/forecast5
+            // https://openweathermap.org/api/hourly-forecast?collection=current_forecast
+            dewPoint: $reader->nullableFloat('main.dew_point'),
+            conditions: $conditions,
             clouds: $clouds === null ? null : Clouds::fromArray($clouds, $context),
+            wind: $wind === null ? null : Wind::fromArray($wind, $context),
+            visibility: $reader->nullableInt('visibility'),
+            precipitationProbability: $reader->nullableFloat('pop'),
             rain: $rain === null ? null : Precipitation::fromArray($rain, $context),
             snow: $snow === null ? null : Precipitation::fromArray($snow, $context),
-            observedAt: $reader->nullableTimestamp('dt'),
-            systemType: $reader->nullableInt('sys.type'),
-            systemId: $reader->nullableInt('sys.id'),
-            countryCode: $reader->nullableString('sys.country'),
-            sunriseAt: $reader->nullableTimestamp('sys.sunrise'),
-            sunsetAt: $reader->nullableTimestamp('sys.sunset'),
-            timezoneOffset: $reader->nullableInt('timezone'),
-            id: $reader->nullableInt('id'),
-            name: $reader->nullableString('name'),
-            code: $reader->nullableInt('cod'),
+            partOfDay: $reader->nullableString('sys.pod'),
+            forecastAtText: $reader->nullableString('dt_txt'),
             units: UnitsResolver::fromContext($context),
         );
     }
 
-    public function latitude(): ?float
+    public function forecastAt(): ?\DateTimeImmutable
     {
-        return $this->latitude;
+        return $this->forecastAt;
     }
 
-    public function longitude(): ?float
+    public function dewPoint(): ?float
     {
-        return $this->longitude;
+        return $this->dewPoint;
+    }
+
+    public function dewPointUnit(): Unit
+    {
+        return $this->temperatureUnit();
+    }
+
+    public function dewPointWithUnit(): ?string
+    {
+        return MeasurementFormatter::format(
+            $this->dewPoint,
+            $this->dewPointUnit(),
+        );
     }
 
     /**
@@ -122,9 +127,9 @@ final class CurrentWeather implements EntityInterface
         return $this->conditions;
     }
 
-    public function base(): ?string
+    public function clouds(): ?Clouds
     {
-        return $this->base;
+        return $this->clouds;
     }
 
     public function wind(): ?Wind
@@ -132,9 +137,9 @@ final class CurrentWeather implements EntityInterface
         return $this->wind;
     }
 
-    public function clouds(): ?Clouds
+    public function precipitationProbability(): ?float
     {
-        return $this->clouds;
+        return $this->precipitationProbability;
     }
 
     public function rain(): ?Precipitation
@@ -147,53 +152,13 @@ final class CurrentWeather implements EntityInterface
         return $this->snow;
     }
 
-    public function observedAt(): ?\DateTimeImmutable
+    public function partOfDay(): ?string
     {
-        return $this->observedAt;
+        return $this->partOfDay;
     }
 
-    public function systemType(): ?int
+    public function forecastAtText(): ?string
     {
-        return $this->systemType;
-    }
-
-    public function systemId(): ?int
-    {
-        return $this->systemId;
-    }
-
-    public function countryCode(): ?string
-    {
-        return $this->countryCode;
-    }
-
-    public function sunriseAt(): ?\DateTimeImmutable
-    {
-        return $this->sunriseAt;
-    }
-
-    public function sunsetAt(): ?\DateTimeImmutable
-    {
-        return $this->sunsetAt;
-    }
-
-    public function timezoneOffset(): ?int
-    {
-        return $this->timezoneOffset;
-    }
-
-    public function id(): ?int
-    {
-        return $this->id;
-    }
-
-    public function name(): ?string
-    {
-        return $this->name;
-    }
-
-    public function code(): ?int
-    {
-        return $this->code;
+        return $this->forecastAtText;
     }
 }

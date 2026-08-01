@@ -50,7 +50,7 @@ final class CurrentWeatherTest extends TestCase
         self::assertSame('scattered clouds', $weather->conditions()[0]->description());
         self::assertSame('03d', $weather->conditions()[0]->icon());
         self::assertSame(
-            'https://openweathermap.org/payload/api/media/file/03d@2x.png',
+            'https://openweathermap.org/img/wn/03d@2x.png',
             $weather->conditions()[0]->iconUrl(),
         );
 

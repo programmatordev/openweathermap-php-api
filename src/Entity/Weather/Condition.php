@@ -8,7 +8,7 @@ use ProgrammatorDev\OpenWeatherMap\Hydration\PayloadReader;
 
 final class Condition implements EntityInterface
 {
-    private const ICON_URL = 'https://openweathermap.org/payload/api/media/file/%s@2x.png';
+    private const ICON_URL = 'https://openweathermap.org/img/wn/%s@2x.png';
 
     private function __construct(
         private readonly ?int $id,
