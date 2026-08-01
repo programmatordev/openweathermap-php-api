@@ -1,0 +1,19 @@
+{
+    "provenance": "captured",
+    "product": "Current Weather API",
+    "endpoint": "Current weather by coordinates",
+    "apiVersion": "2.5",
+    "capturedAt": "2026-08-01T08:50:07Z",
+    "httpStatus": 400,
+    "request": {
+        "method": "GET",
+        "path": "/data/2.5/weather",
+        "query": {
+            "lat": 91,
+            "lon": 0,
+            "units": "metric",
+            "lang": "en"
+        }
+    },
+    "sanitization": []
+}
