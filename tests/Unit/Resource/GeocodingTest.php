@@ -169,4 +169,33 @@ final class GeocodingTest extends ApiTestCase
                 limit: 0,
             );
     }
+
+    #[DataProvider('invalidCoordinates')]
+    public function testRejectsInvalidCoordinates(
+        float $latitude,
+        float $longitude,
+        string $message,
+    ): void {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage($message);
+
+        $this->api->geocoding()->byCoordinates($latitude, $longitude);
+    }
+
+    public static function invalidCoordinates(): iterable
+    {
+        $latitudeMessage = 'Latitude must be a finite number between -90 and 90.';
+        $longitudeMessage = 'Longitude must be a finite number between -180 and 180.';
+
+        yield 'latitude below minimum' => [-90.0001, 0, $latitudeMessage];
+        yield 'latitude above maximum' => [90.0001, 0, $latitudeMessage];
+        yield 'latitude is negative infinity' => [-INF, 0, $latitudeMessage];
+        yield 'latitude is positive infinity' => [INF, 0, $latitudeMessage];
+        yield 'latitude is not a number' => [NAN, 0, $latitudeMessage];
+        yield 'longitude below minimum' => [0, -180.0001, $longitudeMessage];
+        yield 'longitude above maximum' => [0, 180.0001, $longitudeMessage];
+        yield 'longitude is negative infinity' => [0, -INF, $longitudeMessage];
+        yield 'longitude is positive infinity' => [0, INF, $longitudeMessage];
+        yield 'longitude is not a number' => [0, NAN, $longitudeMessage];
+    }
 }

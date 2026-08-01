@@ -17,8 +17,8 @@ final class PostalLocationTest extends TestCase
 
         self::assertSame('1000-001', $location->postalCode());
         self::assertSame('Lisbon', $location->name());
-        self::assertSame(38.7167, $location->coordinates()?->latitude());
-        self::assertSame(-9.1333, $location->coordinates()?->longitude());
+        self::assertSame(38.7167, $location->latitude());
+        self::assertSame(-9.1333, $location->longitude());
         self::assertSame('PT', $location->countryCode());
     }
 
@@ -28,12 +28,14 @@ final class PostalLocationTest extends TestCase
             'zip' => null,
             'name' => null,
             'lat' => null,
+            'lon' => -9.1,
             'unknown' => new \stdClass(),
         ]);
 
         self::assertNull($location->postalCode());
         self::assertNull($location->name());
-        self::assertNull($location->coordinates());
+        self::assertNull($location->latitude());
+        self::assertSame(-9.1, $location->longitude());
         self::assertNull($location->countryCode());
     }
 

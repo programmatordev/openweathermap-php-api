@@ -13,6 +13,7 @@ use ProgrammatorDev\OpenWeatherMap\Exception\TooManyRequestsException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnauthorizedException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnexpectedErrorException;
 use ProgrammatorDev\OpenWeatherMap\Resource\Geocoding;
+use ProgrammatorDev\OpenWeatherMap\Validation\Assert;
 
 class OpenWeatherMap extends Api
 {
@@ -25,8 +26,8 @@ class OpenWeatherMap extends Api
     {
         parent::__construct();
 
-        $this->validateApiKey($apiKey);
-        $this->validateOptions($options);
+        $apiKey = $this->validateApiKey($apiKey);
+        $options = $this->validateOptions($options);
 
         $this->config($options, defaults: [
             self::OPTION_UNITS => Units::METRIC,
@@ -52,14 +53,12 @@ class OpenWeatherMap extends Api
         return $this->resource(Geocoding::class);
     }
 
-    private function validateApiKey(string $apiKey): void
+    private function validateApiKey(string $apiKey): string
     {
-        if (trim($apiKey) === '') {
-            throw new \InvalidArgumentException('The API key must be a non-empty string.');
-        }
+        return Assert::notBlank($apiKey, 'API key');
     }
 
-    private function validateOptions(array $options): void
+    private function validateOptions(array $options): array
     {
         $unknownOptions = array_diff(
             array_keys($options),
@@ -79,8 +78,12 @@ class OpenWeatherMap extends Api
         }
 
         if (array_key_exists(self::OPTION_LANGUAGE, $options)) {
-            $this->validateLanguage($options[self::OPTION_LANGUAGE]);
+            $options[self::OPTION_LANGUAGE] = $this->validateLanguage(
+                $options[self::OPTION_LANGUAGE],
+            );
         }
+
+        return $options;
     }
 
     private function validateUnits(mixed $units): void
@@ -94,7 +97,7 @@ class OpenWeatherMap extends Api
         }
     }
 
-    private function validateLanguage(mixed $language): void
+    private function validateLanguage(mixed $language): Language|string
     {
         if (!$language instanceof Language && !is_string($language)) {
             throw new \InvalidArgumentException(sprintf(
@@ -104,11 +107,8 @@ class OpenWeatherMap extends Api
             ));
         }
 
-        if (is_string($language) && trim($language) === '') {
-            throw new \InvalidArgumentException(sprintf(
-                'The "%s" option must not be an empty string.',
-                self::OPTION_LANGUAGE
-            ));
-        }
+        return is_string($language)
+            ? Assert::notBlank($language, sprintf('"%s" option', self::OPTION_LANGUAGE))
+            : $language;
     }
 }

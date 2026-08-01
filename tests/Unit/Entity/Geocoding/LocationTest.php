@@ -20,8 +20,8 @@ final class LocationTest extends TestCase
         self::assertSame('ஸ்பிரிங்ஃபீல்ட்', $location->localName('ta'));
         self::assertNull($location->localName('pt'));
         self::assertSame(6, count($location->localNames()));
-        self::assertSame(39.7990175, $location->coordinates()?->latitude());
-        self::assertSame(-89.6439575, $location->coordinates()?->longitude());
+        self::assertSame(39.7990175, $location->latitude());
+        self::assertSame(-89.6439575, $location->longitude());
         self::assertSame('US', $location->countryCode());
         self::assertSame('Illinois', $location->state());
     }
@@ -33,8 +33,8 @@ final class LocationTest extends TestCase
 
         self::assertSame('New York County', $location->name());
         self::assertSame('Nova Iorque', $location->localName('pt'));
-        self::assertSame(40.7127281, $location->coordinates()?->latitude());
-        self::assertSame(-74.0060152, $location->coordinates()?->longitude());
+        self::assertSame(40.7127281, $location->latitude());
+        self::assertSame(-74.0060152, $location->longitude());
         self::assertSame('US', $location->countryCode());
         self::assertSame('New York', $location->state());
     }
@@ -45,12 +45,14 @@ final class LocationTest extends TestCase
             'name' => null,
             'local_names' => null,
             'lat' => null,
+            'lon' => -9.1,
             'unknown' => new \stdClass(),
         ]);
 
         self::assertNull($location->name());
         self::assertSame([], $location->localNames());
-        self::assertNull($location->coordinates());
+        self::assertNull($location->latitude());
+        self::assertSame(-9.1, $location->longitude());
         self::assertNull($location->countryCode());
         self::assertNull($location->state());
     }

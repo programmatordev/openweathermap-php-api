@@ -25,8 +25,8 @@ when no locations match. Every response property may be absent or `null`.
 foreach ($locations as $location) {
     echo $location->name();
     echo $location->localName('en');
-    echo $location->coordinates()?->latitude();
-    echo $location->coordinates()?->longitude();
+    echo $location->latitude();
+    echo $location->longitude();
     echo $location->countryCode();
     echo $location->state();
 }
@@ -48,8 +48,8 @@ $location = $api->geocoding()->byPostalCode(
 
 echo $location->postalCode();
 echo $location->name();
-echo $location->coordinates()?->latitude();
-echo $location->coordinates()?->longitude();
+echo $location->latitude();
+echo $location->longitude();
 echo $location->countryCode();
 ```
 

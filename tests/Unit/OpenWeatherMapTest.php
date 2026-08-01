@@ -41,7 +41,7 @@ class OpenWeatherMapTest extends TestCase
     public function testAcceptsAnArbitraryNonEmptyLanguageCode(): void
     {
         $api = new OpenWeatherMap('api-key', [
-            OpenWeatherMap::OPTION_LANGUAGE => 'future_language',
+            OpenWeatherMap::OPTION_LANGUAGE => ' future_language ',
         ]);
 
         self::assertSame('future_language', $api->config()->get(OpenWeatherMap::OPTION_LANGUAGE));
@@ -52,7 +52,7 @@ class OpenWeatherMapTest extends TestCase
         $client = new Client();
         $client->addResponse(new Response(body: '{"ok":true}'));
 
-        $api = new OpenWeatherMap('secret');
+        $api = new OpenWeatherMap(' secret ');
         $api->setup()->client($client);
 
         $response = $api->send(Method::GET, '/data/2.5/weather');
@@ -202,6 +202,6 @@ class OpenWeatherMapTest extends TestCase
         yield 'unknown option' => ['api-key', ['unsupported' => true], 'Unknown OpenWeatherMap option: unsupported.'];
         yield 'invalid units' => ['api-key', [OpenWeatherMap::OPTION_UNITS => 'metric'], 'The "units" option must be an instance of'];
         yield 'invalid language type' => ['api-key', [OpenWeatherMap::OPTION_LANGUAGE => 123], 'The "language" option must be an instance of'];
-        yield 'blank language' => ['api-key', [OpenWeatherMap::OPTION_LANGUAGE => '  '], 'The "language" option must not be an empty string.'];
+        yield 'blank language' => ['api-key', [OpenWeatherMap::OPTION_LANGUAGE => '  '], 'The "language" option must be a non-empty string.'];
     }
 }

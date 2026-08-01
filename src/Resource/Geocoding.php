@@ -5,7 +5,7 @@ namespace ProgrammatorDev\OpenWeatherMap\Resource;
 use ProgrammatorDev\Api\Resource;
 use ProgrammatorDev\OpenWeatherMap\Entity\Geocoding\Location;
 use ProgrammatorDev\OpenWeatherMap\Entity\Geocoding\PostalLocation;
-use ProgrammatorDev\OpenWeatherMap\Value\Coordinates;
+use ProgrammatorDev\OpenWeatherMap\Validation\Assert;
 
 final class Geocoding extends Resource
 {
@@ -14,16 +14,12 @@ final class Geocoding extends Resource
      */
     public function byName(string $name, ?int $limit = null): array
     {
-        $name = trim($name);
-
-        if ($name === '') {
-            throw new \InvalidArgumentException('The location name must be a non-empty string.');
-        }
+        $name = Assert::notBlank($name, 'location name');
 
         // The direct endpoint documents a maximum of five results.
         // https://openweathermap.org/api/geocoding-api?collection=other
-        if ($limit !== null && ($limit < 1 || $limit > 5)) {
-            throw new \InvalidArgumentException('The result limit must be between 1 and 5.');
+        if ($limit !== null) {
+            $limit = Assert::integerBetween($limit, 1, 5, 'result limit');
         }
 
         $query = ['q' => $name];
@@ -41,11 +37,7 @@ final class Geocoding extends Resource
 
     public function byPostalCode(string $postalCode, string $countryCode): PostalLocation
     {
-        $postalCode = trim($postalCode);
-
-        if ($postalCode === '') {
-            throw new \InvalidArgumentException('The postal code must be a non-empty string.');
-        }
+        $postalCode = Assert::notBlank($postalCode, 'postal code');
 
         $countryCode = strtoupper(trim($countryCode));
 
@@ -73,17 +65,18 @@ final class Geocoding extends Resource
         float $longitude,
         ?int $limit = null,
     ): array {
-        $coordinates = Coordinates::from($latitude, $longitude);
+        $latitude = Assert::latitude($latitude);
+        $longitude = Assert::longitude($longitude);
 
         // The reverse endpoint documents no maximum result limit.
         // https://openweathermap.org/api/geocoding-api?collection=other
-        if ($limit !== null && $limit < 1) {
-            throw new \InvalidArgumentException('The result limit must be at least 1.');
+        if ($limit !== null) {
+            $limit = Assert::positiveInteger($limit, 'result limit');
         }
 
         $query = [
-            'lat' => $coordinates->latitude(),
-            'lon' => $coordinates->longitude(),
+            'lat' => $latitude,
+            'lon' => $longitude,
         ];
 
         if ($limit !== null) {

@@ -43,7 +43,7 @@ final class FluentConfigurationTest extends TestCase
 
     public function testItAcceptsAnArbitraryLanguageCode(): void
     {
-        $configured = $this->resource->withLanguage('future_language');
+        $configured = $this->resource->withLanguage(' future_language ');
 
         self::assertSame('future_language', $configured->resolvedLanguageValue());
     }
@@ -51,7 +51,7 @@ final class FluentConfigurationTest extends TestCase
     public function testItRejectsABlankLanguageCode(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('The language must not be an empty string.');
+        $this->expectExceptionMessage('The language must be a non-empty string.');
 
         $this->resource->withLanguage('  ');
     }

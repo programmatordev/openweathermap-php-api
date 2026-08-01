@@ -6,7 +6,6 @@ use ProgrammatorDev\Api\Context\Context;
 use ProgrammatorDev\Api\Contract\EntityInterface;
 use ProgrammatorDev\OpenWeatherMap\Exception\HydrationException;
 use ProgrammatorDev\OpenWeatherMap\Hydration\PayloadReader;
-use ProgrammatorDev\OpenWeatherMap\Value\Coordinates;
 
 final class Location implements EntityInterface
 {
@@ -16,7 +15,8 @@ final class Location implements EntityInterface
     private function __construct(
         private readonly ?string $name,
         private readonly array $localNames,
-        private readonly ?Coordinates $coordinates,
+        private readonly ?float $latitude,
+        private readonly ?float $longitude,
         private readonly ?string $countryCode,
         private readonly ?string $state,
     ) {}
@@ -24,8 +24,6 @@ final class Location implements EntityInterface
     public static function fromArray(array $data, ?Context $context = null): static
     {
         $reader = PayloadReader::from($data, self::class);
-        $latitude = $reader->nullableFloat('lat');
-        $longitude = $reader->nullableFloat('lon');
         $localNames = $reader->nullableArray('local_names') ?? [];
 
         foreach ($localNames as $language => $name) {
@@ -42,9 +40,8 @@ final class Location implements EntityInterface
         return new self(
             name: $reader->nullableString('name'),
             localNames: $localNames,
-            coordinates: $latitude === null || $longitude === null
-                ? null
-                : Coordinates::from($latitude, $longitude),
+            latitude: $reader->nullableFloat('lat'),
+            longitude: $reader->nullableFloat('lon'),
             countryCode: $reader->nullableString('country'),
             state: $reader->nullableString('state'),
         );
@@ -68,9 +65,14 @@ final class Location implements EntityInterface
         return $this->localNames[$languageCode] ?? null;
     }
 
-    public function coordinates(): ?Coordinates
+    public function latitude(): ?float
     {
-        return $this->coordinates;
+        return $this->latitude;
+    }
+
+    public function longitude(): ?float
+    {
+        return $this->longitude;
     }
 
     public function countryCode(): ?string
