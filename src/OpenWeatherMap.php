@@ -37,15 +37,11 @@ class OpenWeatherMap extends Api
         $this->auth()->query('appid', $apiKey);
         $this->responses()->json();
 
-        // Exact status handlers run first.
-        // SDK conditional handlers run for every response,
-        // so null explicitly means that no API error matched.
-        $this->errors()->statuses([
-            400 => static fn (ErrorContext $context): BadRequestException => BadRequestException::fromContext($context),
-            401 => static fn (ErrorContext $context): UnauthorizedException => UnauthorizedException::fromContext($context),
-            404 => static fn (ErrorContext $context): NotFoundException => NotFoundException::fromContext($context),
-            429 => static fn (ErrorContext $context): TooManyRequestsException => TooManyRequestsException::fromContext($context),
-        ])->when(static fn (ErrorContext $context): ?ApiException => match (true) {
+        $this->errors()->when(static fn (ErrorContext $context): ?ApiException => match (true) {
+            $context->statusCode() === 400 => BadRequestException::fromContext($context),
+            $context->statusCode() === 401 => UnauthorizedException::fromContext($context),
+            $context->statusCode() === 404 => NotFoundException::fromContext($context),
+            $context->statusCode() === 429 => TooManyRequestsException::fromContext($context),
             $context->statusCode() >= 400 && $context->statusCode() <= 599 => UnexpectedErrorException::fromContext($context),
             default => null,
         });
