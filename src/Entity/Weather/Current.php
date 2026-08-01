@@ -45,7 +45,6 @@ final class Current implements EntityInterface
         private readonly ?int $timezoneOffset,
         private readonly ?int $id,
         private readonly ?string $name,
-        private readonly ?int $code,
         private readonly Units $units,
     ) {}
 
@@ -99,7 +98,6 @@ final class Current implements EntityInterface
             timezoneOffset: $reader->nullableInt('timezone'),
             id: $reader->nullableInt('id'),
             name: $reader->nullableString('name'),
-            code: $reader->nullableInt('cod'),
             units: UnitsResolver::fromContext($context),
         );
     }
@@ -190,10 +188,5 @@ final class Current implements EntityInterface
     public function name(): ?string
     {
         return $this->name;
-    }
-
-    public function code(): ?int
-    {
-        return $this->code;
     }
 }

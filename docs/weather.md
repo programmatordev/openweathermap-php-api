@@ -67,6 +67,54 @@ Observation, sunrise, and sunset timestamps are nullable `DateTimeImmutable`
 values normalized to UTC. `timezoneOffset()` retains the location's offset
 from UTC in seconds.
 
+## Forecast
+
+The 5 Day / 3 Hour Forecast API is available on OpenWeather's standard free
+and paid subscriptions. See the
+[official forecast documentation](https://openweathermap.org/api/forecast5)
+for the upstream endpoint contract.
+
+Use `forecast()` with a latitude and longitude. The optional `count` limits the
+number of three-hour periods returned. It must be a positive integer; no
+maximum is imposed by this library because the official documentation does not
+define one.
+
+```php
+$forecast = $api->weather()->forecast(
+    latitude: 38.7223,
+    longitude: -9.1393,
+    count: 8,
+);
+```
+
+The method returns a `Forecast` entity containing its periods and city
+metadata. Missing or `null` period lists become empty arrays.
+
+```php
+use ProgrammatorDev\OpenWeatherMap\Enum\PartOfDay;
+
+foreach ($forecast->periods() as $period) {
+    echo $period->forecastAt()?->format(DATE_ATOM);
+    echo $period->temperature();
+    echo $period->precipitationProbability();
+    echo $period->wind()?->speed();
+    echo $period->rain()?->lastThreeHours();
+    echo $period->snow()?->lastThreeHours();
+
+    if ($period->partOfDay() === PartOfDay::DAY) {
+        // This period occurs during daytime at the forecast location.
+    }
+}
+
+echo $forecast->city()?->name();
+echo $forecast->city()?->latitude();
+echo $forecast->city()?->longitude();
+echo $forecast->city()?->timezoneOffset();
+```
+
+Forecast, sunrise, and sunset timestamps are nullable UTC
+`DateTimeImmutable` values. The city timezone offset remains separate.
+
 ## Units And Language
 
 Weather requests use the API configuration by default. Request-local fluent

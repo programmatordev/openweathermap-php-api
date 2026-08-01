@@ -7,6 +7,7 @@ use PHPUnit\Framework\TestCase;
 use ProgrammatorDev\Api\Config\Config;
 use ProgrammatorDev\Api\Context\Context;
 use ProgrammatorDev\OpenWeatherMap\Entity\Weather\Forecast\Period;
+use ProgrammatorDev\OpenWeatherMap\Enum\PartOfDay;
 use ProgrammatorDev\OpenWeatherMap\Enum\Unit;
 use ProgrammatorDev\OpenWeatherMap\Enum\Units;
 use ProgrammatorDev\OpenWeatherMap\Exception\HydrationException;
@@ -50,7 +51,7 @@ final class PeriodTest extends TestCase
         self::assertSame(0.0, $period->precipitationProbability());
         self::assertNull($period->rain());
         self::assertNull($period->snow());
-        self::assertSame('d', $period->partOfDay());
+        self::assertSame(PartOfDay::DAY, $period->partOfDay());
         self::assertSame('2026-08-01 09:00:00', $period->forecastAtText());
     }
 
@@ -76,6 +77,7 @@ final class PeriodTest extends TestCase
         self::assertNull($period->rain());
         self::assertNull($period->visibility());
         self::assertNull($period->visibilityWithUnit());
+        self::assertSame(PartOfDay::NIGHT, $period->partOfDay());
     }
 
     public function testRetainsUnitsFromHydrationContext(): void
@@ -137,6 +139,16 @@ final class PeriodTest extends TestCase
         self::assertNull($period->snow());
         self::assertNull($period->partOfDay());
         self::assertNull($period->forecastAtText());
+    }
+
+    public function testRejectsUnknownPartOfDay(): void
+    {
+        $this->expectException(HydrationException::class);
+        $this->expectExceptionMessage(
+            '"sys.pod" expected "d" or "n", "x" received.',
+        );
+
+        Period::fromArray(['sys' => ['pod' => 'x']]);
     }
 
     #[DataProvider('invalidFields')]

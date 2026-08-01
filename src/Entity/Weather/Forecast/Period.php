@@ -8,6 +8,7 @@ use ProgrammatorDev\OpenWeatherMap\Entity\Weather\Clouds;
 use ProgrammatorDev\OpenWeatherMap\Entity\Weather\Concern\HasWeatherMeasurements;
 use ProgrammatorDev\OpenWeatherMap\Entity\Weather\Condition;
 use ProgrammatorDev\OpenWeatherMap\Entity\Weather\Wind;
+use ProgrammatorDev\OpenWeatherMap\Enum\PartOfDay;
 use ProgrammatorDev\OpenWeatherMap\Enum\Unit;
 use ProgrammatorDev\OpenWeatherMap\Enum\Units;
 use ProgrammatorDev\OpenWeatherMap\Exception\HydrationException;
@@ -40,7 +41,7 @@ final class Period implements EntityInterface
         private readonly ?float $precipitationProbability,
         private readonly ?Precipitation $rain,
         private readonly ?Precipitation $snow,
-        private readonly ?string $partOfDay,
+        private readonly ?PartOfDay $partOfDay,
         private readonly ?string $forecastAtText,
         private readonly Units $units,
     ) {}
@@ -67,6 +68,17 @@ final class Period implements EntityInterface
         $wind = $reader->nullableArray('wind');
         $rain = $reader->nullableArray('rain');
         $snow = $reader->nullableArray('snow');
+        $partOfDay = $reader->nullableString('sys.pod');
+
+        if ($partOfDay !== null) {
+            $partOfDay = PartOfDay::tryFrom($partOfDay)
+                ?? throw HydrationException::invalidValue(
+                    self::class,
+                    'sys.pod',
+                    '"d" or "n"',
+                    $partOfDay,
+                );
+        }
 
         return new self(
             forecastAt: $reader->nullableTimestamp('dt'),
@@ -90,7 +102,7 @@ final class Period implements EntityInterface
             precipitationProbability: $reader->nullableFloat('pop'),
             rain: $rain === null ? null : Precipitation::fromArray($rain, $context),
             snow: $snow === null ? null : Precipitation::fromArray($snow, $context),
-            partOfDay: $reader->nullableString('sys.pod'),
+            partOfDay: $partOfDay,
             forecastAtText: $reader->nullableString('dt_txt'),
             units: UnitsResolver::fromContext($context),
         );
@@ -152,7 +164,7 @@ final class Period implements EntityInterface
         return $this->snow;
     }
 
-    public function partOfDay(): ?string
+    public function partOfDay(): ?PartOfDay
     {
         return $this->partOfDay;
     }

@@ -78,7 +78,6 @@ final class CurrentTest extends TestCase
         self::assertSame(3600, $weather->timezoneOffset());
         self::assertSame(8012502, $weather->id());
         self::assertSame('Socorro', $weather->name());
-        self::assertSame(200, $weather->code());
     }
 
     public function testHydratesConditionalRain(): void
@@ -140,6 +139,7 @@ final class CurrentTest extends TestCase
             'clouds' => ['all' => null],
             'rain' => ['1h' => null, 'unknown' => true],
             'sys' => null,
+            'cod' => new \stdClass(),
             'unknown' => new \stdClass(),
         ]);
 
@@ -163,7 +163,6 @@ final class CurrentTest extends TestCase
         self::assertNull($weather->countryCode());
         self::assertNull($weather->sunriseAt());
         self::assertNull($weather->name());
-        self::assertNull($weather->code());
     }
 
     #[DataProvider('invalidFields')]
@@ -198,6 +197,5 @@ final class CurrentTest extends TestCase
         yield 'rain' => [['rain' => ['1h' => '2.5']], '1h', 'int|float', 'string'];
         yield 'observation time' => [['dt' => '1785573885'], 'dt', 'int', 'string'];
         yield 'country' => [['sys' => ['country' => 1]], 'sys.country', 'string', 'int'];
-        yield 'code' => [['cod' => '200'], 'cod', 'int', 'string'];
     }
 }

@@ -15,8 +15,6 @@ final class Forecast implements EntityInterface
      * @param list<Period> $periods
      */
     private function __construct(
-        private readonly ?string $code,
-        private readonly ?float $message,
         private readonly ?int $count,
         private readonly array $periods,
         private readonly ?City $city,
@@ -43,22 +41,10 @@ final class Forecast implements EntityInterface
         $city = $reader->nullableArray('city');
 
         return new self(
-            code: $reader->nullableString('cod'),
-            message: $reader->nullableFloat('message'),
             count: $reader->nullableInt('cnt'),
             periods: $periods,
             city: $city === null ? null : City::fromArray($city, $context),
         );
-    }
-
-    public function code(): ?string
-    {
-        return $this->code;
-    }
-
-    public function message(): ?float
-    {
-        return $this->message;
     }
 
     public function count(): ?int

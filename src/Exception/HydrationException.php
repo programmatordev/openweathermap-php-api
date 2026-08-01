@@ -18,4 +18,19 @@ final class HydrationException extends \UnexpectedValueException
             get_debug_type($value)
         ));
     }
+
+    public static function invalidValue(
+        string $entity,
+        string $path,
+        string $expectedValue,
+        string $value,
+    ): self {
+        return new self(sprintf(
+            'Cannot hydrate %s: "%s" expected %s, "%s" received.',
+            $entity,
+            $path,
+            $expectedValue,
+            $value,
+        ));
+    }
 }

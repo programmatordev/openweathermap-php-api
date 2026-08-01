@@ -21,8 +21,6 @@ final class ForecastTest extends TestCase
             Fixture::json('weather/forecast/success.json'),
         );
 
-        self::assertSame('200', $forecast->code());
-        self::assertSame(0.0, $forecast->message());
         self::assertSame(40, $forecast->count());
         self::assertCount(40, $forecast->periods());
         self::assertSame(1785574800, $forecast->periods()[0]->forecastAt()?->getTimestamp());
@@ -64,8 +62,8 @@ final class ForecastTest extends TestCase
         self::assertNull(Forecast::fromArray(['city' => null])->city());
 
         $forecast = Forecast::fromArray([
-            'cod' => null,
-            'message' => null,
+            'cod' => new \stdClass(),
+            'message' => new \stdClass(),
             'cnt' => null,
             'list' => null,
             'city' => [
@@ -80,8 +78,6 @@ final class ForecastTest extends TestCase
             'unknown' => new \stdClass(),
         ]);
 
-        self::assertNull($forecast->code());
-        self::assertNull($forecast->message());
         self::assertNull($forecast->count());
         self::assertSame([], $forecast->periods());
         self::assertNull($forecast->city()?->id());
@@ -115,8 +111,6 @@ final class ForecastTest extends TestCase
 
     public static function invalidFields(): iterable
     {
-        yield 'code' => [['cod' => 200], 'cod', 'string', 'int'];
-        yield 'message' => [['message' => '0'], 'message', 'int|float', 'string'];
         yield 'count' => [['cnt' => 40.0], 'cnt', 'int', 'float'];
         yield 'periods' => [['list' => 'invalid'], 'list', 'array', 'string'];
         yield 'period member' => [['list' => ['invalid']], 'list.0', 'array', 'string'];
