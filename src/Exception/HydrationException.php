@@ -23,7 +23,7 @@ final class HydrationException extends \UnexpectedValueException
         string $entity,
         string $path,
         string $expectedValue,
-        string $value,
+        int|string $value,
     ): self {
         return new self(sprintf(
             'Cannot hydrate %s: "%s" expected %s, "%s" received.',
