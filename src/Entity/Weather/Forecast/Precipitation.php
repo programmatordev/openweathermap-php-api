@@ -30,6 +30,8 @@ final class Precipitation implements EntityInterface
 
     public function lastThreeHoursUnit(): Unit
     {
+        // The forecast reports a three-hour volume in mm, unlike Current Weather's mm/h value.
+        // https://openweathermap.org/api/forecast5
         return Unit::MILLIMETER;
     }
 

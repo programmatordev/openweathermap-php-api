@@ -23,7 +23,6 @@ final class CurrentTest extends TestCase
 
         self::assertSame(38.7223, $weather->latitude());
         self::assertSame(-9.1393, $weather->longitude());
-        self::assertSame('stations', $weather->base());
         self::assertSame(22.55, $weather->temperature());
         self::assertSame(Unit::CELSIUS, $weather->temperatureUnit());
         self::assertSame('22.55 °C', $weather->temperatureWithUnit());
@@ -70,8 +69,6 @@ final class CurrentTest extends TestCase
 
         self::assertSame(1785573885, $weather->observedAt()?->getTimestamp());
         self::assertSame('UTC', $weather->observedAt()?->getTimezone()->getName());
-        self::assertSame(2, $weather->systemType());
-        self::assertSame(2016751, $weather->systemId());
         self::assertSame('PT', $weather->countryCode());
         self::assertSame(1785562660, $weather->sunriseAt()?->getTimestamp());
         self::assertSame(1785613679, $weather->sunsetAt()?->getTimestamp());
@@ -88,8 +85,8 @@ final class CurrentTest extends TestCase
 
         self::assertSame('Rain', $weather->conditions()[0]->group());
         self::assertSame(2.47, $weather->rain()?->lastHour());
-        self::assertSame(Unit::MILLIMETER, $weather->rain()?->lastHourUnit());
-        self::assertSame('2.47 mm', $weather->rain()?->lastHourWithUnit());
+        self::assertSame(Unit::MILLIMETERS_PER_HOUR, $weather->rain()?->lastHourUnit());
+        self::assertSame('2.47 mm/h', $weather->rain()?->lastHourWithUnit());
         self::assertNull($weather->snow());
     }
 
@@ -101,12 +98,10 @@ final class CurrentTest extends TestCase
 
         self::assertSame('Snow', $weather->conditions()[0]->group());
         self::assertSame(1.37, $weather->snow()?->lastHour());
-        self::assertSame('1.37 mm', $weather->snow()?->lastHourWithUnit());
+        self::assertSame('1.37 mm/h', $weather->snow()?->lastHourWithUnit());
         self::assertNull($weather->rain());
         self::assertNull($weather->visibility());
         self::assertNull($weather->visibilityWithUnit());
-        self::assertNull($weather->systemType());
-        self::assertNull($weather->systemId());
     }
 
     public function testRetainsUnitsFromHydrationContext(): void
@@ -135,10 +130,14 @@ final class CurrentTest extends TestCase
             'coord' => ['lat' => null, 'unknown' => true],
             'weather' => [['icon' => null]],
             'main' => ['temp' => null],
+            'base' => new \stdClass(),
             'wind' => null,
             'clouds' => ['all' => null],
             'rain' => ['1h' => null, 'unknown' => true],
-            'sys' => null,
+            'sys' => [
+                'type' => new \stdClass(),
+                'id' => new \stdClass(),
+            ],
             'cod' => new \stdClass(),
             'unknown' => new \stdClass(),
         ]);

@@ -39,7 +39,9 @@ echo $current->visibility();
 ```
 
 Conditions, wind, and clouds are exposed as nested entities. A condition keeps
-the raw OpenWeather icon code and provides its absolute image URL.
+the raw OpenWeather icon code and provides its absolute image URL. A response
+can contain multiple conditions; OpenWeather defines the first as the primary
+condition.
 
 ```php
 foreach ($current->conditions() as $condition) {
@@ -56,7 +58,7 @@ echo $current->clouds()?->coverage();
 ```
 
 Rain and snow are conditional. When present, `lastHour()` returns the
-precipitation volume reported for the preceding hour in millimetres.
+precipitation reported for the preceding hour in millimetres per hour.
 
 ```php
 echo $current->rain()?->lastHour();

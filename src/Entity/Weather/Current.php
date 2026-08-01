@@ -22,7 +22,6 @@ final class Current implements EntityInterface
         private readonly ?float $latitude,
         private readonly ?float $longitude,
         private readonly array $conditions,
-        private readonly ?string $base,
         private readonly ?float $temperature,
         private readonly ?float $feelsLikeTemperature,
         private readonly ?float $minimumTemperature,
@@ -37,8 +36,6 @@ final class Current implements EntityInterface
         private readonly ?Precipitation $rain,
         private readonly ?Precipitation $snow,
         private readonly ?\DateTimeImmutable $observedAt,
-        private readonly ?int $systemType,
-        private readonly ?int $systemId,
         private readonly ?string $countryCode,
         private readonly ?\DateTimeImmutable $sunriseAt,
         private readonly ?\DateTimeImmutable $sunsetAt,
@@ -75,7 +72,6 @@ final class Current implements EntityInterface
             latitude: $reader->nullableFloat('coord.lat'),
             longitude: $reader->nullableFloat('coord.lon'),
             conditions: $conditions,
-            base: $reader->nullableString('base'),
             temperature: $reader->nullableFloat('main.temp'),
             feelsLikeTemperature: $reader->nullableFloat('main.feels_like'),
             minimumTemperature: $reader->nullableFloat('main.temp_min'),
@@ -90,8 +86,6 @@ final class Current implements EntityInterface
             rain: $rain === null ? null : Precipitation::fromArray($rain, $context),
             snow: $snow === null ? null : Precipitation::fromArray($snow, $context),
             observedAt: $reader->nullableTimestamp('dt'),
-            systemType: $reader->nullableInt('sys.type'),
-            systemId: $reader->nullableInt('sys.id'),
             countryCode: $reader->nullableString('sys.country'),
             sunriseAt: $reader->nullableTimestamp('sys.sunrise'),
             sunsetAt: $reader->nullableTimestamp('sys.sunset'),
@@ -120,11 +114,6 @@ final class Current implements EntityInterface
         return $this->conditions;
     }
 
-    public function base(): ?string
-    {
-        return $this->base;
-    }
-
     public function wind(): ?Wind
     {
         return $this->wind;
@@ -148,16 +137,6 @@ final class Current implements EntityInterface
     public function observedAt(): ?\DateTimeImmutable
     {
         return $this->observedAt;
-    }
-
-    public function systemType(): ?int
-    {
-        return $this->systemType;
-    }
-
-    public function systemId(): ?int
-    {
-        return $this->systemId;
     }
 
     public function countryCode(): ?string

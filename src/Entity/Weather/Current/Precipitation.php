@@ -30,7 +30,9 @@ final class Precipitation implements EntityInterface
 
     public function lastHourUnit(): Unit
     {
-        return Unit::MILLIMETER;
+        // Current Weather documents the one-hour precipitation value as mm/h.
+        // https://openweathermap.org/api/current
+        return Unit::MILLIMETERS_PER_HOUR;
     }
 
     public function lastHourWithUnit(): ?string
