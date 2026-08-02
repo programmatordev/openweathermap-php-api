@@ -1,0 +1,24 @@
+{
+    "provenance": "captured",
+    "product": "One Call API",
+    "endpoint": "15-minute timeline by coordinates",
+    "apiVersion": "4.0",
+    "capturedAt": "2026-08-02T11:25:06Z",
+    "httpStatus": 200,
+    "request": {
+        "method": "GET",
+        "path": "/data/4.0/onecall/timeline/15min",
+        "query": {
+            "lat": 14.5995,
+            "lon": 120.9842,
+            "units": "metric",
+            "lang": "en"
+        }
+    },
+    "sanitization": [
+        {
+            "path": "$.next",
+            "action": "replaced appid query value with {API key}"
+        }
+    ]
+}

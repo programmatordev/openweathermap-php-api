@@ -1,0 +1,16 @@
+{
+  "id": "urn:oid:2.49.0.0.152.0.2026.7.31.14.20.43:f1076d7511a15522d5a6e41917020bc0",
+  "sender_name": "Dirección Meteorológica de Chile",
+  "event": "",
+  "start": 1785578400,
+  "end": 1785708000,
+  "description": [
+    {
+      "language": "es-CL",
+      "description": "Precipitaciones Normales a Moderadas en zonas de las regiones de La Araucanía, Los Ríos y Los Lagos"
+    }
+  ],
+  "tags": [
+    "Rain"
+  ]
+}
