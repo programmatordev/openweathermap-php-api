@@ -3,7 +3,7 @@
 The Geocoding API is available on OpenWeather's standard free and paid
 subscriptions. See the
 [official Geocoding API documentation](https://openweathermap.org/api/geocoding-api)
-for the upstream endpoint contract.
+for API details.
 
 ## Lookup By Name
 

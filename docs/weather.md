@@ -5,10 +5,9 @@
 The Current Weather API is available on OpenWeather's standard free and paid
 subscriptions. See the
 [official Current Weather API documentation](https://openweathermap.org/api/current)
-for the upstream endpoint contract.
+for API details.
 
-Use `current()` with a latitude and longitude. Both coordinates are validated
-before the request is sent.
+Use `current()` with a latitude and longitude.
 
 ```php
 use ProgrammatorDev\OpenWeatherMap\OpenWeatherMap;
@@ -21,9 +20,9 @@ $current = $api->weather()->current(
 );
 ```
 
-The method returns a `Current` entity. Every response property may be
-absent or explicitly `null`; missing or `null` condition lists become empty
-arrays. Contextual response coordinates are grouped under `coordinates()`.
+`current()` returns a `Current` entity. Every property may be absent or
+explicitly `null`; missing or `null` condition lists become empty arrays.
+Coordinates are available through `coordinates()`.
 
 ```php
 echo $current->name();
@@ -65,8 +64,8 @@ echo $current->rain()?->lastHour();
 echo $current->snow()?->lastHour();
 ```
 
-Observation, sunrise, and sunset timestamps are nullable `DateTimeImmutable`
-values normalized to UTC. `timezoneOffset()` retains the location's offset
+Observation, sunrise, and sunset timestamps are nullable UTC
+`DateTimeImmutable` values. `timezoneOffset()` provides the location's offset
 from UTC in seconds.
 
 ## Forecast
@@ -74,12 +73,10 @@ from UTC in seconds.
 The 5 Day / 3 Hour Forecast API is available on OpenWeather's standard free
 and paid subscriptions. See the
 [official forecast documentation](https://openweathermap.org/api/forecast5)
-for the upstream endpoint contract.
+for API details.
 
 Use `forecast()` with a latitude and longitude. The optional `count` limits the
-number of three-hour periods returned. It must be a positive integer; no
-maximum is imposed by this library because the official documentation does not
-define one.
+number of three-hour periods returned and must be positive.
 
 ```php
 $forecast = $api->weather()->forecast(
@@ -89,7 +86,7 @@ $forecast = $api->weather()->forecast(
 );
 ```
 
-The method returns a `Forecast` entity containing its periods and city
+`forecast()` returns a `Forecast` entity containing its periods and city
 metadata. Missing or `null` period lists become empty arrays.
 
 ```php
@@ -119,9 +116,8 @@ Forecast, sunrise, and sunset timestamps are nullable UTC
 
 ## Units And Language
 
-Weather requests use the API configuration by default. Request-local fluent
-overrides are immutable and do not affect later calls through the original
-resource.
+Weather requests use the API configuration by default. Configure units and
+language for a request with `withUnits()` and `withLanguage()`.
 
 ```php
 use ProgrammatorDev\OpenWeatherMap\Enum\Language;
@@ -137,9 +133,9 @@ $current = $api
     );
 ```
 
-Raw measurement getters remain numeric. Companion `Unit` and `WithUnit`
-methods expose the effective request unit and a locale-independent formatted
-value. For example, when a metric response contains a temperature of `22.55`:
+Measurement getters remain numeric. Companion `Unit` and `WithUnit` methods
+provide the unit and a formatted value. For example, when a metric response
+contains a temperature of `22.55`:
 
 ```php
 $current->temperature();               // 22.55

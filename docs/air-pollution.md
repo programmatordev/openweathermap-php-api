@@ -7,10 +7,9 @@ standard free and paid subscriptions.
 
 See OpenWeather's
 [official Air Pollution API documentation](https://openweathermap.org/api/air-pollution)
-for the upstream endpoint contract.
+for API details.
 
-Use `current()` with a latitude and longitude. Both coordinates are validated
-before the request is sent.
+Use `current()` with a latitude and longitude.
 
 ```php
 use ProgrammatorDev\OpenWeatherMap\OpenWeatherMap;
@@ -23,8 +22,8 @@ $current = $api->airPollution()->current(
 );
 ```
 
-The returned `Current` entity exposes the single observation directly. Every
-response property may be absent or explicitly `null`.
+The returned `Current` entity exposes the observation directly. Every property
+may be absent or explicitly `null`.
 
 ```php
 echo $current->coordinates()?->latitude();
@@ -55,8 +54,8 @@ echo $components?->coarseParticulateMatter();
 echo $components?->ammonia();
 ```
 
-Raw concentration getters return nullable floats. Companion methods expose the
-unit and a locale-independent formatted value:
+Concentration getters return nullable floats. Companion methods provide the
+unit and a formatted value:
 
 ```php
 use ProgrammatorDev\OpenWeatherMap\Enum\Unit;
@@ -70,10 +69,9 @@ $components?->fineParticulateMatterWithUnit();  // '5.89 µg/m³'
 
 The Air Pollution Forecast API provides hourly periods for four days. See the
 [official Air Pollution API documentation](https://openweathermap.org/api/air-pollution)
-for the upstream endpoint contract.
+for API details.
 
-Use `forecast()` with a latitude and longitude. Both coordinates are validated
-before the request is sent.
+Use `forecast()` with a latitude and longitude.
 
 ```php
 $forecast = $api->airPollution()->forecast(
@@ -82,9 +80,9 @@ $forecast = $api->airPollution()->forecast(
 );
 ```
 
-The returned `Forecast` entity exposes the response coordinates and a typed
-collection of hourly periods. Missing or `null` period lists become empty
-arrays, and every period property may be absent or explicitly `null`.
+The returned `Forecast` entity exposes the response coordinates and hourly
+periods. Missing or `null` period lists become empty arrays, and every period
+property may be absent or explicitly `null`.
 
 ```php
 echo $forecast->coordinates()?->latitude();
@@ -103,15 +101,13 @@ Forecast periods use the same OpenWeather Air Quality Index and fixed
 ## History
 
 The Historical Air Pollution API returns hourly observations for a coordinate
-and date range. OpenWeather documents historical availability from November 27,
-2020, although actual availability may vary. See the
+and date range. See the
 [official Air Pollution API documentation](https://openweathermap.org/api/air-pollution)
-for the upstream endpoint contract.
+for availability and API details.
 
 Use `history()` with a latitude, longitude, start date, and end date. The date
-arguments accept any `DateTimeInterface` implementation and are sent as Unix
-timestamps. The end must be after or equal to the start and cannot be in the
-future.
+arguments accept any `DateTimeInterface` implementation. The end must be after
+or equal to the start and cannot be in the future.
 
 ```php
 $history = $api->airPollution()->history(
@@ -122,9 +118,9 @@ $history = $api->airPollution()->history(
 );
 ```
 
-The returned `History` entity exposes the response coordinates and a typed
-collection of hourly periods. A valid range for which OpenWeather has no data
-returns an empty collection.
+The returned `History` entity exposes the response coordinates and hourly
+periods. A valid range for which OpenWeather has no data returns an empty
+collection.
 
 ```php
 echo $history->coordinates()?->latitude();

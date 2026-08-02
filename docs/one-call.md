@@ -9,10 +9,9 @@ endpoints in production.
 
 See OpenWeather's
 [official One Call API 4.0 documentation](https://openweathermap.org/api/one-call-4#current)
-for the upstream endpoint contract and current subscription terms.
+for API details and current subscription terms.
 
-Use `current()` with a latitude and longitude. Both coordinates are validated
-before the request is sent.
+Use `current()` with a latitude and longitude.
 
 ```php
 use ProgrammatorDev\OpenWeatherMap\OpenWeatherMap;
@@ -41,7 +40,7 @@ foreach ($current->conditions() as $condition) {
 }
 ```
 
-Units and language can be overridden for one immutable resource chain:
+Configure units and language for a request:
 
 ```php
 use ProgrammatorDev\OpenWeatherMap\Enum\Language;
@@ -54,9 +53,8 @@ $current = $api
     ->current(38.7223, -9.1393);
 ```
 
-Raw measurement getters return nullable values. Companion methods expose the
-effective unit and a locale-independent formatted value. With the default
-metric configuration, for example:
+Measurement getters return nullable values. Companion methods provide the unit
+and a formatted value. With the default metric configuration, for example:
 
 ```php
 use ProgrammatorDev\OpenWeatherMap\Enum\Unit;
@@ -70,7 +68,7 @@ $current->temperatureWithUnit();  // '24.34 °C'
 
 See OpenWeather's
 [official One Call 4.0 minute forecast documentation](https://openweathermap.org/api/one-call-4#min)
-for the upstream endpoint contract.
+for API details.
 
 Use `minuteTimeline()` with a latitude and longitude to retrieve up to 60
 one-minute forecast periods.
@@ -82,9 +80,8 @@ $timeline = $api->oneCall()->minuteTimeline(
 );
 ```
 
-The response exposes location metadata and a typed collection of periods. Each
-period provides its UTC date and time, precipitation, and any referenced alert
-IDs.
+The response exposes location metadata and forecast periods. Each period
+provides its UTC date and time, precipitation, and any referenced alert IDs.
 
 ```php
 echo $timeline->coordinates()?->latitude();
@@ -108,7 +105,7 @@ unit is unaffected by the configured weather unit system.
 
 See OpenWeather's
 [official One Call 4.0 15-minute forecast documentation](https://openweathermap.org/api/one-call-4#15min)
-for the upstream endpoint contract.
+for API details.
 
 Use `fifteenMinuteTimeline()` with a latitude and longitude to retrieve the
 initial page of 15-minute forecast periods.
@@ -121,13 +118,10 @@ $timeline = $api->oneCall()->fifteenMinuteTimeline(
 );
 ```
 
-The optional positive `count` limits the requested page size. When it is
-omitted, OpenWeather chooses the page size. OpenWeather also determines the
-supported maximum.
+The optional positive `count` limits the requested page size.
 
-The response exposes location metadata, up to 50 typed periods, and passive
-pagination URLs when OpenWeather provides them. Pagination URLs are normalized
-to HTTPS and stripped of the API key before they are exposed.
+The response exposes location metadata, up to 50 periods, and pagination URLs
+when OpenWeather provides them.
 
 ```php
 echo $timeline->coordinates()?->latitude();
@@ -142,14 +136,13 @@ foreach ($timeline->periods() as $period) {
 }
 ```
 
-The pagination URL getters return metadata only and do not make another API
-request.
+The pagination URL getters do not make another API request.
 
 ## One-hour Timeline
 
 See OpenWeather's
 [official One Call 4.0 hourly forecast documentation](https://openweathermap.org/api/one-call-4#hourly)
-for the upstream endpoint contract.
+for API details.
 
 Use `oneHourTimeline()` with a latitude and longitude to retrieve the default
 hourly timeline.
@@ -162,8 +155,7 @@ $timeline = $api->oneCall()->oneHourTimeline(
 ```
 
 Pass an optional `DateTimeInterface` value to select a historical or future
-starting point. It is sent to OpenWeather as a Unix timestamp. Actual data
-availability is determined by OpenWeather.
+starting point. Availability depends on OpenWeather.
 
 ```php
 $timeline = $api->oneCall()->oneHourTimeline(
@@ -174,11 +166,10 @@ $timeline = $api->oneCall()->oneHourTimeline(
 );
 ```
 
-The optional positive `count` limits the requested page size. OpenWeather
-determines the supported maximum.
+The optional positive `count` limits the requested page size.
 
-The response contains up to 20 typed periods. Historical and forecast periods
-share the same entity and expose their UTC timestamp through `dateTime()`.
+The response contains up to 20 periods. Historical and forecast periods expose
+their UTC date and time through `dateTime()`.
 
 ```php
 foreach ($timeline->periods() as $period) {
@@ -190,5 +181,5 @@ foreach ($timeline->periods() as $period) {
 }
 ```
 
-As with the 15-minute timeline, normalized `previousPageUrl()` and
-`nextPageUrl()` values are passive metadata and do not make another request.
+As with the 15-minute timeline, `previousPageUrl()` and `nextPageUrl()` do not
+make another request.
