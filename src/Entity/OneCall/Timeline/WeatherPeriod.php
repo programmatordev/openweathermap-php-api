@@ -61,21 +61,6 @@ abstract class WeatherPeriod implements EntityInterface
             $conditions[] = Condition::fromArray($condition, $context);
         }
 
-        $alertIds = [];
-
-        foreach ($reader->nullableArray('alerts') ?? [] as $index => $alertId) {
-            if (!is_string($alertId)) {
-                throw HydrationException::invalidType(
-                    static::class,
-                    sprintf('alerts.%s', $index),
-                    'string',
-                    $alertId,
-                );
-            }
-
-            $alertIds[] = $alertId;
-        }
-
         $rain = $reader->nullableArray('rain');
         $snow = $reader->nullableArray('snow');
         $hasWind = array_key_exists('wind_speed', $data)
@@ -108,7 +93,7 @@ abstract class WeatherPeriod implements EntityInterface
             conditions: $conditions,
             rain: $rain === null ? null : Precipitation::fromArray($rain, $context),
             snow: $snow === null ? null : Precipitation::fromArray($snow, $context),
-            alertIds: $alertIds,
+            alertIds: $reader->nullableStringList('alerts') ?? [],
             units: UnitsResolver::fromContext($context),
         );
     }

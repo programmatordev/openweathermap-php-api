@@ -18,6 +18,7 @@ final class PayloadReaderTest extends TestCase
             'cloudiness' => 12.5,
             'daylight' => true,
             'rain' => ['1h' => 0.4],
+            'alerts' => ['alert-1', 'alert-2'],
         ], 'Weather');
 
         self::assertSame('Lisbon', $reader->nullableString('name'));
@@ -26,6 +27,10 @@ final class PayloadReaderTest extends TestCase
         self::assertSame(12.5, $reader->nullableFloat('cloudiness'));
         self::assertTrue($reader->nullableBool('daylight'));
         self::assertSame(['1h' => 0.4], $reader->nullableArray('rain'));
+        self::assertSame(
+            ['alert-1', 'alert-2'],
+            $reader->nullableStringList('alerts')
+        );
     }
 
     public function testMissingAndNullValuesAreTolerated(): void
@@ -34,6 +39,7 @@ final class PayloadReaderTest extends TestCase
 
         self::assertNull($reader->nullableString('missing'));
         self::assertNull($reader->nullableString('name'));
+        self::assertNull($reader->nullableStringList('alerts'));
         self::assertNull($reader->nullableTimestamp('observed_at'));
     }
 

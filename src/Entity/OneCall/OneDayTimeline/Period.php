@@ -62,21 +62,6 @@ final class Period implements EntityInterface
             $conditions[] = Condition::fromArray($condition, $context);
         }
 
-        $alertIds = [];
-
-        foreach ($reader->nullableArray('alerts') ?? [] as $index => $alertId) {
-            if (!is_string($alertId)) {
-                throw HydrationException::invalidType(
-                    self::class,
-                    sprintf('alerts.%s', $index),
-                    'string',
-                    $alertId,
-                );
-            }
-
-            $alertIds[] = $alertId;
-        }
-
         $temperature = $reader->nullableArray('temp');
         $feelsLikeTemperature = $reader->nullableArray('feels_like');
         $hasWind = array_key_exists('wind_speed', $data)
@@ -120,7 +105,7 @@ final class Period implements EntityInterface
             // still describes hourly objects: https://openweathermap.org/api/one-call-4
             rain: $reader->nullableFloat('rain'),
             snow: $reader->nullableFloat('snow'),
-            alertIds: $alertIds,
+            alertIds: $reader->nullableStringList('alerts') ?? [],
             units: UnitsResolver::fromContext($context),
         );
     }

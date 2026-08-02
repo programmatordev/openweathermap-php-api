@@ -65,21 +65,6 @@ final class Current implements EntityInterface
             $conditions[] = Condition::fromArray($condition, $context);
         }
 
-        $alertIds = [];
-
-        foreach ($reader->nullableArray('data.0.alerts') ?? [] as $index => $alertId) {
-            if (!is_string($alertId)) {
-                throw HydrationException::invalidType(
-                    self::class,
-                    sprintf('data.0.alerts.%s', $index),
-                    'string',
-                    $alertId,
-                );
-            }
-
-            $alertIds[] = $alertId;
-        }
-
         $rain = $reader->nullableArray('data.0.rain');
         $snow = $reader->nullableArray('data.0.snow');
         $hasCoordinates = array_key_exists('lat', $data)
@@ -119,7 +104,7 @@ final class Current implements EntityInterface
             conditions: $conditions,
             rain: $rain === null ? null : Precipitation::fromArray($rain, $context),
             snow: $snow === null ? null : Precipitation::fromArray($snow, $context),
-            alertIds: $alertIds,
+            alertIds: $reader->nullableStringList('data.0.alerts') ?? [],
             units: UnitsResolver::fromContext($context),
         );
     }

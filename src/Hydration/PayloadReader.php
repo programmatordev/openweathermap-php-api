@@ -69,6 +69,35 @@ final class PayloadReader
         );
     }
 
+    /**
+     * @return list<string>|null
+     */
+    public function nullableStringList(string $path): ?array
+    {
+        $values = $this->nullableArray($path);
+
+        if ($values === null) {
+            return null;
+        }
+
+        $strings = [];
+
+        foreach ($values as $index => $value) {
+            if (!is_string($value)) {
+                throw HydrationException::invalidType(
+                    $this->entity,
+                    sprintf('%s.%s', $path, $index),
+                    'string',
+                    $value
+                );
+            }
+
+            $strings[] = $value;
+        }
+
+        return $strings;
+    }
+
     public function nullableTimestamp(string $path): ?\DateTimeImmutable
     {
         $timestamp = $this->nullableInt($path);
