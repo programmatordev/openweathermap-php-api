@@ -16,6 +16,7 @@ use yet.
 
 ## Documentation
 
+- [Air Pollution](docs/air-pollution.md)
 - [Weather](docs/weather.md)
 - [Geocoding](docs/geocoding.md)
 

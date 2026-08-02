@@ -18,8 +18,8 @@ final class CurrentTest extends TestCase
             Fixture::json('air-pollution/current/good.json'),
         );
 
-        self::assertSame(-33.8679, $current->latitude());
-        self::assertSame(151.2073, $current->longitude());
+        self::assertSame(-33.8679, $current->coordinates()?->latitude());
+        self::assertSame(151.2073, $current->coordinates()?->longitude());
         self::assertSame(1785616883, $current->observedAt()?->getTimestamp());
         self::assertSame('UTC', $current->observedAt()?->getTimezone()->getName());
         self::assertSame(AirQualityIndex::GOOD, $current->airQualityIndex());
@@ -64,8 +64,7 @@ final class CurrentTest extends TestCase
     {
         $missing = Current::fromArray([]);
 
-        self::assertNull($missing->latitude());
-        self::assertNull($missing->longitude());
+        self::assertNull($missing->coordinates());
         self::assertNull($missing->observedAt());
         self::assertNull($missing->airQualityIndex());
         self::assertNull($missing->components());
@@ -84,8 +83,8 @@ final class CurrentTest extends TestCase
             'unknown' => new \stdClass(),
         ]);
 
-        self::assertNull($current->latitude());
-        self::assertNull($current->longitude());
+        self::assertNull($current->coordinates()?->latitude());
+        self::assertNull($current->coordinates()?->longitude());
         self::assertNull($current->observedAt());
         self::assertNull($current->airQualityIndex());
         self::assertNull($current->components()?->carbonMonoxide());
@@ -125,7 +124,7 @@ final class CurrentTest extends TestCase
         ];
         yield 'latitude' => [
             ['coord' => ['lat' => '-33.8']],
-            '"coord.lat" expected int|float, string received.',
+            '"lat" expected int|float, string received.',
         ];
         yield 'list' => [
             ['list' => 'invalid'],

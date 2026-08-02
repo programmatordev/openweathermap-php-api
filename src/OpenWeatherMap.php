@@ -12,6 +12,7 @@ use ProgrammatorDev\OpenWeatherMap\Exception\NotFoundException;
 use ProgrammatorDev\OpenWeatherMap\Exception\TooManyRequestsException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnauthorizedException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnexpectedErrorException;
+use ProgrammatorDev\OpenWeatherMap\Resource\AirPollution;
 use ProgrammatorDev\OpenWeatherMap\Resource\Geocoding;
 use ProgrammatorDev\OpenWeatherMap\Resource\Weather;
 use ProgrammatorDev\OpenWeatherMap\Validation\Assert;
@@ -47,6 +48,11 @@ class OpenWeatherMap extends Api
             $context->statusCode() >= 400 && $context->statusCode() <= 599 => UnexpectedErrorException::fromContext($context),
             default => null,
         });
+    }
+
+    public function airPollution(): AirPollution
+    {
+        return $this->resource(AirPollution::class);
     }
 
     public function geocoding(): Geocoding

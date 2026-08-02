@@ -11,8 +11,7 @@ use ProgrammatorDev\OpenWeatherMap\Hydration\PayloadReader;
 final class Current implements EntityInterface
 {
     private function __construct(
-        private readonly ?float $latitude,
-        private readonly ?float $longitude,
+        private readonly ?Coordinates $coordinates,
         private readonly ?\DateTimeImmutable $observedAt,
         private readonly ?AirQualityIndex $airQualityIndex,
         private readonly ?Components $components,
@@ -33,11 +32,13 @@ final class Current implements EntityInterface
                 );
         }
 
+        $coordinates = $reader->nullableArray('coord');
         $components = $reader->nullableArray('list.0.components');
 
         return new self(
-            latitude: $reader->nullableFloat('coord.lat'),
-            longitude: $reader->nullableFloat('coord.lon'),
+            coordinates: $coordinates === null
+                ? null
+                : Coordinates::fromArray($coordinates, $context),
             observedAt: $reader->nullableTimestamp('list.0.dt'),
             airQualityIndex: $airQualityIndex,
             components: $components === null
@@ -46,14 +47,9 @@ final class Current implements EntityInterface
         );
     }
 
-    public function latitude(): ?float
+    public function coordinates(): ?Coordinates
     {
-        return $this->latitude;
-    }
-
-    public function longitude(): ?float
-    {
-        return $this->longitude;
+        return $this->coordinates;
     }
 
     public function observedAt(): ?\DateTimeImmutable
