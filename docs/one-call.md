@@ -183,3 +183,52 @@ foreach ($timeline->periods() as $period) {
 
 As with the 15-minute timeline, `previousPageUrl()` and `nextPageUrl()` do not
 make another request.
+
+## One-day Timeline
+
+See OpenWeather's
+[official One Call 4.0 daily forecast documentation](https://openweathermap.org/api/one-call-4#daily)
+for API details.
+
+Use `oneDayTimeline()` with a latitude and longitude to retrieve the default
+daily timeline.
+
+```php
+$timeline = $api->oneCall()->oneDayTimeline(
+    latitude: 38.7223,
+    longitude: -9.1393,
+);
+```
+
+Use `start` to select a historical or future starting point and `count` to
+limit the requested page size.
+
+```php
+$timeline = $api->oneCall()->oneDayTimeline(
+    latitude: 38.7223,
+    longitude: -9.1393,
+    start: new DateTimeImmutable('2 days ago'),
+    count: 5,
+);
+```
+
+Daily periods provide UTC dates, astronomy, daily temperatures, weather
+measurements, conditions, precipitation probability, rain, snow, and alert
+references.
+
+```php
+foreach ($timeline->periods() as $period) {
+    echo $period->dateTime()?->format(DATE_ATOM);
+    echo $period->sunriseAt()?->format(DATE_ATOM);
+    echo $period->moonPhase();
+    echo $period->temperature()?->day();
+    echo $period->temperature()?->minimum();
+    echo $period->temperature()?->maximum();
+    echo $period->rain();
+    echo $period->snow();
+}
+```
+
+OpenWeather does not currently define units for the daily scalar rain and snow
+values, so these getters return raw nullable floats. `previousPageUrl()` and
+`nextPageUrl()` do not make another request.

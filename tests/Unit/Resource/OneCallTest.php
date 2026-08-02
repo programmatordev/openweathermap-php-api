@@ -7,6 +7,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\Current;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\FifteenMinuteTimeline;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\MinuteTimeline;
+use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\OneDayTimeline;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\OneHourTimeline;
 use ProgrammatorDev\OpenWeatherMap\Enum\Unit;
 use ProgrammatorDev\OpenWeatherMap\Enum\Units;
@@ -228,6 +229,74 @@ final class OneCallTest extends ApiTestCase
         self::assertSame('pt', $this->query($request)['lang']);
     }
 
+    public function testGetsOneDayTimelineByCoordinates(): void
+    {
+        $this->respondWithFixture('one-call/one-day/success.json');
+
+        $timeline = $this->api->oneCall()->oneDayTimeline(
+            latitude: 38.7223,
+            longitude: -9.1393,
+        );
+        $request = $this->client->getLastRequest();
+
+        self::assertInstanceOf(OneDayTimeline::class, $timeline);
+        self::assertCount(10, $timeline->periods());
+        self::assertSame(1785628800, $timeline->periods()[0]->dateTime()?->getTimestamp());
+        self::assertStringNotContainsString('appid', $timeline->previousPageUrl() ?? '');
+        self::assertStringNotContainsString('appid', $timeline->nextPageUrl() ?? '');
+        self::assertSame('GET', $request->getMethod());
+        self::assertSame('/data/4.0/onecall/timeline/1day', $request->getUri()->getPath());
+        self::assertSame([
+            'lat' => '38.7223',
+            'lon' => '-9.1393',
+            'units' => 'metric',
+            'lang' => 'en',
+            'appid' => 'api-key',
+        ], $this->query($request));
+    }
+
+    public function testGetsOneDayTimelineFromStart(): void
+    {
+        $this->respondWithFixture('one-call/one-day/history.json');
+
+        $timeline = $this->api->oneCall()->oneDayTimeline(
+            latitude: 38.7223,
+            longitude: -9.1393,
+            start: new \DateTimeImmutable('@1785456000'),
+        );
+        $request = $this->client->getLastRequest();
+
+        self::assertSame(1785456000, $timeline->periods()[0]->dateTime()?->getTimestamp());
+        self::assertSame([
+            'lat' => '38.7223',
+            'lon' => '-9.1393',
+            'start' => '1785456000',
+            'units' => 'metric',
+            'lang' => 'en',
+            'appid' => 'api-key',
+        ], $this->query($request));
+    }
+
+    public function testOneDayTimelineAcceptsFluentConfigurationAndCount(): void
+    {
+        $this->client->addResponse(new Response(
+            body: '{"data":[{"temp":{"day":72.5}}]}',
+        ));
+
+        $timeline = $this->api
+            ->oneCall()
+            ->withUnits(Units::IMPERIAL)
+            ->withLanguage('pt')
+            ->oneDayTimeline(38.7223, -9.1393, count: 3);
+        $request = $this->client->getLastRequest();
+
+        self::assertSame(Unit::FAHRENHEIT, $timeline->periods()[0]->temperature()?->dayUnit());
+        self::assertSame('72.5 °F', $timeline->periods()[0]->temperature()?->dayWithUnit());
+        self::assertSame('3', $this->query($request)['cnt']);
+        self::assertSame('imperial', $this->query($request)['units']);
+        self::assertSame('pt', $this->query($request)['lang']);
+    }
+
     #[DataProvider('invalidCoordinates')]
     public function testRejectsInvalidCoordinates(
         float $latitude,
@@ -276,6 +345,18 @@ final class OneCallTest extends ApiTestCase
         $this->api->oneCall()->oneHourTimeline($latitude, $longitude);
     }
 
+    #[DataProvider('invalidCoordinates')]
+    public function testOneDayTimelineRejectsInvalidCoordinates(
+        float $latitude,
+        float $longitude,
+        string $message,
+    ): void {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage($message);
+
+        $this->api->oneCall()->oneDayTimeline($latitude, $longitude);
+    }
+
     public function testFifteenMinuteTimelineRejectsInvalidCount(): void
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -290,6 +371,14 @@ final class OneCallTest extends ApiTestCase
         $this->expectExceptionMessage('The timeline count must be at least 1.');
 
         $this->api->oneCall()->oneHourTimeline(38.7223, -9.1393, count: 0);
+    }
+
+    public function testOneDayTimelineRejectsInvalidCount(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The timeline count must be at least 1.');
+
+        $this->api->oneCall()->oneDayTimeline(38.7223, -9.1393, count: 0);
     }
 
     public static function invalidCoordinates(): iterable

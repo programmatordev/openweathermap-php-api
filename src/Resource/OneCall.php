@@ -6,6 +6,7 @@ use ProgrammatorDev\Api\Resource;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\Current;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\FifteenMinuteTimeline;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\MinuteTimeline;
+use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\OneDayTimeline;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\OneHourTimeline;
 use ProgrammatorDev\OpenWeatherMap\Resource\Concern\WithLanguage;
 use ProgrammatorDev\OpenWeatherMap\Resource\Concern\WithUnits;
@@ -114,6 +115,37 @@ final class OneCall extends Resource
             ])
             ->get('/data/4.0/onecall/timeline/1h')
             ->entity(OneHourTimeline::class);
+
+        return $timeline;
+    }
+
+    public function oneDayTimeline(
+        float $latitude,
+        float $longitude,
+        ?\DateTimeInterface $start = null,
+        ?int $count = null,
+    ): OneDayTimeline {
+        $latitude = Assert::latitude($latitude);
+        $longitude = Assert::longitude($longitude);
+
+        if ($count !== null) {
+            $count = Assert::positiveInteger($count, 'timeline count');
+        }
+
+        // https://openweathermap.org/api/one-call-4#daily
+        /** @var OneDayTimeline $timeline */
+        $timeline = $this
+            ->endpoint()
+            ->queries([
+                'lat' => $latitude,
+                'lon' => $longitude,
+                'start' => $start?->getTimestamp(),
+                'cnt' => $count,
+                'units' => $this->resolvedUnits(),
+                'lang' => $this->resolvedLanguage(),
+            ])
+            ->get('/data/4.0/onecall/timeline/1day')
+            ->entity(OneDayTimeline::class);
 
         return $timeline;
     }
