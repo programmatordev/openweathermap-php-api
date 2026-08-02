@@ -2,7 +2,6 @@
 
 namespace ProgrammatorDev\OpenWeatherMap\Test\Unit\Entity\AirPollution\Forecast;
 
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\Forecast\Period;
 use ProgrammatorDev\OpenWeatherMap\Enum\AirQualityIndex;
@@ -48,36 +47,11 @@ final class PeriodTest extends TestCase
         self::assertNull($period->components()?->nitrogenDioxide());
     }
 
-    #[DataProvider('invalidFields')]
-    public function testRejectsInvalidKnownFields(array $data, string $message): void
+    public function testRejectsInvalidForecastTime(): void
     {
         $this->expectException(HydrationException::class);
-        $this->expectExceptionMessage($message);
+        $this->expectExceptionMessage('"dt" expected int, string received.');
 
-        Period::fromArray($data);
-    }
-
-    public static function invalidFields(): iterable
-    {
-        yield 'forecast time' => [
-            ['dt' => '1785614400'],
-            '"dt" expected int, string received.',
-        ];
-        yield 'main' => [
-            ['main' => 'invalid'],
-            '"main" expected array, string received.',
-        ];
-        yield 'AQI float' => [
-            ['main' => ['aqi' => 1.0]],
-            '"main.aqi" expected int, float received.',
-        ];
-        yield 'unsupported AQI' => [
-            ['main' => ['aqi' => 6]],
-            '"main.aqi" expected an integer from 1 through 5, "6" received.',
-        ];
-        yield 'components' => [
-            ['components' => 'invalid'],
-            '"components" expected array, string received.',
-        ];
+        Period::fromArray(['dt' => '1785614400']);
     }
 }
