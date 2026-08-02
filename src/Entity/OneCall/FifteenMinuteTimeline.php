@@ -6,84 +6,38 @@ use ProgrammatorDev\Api\Context\Context;
 use ProgrammatorDev\Api\Contract\EntityInterface;
 use ProgrammatorDev\OpenWeatherMap\Entity\Coordinates;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\FifteenMinuteTimeline\Period;
-use ProgrammatorDev\OpenWeatherMap\Exception\HydrationException;
-use ProgrammatorDev\OpenWeatherMap\Hydration\OneCallPaginationUrlNormalizer;
-use ProgrammatorDev\OpenWeatherMap\Hydration\PayloadReader;
+use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\Timeline\TimelinePage;
 
 final class FifteenMinuteTimeline implements EntityInterface
 {
     private const ENDPOINT_PATH = '/data/4.0/onecall/timeline/15min';
 
     /**
-     * @param list<Period> $periods
+     * @param TimelinePage<Period> $page
      */
     private function __construct(
-        private readonly ?Coordinates $coordinates,
-        private readonly ?Timezone $timezone,
-        private readonly array $periods,
-        private readonly ?string $previousPageUrl,
-        private readonly ?string $nextPageUrl,
+        private readonly TimelinePage $page,
     ) {}
 
     public static function fromArray(array $data, ?Context $context = null): static
     {
-        $reader = PayloadReader::from($data, self::class);
-        $periods = [];
-
-        foreach ($reader->nullableArray('data') ?? [] as $index => $period) {
-            if (!is_array($period)) {
-                throw HydrationException::invalidType(
-                    self::class,
-                    sprintf('data.%s', $index),
-                    'array',
-                    $period,
-                );
-            }
-
-            $periods[] = Period::fromArray($period, $context);
-        }
-
-        $hasCoordinates = array_key_exists('lat', $data)
-            || array_key_exists('lon', $data);
-        $hasTimezone = array_key_exists('timezone', $data)
-            || array_key_exists('timezone_offset', $data);
-        $previousPageUrl = $reader->nullableString('prev');
-        $nextPageUrl = $reader->nullableString('next');
-
-        $previousPageUrl = $previousPageUrl === null
-            ? null
-            : OneCallPaginationUrlNormalizer::normalize(
-                $previousPageUrl,
-                self::class,
-                'prev',
-                self::ENDPOINT_PATH,
-            );
-        $nextPageUrl = $nextPageUrl === null
-            ? null
-            : OneCallPaginationUrlNormalizer::normalize(
-                $nextPageUrl,
-                self::class,
-                'next',
-                self::ENDPOINT_PATH,
-            );
-
-        return new self(
-            coordinates: $hasCoordinates ? Coordinates::fromArray($data, $context) : null,
-            timezone: $hasTimezone ? Timezone::fromArray($data, $context) : null,
-            periods: $periods,
-            previousPageUrl: $previousPageUrl,
-            nextPageUrl: $nextPageUrl,
-        );
+        return new self(TimelinePage::fromArray(
+            data: $data,
+            entity: self::class,
+            endpointPath: self::ENDPOINT_PATH,
+            periodClass: Period::class,
+            context: $context,
+        ));
     }
 
     public function coordinates(): ?Coordinates
     {
-        return $this->coordinates;
+        return $this->page->coordinates();
     }
 
     public function timezone(): ?Timezone
     {
-        return $this->timezone;
+        return $this->page->timezone();
     }
 
     /**
@@ -91,16 +45,16 @@ final class FifteenMinuteTimeline implements EntityInterface
      */
     public function periods(): array
     {
-        return $this->periods;
+        return $this->page->periods();
     }
 
     public function previousPageUrl(): ?string
     {
-        return $this->previousPageUrl;
+        return $this->page->previousPageUrl();
     }
 
     public function nextPageUrl(): ?string
     {
-        return $this->nextPageUrl;
+        return $this->page->nextPageUrl();
     }
 }

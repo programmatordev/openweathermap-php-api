@@ -5,12 +5,12 @@ namespace ProgrammatorDev\OpenWeatherMap\Entity\OneCall;
 use ProgrammatorDev\Api\Context\Context;
 use ProgrammatorDev\Api\Contract\EntityInterface;
 use ProgrammatorDev\OpenWeatherMap\Entity\Coordinates;
-use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\OneHourTimeline\Period;
+use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\OneDayTimeline\Period;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\Timeline\TimelinePage;
 
-final class OneHourTimeline implements EntityInterface
+final class OneDayTimeline implements EntityInterface
 {
-    private const ENDPOINT_PATH = '/data/4.0/onecall/timeline/1h';
+    private const ENDPOINT_PATH = '/data/4.0/onecall/timeline/1day';
 
     /**
      * @param TimelinePage<Period> $page
