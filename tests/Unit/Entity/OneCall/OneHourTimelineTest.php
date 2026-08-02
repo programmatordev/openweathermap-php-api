@@ -1,0 +1,119 @@
+<?php
+
+namespace ProgrammatorDev\OpenWeatherMap\Test\Unit\Entity\OneCall;
+
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\OneHourTimeline;
+use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\OneHourTimeline\Period;
+use ProgrammatorDev\OpenWeatherMap\Exception\HydrationException;
+use ProgrammatorDev\OpenWeatherMap\Test\Support\Fixture;
+
+final class OneHourTimelineTest extends TestCase
+{
+    public function testHydratesCapturedTimeline(): void
+    {
+        $timeline = OneHourTimeline::fromArray(
+            Fixture::json('one-call/one-hour/success.json'),
+        );
+
+        self::assertSame(38.7223, $timeline->coordinates()?->latitude());
+        self::assertSame(-9.1393, $timeline->coordinates()?->longitude());
+        self::assertSame('Europe/Lisbon', $timeline->timezone()?->identifier());
+        self::assertSame(3600, $timeline->timezone()?->offsetSeconds());
+        self::assertCount(20, $timeline->periods());
+        self::assertContainsOnlyInstancesOf(Period::class, $timeline->periods());
+        self::assertSame(1785668400, $timeline->periods()[0]->dateTime()?->getTimestamp());
+        self::assertSame(1785736800, $timeline->periods()[19]->dateTime()?->getTimestamp());
+        self::assertSame(
+            'https://api.openweathermap.org/data/4.0/onecall/timeline/1h?'
+            .'cnt=20&lat=38.7223&lon=-9.1393&start=1785596400&units=metric&lang=en',
+            $timeline->previousPageUrl(),
+        );
+        self::assertSame(
+            'https://api.openweathermap.org/data/4.0/onecall/timeline/1h?'
+            .'cnt=20&lat=38.7223&lon=-9.1393&start=1785740400&units=metric&lang=en',
+            $timeline->nextPageUrl(),
+        );
+    }
+
+    public function testHydratesCapturedHistoricalTimeline(): void
+    {
+        $timeline = OneHourTimeline::fromArray(
+            Fixture::json('one-call/one-hour/history.json'),
+        );
+
+        self::assertCount(20, $timeline->periods());
+        self::assertSame(1785495600, $timeline->periods()[0]->dateTime()?->getTimestamp());
+        self::assertSame(1785564000, $timeline->periods()[19]->dateTime()?->getTimestamp());
+        self::assertNull($timeline->periods()[0]->precipitationProbability());
+    }
+
+    public function testToleratesMissingNullUnknownAndPartialFields(): void
+    {
+        $missing = OneHourTimeline::fromArray([]);
+
+        self::assertNull($missing->coordinates());
+        self::assertNull($missing->timezone());
+        self::assertSame([], $missing->periods());
+        self::assertNull($missing->previousPageUrl());
+        self::assertNull($missing->nextPageUrl());
+
+        $timeline = OneHourTimeline::fromArray([
+            'lat' => null,
+            'timezone_offset' => null,
+            'data' => [
+                [],
+                ['dt' => null, 'unknown' => new \stdClass()],
+            ],
+            'prev' => null,
+            'next' => null,
+            'unknown' => new \stdClass(),
+        ]);
+
+        self::assertNull($timeline->coordinates()?->latitude());
+        self::assertNull($timeline->coordinates()?->longitude());
+        self::assertNull($timeline->timezone()?->identifier());
+        self::assertNull($timeline->timezone()?->offsetSeconds());
+        self::assertCount(2, $timeline->periods());
+        self::assertNull($timeline->periods()[0]->dateTime());
+        self::assertNull($timeline->periods()[1]->temperature());
+    }
+
+    #[DataProvider('invalidFields')]
+    public function testRejectsInvalidKnownFields(array $data, string $message): void
+    {
+        $this->expectException(HydrationException::class);
+        $this->expectExceptionMessage($message);
+
+        OneHourTimeline::fromArray($data);
+    }
+
+    public static function invalidFields(): iterable
+    {
+        yield 'periods' => [
+            ['data' => 'invalid'],
+            '"data" expected array, string received.',
+        ];
+        yield 'period member' => [
+            ['data' => ['invalid']],
+            '"data.0" expected array, string received.',
+        ];
+        yield 'period field' => [
+            ['data' => [['temp' => '25.05']]],
+            '"temp" expected int|float, string received.',
+        ];
+        yield 'previous page URL type' => [
+            ['prev' => 1],
+            '"prev" expected string, int received.',
+        ];
+        yield 'unexpected page host' => [
+            ['next' => 'https://example.com/page?appid=secret'],
+            '"next" expected safe One Call pagination URL, "[redacted]" received.',
+        ];
+        yield 'unexpected endpoint path' => [
+            ['next' => 'https://api.openweathermap.org/data/4.0/onecall/timeline/15min'],
+            '"next" expected safe One Call pagination URL, "[redacted]" received.',
+        ];
+    }
+}

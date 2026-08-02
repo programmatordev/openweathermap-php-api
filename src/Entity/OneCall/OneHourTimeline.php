@@ -1,0 +1,106 @@
+<?php
+
+namespace ProgrammatorDev\OpenWeatherMap\Entity\OneCall;
+
+use ProgrammatorDev\Api\Context\Context;
+use ProgrammatorDev\Api\Contract\EntityInterface;
+use ProgrammatorDev\OpenWeatherMap\Entity\Coordinates;
+use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\OneHourTimeline\Period;
+use ProgrammatorDev\OpenWeatherMap\Exception\HydrationException;
+use ProgrammatorDev\OpenWeatherMap\Hydration\OneCallPaginationUrlNormalizer;
+use ProgrammatorDev\OpenWeatherMap\Hydration\PayloadReader;
+
+final class OneHourTimeline implements EntityInterface
+{
+    private const ENDPOINT_PATH = '/data/4.0/onecall/timeline/1h';
+
+    /**
+     * @param list<Period> $periods
+     */
+    private function __construct(
+        private readonly ?Coordinates $coordinates,
+        private readonly ?Timezone $timezone,
+        private readonly array $periods,
+        private readonly ?string $previousPageUrl,
+        private readonly ?string $nextPageUrl,
+    ) {}
+
+    public static function fromArray(array $data, ?Context $context = null): static
+    {
+        $reader = PayloadReader::from($data, self::class);
+        $periods = [];
+
+        foreach ($reader->nullableArray('data') ?? [] as $index => $period) {
+            if (!is_array($period)) {
+                throw HydrationException::invalidType(
+                    self::class,
+                    sprintf('data.%s', $index),
+                    'array',
+                    $period,
+                );
+            }
+
+            $periods[] = Period::fromArray($period, $context);
+        }
+
+        $hasCoordinates = array_key_exists('lat', $data)
+            || array_key_exists('lon', $data);
+        $hasTimezone = array_key_exists('timezone', $data)
+            || array_key_exists('timezone_offset', $data);
+        $previousPageUrl = $reader->nullableString('prev');
+        $nextPageUrl = $reader->nullableString('next');
+
+        $previousPageUrl = $previousPageUrl === null
+            ? null
+            : OneCallPaginationUrlNormalizer::normalize(
+                $previousPageUrl,
+                self::class,
+                'prev',
+                self::ENDPOINT_PATH,
+            );
+        $nextPageUrl = $nextPageUrl === null
+            ? null
+            : OneCallPaginationUrlNormalizer::normalize(
+                $nextPageUrl,
+                self::class,
+                'next',
+                self::ENDPOINT_PATH,
+            );
+
+        return new self(
+            coordinates: $hasCoordinates ? Coordinates::fromArray($data, $context) : null,
+            timezone: $hasTimezone ? Timezone::fromArray($data, $context) : null,
+            periods: $periods,
+            previousPageUrl: $previousPageUrl,
+            nextPageUrl: $nextPageUrl,
+        );
+    }
+
+    public function coordinates(): ?Coordinates
+    {
+        return $this->coordinates;
+    }
+
+    public function timezone(): ?Timezone
+    {
+        return $this->timezone;
+    }
+
+    /**
+     * @return list<Period>
+     */
+    public function periods(): array
+    {
+        return $this->periods;
+    }
+
+    public function previousPageUrl(): ?string
+    {
+        return $this->previousPageUrl;
+    }
+
+    public function nextPageUrl(): ?string
+    {
+        return $this->nextPageUrl;
+    }
+}
