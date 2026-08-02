@@ -139,3 +139,47 @@ foreach ($timeline->periods() as $period) {
 
 The pagination URL getters return metadata only and do not make another API
 request.
+
+## One-hour Timeline
+
+See OpenWeather's
+[official One Call 4.0 hourly forecast documentation](https://openweathermap.org/api/one-call-4#hourly)
+for the upstream endpoint contract.
+
+Use `oneHourTimeline()` with a latitude and longitude to retrieve the default
+hourly timeline.
+
+```php
+$timeline = $api->oneCall()->oneHourTimeline(
+    latitude: 38.7223,
+    longitude: -9.1393,
+);
+```
+
+Pass an optional `DateTimeInterface` value to select a historical or future
+starting point. It is sent to OpenWeather as a Unix timestamp. Actual data
+availability is determined by OpenWeather.
+
+```php
+$timeline = $api->oneCall()->oneHourTimeline(
+    latitude: 38.7223,
+    longitude: -9.1393,
+    start: new DateTimeImmutable('2 days ago'),
+);
+```
+
+The response contains up to 20 typed periods. Historical and forecast periods
+share the same entity and expose their UTC timestamp through `dateTime()`.
+
+```php
+foreach ($timeline->periods() as $period) {
+    echo $period->dateTime()?->format(DATE_ATOM);
+    echo $period->temperature();
+    echo $period->precipitationProbability();
+    echo $period->rain()?->lastHour();
+    echo $period->snow()?->lastHour();
+}
+```
+
+As with the 15-minute timeline, normalized `previousPageUrl()` and
+`nextPageUrl()` values are passive metadata and do not make another request.
