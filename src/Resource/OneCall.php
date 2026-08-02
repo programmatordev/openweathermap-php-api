@@ -61,9 +61,14 @@ final class OneCall extends Resource
     public function fifteenMinuteTimeline(
         float $latitude,
         float $longitude,
+        ?int $count = null,
     ): FifteenMinuteTimeline {
         $latitude = Assert::latitude($latitude);
         $longitude = Assert::longitude($longitude);
+
+        if ($count !== null) {
+            $count = Assert::positiveInteger($count, 'timeline count');
+        }
 
         // https://openweathermap.org/api/one-call-4#15min
         /** @var FifteenMinuteTimeline $timeline */
@@ -72,6 +77,7 @@ final class OneCall extends Resource
             ->queries([
                 'lat' => $latitude,
                 'lon' => $longitude,
+                'cnt' => $count,
                 'units' => $this->resolvedUnits(),
                 'lang' => $this->resolvedLanguage(),
             ])
@@ -85,9 +91,14 @@ final class OneCall extends Resource
         float $latitude,
         float $longitude,
         ?\DateTimeInterface $start = null,
+        ?int $count = null,
     ): OneHourTimeline {
         $latitude = Assert::latitude($latitude);
         $longitude = Assert::longitude($longitude);
+
+        if ($count !== null) {
+            $count = Assert::positiveInteger($count, 'timeline count');
+        }
 
         // https://openweathermap.org/api/one-call-4#hourly
         /** @var OneHourTimeline $timeline */
@@ -97,6 +108,7 @@ final class OneCall extends Resource
                 'lat' => $latitude,
                 'lon' => $longitude,
                 'start' => $start?->getTimestamp(),
+                'cnt' => $count,
                 'units' => $this->resolvedUnits(),
                 'lang' => $this->resolvedLanguage(),
             ])

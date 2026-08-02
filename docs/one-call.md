@@ -117,8 +117,13 @@ initial page of 15-minute forecast periods.
 $timeline = $api->oneCall()->fifteenMinuteTimeline(
     latitude: 38.7223,
     longitude: -9.1393,
+    count: 10,
 );
 ```
+
+The optional positive `count` limits the requested page size. When it is
+omitted, OpenWeather chooses the page size. OpenWeather also determines the
+supported maximum.
 
 The response exposes location metadata, up to 50 typed periods, and passive
 pagination URLs when OpenWeather provides them. Pagination URLs are normalized
@@ -165,8 +170,12 @@ $timeline = $api->oneCall()->oneHourTimeline(
     latitude: 38.7223,
     longitude: -9.1393,
     start: new DateTimeImmutable('2 days ago'),
+    count: 10,
 );
 ```
+
+The optional positive `count` limits the requested page size. OpenWeather
+determines the supported maximum.
 
 The response contains up to 20 typed periods. Historical and forecast periods
 share the same entity and expose their UTC timestamp through `dateTime()`.

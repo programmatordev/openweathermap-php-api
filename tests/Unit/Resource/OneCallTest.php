@@ -145,7 +145,7 @@ final class OneCallTest extends ApiTestCase
             ->oneCall()
             ->withUnits(Units::IMPERIAL)
             ->withLanguage('pt')
-            ->fifteenMinuteTimeline(38.7223, -9.1393);
+            ->fifteenMinuteTimeline(38.7223, -9.1393, count: 3);
         $request = $this->client->getLastRequest();
 
         self::assertSame(Unit::FAHRENHEIT, $timeline->periods()[0]->temperatureUnit());
@@ -153,6 +153,7 @@ final class OneCallTest extends ApiTestCase
         self::assertSame([
             'lat' => '38.7223',
             'lon' => '-9.1393',
+            'cnt' => '3',
             'units' => 'imperial',
             'lang' => 'pt',
             'appid' => 'api-key',
@@ -217,11 +218,12 @@ final class OneCallTest extends ApiTestCase
             ->oneCall()
             ->withUnits(Units::IMPERIAL)
             ->withLanguage('pt')
-            ->oneHourTimeline(38.7223, -9.1393);
+            ->oneHourTimeline(38.7223, -9.1393, count: 3);
         $request = $this->client->getLastRequest();
 
         self::assertSame(Unit::FAHRENHEIT, $timeline->periods()[0]->temperatureUnit());
         self::assertSame('72.5 °F', $timeline->periods()[0]->temperatureWithUnit());
+        self::assertSame('3', $this->query($request)['cnt']);
         self::assertSame('imperial', $this->query($request)['units']);
         self::assertSame('pt', $this->query($request)['lang']);
     }
@@ -272,6 +274,22 @@ final class OneCallTest extends ApiTestCase
         $this->expectExceptionMessage($message);
 
         $this->api->oneCall()->oneHourTimeline($latitude, $longitude);
+    }
+
+    public function testFifteenMinuteTimelineRejectsInvalidCount(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The timeline count must be at least 1.');
+
+        $this->api->oneCall()->fifteenMinuteTimeline(38.7223, -9.1393, count: 0);
+    }
+
+    public function testOneHourTimelineRejectsInvalidCount(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The timeline count must be at least 1.');
+
+        $this->api->oneCall()->oneHourTimeline(38.7223, -9.1393, count: 0);
     }
 
     public static function invalidCoordinates(): iterable
