@@ -55,6 +55,31 @@ final class Assert
         return $countryCode;
     }
 
+    public static function chronologicalRange(
+        \DateTimeInterface $start,
+        \DateTimeInterface $end,
+    ): void {
+        if ($end->getTimestamp() < $start->getTimestamp()) {
+            throw new \InvalidArgumentException(
+                'The end date must be after or equal to the start date.',
+            );
+        }
+    }
+
+    public static function notFuture(
+        \DateTimeInterface $value,
+        string $name,
+    ): \DateTimeInterface {
+        if ($value->getTimestamp() > time()) {
+            throw new \InvalidArgumentException(sprintf(
+                'The %s must not be in the future.',
+                $name,
+            ));
+        }
+
+        return $value;
+    }
+
     public static function positiveInteger(int $value, string $name): int
     {
         if ($value < 1) {

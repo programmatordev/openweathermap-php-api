@@ -93,3 +93,43 @@ foreach ($forecast->periods() as $period) {
 
 Forecast periods use the same OpenWeather Air Quality Index and fixed
 `µg/m³` pollutant units as current observations.
+
+## History
+
+The Historical Air Pollution API returns hourly observations for a coordinate
+and date range. OpenWeather documents historical availability from November 27,
+2020, although actual availability may vary. See the
+[official Air Pollution API documentation](https://openweathermap.org/api/air-pollution)
+for the upstream endpoint contract.
+
+Use `history()` with a latitude, longitude, start date, and end date. The date
+arguments accept any `DateTimeInterface` implementation and are sent as Unix
+timestamps. The end must be after or equal to the start and cannot be in the
+future.
+
+```php
+$history = $api->airPollution()->history(
+    latitude: 38.7223,
+    longitude: -9.1393,
+    start: new DateTimeImmutable('2 days ago'),
+    end: new DateTimeImmutable('1 day ago'),
+);
+```
+
+The returned `History` entity exposes the response coordinates and a typed
+collection of hourly periods. A valid range for which OpenWeather has no data
+returns an empty collection.
+
+```php
+echo $history->coordinates()?->latitude();
+echo $history->coordinates()?->longitude();
+
+foreach ($history->periods() as $period) {
+    echo $period->observedAt()?->format(DATE_ATOM);
+    echo $period->airQualityIndex()?->value;
+    echo $period->components()?->fineParticulateMatter();
+}
+```
+
+Historical periods use the same OpenWeather Air Quality Index and fixed
+`µg/m³` pollutant units as current observations and forecast periods.

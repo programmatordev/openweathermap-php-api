@@ -5,6 +5,7 @@ namespace ProgrammatorDev\OpenWeatherMap\Resource;
 use ProgrammatorDev\Api\Resource;
 use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\Current;
 use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\Forecast;
+use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\History;
 use ProgrammatorDev\OpenWeatherMap\Validation\Assert;
 
 final class AirPollution extends Resource
@@ -45,5 +46,32 @@ final class AirPollution extends Resource
             ->entity(Forecast::class);
 
         return $forecast;
+    }
+
+    public function history(
+        float $latitude,
+        float $longitude,
+        \DateTimeInterface $start,
+        \DateTimeInterface $end,
+    ): History {
+        $latitude = Assert::latitude($latitude);
+        $longitude = Assert::longitude($longitude);
+        Assert::chronologicalRange($start, $end);
+        $end = Assert::notFuture($end, 'end date');
+
+        // https://openweathermap.org/api/air-pollution
+        /** @var History $history */
+        $history = $this
+            ->endpoint()
+            ->queries([
+                'lat' => $latitude,
+                'lon' => $longitude,
+                'start' => $start->getTimestamp(),
+                'end' => $end->getTimestamp(),
+            ])
+            ->get('/data/2.5/air_pollution/history')
+            ->entity(History::class);
+
+        return $history;
     }
 }
