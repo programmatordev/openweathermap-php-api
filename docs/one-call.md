@@ -103,3 +103,39 @@ foreach ($timeline->periods() as $period) {
 
 One-minute precipitation is always expressed in millimetres per hour, so its
 unit is unaffected by the configured weather unit system.
+
+## Fifteen-minute Timeline
+
+See OpenWeather's
+[official One Call 4.0 15-minute forecast documentation](https://openweathermap.org/api/one-call-4#15min)
+for the upstream endpoint contract.
+
+Use `fifteenMinuteTimeline()` with a latitude and longitude to retrieve the
+initial page of 15-minute forecast periods.
+
+```php
+$timeline = $api->oneCall()->fifteenMinuteTimeline(
+    latitude: 38.7223,
+    longitude: -9.1393,
+);
+```
+
+The response exposes location metadata, up to 50 typed periods, and passive
+pagination URLs when OpenWeather provides them. Pagination URLs are normalized
+to HTTPS and stripped of the API key before they are exposed.
+
+```php
+echo $timeline->coordinates()?->latitude();
+echo $timeline->timezone()?->identifier();
+echo $timeline->previousPageUrl();
+echo $timeline->nextPageUrl();
+
+foreach ($timeline->periods() as $period) {
+    echo $period->dateTime()?->format(DATE_ATOM);
+    echo $period->temperature();
+    echo $period->precipitationProbability();
+}
+```
+
+The pagination URL getters return metadata only and do not make another API
+request.
