@@ -14,6 +14,7 @@ use ProgrammatorDev\OpenWeatherMap\Exception\UnauthorizedException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnexpectedErrorException;
 use ProgrammatorDev\OpenWeatherMap\Resource\AirPollution;
 use ProgrammatorDev\OpenWeatherMap\Resource\Geocoding;
+use ProgrammatorDev\OpenWeatherMap\Resource\OneCall;
 use ProgrammatorDev\OpenWeatherMap\Resource\Weather;
 use ProgrammatorDev\OpenWeatherMap\Validation\Assert;
 
@@ -58,6 +59,11 @@ class OpenWeatherMap extends Api
     public function geocoding(): Geocoding
     {
         return $this->resource(Geocoding::class);
+    }
+
+    public function oneCall(): OneCall
+    {
+        return $this->resource(OneCall::class);
     }
 
     public function weather(): Weather

@@ -16,6 +16,7 @@ use yet.
 
 ## Documentation
 
+- [One Call 4.0](docs/one-call.md)
 - [Air Pollution](docs/air-pollution.md)
 - [Weather](docs/weather.md)
 - [Geocoding](docs/geocoding.md)
