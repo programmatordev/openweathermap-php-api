@@ -42,7 +42,6 @@ final class Period implements EntityInterface
         private readonly ?Precipitation $rain,
         private readonly ?Precipitation $snow,
         private readonly ?PartOfDay $partOfDay,
-        private readonly ?string $forecastAtText,
         private readonly Units $units,
     ) {}
 
@@ -103,7 +102,6 @@ final class Period implements EntityInterface
             rain: $rain === null ? null : Precipitation::fromArray($rain, $context),
             snow: $snow === null ? null : Precipitation::fromArray($snow, $context),
             partOfDay: $partOfDay,
-            forecastAtText: $reader->nullableString('dt_txt'),
             units: UnitsResolver::fromContext($context),
         );
     }
@@ -167,10 +165,5 @@ final class Period implements EntityInterface
     public function partOfDay(): ?PartOfDay
     {
         return $this->partOfDay;
-    }
-
-    public function forecastAtText(): ?string
-    {
-        return $this->forecastAtText;
     }
 }

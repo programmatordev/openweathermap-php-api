@@ -52,7 +52,6 @@ final class PeriodTest extends TestCase
         self::assertNull($period->rain());
         self::assertNull($period->snow());
         self::assertSame(PartOfDay::DAY, $period->partOfDay());
-        self::assertSame('2026-08-01 09:00:00', $period->forecastAtText());
     }
 
     public function testHydratesConditionalRain(): void
@@ -117,7 +116,7 @@ final class PeriodTest extends TestCase
             'rain' => ['3h' => null, 'unknown' => true],
             'snow' => null,
             'sys' => null,
-            'dt_txt' => null,
+            'dt_txt' => new \stdClass(),
             'unknown' => new \stdClass(),
         ]);
 
@@ -138,7 +137,6 @@ final class PeriodTest extends TestCase
         self::assertNull($period->rain()?->lastThreeHoursWithUnit());
         self::assertNull($period->snow());
         self::assertNull($period->partOfDay());
-        self::assertNull($period->forecastAtText());
     }
 
     public function testRejectsUnknownPartOfDay(): void
@@ -184,7 +182,6 @@ final class PeriodTest extends TestCase
         yield 'rain' => [['rain' => ['3h' => '5.49']], '3h', 'int|float', 'string'];
         yield 'system' => [['sys' => 'invalid'], 'sys', 'array', 'string'];
         yield 'part of day' => [['sys' => ['pod' => 1]], 'sys.pod', 'string', 'int'];
-        yield 'forecast time text' => [['dt_txt' => 1785574800], 'dt_txt', 'string', 'int'];
     }
 
     private static function fromFixture(string $path): Period
