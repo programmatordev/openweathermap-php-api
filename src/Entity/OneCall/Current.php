@@ -24,8 +24,7 @@ final class Current implements EntityInterface
      */
     private function __construct(
         private readonly ?Coordinates $coordinates,
-        private readonly ?string $timezone,
-        private readonly ?int $timezoneOffset,
+        private readonly ?Timezone $timezone,
         private readonly ?\DateTimeImmutable $observedAt,
         private readonly ?\DateTimeImmutable $sunriseAt,
         private readonly ?\DateTimeImmutable $sunsetAt,
@@ -83,17 +82,18 @@ final class Current implements EntityInterface
 
         $rain = $reader->nullableArray('data.0.rain');
         $snow = $reader->nullableArray('data.0.snow');
+        $hasCoordinates = array_key_exists('lat', $data)
+            || array_key_exists('lon', $data);
+        $hasTimezone = array_key_exists('timezone', $data)
+            || array_key_exists('timezone_offset', $data);
         $hasWind = array_key_exists('wind_speed', $observation)
             || array_key_exists('wind_deg', $observation)
             || array_key_exists('wind_gust', $observation);
         $hasClouds = array_key_exists('clouds', $observation);
 
         return new self(
-            coordinates: array_key_exists('lat', $data) || array_key_exists('lon', $data)
-                ? Coordinates::fromArray($data, $context)
-                : null,
-            timezone: $reader->nullableString('timezone'),
-            timezoneOffset: $reader->nullableInt('timezone_offset'),
+            coordinates: $hasCoordinates ? Coordinates::fromArray($data, $context) : null,
+            timezone: $hasTimezone ? Timezone::fromArray($data, $context) : null,
             observedAt: $reader->nullableTimestamp('data.0.dt'),
             sunriseAt: $reader->nullableTimestamp('data.0.sunrise'),
             sunsetAt: $reader->nullableTimestamp('data.0.sunset'),
@@ -129,14 +129,9 @@ final class Current implements EntityInterface
         return $this->coordinates;
     }
 
-    public function timezone(): ?string
+    public function timezone(): ?Timezone
     {
         return $this->timezone;
-    }
-
-    public function timezoneOffset(): ?int
-    {
-        return $this->timezoneOffset;
     }
 
     public function observedAt(): ?\DateTimeImmutable

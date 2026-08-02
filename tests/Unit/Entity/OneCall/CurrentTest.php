@@ -23,8 +23,8 @@ final class CurrentTest extends TestCase
 
         self::assertSame(38.7223, $current->coordinates()?->latitude());
         self::assertSame(-9.1393, $current->coordinates()?->longitude());
-        self::assertSame('Europe/Lisbon', $current->timezone());
-        self::assertSame(3600, $current->timezoneOffset());
+        self::assertSame('Europe/Lisbon', $current->timezone()?->identifier());
+        self::assertSame(3600, $current->timezone()?->offsetSeconds());
         self::assertSame(1785668004, $current->observedAt()?->getTimestamp());
         self::assertSame('UTC', $current->observedAt()?->getTimezone()->getName());
         self::assertSame(1785649113, $current->sunriseAt()?->getTimestamp());
@@ -164,6 +164,8 @@ final class CurrentTest extends TestCase
 
         self::assertNull($current->coordinates()?->latitude());
         self::assertNull($current->coordinates()?->longitude());
+        self::assertNull($current->timezone()?->identifier());
+        self::assertNull($current->timezone()?->offsetSeconds());
         self::assertCount(1, $current->conditions());
         self::assertNull($current->conditions()[0]->icon());
         self::assertNull($current->temperature());
