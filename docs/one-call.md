@@ -65,3 +65,41 @@ $current->temperature();          // 24.34
 $current->temperatureUnit();      // Unit::CELSIUS
 $current->temperatureWithUnit();  // '24.34 °C'
 ```
+
+## Minute Timeline
+
+See OpenWeather's
+[official One Call 4.0 minute forecast documentation](https://openweathermap.org/api/one-call-4#min)
+for the upstream endpoint contract.
+
+Use `minuteTimeline()` with a latitude and longitude to retrieve up to 60
+one-minute forecast periods.
+
+```php
+$timeline = $api->oneCall()->minuteTimeline(
+    latitude: 38.7223,
+    longitude: -9.1393,
+);
+```
+
+The response exposes location metadata and a typed collection of periods. Each
+period provides its UTC date and time, precipitation, and any referenced alert
+IDs.
+
+```php
+echo $timeline->coordinates()?->latitude();
+echo $timeline->timezone()?->identifier();
+
+foreach ($timeline->periods() as $period) {
+    echo $period->dateTime()?->format(DATE_ATOM);
+    echo $period->precipitation();
+    echo $period->precipitationWithUnit();
+
+    foreach ($period->alertIds() as $alertId) {
+        echo $alertId;
+    }
+}
+```
+
+One-minute precipitation is always expressed in millimetres per hour, so its
+unit is unaffected by the configured weather unit system.

@@ -5,6 +5,7 @@ namespace ProgrammatorDev\OpenWeatherMap\Test\Unit\Resource;
 use Nyholm\Psr7\Response;
 use PHPUnit\Framework\Attributes\DataProvider;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\Current;
+use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\MinuteTimeline;
 use ProgrammatorDev\OpenWeatherMap\Enum\Unit;
 use ProgrammatorDev\OpenWeatherMap\Enum\Units;
 use ProgrammatorDev\OpenWeatherMap\Test\Support\ApiTestCase;
@@ -61,6 +62,51 @@ final class OneCallTest extends ApiTestCase
         self::assertSame('en', $this->query($metricRequest)['lang']);
     }
 
+    public function testGetsMinuteTimelineByCoordinates(): void
+    {
+        $this->respondWithFixture('one-call/one-minute/success.json');
+
+        $timeline = $this->api->oneCall()->minuteTimeline(
+            latitude: 38.7223,
+            longitude: -9.1393,
+        );
+        $request = $this->client->getLastRequest();
+
+        self::assertInstanceOf(MinuteTimeline::class, $timeline);
+        self::assertCount(60, $timeline->periods());
+        self::assertSame(1785669780, $timeline->periods()[0]->dateTime()?->getTimestamp());
+        self::assertSame('GET', $request->getMethod());
+        self::assertSame('/data/4.0/onecall/timeline/1min', $request->getUri()->getPath());
+        self::assertSame([
+            'lat' => '38.7223',
+            'lon' => '-9.1393',
+            'units' => 'metric',
+            'lang' => 'en',
+            'appid' => 'api-key',
+        ], $this->query($request));
+    }
+
+    public function testMinuteTimelineAcceptsFluentConfiguration(): void
+    {
+        $this->respondWithFixture('one-call/one-minute/precipitation-alerts.json');
+
+        $timeline = $this->api
+            ->oneCall()
+            ->withUnits(Units::IMPERIAL)
+            ->withLanguage('pt')
+            ->minuteTimeline(-38.4, -71.58);
+        $request = $this->client->getLastRequest();
+
+        self::assertSame(Unit::MILLIMETERS_PER_HOUR, $timeline->periods()[0]->precipitationUnit());
+        self::assertSame([
+            'lat' => '-38.4',
+            'lon' => '-71.58',
+            'units' => 'imperial',
+            'lang' => 'pt',
+            'appid' => 'api-key',
+        ], $this->query($request));
+    }
+
     #[DataProvider('invalidCoordinates')]
     public function testRejectsInvalidCoordinates(
         float $latitude,
@@ -71,6 +117,18 @@ final class OneCallTest extends ApiTestCase
         $this->expectExceptionMessage($message);
 
         $this->api->oneCall()->current($latitude, $longitude);
+    }
+
+    #[DataProvider('invalidCoordinates')]
+    public function testMinuteTimelineRejectsInvalidCoordinates(
+        float $latitude,
+        float $longitude,
+        string $message,
+    ): void {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage($message);
+
+        $this->api->oneCall()->minuteTimeline($latitude, $longitude);
     }
 
     public static function invalidCoordinates(): iterable
