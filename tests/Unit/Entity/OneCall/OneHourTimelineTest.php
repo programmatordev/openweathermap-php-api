@@ -107,9 +107,5 @@ final class OneHourTimelineTest extends TestCase
             ['prev' => 1],
             '"prev" expected string, int received.',
         ];
-        yield 'unexpected page host' => [
-            ['next' => 'https://example.com/page?appid=secret'],
-            '"next" expected safe One Call pagination URL, "[redacted]" received.',
-        ];
     }
 }

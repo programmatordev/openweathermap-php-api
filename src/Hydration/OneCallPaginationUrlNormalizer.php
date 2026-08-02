@@ -2,68 +2,37 @@
 
 namespace ProgrammatorDev\OpenWeatherMap\Hydration;
 
-use ProgrammatorDev\OpenWeatherMap\Exception\HydrationException;
+use Http\Discovery\Psr17FactoryDiscovery;
 use ProgrammatorDev\OpenWeatherMap\OpenWeatherMap;
 
 final class OneCallPaginationUrlNormalizer
 {
-    private const HOST = 'api.openweathermap.org';
-
     private function __construct() {}
 
-    public static function normalize(
-        string $url,
-        string $entity,
-        string $path,
-    ): string {
-        $parts = parse_url($url);
+    public static function normalize(string $url): string
+    {
+        $uri = Psr17FactoryDiscovery::findUriFactory()->createUri($url);
+        $queryParameters = [];
 
-        if (
-            !is_array($parts)
-            || !isset($parts['host'], $parts['path'])
-            || strtolower($parts['host']) !== self::HOST
-        ) {
-            throw self::invalidUrl($entity, $path);
+        parse_str($uri->getQuery(), $queryParameters);
+
+        // Authentication is reapplied by the SDK when the pagination link is followed,
+        // so the response must not retain its embedded API key.
+        unset($queryParameters[OpenWeatherMap::AUTHENTICATION_KEY]);
+
+        // Keep relative references relative so the resolver can apply the configured base URL;
+        // absolute references are upgraded to HTTPS.
+        if ($uri->getHost() !== '') {
+            $uri = $uri->withScheme('https');
         }
 
-        $query = self::withoutApiKey($parts['query'] ?? '');
-
-        return sprintf(
-            'https://%s%s%s',
-            self::HOST,
-            $parts['path'],
-            $query === '' ? '' : sprintf('?%s', $query),
-        );
-    }
-
-    private static function withoutApiKey(string $query): string
-    {
-        $parameters = [];
-
-        foreach (explode('&', $query) as $parameter) {
-            if ($parameter === '') {
-                continue;
-            }
-
-            $name = rawurldecode(explode('=', $parameter, 2)[0]);
-
-            if (strtolower($name) !== OpenWeatherMap::AUTHENTICATION_KEY) {
-                $parameters[] = $parameter;
-            }
-        }
-
-        return implode('&', $parameters);
-    }
-
-    private static function invalidUrl(string $entity, string $path): HydrationException
-    {
-        // Pagination URLs may contain credentials,
-        // so invalid values are never copied into exception messages.
-        return HydrationException::invalidValue(
-            $entity,
-            $path,
-            'safe One Call pagination URL',
-            '[redacted]',
+        return (string) $uri->withQuery(
+            http_build_query(
+                $queryParameters,
+                '',
+                '&',
+                PHP_QUERY_RFC3986,
+            ),
         );
     }
 }

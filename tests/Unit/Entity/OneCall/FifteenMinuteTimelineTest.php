@@ -59,6 +59,18 @@ final class FifteenMinuteTimelineTest extends TestCase
         );
     }
 
+    public function testNormalizesPaginationUrl(): void
+    {
+        $timeline = FifteenMinuteTimeline::fromArray([
+            'next' => 'http://example.com/page?cursor=next&appid=secret',
+        ]);
+
+        self::assertSame(
+            'https://example.com/page?cursor=next',
+            $timeline->nextPageUrl(),
+        );
+    }
+
     public function testToleratesMissingNullUnknownAndPartialFields(): void
     {
         $missing = FifteenMinuteTimeline::fromArray([]);
@@ -128,14 +140,6 @@ final class FifteenMinuteTimelineTest extends TestCase
         yield 'next page URL type' => [
             ['next' => []],
             '"next" expected string, array received.',
-        ];
-        yield 'malformed page URL' => [
-            ['next' => 'not a URL'],
-            '"next" expected safe One Call pagination URL, "[redacted]" received.',
-        ];
-        yield 'unexpected page host' => [
-            ['next' => 'https://example.com/page?appid=secret'],
-            '"next" expected safe One Call pagination URL, "[redacted]" received.',
         ];
     }
 }

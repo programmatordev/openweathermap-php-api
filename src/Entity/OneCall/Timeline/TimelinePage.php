@@ -65,18 +65,10 @@ final class TimelinePage
 
         $previousPageUrl = $previousPageUrl === null
             ? null
-            : OneCallPaginationUrlNormalizer::normalize(
-                $previousPageUrl,
-                $entity,
-                'prev',
-            );
+            : OneCallPaginationUrlNormalizer::normalize($previousPageUrl);
         $nextPageUrl = $nextPageUrl === null
             ? null
-            : OneCallPaginationUrlNormalizer::normalize(
-                $nextPageUrl,
-                $entity,
-                'next',
-            );
+            : OneCallPaginationUrlNormalizer::normalize($nextPageUrl);
 
         return new self(
             coordinates: $hasCoordinates ? Coordinates::fromArray($data, $context) : null,
