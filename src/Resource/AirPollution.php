@@ -4,6 +4,7 @@ namespace ProgrammatorDev\OpenWeatherMap\Resource;
 
 use ProgrammatorDev\Api\Resource;
 use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\Current;
+use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\Forecast;
 use ProgrammatorDev\OpenWeatherMap\Validation\Assert;
 
 final class AirPollution extends Resource
@@ -25,5 +26,24 @@ final class AirPollution extends Resource
             ->entity(Current::class);
 
         return $current;
+    }
+
+    public function forecast(float $latitude, float $longitude): Forecast
+    {
+        $latitude = Assert::latitude($latitude);
+        $longitude = Assert::longitude($longitude);
+
+        // https://openweathermap.org/api/air-pollution
+        /** @var Forecast $forecast */
+        $forecast = $this
+            ->endpoint()
+            ->queries([
+                'lat' => $latitude,
+                'lon' => $longitude,
+            ])
+            ->get('/data/2.5/air_pollution/forecast')
+            ->entity(Forecast::class);
+
+        return $forecast;
     }
 }

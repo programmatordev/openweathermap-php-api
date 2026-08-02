@@ -4,6 +4,7 @@ namespace ProgrammatorDev\OpenWeatherMap\Test\Unit\Resource;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\Current;
+use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\Forecast;
 use ProgrammatorDev\OpenWeatherMap\Enum\AirQualityIndex;
 use ProgrammatorDev\OpenWeatherMap\Test\Support\ApiTestCase;
 
@@ -31,8 +32,33 @@ final class AirPollutionTest extends ApiTestCase
         ], $this->query($request));
     }
 
+    public function testGetsAirPollutionForecastByCoordinates(): void
+    {
+        $this->respondWithFixture('air-pollution/forecast/good-to-moderate.json');
+
+        $forecast = $this->api->airPollution()->forecast(
+            latitude: 28.6139,
+            longitude: 77.209,
+        );
+        $request = $this->client->getLastRequest();
+
+        self::assertInstanceOf(Forecast::class, $forecast);
+        self::assertCount(96, $forecast->periods());
+        self::assertSame(1785614400, $forecast->periods()[0]->forecastAt()?->getTimestamp());
+        self::assertSame('GET', $request->getMethod());
+        self::assertSame(
+            '/data/2.5/air_pollution/forecast',
+            $request->getUri()->getPath(),
+        );
+        self::assertSame([
+            'lat' => '28.6139',
+            'lon' => '77.209',
+            'appid' => 'api-key',
+        ], $this->query($request));
+    }
+
     #[DataProvider('invalidCoordinates')]
-    public function testRejectsInvalidCoordinates(
+    public function testCurrentRejectsInvalidCoordinates(
         float $latitude,
         float $longitude,
         string $message,
@@ -41,6 +67,18 @@ final class AirPollutionTest extends ApiTestCase
         $this->expectExceptionMessage($message);
 
         $this->api->airPollution()->current($latitude, $longitude);
+    }
+
+    #[DataProvider('invalidCoordinates')]
+    public function testForecastRejectsInvalidCoordinates(
+        float $latitude,
+        float $longitude,
+        string $message,
+    ): void {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage($message);
+
+        $this->api->airPollution()->forecast($latitude, $longitude);
     }
 
     public static function invalidCoordinates(): iterable

@@ -59,3 +59,37 @@ $components?->fineParticulateMatter();          // 5.89
 $components?->fineParticulateMatterUnit();      // Unit::MICROGRAMS_PER_CUBIC_METER
 $components?->fineParticulateMatterWithUnit();  // '5.89 µg/m³'
 ```
+
+## Forecast
+
+The Air Pollution Forecast API provides hourly periods for four days. See the
+[official Air Pollution API documentation](https://openweathermap.org/api/air-pollution)
+for the upstream endpoint contract.
+
+Use `forecast()` with a latitude and longitude. Both coordinates are validated
+before the request is sent.
+
+```php
+$forecast = $api->airPollution()->forecast(
+    latitude: 38.7223,
+    longitude: -9.1393,
+);
+```
+
+The returned `Forecast` entity exposes the response coordinates and a typed
+collection of hourly periods. Missing or `null` period lists become empty
+arrays, and every period property may be absent or explicitly `null`.
+
+```php
+echo $forecast->coordinates()?->latitude();
+echo $forecast->coordinates()?->longitude();
+
+foreach ($forecast->periods() as $period) {
+    echo $period->forecastAt()?->format(DATE_ATOM);
+    echo $period->airQualityIndex()?->value;
+    echo $period->components()?->fineParticulateMatter();
+}
+```
+
+Forecast periods use the same OpenWeather Air Quality Index and fixed
+`µg/m³` pollutant units as current observations.
