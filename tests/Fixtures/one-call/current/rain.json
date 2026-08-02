@@ -1,0 +1,35 @@
+{
+    "lat": 14.5995,
+    "lon": 120.9842,
+    "timezone": "Asia/Manila",
+    "timezone_offset": 28800,
+    "data": [
+        {
+            "dt": 1785668580,
+            "sunrise": 1785620365,
+            "sunset": 1785666311,
+            "temp": 26.42,
+            "feels_like": 26.42,
+            "pressure": 1006,
+            "humidity": 92,
+            "dew_point": 25.01,
+            "uvi": 0,
+            "clouds": 100,
+            "visibility": 7458,
+            "wind_speed": 1.79,
+            "wind_deg": 272,
+            "wind_gust": 2.68,
+            "weather": [
+                {
+                    "id": 500,
+                    "main": "Rain",
+                    "description": "light rain",
+                    "icon": "10n"
+                }
+            ],
+            "rain": {
+                "1h": 0.13
+            }
+        }
+    ]
+}

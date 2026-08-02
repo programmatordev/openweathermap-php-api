@@ -1,0 +1,38 @@
+{
+    "lat": -38.4,
+    "lon": -71.58,
+    "timezone": "America/Santiago",
+    "timezone_offset": -14400,
+    "data": [
+        {
+            "dt": 1785668585,
+            "sunrise": 1785671200,
+            "sunset": 1785707904,
+            "temp": -2.31,
+            "feels_like": -6.94,
+            "pressure": 1012,
+            "humidity": 100,
+            "dew_point": -2.31,
+            "uvi": 0,
+            "clouds": 100,
+            "visibility": 33,
+            "wind_speed": 3.77,
+            "wind_deg": 306,
+            "wind_gust": 14.85,
+            "weather": [
+                {
+                    "id": 601,
+                    "main": "Snow",
+                    "description": "snow",
+                    "icon": "13n"
+                }
+            ],
+            "snow": {
+                "1h": 4.86
+            },
+            "alerts": [
+                "urn:oid:2.49.0.0.152.0.2026.7.31.14.20.43:f1076d7511a15522d5a6e41917020bc0"
+            ]
+        }
+    ]
+}
