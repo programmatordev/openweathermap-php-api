@@ -232,3 +232,39 @@ foreach ($timeline->periods() as $period) {
 OpenWeather does not currently define units for the daily scalar rain and snow
 values, so these getters return raw nullable floats. `previousPageUrl()` and
 `nextPageUrl()` do not make another request.
+
+## Alert
+
+See OpenWeather's
+[official One Call 4.0 weather alert documentation](https://openweathermap.org/api/one-call-4#alerts)
+for API details.
+
+Current weather and timeline periods may provide alert IDs. Use `alert()` to
+retrieve the corresponding alert.
+
+```php
+$alert = $api->oneCall()->alert($id);
+```
+
+Alerts provide sender and event information, validity dates, localized
+descriptions, and tags.
+
+```php
+echo $alert->id();
+echo $alert->senderName();
+echo $alert->event();
+echo $alert->startsAt()?->format(DATE_ATOM);
+echo $alert->endsAt()?->format(DATE_ATOM);
+echo $alert->description('en-US');
+
+foreach ($alert->descriptions() as $description) {
+    echo $description->languageCode();
+    echo $description->text();
+}
+
+foreach ($alert->tags() as $tag) {
+    echo $tag;
+}
+```
+
+`description()` returns the first exact language-code match or `null`.

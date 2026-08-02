@@ -3,6 +3,7 @@
 namespace ProgrammatorDev\OpenWeatherMap\Resource;
 
 use ProgrammatorDev\Api\Resource;
+use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\Alert;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\Current;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\FifteenMinuteTimeline;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\MinuteTimeline;
@@ -148,5 +149,21 @@ final class OneCall extends Resource
             ->entity(OneDayTimeline::class);
 
         return $timeline;
+    }
+
+    public function alert(string $id): Alert
+    {
+        $id = Assert::notBlank($id, 'alert ID');
+
+        // https://openweathermap.org/api/one-call-4#alerts
+        /** @var Alert $alert */
+        $alert = $this
+            ->endpoint()
+            ->get('/data/4.0/onecall/alert/{id}', [
+                'id' => $id,
+            ])
+            ->entity(Alert::class);
+
+        return $alert;
     }
 }

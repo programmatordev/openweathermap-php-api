@@ -4,6 +4,7 @@ namespace ProgrammatorDev\OpenWeatherMap\Test\Unit\Resource;
 
 use Nyholm\Psr7\Response;
 use PHPUnit\Framework\Attributes\DataProvider;
+use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\Alert;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\Current;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\FifteenMinuteTimeline;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\MinuteTimeline;
@@ -15,6 +16,47 @@ use ProgrammatorDev\OpenWeatherMap\Test\Support\ApiTestCase;
 
 final class OneCallTest extends ApiTestCase
 {
+    public function testGetsAlertById(): void
+    {
+        $this->respondWithFixture('one-call/alert/chile-rain.json');
+        $id = 'urn:oid:2.49.0.0.152.0.2026.7.31.14.20.43:'
+            .'f1076d7511a15522d5a6e41917020bc0';
+
+        $alert = $this->api->oneCall()->alert($id);
+        $request = $this->client->getLastRequest();
+
+        self::assertInstanceOf(Alert::class, $alert);
+        self::assertSame($id, $alert->id());
+        self::assertSame('Dirección Meteorológica de Chile', $alert->senderName());
+        self::assertSame('GET', $request->getMethod());
+        self::assertSame(
+            '/data/4.0/onecall/alert/'.rawurlencode($id),
+            $request->getUri()->getPath(),
+        );
+        self::assertSame(['appid' => 'api-key'], $this->query($request));
+    }
+
+    public function testEncodesOpaqueAlertIdAsOnePathSegment(): void
+    {
+        $this->client->addResponse(new Response(body: '{}'));
+
+        $this->api->oneCall()->alert('agency:alert/segment');
+        $request = $this->client->getLastRequest();
+
+        self::assertSame(
+            '/data/4.0/onecall/alert/agency%3Aalert%2Fsegment',
+            $request->getUri()->getPath(),
+        );
+    }
+
+    public function testRejectsBlankAlertId(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The alert ID must be a non-empty string.');
+
+        $this->api->oneCall()->alert('  ');
+    }
+
     public function testGetsCurrentWeatherByCoordinates(): void
     {
         $this->respondWithFixture('one-call/current/success.json');
