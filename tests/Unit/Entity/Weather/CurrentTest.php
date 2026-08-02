@@ -67,8 +67,8 @@ final class CurrentTest extends TestCase
         self::assertNull($weather->rain());
         self::assertNull($weather->snow());
 
-        self::assertSame(1785573885, $weather->observedAt()?->getTimestamp());
-        self::assertSame('UTC', $weather->observedAt()?->getTimezone()->getName());
+        self::assertSame(1785573885, $weather->dateTime()?->getTimestamp());
+        self::assertSame('UTC', $weather->dateTime()?->getTimezone()->getName());
         self::assertSame('PT', $weather->countryCode());
         self::assertSame(1785562660, $weather->sunriseAt()?->getTimestamp());
         self::assertSame(1785613679, $weather->sunsetAt()?->getTimestamp());
@@ -159,7 +159,7 @@ final class CurrentTest extends TestCase
         self::assertNull($weather->rain()?->lastHour());
         self::assertNull($weather->rain()?->lastHourWithUnit());
         self::assertNull($weather->snow());
-        self::assertNull($weather->observedAt());
+        self::assertNull($weather->dateTime());
         self::assertNull($weather->countryCode());
         self::assertNull($weather->sunriseAt());
         self::assertNull($weather->name());

@@ -23,7 +23,7 @@ final class ForecastTest extends TestCase
 
         self::assertSame(40, $forecast->count());
         self::assertCount(40, $forecast->periods());
-        self::assertSame(1785574800, $forecast->periods()[0]->forecastAt()?->getTimestamp());
+        self::assertSame(1785574800, $forecast->periods()[0]->dateTime()?->getTimestamp());
         self::assertSame(22.54, $forecast->periods()[0]->temperature());
 
         $city = $forecast->city();

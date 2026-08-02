@@ -19,8 +19,8 @@ final class PeriodTest extends TestCase
     {
         $period = self::fromFixture('one-call/fifteen-minute/success.json', 7);
 
-        self::assertSame(1785676500, $period->forecastAt()?->getTimestamp());
-        self::assertSame('UTC', $period->forecastAt()?->getTimezone()->getName());
+        self::assertSame(1785676500, $period->dateTime()?->getTimestamp());
+        self::assertSame('UTC', $period->dateTime()?->getTimezone()->getName());
         self::assertSame(26.06, $period->temperature());
         self::assertSame(Unit::CELSIUS, $period->temperatureUnit());
         self::assertSame('26.06 °C', $period->temperatureWithUnit());
@@ -115,7 +115,7 @@ final class PeriodTest extends TestCase
     {
         $missing = Period::fromArray([]);
 
-        self::assertNull($missing->forecastAt());
+        self::assertNull($missing->dateTime());
         self::assertNull($missing->temperature());
         self::assertNull($missing->temperatureWithUnit());
         self::assertNull($missing->pressure());
@@ -138,7 +138,7 @@ final class PeriodTest extends TestCase
             'unknown' => new \stdClass(),
         ]);
 
-        self::assertNull($period->forecastAt());
+        self::assertNull($period->dateTime());
         self::assertNull($period->temperature());
         self::assertCount(1, $period->conditions());
         self::assertNull($period->conditions()[0]->icon());

@@ -15,7 +15,7 @@ final class Period implements EntityInterface
      * @param list<string> $alertIds
      */
     private function __construct(
-        private readonly ?\DateTimeImmutable $forecastAt,
+        private readonly ?\DateTimeImmutable $dateTime,
         private readonly ?float $precipitation,
         private readonly array $alertIds,
     ) {}
@@ -39,15 +39,15 @@ final class Period implements EntityInterface
         }
 
         return new self(
-            forecastAt: $reader->nullableTimestamp('dt'),
+            dateTime: $reader->nullableTimestamp('dt'),
             precipitation: $reader->nullableFloat('precipitation'),
             alertIds: $alertIds,
         );
     }
 
-    public function forecastAt(): ?\DateTimeImmutable
+    public function dateTime(): ?\DateTimeImmutable
     {
-        return $this->forecastAt;
+        return $this->dateTime;
     }
 
     public function precipitation(): ?float

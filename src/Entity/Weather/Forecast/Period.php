@@ -24,7 +24,7 @@ final class Period implements EntityInterface
      * @param list<Condition> $conditions
      */
     private function __construct(
-        private readonly ?\DateTimeImmutable $forecastAt,
+        private readonly ?\DateTimeImmutable $dateTime,
         private readonly ?float $temperature,
         private readonly ?float $feelsLikeTemperature,
         private readonly ?float $minimumTemperature,
@@ -80,7 +80,7 @@ final class Period implements EntityInterface
         }
 
         return new self(
-            forecastAt: $reader->nullableTimestamp('dt'),
+            dateTime: $reader->nullableTimestamp('dt'),
             temperature: $reader->nullableFloat('main.temp'),
             feelsLikeTemperature: $reader->nullableFloat('main.feels_like'),
             minimumTemperature: $reader->nullableFloat('main.temp_min'),
@@ -106,9 +106,9 @@ final class Period implements EntityInterface
         );
     }
 
-    public function forecastAt(): ?\DateTimeImmutable
+    public function dateTime(): ?\DateTimeImmutable
     {
-        return $this->forecastAt;
+        return $this->dateTime;
     }
 
     public function dewPoint(): ?float

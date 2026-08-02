@@ -13,7 +13,7 @@ final class Period implements EntityInterface
     use HasAirQuality;
 
     private function __construct(
-        private readonly ?\DateTimeImmutable $forecastAt,
+        private readonly ?\DateTimeImmutable $dateTime,
         private readonly AirQuality $airQuality,
     ) {}
 
@@ -22,13 +22,13 @@ final class Period implements EntityInterface
         $reader = PayloadReader::from($data, self::class);
 
         return new self(
-            forecastAt: $reader->nullableTimestamp('dt'),
+            dateTime: $reader->nullableTimestamp('dt'),
             airQuality: AirQuality::fromArray($data, $context),
         );
     }
 
-    public function forecastAt(): ?\DateTimeImmutable
+    public function dateTime(): ?\DateTimeImmutable
     {
-        return $this->forecastAt;
+        return $this->dateTime;
     }
 }

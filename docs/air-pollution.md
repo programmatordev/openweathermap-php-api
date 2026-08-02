@@ -29,7 +29,7 @@ response property may be absent or explicitly `null`.
 ```php
 echo $current->coordinates()?->latitude();
 echo $current->coordinates()?->longitude();
-echo $current->observedAt()?->format(DATE_ATOM);
+echo $current->dateTime()?->format(DATE_ATOM);
 echo $current->airQualityIndex()?->value;
 ```
 
@@ -91,7 +91,7 @@ echo $forecast->coordinates()?->latitude();
 echo $forecast->coordinates()?->longitude();
 
 foreach ($forecast->periods() as $period) {
-    echo $period->forecastAt()?->format(DATE_ATOM);
+    echo $period->dateTime()?->format(DATE_ATOM);
     echo $period->airQualityIndex()?->value;
     echo $period->components()?->fineParticulateMatter();
 }
@@ -131,7 +131,7 @@ echo $history->coordinates()?->latitude();
 echo $history->coordinates()?->longitude();
 
 foreach ($history->periods() as $period) {
-    echo $period->observedAt()?->format(DATE_ATOM);
+    echo $period->dateTime()?->format(DATE_ATOM);
     echo $period->airQualityIndex()?->value;
     echo $period->components()?->fineParticulateMatter();
 }

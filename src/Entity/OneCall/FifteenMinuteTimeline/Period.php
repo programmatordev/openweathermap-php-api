@@ -22,7 +22,7 @@ final class Period implements EntityInterface
      * @param list<string> $alertIds
      */
     private function __construct(
-        private readonly ?\DateTimeImmutable $forecastAt,
+        private readonly ?\DateTimeImmutable $dateTime,
         private readonly ?float $temperature,
         private readonly ?float $feelsLikeTemperature,
         private readonly ?float $pressure,
@@ -81,7 +81,7 @@ final class Period implements EntityInterface
         $hasClouds = array_key_exists('clouds', $data);
 
         return new self(
-            forecastAt: $reader->nullableTimestamp('dt'),
+            dateTime: $reader->nullableTimestamp('dt'),
             temperature: $reader->nullableFloat('temp'),
             feelsLikeTemperature: $reader->nullableFloat('feels_like'),
             pressure: $reader->nullableFloat('pressure'),
@@ -110,9 +110,9 @@ final class Period implements EntityInterface
         );
     }
 
-    public function forecastAt(): ?\DateTimeImmutable
+    public function dateTime(): ?\DateTimeImmutable
     {
-        return $this->forecastAt;
+        return $this->dateTime;
     }
 
     public function temperature(): ?float

@@ -20,8 +20,8 @@ final class PeriodTest extends TestCase
     {
         $period = self::fromFixture('weather/forecast/success.json');
 
-        self::assertSame(1785574800, $period->forecastAt()?->getTimestamp());
-        self::assertSame('UTC', $period->forecastAt()?->getTimezone()->getName());
+        self::assertSame(1785574800, $period->dateTime()?->getTimestamp());
+        self::assertSame('UTC', $period->dateTime()?->getTimezone()->getName());
         self::assertSame(22.54, $period->temperature());
         self::assertSame(Unit::CELSIUS, $period->temperatureUnit());
         self::assertSame('22.54 °C', $period->temperatureWithUnit());
@@ -120,7 +120,7 @@ final class PeriodTest extends TestCase
             'unknown' => new \stdClass(),
         ]);
 
-        self::assertNull($period->forecastAt());
+        self::assertNull($period->dateTime());
         self::assertNull($period->temperature());
         self::assertNull($period->temperatureWithUnit());
         self::assertNull($period->feelsLikeTemperature());

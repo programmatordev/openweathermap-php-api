@@ -22,8 +22,8 @@ final class HistoryTest extends TestCase
         self::assertSame(-9.1393, $history->coordinates()?->longitude());
         self::assertCount(25, $history->periods());
         self::assertContainsOnlyInstancesOf(Period::class, $history->periods());
-        self::assertSame(1782864000, $history->periods()[0]->observedAt()?->getTimestamp());
-        self::assertSame(1782950400, $history->periods()[24]->observedAt()?->getTimestamp());
+        self::assertSame(1782864000, $history->periods()[0]->dateTime()?->getTimestamp());
+        self::assertSame(1782950400, $history->periods()[24]->dateTime()?->getTimestamp());
         self::assertSame(AirQualityIndex::FAIR, $history->periods()[0]->airQualityIndex());
         self::assertSame(80.71, $history->periods()[0]->components()?->carbonMonoxide());
     }
@@ -61,7 +61,7 @@ final class HistoryTest extends TestCase
         self::assertNull($history->coordinates()?->latitude());
         self::assertNull($history->coordinates()?->longitude());
         self::assertCount(2, $history->periods());
-        self::assertNull($history->periods()[0]->observedAt());
+        self::assertNull($history->periods()[0]->dateTime());
         self::assertNull($history->periods()[1]->airQualityIndex());
 
         self::assertSame([], History::fromArray(['list' => null])->periods());

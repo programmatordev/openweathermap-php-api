@@ -27,8 +27,8 @@ final class MinuteTimelineTest extends TestCase
         self::assertSame($timezoneOffset, $timeline->timezone()?->offsetSeconds());
         self::assertCount(60, $timeline->periods());
         self::assertContainsOnlyInstancesOf(Period::class, $timeline->periods());
-        self::assertSame(1785669780, $timeline->periods()[0]->forecastAt()?->getTimestamp());
-        self::assertSame(1785673320, $timeline->periods()[59]->forecastAt()?->getTimestamp());
+        self::assertSame(1785669780, $timeline->periods()[0]->dateTime()?->getTimestamp());
+        self::assertSame(1785673320, $timeline->periods()[59]->dateTime()?->getTimestamp());
     }
 
     public function testToleratesMissingNullUnknownAndPartialFields(): void
@@ -55,7 +55,7 @@ final class MinuteTimelineTest extends TestCase
         self::assertNull($timeline->timezone()?->identifier());
         self::assertNull($timeline->timezone()?->offsetSeconds());
         self::assertCount(2, $timeline->periods());
-        self::assertNull($timeline->periods()[0]->forecastAt());
+        self::assertNull($timeline->periods()[0]->dateTime());
         self::assertNull($timeline->periods()[1]->precipitation());
 
         self::assertSame([], MinuteTimeline::fromArray(['data' => null])->periods());

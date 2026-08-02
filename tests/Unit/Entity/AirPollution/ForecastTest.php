@@ -24,8 +24,8 @@ final class ForecastTest extends TestCase
         self::assertSame($longitude, $forecast->coordinates()?->longitude());
         self::assertCount(96, $forecast->periods());
         self::assertContainsOnlyInstancesOf(Period::class, $forecast->periods());
-        self::assertSame(1785614400, $forecast->periods()[0]->forecastAt()?->getTimestamp());
-        self::assertSame(1785956400, $forecast->periods()[95]->forecastAt()?->getTimestamp());
+        self::assertSame(1785614400, $forecast->periods()[0]->dateTime()?->getTimestamp());
+        self::assertSame(1785956400, $forecast->periods()[95]->dateTime()?->getTimestamp());
 
         $actualAirQualityIndexes = array_values(array_unique(array_map(
             static fn (Period $period): ?int => $period->airQualityIndex()?->value,
@@ -58,7 +58,7 @@ final class ForecastTest extends TestCase
         self::assertNull($forecast->coordinates()?->latitude());
         self::assertNull($forecast->coordinates()?->longitude());
         self::assertCount(2, $forecast->periods());
-        self::assertNull($forecast->periods()[0]->forecastAt());
+        self::assertNull($forecast->periods()[0]->dateTime());
         self::assertNull($forecast->periods()[1]->airQualityIndex());
 
         self::assertSame([], Forecast::fromArray(['list' => null])->periods());

@@ -25,7 +25,7 @@ final class Current implements EntityInterface
     private function __construct(
         private readonly ?Coordinates $coordinates,
         private readonly ?Timezone $timezone,
-        private readonly ?\DateTimeImmutable $observedAt,
+        private readonly ?\DateTimeImmutable $dateTime,
         private readonly ?\DateTimeImmutable $sunriseAt,
         private readonly ?\DateTimeImmutable $sunsetAt,
         private readonly ?float $temperature,
@@ -94,7 +94,7 @@ final class Current implements EntityInterface
         return new self(
             coordinates: $hasCoordinates ? Coordinates::fromArray($data, $context) : null,
             timezone: $hasTimezone ? Timezone::fromArray($data, $context) : null,
-            observedAt: $reader->nullableTimestamp('data.0.dt'),
+            dateTime: $reader->nullableTimestamp('data.0.dt'),
             sunriseAt: $reader->nullableTimestamp('data.0.sunrise'),
             sunsetAt: $reader->nullableTimestamp('data.0.sunset'),
             temperature: $reader->nullableFloat('data.0.temp'),
@@ -134,9 +134,9 @@ final class Current implements EntityInterface
         return $this->timezone;
     }
 
-    public function observedAt(): ?\DateTimeImmutable
+    public function dateTime(): ?\DateTimeImmutable
     {
-        return $this->observedAt;
+        return $this->dateTime;
     }
 
     public function sunriseAt(): ?\DateTimeImmutable

@@ -19,8 +19,8 @@ final class CurrentTest extends TestCase
 
         self::assertSame(-33.8679, $current->coordinates()?->latitude());
         self::assertSame(151.2073, $current->coordinates()?->longitude());
-        self::assertSame(1785616883, $current->observedAt()?->getTimestamp());
-        self::assertSame('UTC', $current->observedAt()?->getTimezone()->getName());
+        self::assertSame(1785616883, $current->dateTime()?->getTimestamp());
+        self::assertSame('UTC', $current->dateTime()?->getTimezone()->getName());
         self::assertSame(AirQualityIndex::GOOD, $current->airQualityIndex());
 
         self::assertSame(96.56, $current->components()?->carbonMonoxide());
@@ -32,7 +32,7 @@ final class CurrentTest extends TestCase
         $missing = Current::fromArray([]);
 
         self::assertNull($missing->coordinates());
-        self::assertNull($missing->observedAt());
+        self::assertNull($missing->dateTime());
         self::assertNull($missing->airQualityIndex());
         self::assertNull($missing->components());
 
@@ -52,13 +52,13 @@ final class CurrentTest extends TestCase
 
         self::assertNull($current->coordinates()?->latitude());
         self::assertNull($current->coordinates()?->longitude());
-        self::assertNull($current->observedAt());
+        self::assertNull($current->dateTime());
         self::assertNull($current->airQualityIndex());
         self::assertNull($current->components()?->carbonMonoxide());
         self::assertNull($current->components()?->nitrogenMonoxide());
 
-        self::assertNull(Current::fromArray(['list' => null])->observedAt());
-        self::assertNull(Current::fromArray(['list' => []])->observedAt());
+        self::assertNull(Current::fromArray(['list' => null])->dateTime());
+        self::assertNull(Current::fromArray(['list' => []])->dateTime());
     }
 
     #[DataProvider('invalidFields')]

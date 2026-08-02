@@ -14,7 +14,7 @@ final class Current implements EntityInterface
 
     private function __construct(
         private readonly ?Coordinates $coordinates,
-        private readonly ?\DateTimeImmutable $observedAt,
+        private readonly ?\DateTimeImmutable $dateTime,
         private readonly AirQuality $airQuality,
     ) {}
 
@@ -30,7 +30,7 @@ final class Current implements EntityInterface
             coordinates: $coordinates === null
                 ? null
                 : Coordinates::fromArray($coordinates, $context),
-            observedAt: $reader->nullableTimestamp('list.0.dt'),
+            dateTime: $reader->nullableTimestamp('list.0.dt'),
             airQuality: AirQuality::fromArray($observation, $context),
         );
     }
@@ -40,8 +40,8 @@ final class Current implements EntityInterface
         return $this->coordinates;
     }
 
-    public function observedAt(): ?\DateTimeImmutable
+    public function dateTime(): ?\DateTimeImmutable
     {
-        return $this->observedAt;
+        return $this->dateTime;
     }
 }

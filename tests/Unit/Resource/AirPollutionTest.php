@@ -45,7 +45,7 @@ final class AirPollutionTest extends ApiTestCase
 
         self::assertInstanceOf(Forecast::class, $forecast);
         self::assertCount(96, $forecast->periods());
-        self::assertSame(1785614400, $forecast->periods()[0]->forecastAt()?->getTimestamp());
+        self::assertSame(1785614400, $forecast->periods()[0]->dateTime()?->getTimestamp());
         self::assertSame('GET', $request->getMethod());
         self::assertSame(
             '/data/2.5/air_pollution/forecast',
@@ -72,7 +72,7 @@ final class AirPollutionTest extends ApiTestCase
 
         self::assertInstanceOf(History::class, $history);
         self::assertCount(25, $history->periods());
-        self::assertSame(1782864000, $history->periods()[0]->observedAt()?->getTimestamp());
+        self::assertSame(1782864000, $history->periods()[0]->dateTime()?->getTimestamp());
         self::assertSame('GET', $request->getMethod());
         self::assertSame(
             '/data/2.5/air_pollution/history',

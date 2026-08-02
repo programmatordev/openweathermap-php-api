@@ -25,8 +25,8 @@ final class CurrentTest extends TestCase
         self::assertSame(-9.1393, $current->coordinates()?->longitude());
         self::assertSame('Europe/Lisbon', $current->timezone()?->identifier());
         self::assertSame(3600, $current->timezone()?->offsetSeconds());
-        self::assertSame(1785668004, $current->observedAt()?->getTimestamp());
-        self::assertSame('UTC', $current->observedAt()?->getTimezone()->getName());
+        self::assertSame(1785668004, $current->dateTime()?->getTimestamp());
+        self::assertSame('UTC', $current->dateTime()?->getTimezone()->getName());
         self::assertSame(1785649113, $current->sunriseAt()?->getTimestamp());
         self::assertSame(1785700020, $current->sunsetAt()?->getTimestamp());
 
@@ -135,7 +135,7 @@ final class CurrentTest extends TestCase
 
         self::assertNull($missing->coordinates());
         self::assertNull($missing->timezone());
-        self::assertNull($missing->observedAt());
+        self::assertNull($missing->dateTime());
         self::assertNull($missing->temperature());
         self::assertNull($missing->temperatureWithUnit());
         self::assertNull($missing->dewPointTemperature());
@@ -175,8 +175,8 @@ final class CurrentTest extends TestCase
         self::assertNull($current->snow());
         self::assertSame([], $current->alertIds());
 
-        self::assertNull(Current::fromArray(['data' => null])->observedAt());
-        self::assertNull(Current::fromArray(['data' => []])->observedAt());
+        self::assertNull(Current::fromArray(['data' => null])->dateTime());
+        self::assertNull(Current::fromArray(['data' => []])->dateTime());
     }
 
     #[DataProvider('invalidFields')]

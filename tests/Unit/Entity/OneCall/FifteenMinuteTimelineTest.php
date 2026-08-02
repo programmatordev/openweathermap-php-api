@@ -23,8 +23,8 @@ final class FifteenMinuteTimelineTest extends TestCase
         self::assertSame(3600, $timeline->timezone()?->offsetSeconds());
         self::assertCount(50, $timeline->periods());
         self::assertContainsOnlyInstancesOf(Period::class, $timeline->periods());
-        self::assertSame(1785670200, $timeline->periods()[0]->forecastAt()?->getTimestamp());
-        self::assertSame(1785714300, $timeline->periods()[49]->forecastAt()?->getTimestamp());
+        self::assertSame(1785670200, $timeline->periods()[0]->dateTime()?->getTimestamp());
+        self::assertSame(1785714300, $timeline->periods()[49]->dateTime()?->getTimestamp());
         self::assertNull($timeline->previousPageUrl());
         self::assertSame(
             'https://api.openweathermap.org/data/4.0/onecall/timeline/15min?'
@@ -86,7 +86,7 @@ final class FifteenMinuteTimelineTest extends TestCase
         self::assertNull($timeline->timezone()?->identifier());
         self::assertNull($timeline->timezone()?->offsetSeconds());
         self::assertCount(2, $timeline->periods());
-        self::assertNull($timeline->periods()[0]->forecastAt());
+        self::assertNull($timeline->periods()[0]->dateTime());
         self::assertNull($timeline->periods()[1]->temperature());
     }
 

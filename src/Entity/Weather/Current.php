@@ -35,7 +35,7 @@ final class Current implements EntityInterface
         private readonly ?Clouds $clouds,
         private readonly ?Precipitation $rain,
         private readonly ?Precipitation $snow,
-        private readonly ?\DateTimeImmutable $observedAt,
+        private readonly ?\DateTimeImmutable $dateTime,
         private readonly ?string $countryCode,
         private readonly ?\DateTimeImmutable $sunriseAt,
         private readonly ?\DateTimeImmutable $sunsetAt,
@@ -87,7 +87,7 @@ final class Current implements EntityInterface
             clouds: $clouds === null ? null : Clouds::fromArray($clouds, $context),
             rain: $rain === null ? null : Precipitation::fromArray($rain, $context),
             snow: $snow === null ? null : Precipitation::fromArray($snow, $context),
-            observedAt: $reader->nullableTimestamp('dt'),
+            dateTime: $reader->nullableTimestamp('dt'),
             countryCode: $reader->nullableString('sys.country'),
             sunriseAt: $reader->nullableTimestamp('sys.sunrise'),
             sunsetAt: $reader->nullableTimestamp('sys.sunset'),
@@ -131,9 +131,9 @@ final class Current implements EntityInterface
         return $this->snow;
     }
 
-    public function observedAt(): ?\DateTimeImmutable
+    public function dateTime(): ?\DateTimeImmutable
     {
-        return $this->observedAt;
+        return $this->dateTime;
     }
 
     public function countryCode(): ?string

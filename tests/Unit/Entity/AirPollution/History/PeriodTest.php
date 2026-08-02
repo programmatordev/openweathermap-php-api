@@ -15,8 +15,8 @@ final class PeriodTest extends TestCase
         $response = Fixture::json('air-pollution/history/success.json');
         $period = Period::fromArray($response['list'][0]);
 
-        self::assertSame(1782864000, $period->observedAt()?->getTimestamp());
-        self::assertSame('UTC', $period->observedAt()?->getTimezone()->getName());
+        self::assertSame(1782864000, $period->dateTime()?->getTimestamp());
+        self::assertSame('UTC', $period->dateTime()?->getTimezone()->getName());
         self::assertSame(AirQualityIndex::FAIR, $period->airQualityIndex());
         self::assertSame(80.71, $period->components()?->carbonMonoxide());
         self::assertSame(6.86, $period->components()?->fineParticulateMatter());
@@ -27,7 +27,7 @@ final class PeriodTest extends TestCase
     {
         $missing = Period::fromArray([]);
 
-        self::assertNull($missing->observedAt());
+        self::assertNull($missing->dateTime());
         self::assertNull($missing->airQualityIndex());
         self::assertNull($missing->components());
 
@@ -41,7 +41,7 @@ final class PeriodTest extends TestCase
             'unknown' => new \stdClass(),
         ]);
 
-        self::assertNull($period->observedAt());
+        self::assertNull($period->dateTime());
         self::assertNull($period->airQualityIndex());
         self::assertNull($period->components()?->carbonMonoxide());
         self::assertNull($period->components()?->nitrogenDioxide());

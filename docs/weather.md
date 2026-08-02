@@ -96,7 +96,7 @@ metadata. Missing or `null` period lists become empty arrays.
 use ProgrammatorDev\OpenWeatherMap\Enum\PartOfDay;
 
 foreach ($forecast->periods() as $period) {
-    echo $period->forecastAt()?->format(DATE_ATOM);
+    echo $period->dateTime()?->format(DATE_ATOM);
     echo $period->temperature();
     echo $period->precipitationProbability();
     echo $period->wind()?->speed();
