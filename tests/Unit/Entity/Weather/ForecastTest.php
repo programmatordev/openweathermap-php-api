@@ -30,8 +30,8 @@ final class ForecastTest extends TestCase
 
         self::assertSame(6458923, $city?->id());
         self::assertSame('Lisbon Municipality', $city?->name());
-        self::assertSame(38.7223, $city?->latitude());
-        self::assertSame(-9.1393, $city?->longitude());
+        self::assertSame(38.7223, $city?->coordinates()?->latitude());
+        self::assertSame(-9.1393, $city?->coordinates()?->longitude());
         self::assertSame('PT', $city?->countryCode());
         self::assertSame(0, $city?->population());
         self::assertSame(3600, $city?->timezoneOffset());
@@ -60,6 +60,7 @@ final class ForecastTest extends TestCase
     public function testToleratesMissingNullUnknownAndPartialFields(): void
     {
         self::assertNull(Forecast::fromArray(['city' => null])->city());
+        self::assertNull(Forecast::fromArray(['city' => []])->city()?->coordinates());
 
         $forecast = Forecast::fromArray([
             'cod' => new \stdClass(),
@@ -82,8 +83,8 @@ final class ForecastTest extends TestCase
         self::assertSame([], $forecast->periods());
         self::assertNull($forecast->city()?->id());
         self::assertNull($forecast->city()?->name());
-        self::assertNull($forecast->city()?->latitude());
-        self::assertNull($forecast->city()?->longitude());
+        self::assertNull($forecast->city()?->coordinates()?->latitude());
+        self::assertNull($forecast->city()?->coordinates()?->longitude());
         self::assertNull($forecast->city()?->countryCode());
         self::assertNull($forecast->city()?->population());
         self::assertNull($forecast->city()?->timezoneOffset());
@@ -118,7 +119,7 @@ final class ForecastTest extends TestCase
         yield 'city id' => [['city' => ['id' => '1']], 'id', 'int', 'string'];
         yield 'city name' => [['city' => ['name' => 1]], 'name', 'string', 'int'];
         yield 'coordinates' => [['city' => ['coord' => 'invalid']], 'coord', 'array', 'string'];
-        yield 'latitude' => [['city' => ['coord' => ['lat' => '38.7']]], 'coord.lat', 'int|float', 'string'];
+        yield 'latitude' => [['city' => ['coord' => ['lat' => '38.7']]], 'lat', 'int|float', 'string'];
         yield 'country' => [['city' => ['country' => 1]], 'country', 'string', 'int'];
         yield 'population' => [['city' => ['population' => 1.5]], 'population', 'int', 'float'];
         yield 'timezone' => [['city' => ['timezone' => '3600']], 'timezone', 'int', 'string'];

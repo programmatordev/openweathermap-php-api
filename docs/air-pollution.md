@@ -1,9 +1,11 @@
 # Air Pollution
 
+Current, forecast, and historical air pollution are included in OpenWeather's
+standard free and paid subscriptions.
+
 ## Current
 
-The Current Air Pollution API is available on OpenWeather's standard free and
-paid subscriptions. See the
+See OpenWeather's
 [official Air Pollution API documentation](https://openweathermap.org/api/air-pollution)
 for the upstream endpoint contract.
 
@@ -35,6 +37,10 @@ The air quality index uses OpenWeather's native scale from 1 (good) through 5
 (very poor). Pollutant concentrations are grouped under `components()` and use
 the fixed `µg/m³` unit documented by OpenWeather; weather unit configuration
 does not affect them.
+
+OpenWeather also documents the UK, European, US, and Mainland China scales in
+its [Air Pollution Index levels](https://openweathermap.org/api/air-pollution-index-levels)
+reference.
 
 ```php
 $components = $current->components();

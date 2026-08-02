@@ -21,8 +21,8 @@ final class CurrentTest extends TestCase
             Fixture::json('weather/current/success.json'),
         );
 
-        self::assertSame(38.7223, $weather->latitude());
-        self::assertSame(-9.1393, $weather->longitude());
+        self::assertSame(38.7223, $weather->coordinates()?->latitude());
+        self::assertSame(-9.1393, $weather->coordinates()?->longitude());
         self::assertSame(22.55, $weather->temperature());
         self::assertSame(Unit::CELSIUS, $weather->temperatureUnit());
         self::assertSame('22.55 °C', $weather->temperatureWithUnit());
@@ -124,6 +124,7 @@ final class CurrentTest extends TestCase
 
     public function testToleratesMissingNullUnknownAndPartialFields(): void
     {
+        self::assertNull(Current::fromArray([])->coordinates());
         self::assertSame([], Current::fromArray(['weather' => null])->conditions());
 
         $weather = Current::fromArray([
@@ -142,8 +143,8 @@ final class CurrentTest extends TestCase
             'unknown' => new \stdClass(),
         ]);
 
-        self::assertNull($weather->latitude());
-        self::assertNull($weather->longitude());
+        self::assertNull($weather->coordinates()?->latitude());
+        self::assertNull($weather->coordinates()?->longitude());
         self::assertCount(1, $weather->conditions());
         self::assertNull($weather->conditions()[0]->icon());
         self::assertNull($weather->conditions()[0]->iconUrl());
@@ -185,7 +186,7 @@ final class CurrentTest extends TestCase
     public static function invalidFields(): iterable
     {
         yield 'coordinates' => [['coord' => 'invalid'], 'coord', 'array', 'string'];
-        yield 'latitude' => [['coord' => ['lat' => '38.7']], 'coord.lat', 'int|float', 'string'];
+        yield 'latitude' => [['coord' => ['lat' => '38.7']], 'lat', 'int|float', 'string'];
         yield 'conditions' => [['weather' => 'Clouds'], 'weather', 'array', 'string'];
         yield 'condition member' => [['weather' => ['Clouds']], 'weather.0', 'array', 'string'];
         yield 'condition id' => [['weather' => [['id' => '802']]], 'id', 'int', 'string'];

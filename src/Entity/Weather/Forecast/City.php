@@ -4,6 +4,7 @@ namespace ProgrammatorDev\OpenWeatherMap\Entity\Weather\Forecast;
 
 use ProgrammatorDev\Api\Context\Context;
 use ProgrammatorDev\Api\Contract\EntityInterface;
+use ProgrammatorDev\OpenWeatherMap\Entity\Coordinates;
 use ProgrammatorDev\OpenWeatherMap\Hydration\PayloadReader;
 
 final class City implements EntityInterface
@@ -11,8 +12,7 @@ final class City implements EntityInterface
     private function __construct(
         private readonly ?int $id,
         private readonly ?string $name,
-        private readonly ?float $latitude,
-        private readonly ?float $longitude,
+        private readonly ?Coordinates $coordinates,
         private readonly ?string $countryCode,
         private readonly ?int $population,
         private readonly ?int $timezoneOffset,
@@ -23,12 +23,14 @@ final class City implements EntityInterface
     public static function fromArray(array $data, ?Context $context = null): static
     {
         $reader = PayloadReader::from($data, self::class);
+        $coordinates = $reader->nullableArray('coord');
 
         return new self(
             id: $reader->nullableInt('id'),
             name: $reader->nullableString('name'),
-            latitude: $reader->nullableFloat('coord.lat'),
-            longitude: $reader->nullableFloat('coord.lon'),
+            coordinates: $coordinates === null
+                ? null
+                : Coordinates::fromArray($coordinates, $context),
             countryCode: $reader->nullableString('country'),
             population: $reader->nullableInt('population'),
             timezoneOffset: $reader->nullableInt('timezone'),
@@ -47,14 +49,9 @@ final class City implements EntityInterface
         return $this->name;
     }
 
-    public function latitude(): ?float
+    public function coordinates(): ?Coordinates
     {
-        return $this->latitude;
-    }
-
-    public function longitude(): ?float
-    {
-        return $this->longitude;
+        return $this->coordinates;
     }
 
     public function countryCode(): ?string

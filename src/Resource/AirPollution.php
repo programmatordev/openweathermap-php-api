@@ -57,6 +57,9 @@ final class AirPollution extends Resource
         $latitude = Assert::latitude($latitude);
         $longitude = Assert::longitude($longitude);
         Assert::chronologicalRange($start, $end);
+
+        // A non-future end also constrains the ordered start.
+        // The documented minimum is left to OpenWeather because live availability differs.
         $end = Assert::notFuture($end, 'end date');
 
         // https://openweathermap.org/api/air-pollution

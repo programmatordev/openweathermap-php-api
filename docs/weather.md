@@ -23,12 +23,12 @@ $current = $api->weather()->current(
 
 The method returns a `Current` entity. Every response property may be
 absent or explicitly `null`; missing or `null` condition lists become empty
-arrays.
+arrays. Contextual response coordinates are grouped under `coordinates()`.
 
 ```php
 echo $current->name();
-echo $current->latitude();
-echo $current->longitude();
+echo $current->coordinates()?->latitude();
+echo $current->coordinates()?->longitude();
 echo $current->temperature();
 echo $current->feelsLikeTemperature();
 echo $current->minimumTemperature();
@@ -109,8 +109,8 @@ foreach ($forecast->periods() as $period) {
 }
 
 echo $forecast->city()?->name();
-echo $forecast->city()?->latitude();
-echo $forecast->city()?->longitude();
+echo $forecast->city()?->coordinates()?->latitude();
+echo $forecast->city()?->coordinates()?->longitude();
 echo $forecast->city()?->timezoneOffset();
 ```
 

@@ -5,6 +5,7 @@ namespace ProgrammatorDev\OpenWeatherMap\Entity\AirPollution;
 use ProgrammatorDev\Api\Context\Context;
 use ProgrammatorDev\Api\Contract\EntityInterface;
 use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\Concern\HasAirQuality;
+use ProgrammatorDev\OpenWeatherMap\Entity\Coordinates;
 use ProgrammatorDev\OpenWeatherMap\Hydration\PayloadReader;
 
 final class Current implements EntityInterface
@@ -21,6 +22,8 @@ final class Current implements EntityInterface
     {
         $reader = PayloadReader::from($data, self::class);
         $coordinates = $reader->nullableArray('coord');
+
+        // The current endpoint wraps its single observation in a list.
         $observation = $reader->nullableArray('list.0') ?? [];
 
         return new self(

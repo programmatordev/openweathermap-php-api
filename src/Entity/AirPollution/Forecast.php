@@ -5,6 +5,7 @@ namespace ProgrammatorDev\OpenWeatherMap\Entity\AirPollution;
 use ProgrammatorDev\Api\Context\Context;
 use ProgrammatorDev\Api\Contract\EntityInterface;
 use ProgrammatorDev\OpenWeatherMap\Entity\AirPollution\Forecast\Period;
+use ProgrammatorDev\OpenWeatherMap\Entity\Coordinates;
 use ProgrammatorDev\OpenWeatherMap\Exception\HydrationException;
 use ProgrammatorDev\OpenWeatherMap\Hydration\PayloadReader;
 

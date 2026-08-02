@@ -4,6 +4,7 @@ namespace ProgrammatorDev\OpenWeatherMap\Entity\Weather;
 
 use ProgrammatorDev\Api\Context\Context;
 use ProgrammatorDev\Api\Contract\EntityInterface;
+use ProgrammatorDev\OpenWeatherMap\Entity\Coordinates;
 use ProgrammatorDev\OpenWeatherMap\Entity\Weather\Concern\HasWeatherMeasurements;
 use ProgrammatorDev\OpenWeatherMap\Entity\Weather\Current\Precipitation;
 use ProgrammatorDev\OpenWeatherMap\Enum\Units;
@@ -19,8 +20,7 @@ final class Current implements EntityInterface
      * @param list<Condition> $conditions
      */
     private function __construct(
-        private readonly ?float $latitude,
-        private readonly ?float $longitude,
+        private readonly ?Coordinates $coordinates,
         private readonly array $conditions,
         private readonly ?float $temperature,
         private readonly ?float $feelsLikeTemperature,
@@ -48,6 +48,7 @@ final class Current implements EntityInterface
     public static function fromArray(array $data, ?Context $context = null): static
     {
         $reader = PayloadReader::from($data, self::class);
+        $coordinates = $reader->nullableArray('coord');
         $conditions = [];
 
         foreach ($reader->nullableArray('weather') ?? [] as $index => $condition) {
@@ -69,8 +70,9 @@ final class Current implements EntityInterface
         $snow = $reader->nullableArray('snow');
 
         return new self(
-            latitude: $reader->nullableFloat('coord.lat'),
-            longitude: $reader->nullableFloat('coord.lon'),
+            coordinates: $coordinates === null
+                ? null
+                : Coordinates::fromArray($coordinates, $context),
             conditions: $conditions,
             temperature: $reader->nullableFloat('main.temp'),
             feelsLikeTemperature: $reader->nullableFloat('main.feels_like'),
@@ -96,14 +98,9 @@ final class Current implements EntityInterface
         );
     }
 
-    public function latitude(): ?float
+    public function coordinates(): ?Coordinates
     {
-        return $this->latitude;
-    }
-
-    public function longitude(): ?float
-    {
-        return $this->longitude;
+        return $this->coordinates;
     }
 
     /**
