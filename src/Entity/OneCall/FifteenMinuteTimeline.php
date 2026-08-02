@@ -10,8 +10,6 @@ use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\Timeline\TimelinePage;
 
 final class FifteenMinuteTimeline implements EntityInterface
 {
-    private const ENDPOINT_PATH = '/data/4.0/onecall/timeline/15min';
-
     /**
      * @param TimelinePage<Period> $page
      */
@@ -24,7 +22,6 @@ final class FifteenMinuteTimeline implements EntityInterface
         return new self(TimelinePage::fromArray(
             data: $data,
             entity: self::class,
-            endpointPath: self::ENDPOINT_PATH,
             periodClass: Period::class,
             context: $context,
         ));

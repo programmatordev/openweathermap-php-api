@@ -37,7 +37,6 @@ final class TimelinePage
     public static function fromArray(
         array $data,
         string $entity,
-        string $endpointPath,
         string $periodClass,
         ?Context $context = null,
     ): self {
@@ -70,7 +69,6 @@ final class TimelinePage
                 $previousPageUrl,
                 $entity,
                 'prev',
-                $endpointPath,
             );
         $nextPageUrl = $nextPageUrl === null
             ? null
@@ -78,7 +76,6 @@ final class TimelinePage
                 $nextPageUrl,
                 $entity,
                 'next',
-                $endpointPath,
             );
 
         return new self(

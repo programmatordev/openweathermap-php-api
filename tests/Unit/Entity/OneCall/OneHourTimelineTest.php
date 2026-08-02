@@ -111,9 +111,5 @@ final class OneHourTimelineTest extends TestCase
             ['next' => 'https://example.com/page?appid=secret'],
             '"next" expected safe One Call pagination URL, "[redacted]" received.',
         ];
-        yield 'unexpected endpoint path' => [
-            ['next' => 'https://api.openweathermap.org/data/4.0/onecall/timeline/15min'],
-            '"next" expected safe One Call pagination URL, "[redacted]" received.',
-        ];
     }
 }

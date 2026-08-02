@@ -20,6 +20,7 @@ use ProgrammatorDev\OpenWeatherMap\Validation\Assert;
 
 class OpenWeatherMap extends Api
 {
+    public const AUTHENTICATION_KEY = 'appid';
     public const OPTION_LANGUAGE = 'language';
     public const OPTION_UNITS = 'units';
 
@@ -38,7 +39,7 @@ class OpenWeatherMap extends Api
         ]);
 
         $this->baseUrl(self::BASE_URL);
-        $this->auth()->query('appid', $apiKey);
+        $this->auth()->query(self::AUTHENTICATION_KEY, $apiKey);
         $this->responses()->json();
 
         $this->errors()->when(static fn (ErrorContext $context): ?ApiException => match (true) {

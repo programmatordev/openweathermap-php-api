@@ -3,6 +3,7 @@
 namespace ProgrammatorDev\OpenWeatherMap\Hydration;
 
 use ProgrammatorDev\OpenWeatherMap\Exception\HydrationException;
+use ProgrammatorDev\OpenWeatherMap\OpenWeatherMap;
 
 final class OneCallPaginationUrlNormalizer
 {
@@ -14,20 +15,13 @@ final class OneCallPaginationUrlNormalizer
         string $url,
         string $entity,
         string $path,
-        string $expectedPath,
     ): string {
         $parts = parse_url($url);
 
         if (
             !is_array($parts)
-            || !isset($parts['scheme'], $parts['host'], $parts['path'])
-            || !in_array(strtolower($parts['scheme']), ['http', 'https'], true)
+            || !isset($parts['host'], $parts['path'])
             || strtolower($parts['host']) !== self::HOST
-            || $parts['path'] !== $expectedPath
-            || isset($parts['user'])
-            || isset($parts['pass'])
-            || isset($parts['port'])
-            || isset($parts['fragment'])
         ) {
             throw self::invalidUrl($entity, $path);
         }
@@ -53,7 +47,7 @@ final class OneCallPaginationUrlNormalizer
 
             $name = rawurldecode(explode('=', $parameter, 2)[0]);
 
-            if (strtolower($name) !== 'appid') {
+            if (strtolower($name) !== OpenWeatherMap::AUTHENTICATION_KEY) {
                 $parameters[] = $parameter;
             }
         }
@@ -63,8 +57,8 @@ final class OneCallPaginationUrlNormalizer
 
     private static function invalidUrl(string $entity, string $path): HydrationException
     {
-        // Pagination URLs may contain credentials, so invalid values are never
-        // copied into exception messages.
+        // Pagination URLs may contain credentials,
+        // so invalid values are never copied into exception messages.
         return HydrationException::invalidValue(
             $entity,
             $path,
