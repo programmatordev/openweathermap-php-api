@@ -7,7 +7,7 @@ use ProgrammatorDev\Api\Contract\EntityInterface;
 use ProgrammatorDev\OpenWeatherMap\Entity\Coordinates;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\Timezone;
 use ProgrammatorDev\OpenWeatherMap\Exception\HydrationException;
-use ProgrammatorDev\OpenWeatherMap\Hydration\OneCallPaginationUrlNormalizer;
+use ProgrammatorDev\OpenWeatherMap\Hydration\OneCall\PaginationUrlNormalizer;
 use ProgrammatorDev\OpenWeatherMap\Hydration\PayloadReader;
 
 /**
@@ -65,10 +65,10 @@ final class TimelinePage
 
         $previousPageUrl = $previousPageUrl === null
             ? null
-            : OneCallPaginationUrlNormalizer::normalize($previousPageUrl);
+            : PaginationUrlNormalizer::normalize($previousPageUrl);
         $nextPageUrl = $nextPageUrl === null
             ? null
-            : OneCallPaginationUrlNormalizer::normalize($nextPageUrl);
+            : PaginationUrlNormalizer::normalize($nextPageUrl);
 
         return new self(
             coordinates: $hasCoordinates ? Coordinates::fromArray($data, $context) : null,

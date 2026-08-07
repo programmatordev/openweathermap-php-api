@@ -1,11 +1,11 @@
 <?php
 
-namespace ProgrammatorDev\OpenWeatherMap\Hydration;
+namespace ProgrammatorDev\OpenWeatherMap\Hydration\OneCall;
 
 use Http\Discovery\Psr17FactoryDiscovery;
 use ProgrammatorDev\OpenWeatherMap\OpenWeatherMap;
 
-final class OneCallPaginationUrlNormalizer
+final class PaginationUrlNormalizer
 {
     private function __construct() {}
 
