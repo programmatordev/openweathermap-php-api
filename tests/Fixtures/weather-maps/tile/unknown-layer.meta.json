@@ -1,0 +1,18 @@
+{
+    "provenance": "captured",
+    "product": "Weather Maps API",
+    "endpoint": "Map tile",
+    "apiVersion": "1.0",
+    "capturedAt": "2026-08-08T10:22:04Z",
+    "httpStatus": 400,
+    "contentType": "application/json; charset=utf-8",
+    "bodyFormat": "json",
+    "bodyBytes": 36,
+    "sha256": "1a8d7022d57616fa8ab74ce761ba40b8ef3c85dc5580ca5b0a488f682a1a4b0c",
+    "request": {
+        "method": "GET",
+        "path": "/map/unknown_layer/1/1/1.png",
+        "query": {}
+    },
+    "sanitization": []
+}

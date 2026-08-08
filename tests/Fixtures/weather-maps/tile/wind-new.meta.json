@@ -1,0 +1,22 @@
+{
+    "provenance": "captured",
+    "product": "Weather Maps API",
+    "endpoint": "Map tile",
+    "apiVersion": "1.0",
+    "capturedAt": "2026-08-08T10:22:04Z",
+    "httpStatus": 200,
+    "contentType": "image/png",
+    "bodyFormat": "png",
+    "bodyBytes": 113454,
+    "sha256": "b96ef794cc6a079d8e5daeb854f34c4801cc8bcd67c14319415ff6ac8c9d3da6",
+    "image": {
+        "width": 256,
+        "height": 256
+    },
+    "request": {
+        "method": "GET",
+        "path": "/map/wind_new/1/1/1.png",
+        "query": {}
+    },
+    "sanitization": []
+}

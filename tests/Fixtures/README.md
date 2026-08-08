@@ -1,7 +1,9 @@
 # Response Fixtures
 
-Automated tests use committed JSON fixtures derived from representative real
-OpenWeather responses. Tests must never make live OpenWeather requests.
+Automated tests use committed response fixtures derived from representative
+real OpenWeather responses. These are usually JSON, but binary APIs retain
+their original response format. Tests must never make live OpenWeather
+requests.
 
 ## Naming
 
@@ -22,6 +24,8 @@ tests/Fixtures/geocoding/direct/success.meta.json
 Use stable endpoint and scenario names such as `success`, `empty`,
 `missing-optional-fields`, or `invalid-request`. Do not include a captured
 location name in a filename because the returned name may change or be absent.
+Use the actual body format as the fixture extension, such as `.png` for a map
+tile, even when the response advertises an incorrect content type.
 
 ## Metadata
 
@@ -51,6 +55,10 @@ response sidecar follows this shape:
 Record non-secret request parameters, including coordinates when applicable.
 Never include an API key. Synthetic fixtures use `"provenance": "synthetic"`
 and describe why they were created in a `notes` field.
+
+For binary fixtures, also record the response content type, body format, byte
+length, and SHA-256 hash. Record stable format metadata such as image dimensions
+when it is useful for validation.
 
 ## Sanitization
 
