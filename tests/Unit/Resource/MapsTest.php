@@ -5,6 +5,7 @@ namespace ProgrammatorDev\OpenWeatherMap\Test\Unit\Resource;
 use Nyholm\Psr7\Response;
 use PHPUnit\Framework\Attributes\DataProvider;
 use ProgrammatorDev\OpenWeatherMap\Enum\MapLayer;
+use ProgrammatorDev\OpenWeatherMap\OpenWeatherMap;
 use ProgrammatorDev\OpenWeatherMap\Resource\Maps;
 use ProgrammatorDev\OpenWeatherMap\Response\MapTile;
 use ProgrammatorDev\OpenWeatherMap\Test\Support\ApiTestCase;
@@ -20,6 +21,34 @@ final class MapsTest extends ApiTestCase
             1,
             $constructor->getParameters()[1]->getAttributes(\SensitiveParameter::class),
         );
+    }
+
+    public function testGeneratesAnAuthenticatedTileUrlWithoutSendingARequest(): void
+    {
+        $api = new OpenWeatherMap('api key&value');
+        $api->setup()->client($this->client);
+
+        $url = $api->maps()->tileUrl(
+            layer: MapLayer::PRECIPITATION,
+            zoom: 6,
+            x: 31,
+            y: 20,
+        );
+        $expected = 'https://tile.openweathermap.org/map/precipitation_new/6/31/20.png'
+            . '?appid=api%20key%26value';
+
+        self::assertSame($expected, $url);
+        self::assertSame([], $this->client->getRequests());
+    }
+
+    public function testValidatesGeneratedTileUrlAddresses(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            'At zoom level 1, the tile X coordinate must be between 0 and 1.',
+        );
+
+        $this->api->maps()->tileUrl(MapLayer::CLOUDS, 1, 2, 0);
     }
 
     #[DataProvider('layers')]
