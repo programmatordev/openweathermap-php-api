@@ -25,16 +25,6 @@ final class OneDayTimelineTest extends TestCase
         self::assertContainsOnlyInstancesOf(Period::class, $timeline->periods());
         self::assertSame(1785628800, $timeline->periods()[0]->dateTime()?->getTimestamp());
         self::assertSame(1786406400, $timeline->periods()[9]->dateTime()?->getTimestamp());
-        self::assertSame(
-            'https://api.openweathermap.org/data/4.0/onecall/timeline/1day?'
-            .'cnt=10&lat=38.7223&lon=-9.1393&start=1784764800&units=metric&lang=en',
-            $timeline->previousPageUrl(),
-        );
-        self::assertSame(
-            'https://api.openweathermap.org/data/4.0/onecall/timeline/1day?'
-            .'cnt=10&lat=38.7223&lon=-9.1393&start=1786492800&units=metric&lang=en',
-            $timeline->nextPageUrl(),
-        );
     }
 
     public function testHydratesCapturedMixedHistoricalAndForecastTimeline(): void
@@ -57,8 +47,6 @@ final class OneDayTimelineTest extends TestCase
         self::assertNull($missing->coordinates());
         self::assertNull($missing->timezone());
         self::assertSame([], $missing->periods());
-        self::assertNull($missing->previousPageUrl());
-        self::assertNull($missing->nextPageUrl());
 
         $timeline = OneDayTimeline::fromArray([
             'lat' => null,
@@ -111,10 +99,6 @@ final class OneDayTimelineTest extends TestCase
         yield 'period field' => [
             ['data' => [['temp' => 'invalid']]],
             '"temp" expected array, string received.',
-        ];
-        yield 'previous page URL type' => [
-            ['prev' => 1],
-            '"prev" expected string, int received.',
         ];
     }
 }

@@ -5,6 +5,7 @@ namespace ProgrammatorDev\OpenWeatherMap\Entity\OneCall;
 use ProgrammatorDev\Api\Context\Context;
 use ProgrammatorDev\Api\Contract\EntityInterface;
 use ProgrammatorDev\OpenWeatherMap\Entity\Coordinates;
+use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\OneHourTimeline\Pagination;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\OneHourTimeline\Period;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\Timeline\TimelinePage;
 
@@ -15,16 +16,22 @@ final class OneHourTimeline implements EntityInterface
      */
     private function __construct(
         private readonly TimelinePage $page,
+        private readonly Pagination $pagination,
     ) {}
 
     public static function fromArray(array $data, ?Context $context = null): static
     {
-        return new self(TimelinePage::fromArray(
+        $page = TimelinePage::fromArray(
             data: $data,
             entity: self::class,
             periodClass: Period::class,
             context: $context,
-        ));
+        );
+
+        return new self(
+            page: $page,
+            pagination: Pagination::fromArray($data, $context),
+        );
     }
 
     public function coordinates(): ?Coordinates
@@ -45,13 +52,8 @@ final class OneHourTimeline implements EntityInterface
         return $this->page->periods();
     }
 
-    public function previousPageUrl(): ?string
+    public function pagination(): Pagination
     {
-        return $this->page->previousPageUrl();
-    }
-
-    public function nextPageUrl(): ?string
-    {
-        return $this->page->nextPageUrl();
+        return $this->pagination;
     }
 }

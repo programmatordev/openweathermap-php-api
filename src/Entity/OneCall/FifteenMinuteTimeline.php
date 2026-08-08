@@ -44,14 +44,4 @@ final class FifteenMinuteTimeline implements EntityInterface
     {
         return $this->page->periods();
     }
-
-    public function previousPageUrl(): ?string
-    {
-        return $this->page->previousPageUrl();
-    }
-
-    public function nextPageUrl(): ?string
-    {
-        return $this->page->nextPageUrl();
-    }
 }

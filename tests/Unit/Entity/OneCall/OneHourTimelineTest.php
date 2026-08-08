@@ -5,6 +5,7 @@ namespace ProgrammatorDev\OpenWeatherMap\Test\Unit\Entity\OneCall;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\OneHourTimeline;
+use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\OneHourTimeline\Pagination;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\OneHourTimeline\Period;
 use ProgrammatorDev\OpenWeatherMap\Exception\HydrationException;
 use ProgrammatorDev\OpenWeatherMap\Test\Support\Fixture;
@@ -23,17 +24,20 @@ final class OneHourTimelineTest extends TestCase
         self::assertSame(3600, $timeline->timezone()?->offsetSeconds());
         self::assertCount(20, $timeline->periods());
         self::assertContainsOnlyInstancesOf(Period::class, $timeline->periods());
+        self::assertInstanceOf(Pagination::class, $timeline->pagination());
         self::assertSame(1785668400, $timeline->periods()[0]->dateTime()?->getTimestamp());
         self::assertSame(1785736800, $timeline->periods()[19]->dateTime()?->getTimestamp());
         self::assertSame(
             'https://api.openweathermap.org/data/4.0/onecall/timeline/1h?'
-            .'cnt=20&lat=38.7223&lon=-9.1393&start=1785596400&units=metric&lang=en',
-            $timeline->previousPageUrl(),
+            .'cnt=20&lat=38.7223&lon=-9.1393&start=1785596400'
+            .'&appid=%7BAPI%20key%7D&units=metric&lang=en',
+            $timeline->pagination()->previousPageUrl(),
         );
         self::assertSame(
             'https://api.openweathermap.org/data/4.0/onecall/timeline/1h?'
-            .'cnt=20&lat=38.7223&lon=-9.1393&start=1785740400&units=metric&lang=en',
-            $timeline->nextPageUrl(),
+            .'cnt=20&lat=38.7223&lon=-9.1393&start=1785740400'
+            .'&appid=%7BAPI%20key%7D&units=metric&lang=en',
+            $timeline->pagination()->nextPageUrl(),
         );
     }
 
@@ -56,8 +60,10 @@ final class OneHourTimelineTest extends TestCase
         self::assertNull($missing->coordinates());
         self::assertNull($missing->timezone());
         self::assertSame([], $missing->periods());
-        self::assertNull($missing->previousPageUrl());
-        self::assertNull($missing->nextPageUrl());
+        self::assertNull($missing->pagination()->previousPageUrl());
+        self::assertNull($missing->pagination()->nextPageUrl());
+        self::assertNull($missing->pagination()->previousPage());
+        self::assertNull($missing->pagination()->nextPage());
 
         $timeline = OneHourTimeline::fromArray([
             'lat' => null,

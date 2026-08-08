@@ -25,50 +25,6 @@ final class FifteenMinuteTimelineTest extends TestCase
         self::assertContainsOnlyInstancesOf(Period::class, $timeline->periods());
         self::assertSame(1785670200, $timeline->periods()[0]->dateTime()?->getTimestamp());
         self::assertSame(1785714300, $timeline->periods()[49]->dateTime()?->getTimestamp());
-        self::assertNull($timeline->previousPageUrl());
-        self::assertSame(
-            'https://api.openweathermap.org/data/4.0/onecall/timeline/15min?'
-            .'cnt=50&lat=38.7223&lon=-9.1393&start=1785715200&units=metric&lang=en',
-            $timeline->nextPageUrl(),
-        );
-    }
-
-    public function testNormalizesCapturedBidirectionalPagination(): void
-    {
-        $timeline = FifteenMinuteTimeline::fromArray(
-            Fixture::json('one-call/fifteen-minute/pagination.json'),
-        );
-
-        self::assertSame(
-            'https://api.openweathermap.org/data/4.0/onecall/timeline/15min?'
-            .'cnt=50&lat=38.7223&lon=-9.1393&start=1785670200&units=metric&lang=en',
-            $timeline->previousPageUrl(),
-        );
-        self::assertSame(
-            'https://api.openweathermap.org/data/4.0/onecall/timeline/15min?'
-            .'cnt=50&lat=38.7223&lon=-9.1393&start=1785760200&units=metric&lang=en',
-            $timeline->nextPageUrl(),
-        );
-        self::assertStringNotContainsString(
-            'appid',
-            $timeline->previousPageUrl() ?? '',
-        );
-        self::assertStringNotContainsString(
-            'appid',
-            $timeline->nextPageUrl() ?? '',
-        );
-    }
-
-    public function testNormalizesPaginationUrl(): void
-    {
-        $timeline = FifteenMinuteTimeline::fromArray([
-            'next' => 'http://example.com/page?cursor=next&appid=secret',
-        ]);
-
-        self::assertSame(
-            'https://example.com/page?cursor=next',
-            $timeline->nextPageUrl(),
-        );
     }
 
     public function testToleratesMissingNullUnknownAndPartialFields(): void
@@ -78,8 +34,6 @@ final class FifteenMinuteTimelineTest extends TestCase
         self::assertNull($missing->coordinates());
         self::assertNull($missing->timezone());
         self::assertSame([], $missing->periods());
-        self::assertNull($missing->previousPageUrl());
-        self::assertNull($missing->nextPageUrl());
 
         $timeline = FifteenMinuteTimeline::fromArray([
             'lat' => null,
@@ -132,14 +86,6 @@ final class FifteenMinuteTimelineTest extends TestCase
         yield 'period field' => [
             ['data' => [['pressure' => '1015.75']]],
             '"pressure" expected int|float, string received.',
-        ];
-        yield 'previous page URL type' => [
-            ['prev' => 1],
-            '"prev" expected string, int received.',
-        ];
-        yield 'next page URL type' => [
-            ['next' => []],
-            '"next" expected string, array received.',
         ];
     }
 }

@@ -7,7 +7,6 @@ use ProgrammatorDev\Api\Contract\EntityInterface;
 use ProgrammatorDev\OpenWeatherMap\Entity\Coordinates;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\Timezone;
 use ProgrammatorDev\OpenWeatherMap\Exception\HydrationException;
-use ProgrammatorDev\OpenWeatherMap\Hydration\OneCall\PaginationUrlNormalizer;
 use ProgrammatorDev\OpenWeatherMap\Hydration\PayloadReader;
 
 /**
@@ -22,8 +21,6 @@ final class TimelinePage
         private readonly ?Coordinates $coordinates,
         private readonly ?Timezone $timezone,
         private readonly array $periods,
-        private readonly ?string $previousPageUrl,
-        private readonly ?string $nextPageUrl,
     ) {}
 
     /**
@@ -60,22 +57,11 @@ final class TimelinePage
             || array_key_exists('lon', $data);
         $hasTimezone = array_key_exists('timezone', $data)
             || array_key_exists('timezone_offset', $data);
-        $previousPageUrl = $reader->nullableString('prev');
-        $nextPageUrl = $reader->nullableString('next');
-
-        $previousPageUrl = $previousPageUrl === null
-            ? null
-            : PaginationUrlNormalizer::normalize($previousPageUrl);
-        $nextPageUrl = $nextPageUrl === null
-            ? null
-            : PaginationUrlNormalizer::normalize($nextPageUrl);
 
         return new self(
             coordinates: $hasCoordinates ? Coordinates::fromArray($data, $context) : null,
             timezone: $hasTimezone ? Timezone::fromArray($data, $context) : null,
             periods: $periods,
-            previousPageUrl: $previousPageUrl,
-            nextPageUrl: $nextPageUrl,
         );
     }
 
@@ -95,15 +81,5 @@ final class TimelinePage
     public function periods(): array
     {
         return $this->periods;
-    }
-
-    public function previousPageUrl(): ?string
-    {
-        return $this->previousPageUrl;
-    }
-
-    public function nextPageUrl(): ?string
-    {
-        return $this->nextPageUrl;
     }
 }
