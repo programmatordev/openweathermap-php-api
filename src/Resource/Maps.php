@@ -3,6 +3,7 @@
 namespace ProgrammatorDev\OpenWeatherMap\Resource;
 
 use ProgrammatorDev\Api\Resource;
+use ProgrammatorDev\Api\Runtime;
 use ProgrammatorDev\OpenWeatherMap\Enum\MapLayer;
 use ProgrammatorDev\OpenWeatherMap\Response\MapTile;
 use ProgrammatorDev\OpenWeatherMap\Validation\Assert;
@@ -10,6 +11,13 @@ use ProgrammatorDev\OpenWeatherMap\Validation\Assert;
 final class Maps extends Resource
 {
     private const BASE_URL = 'https://tile.openweathermap.org';
+
+    public function __construct(
+        Runtime $runtime,
+        #[\SensitiveParameter] private readonly string $apiKey,
+    ) {
+        parent::__construct($runtime);
+    }
 
     public function tile(
         MapLayer $layer,

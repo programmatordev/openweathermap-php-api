@@ -5,12 +5,23 @@ namespace ProgrammatorDev\OpenWeatherMap\Test\Unit\Resource;
 use Nyholm\Psr7\Response;
 use PHPUnit\Framework\Attributes\DataProvider;
 use ProgrammatorDev\OpenWeatherMap\Enum\MapLayer;
+use ProgrammatorDev\OpenWeatherMap\Resource\Maps;
 use ProgrammatorDev\OpenWeatherMap\Response\MapTile;
 use ProgrammatorDev\OpenWeatherMap\Test\Support\ApiTestCase;
 use ProgrammatorDev\OpenWeatherMap\Test\Support\Fixture;
 
 final class MapsTest extends ApiTestCase
 {
+    public function testMarksTheApiKeyAsSensitive(): void
+    {
+        $constructor = new \ReflectionMethod(Maps::class, '__construct');
+
+        self::assertCount(
+            1,
+            $constructor->getParameters()[1]->getAttributes(\SensitiveParameter::class),
+        );
+    }
+
     #[DataProvider('layers')]
     public function testGetsWeatherMapTiles(
         MapLayer $layer,

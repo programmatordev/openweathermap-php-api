@@ -14,7 +14,7 @@
     "require": {
         "php": ">=8.1",
         "php-http/discovery": "^1.20",
-        "programmatordev/php-api-sdk": "^3.2"
+        "programmatordev/php-api-sdk": "^3.3"
     },
     "require-dev": {
         "monolog/monolog": "^3.10",

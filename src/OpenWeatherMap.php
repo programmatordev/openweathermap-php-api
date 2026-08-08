@@ -28,6 +28,8 @@ class OpenWeatherMap extends Api
 
     private const BASE_URL = 'https://api.openweathermap.org';
 
+    private readonly string $apiKey;
+
     public function __construct(
         #[\SensitiveParameter] string $apiKey,
         array $options = [],
@@ -35,7 +37,7 @@ class OpenWeatherMap extends Api
     {
         parent::__construct();
 
-        $apiKey = $this->validateApiKey($apiKey);
+        $this->apiKey = $this->validateApiKey($apiKey);
         $options = $this->validateOptions($options);
 
         $this->config($options, defaults: [
@@ -44,7 +46,7 @@ class OpenWeatherMap extends Api
         ]);
 
         $this->baseUrl(self::BASE_URL);
-        $this->auth()->query(self::AUTHENTICATION_KEY, $apiKey);
+        $this->auth()->query(self::AUTHENTICATION_KEY, $this->apiKey);
         $this->responses()->custom(new PayloadDecoder());
 
         $this->errors()->when(static fn (ErrorContext $context): ?ApiException => match (true) {
@@ -69,7 +71,10 @@ class OpenWeatherMap extends Api
 
     public function maps(): Maps
     {
-        return $this->resource(Maps::class);
+        return $this->resourceWith(
+            Maps::class,
+            apiKey: $this->apiKey,
+        );
     }
 
     public function oneCall(): OneCall
