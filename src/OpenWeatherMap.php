@@ -28,7 +28,10 @@ class OpenWeatherMap extends Api
 
     private const BASE_URL = 'https://api.openweathermap.org';
 
-    public function __construct(string $apiKey, array $options = [])
+    public function __construct(
+        #[\SensitiveParameter] string $apiKey,
+        array $options = [],
+    )
     {
         parent::__construct();
 
@@ -79,7 +82,9 @@ class OpenWeatherMap extends Api
         return $this->resource(Weather::class);
     }
 
-    private function validateApiKey(string $apiKey): string
+    private function validateApiKey(
+        #[\SensitiveParameter] string $apiKey,
+    ): string
     {
         return Assert::notBlank($apiKey, 'API key');
     }

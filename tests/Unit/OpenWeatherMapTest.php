@@ -28,6 +28,21 @@ class OpenWeatherMapTest extends TestCase
         self::assertSame(Language::ENGLISH, $api->config()->get(OpenWeatherMap::OPTION_LANGUAGE));
     }
 
+    public function testMarksApiKeyParametersAsSensitive(): void
+    {
+        $constructor = new \ReflectionMethod(OpenWeatherMap::class, '__construct');
+        $validator = new \ReflectionMethod(OpenWeatherMap::class, 'validateApiKey');
+
+        self::assertCount(
+            1,
+            $constructor->getParameters()[0]->getAttributes(\SensitiveParameter::class),
+        );
+        self::assertCount(
+            1,
+            $validator->getParameters()[0]->getAttributes(\SensitiveParameter::class),
+        );
+    }
+
     public function testAcceptsConfiguredUnitsAndKnownLanguage(): void
     {
         $api = new OpenWeatherMap('api-key', [
