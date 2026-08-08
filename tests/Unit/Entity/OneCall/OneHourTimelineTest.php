@@ -5,8 +5,8 @@ namespace ProgrammatorDev\OpenWeatherMap\Test\Unit\Entity\OneCall;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\OneHourTimeline;
-use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\OneHourTimeline\Pagination;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\OneHourTimeline\Period;
+use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\Timeline\Pagination;
 use ProgrammatorDev\OpenWeatherMap\Exception\HydrationException;
 use ProgrammatorDev\OpenWeatherMap\Test\Support\Fixture;
 
