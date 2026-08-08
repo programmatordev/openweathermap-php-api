@@ -71,6 +71,8 @@ class OpenWeatherMap extends Api
 
     public function maps(): Maps
     {
+        // URL generation does not send a request through the SDK authentication
+        // pipeline, so Maps also needs the validated key directly.
         return $this->resourceWith(
             Maps::class,
             apiKey: $this->apiKey,

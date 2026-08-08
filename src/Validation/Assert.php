@@ -128,6 +128,9 @@ final class Assert
         string $axis,
     ): int {
         $zoom = self::nonNegativeInteger($zoom, 'tile zoom level');
+
+        // Each zoom level doubles the number of tiles along both axes, making
+        // the valid zero-based coordinate range 0 through 2^zoom - 1.
         $maximum = (2 ** $zoom) - 1;
 
         if ($coordinate < 0 || $coordinate > $maximum) {
