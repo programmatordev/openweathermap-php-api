@@ -92,6 +92,18 @@ final class Assert
         return $value;
     }
 
+    public static function nonNegativeInteger(int $value, string $name): int
+    {
+        if ($value < 0) {
+            throw new \InvalidArgumentException(sprintf(
+                'The %s must be zero or greater.',
+                $name,
+            ));
+        }
+
+        return $value;
+    }
+
     public static function integerBetween(
         int $value,
         int $minimum,
@@ -108,5 +120,25 @@ final class Assert
         }
 
         return $value;
+    }
+
+    public static function tileCoordinate(
+        int $coordinate,
+        int $zoom,
+        string $axis,
+    ): int {
+        $zoom = self::nonNegativeInteger($zoom, 'tile zoom');
+        $maximum = (2 ** $zoom) - 1;
+
+        if ($coordinate < 0 || $coordinate > $maximum) {
+            throw new \InvalidArgumentException(sprintf(
+                'The tile %s coordinate must be between 0 and %.0f for zoom %d.',
+                strtoupper($axis),
+                $maximum,
+                $zoom,
+            ));
+        }
+
+        return $coordinate;
     }
 }
