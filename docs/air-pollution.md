@@ -113,8 +113,8 @@ or equal to the start and cannot be in the future.
 $history = $api->airPollution()->history(
     latitude: 38.7223,
     longitude: -9.1393,
-    start: new DateTimeImmutable('2 days ago'),
-    end: new DateTimeImmutable('1 day ago'),
+    startAt: new DateTimeImmutable('2 days ago'),
+    endAt: new DateTimeImmutable('1 day ago'),
 );
 ```
 

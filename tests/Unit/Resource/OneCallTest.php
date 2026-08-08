@@ -313,7 +313,7 @@ final class OneCallTest extends ApiTestCase
         $timeline = $this->api->oneCall()->oneHourTimeline(
             latitude: 38.7223,
             longitude: -9.1393,
-            start: new \DateTimeImmutable('@1785495600'),
+            startAt: new \DateTimeImmutable('@1785495600'),
         );
         $request = $this->client->getLastRequest();
 
@@ -455,7 +455,7 @@ final class OneCallTest extends ApiTestCase
         $timeline = $this->api->oneCall()->oneDayTimeline(
             latitude: 38.7223,
             longitude: -9.1393,
-            start: new \DateTimeImmutable('@1785456000'),
+            startAt: new \DateTimeImmutable('@1785456000'),
         );
         $request = $this->client->getLastRequest();
 

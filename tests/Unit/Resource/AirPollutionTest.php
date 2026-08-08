@@ -65,8 +65,8 @@ final class AirPollutionTest extends ApiTestCase
         $history = $this->api->airPollution()->history(
             latitude: 38.7223,
             longitude: -9.1393,
-            start: new \DateTimeImmutable('@1782864000'),
-            end: new \DateTimeImmutable('@1782950400'),
+            startAt: new \DateTimeImmutable('@1782864000'),
+            endAt: new \DateTimeImmutable('@1782950400'),
         );
         $request = $this->client->getLastRequest();
 
@@ -96,8 +96,8 @@ final class AirPollutionTest extends ApiTestCase
         $this->api->airPollution()->history(
             latitude: 38.7223,
             longitude: -9.1393,
-            start: $boundary,
-            end: $boundary,
+            startAt: $boundary,
+            endAt: $boundary,
         );
 
         self::assertSame([
@@ -119,8 +119,8 @@ final class AirPollutionTest extends ApiTestCase
         $this->api->airPollution()->history(
             latitude: 38.7223,
             longitude: -9.1393,
-            start: new \DateTimeImmutable('@1782950400'),
-            end: new \DateTimeImmutable('@1782864000'),
+            startAt: new \DateTimeImmutable('@1782950400'),
+            endAt: new \DateTimeImmutable('@1782864000'),
         );
     }
 
@@ -132,8 +132,8 @@ final class AirPollutionTest extends ApiTestCase
         $this->api->airPollution()->history(
             latitude: 38.7223,
             longitude: -9.1393,
-            start: new \DateTimeImmutable('@0'),
-            end: new \DateTimeImmutable(sprintf('@%d', time() + 60)),
+            startAt: new \DateTimeImmutable('@0'),
+            endAt: new \DateTimeImmutable(sprintf('@%d', time() + 60)),
         );
     }
 

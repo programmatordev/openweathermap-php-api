@@ -157,7 +157,7 @@ starting point. Availability depends on OpenWeather.
 $timeline = $api->oneCall()->oneHourTimeline(
     latitude: 38.7223,
     longitude: -9.1393,
-    start: new DateTimeImmutable('2 days ago'),
+    startAt: new DateTimeImmutable('2 days ago'),
     count: 10,
 );
 ```
@@ -193,14 +193,14 @@ $timeline = $api->oneCall()->oneDayTimeline(
 );
 ```
 
-Use `start` to select a historical or future starting point and `count` to
+Use `startAt` to select a historical or future starting point and `count` to
 limit the requested page size.
 
 ```php
 $timeline = $api->oneCall()->oneDayTimeline(
     latitude: 38.7223,
     longitude: -9.1393,
-    start: new DateTimeImmutable('2 days ago'),
+    startAt: new DateTimeImmutable('2 days ago'),
     count: 5,
 );
 ```
@@ -247,7 +247,10 @@ echo $pagination->nextPageUrl();
 The availability checks and URL getters do not make another API request.
 `previousPage()` and `nextPage()` request the corresponding page when its URL
 is available and otherwise return `null`. Pagination does not iterate
-automatically.
+automatically. Every pagination request counts as a separate One Call API call
+under your OpenWeather subscription; consult the
+[official documentation](https://openweathermap.org/api/one-call-4#pagination)
+for current usage and billing terms.
 
 ## Alert
 

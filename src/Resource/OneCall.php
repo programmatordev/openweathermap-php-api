@@ -92,7 +92,7 @@ final class OneCall extends Resource
     public function oneHourTimeline(
         float $latitude,
         float $longitude,
-        ?\DateTimeInterface $start = null,
+        ?\DateTimeInterface $startAt = null,
         ?int $count = null,
     ): OneHourTimeline {
         $latitude = Assert::latitude($latitude);
@@ -109,7 +109,7 @@ final class OneCall extends Resource
             ->queries([
                 'lat' => $latitude,
                 'lon' => $longitude,
-                'start' => $start?->getTimestamp(),
+                'start' => $startAt?->getTimestamp(),
                 'cnt' => $count,
                 'units' => $this->resolvedUnits(),
                 'lang' => $this->resolvedLanguage(),
@@ -123,7 +123,7 @@ final class OneCall extends Resource
     public function oneDayTimeline(
         float $latitude,
         float $longitude,
-        ?\DateTimeInterface $start = null,
+        ?\DateTimeInterface $startAt = null,
         ?int $count = null,
     ): OneDayTimeline {
         $latitude = Assert::latitude($latitude);
@@ -140,7 +140,7 @@ final class OneCall extends Resource
             ->queries([
                 'lat' => $latitude,
                 'lon' => $longitude,
-                'start' => $start?->getTimestamp(),
+                'start' => $startAt?->getTimestamp(),
                 'cnt' => $count,
                 'units' => $this->resolvedUnits(),
                 'lang' => $this->resolvedLanguage(),

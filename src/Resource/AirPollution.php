@@ -51,16 +51,16 @@ final class AirPollution extends Resource
     public function history(
         float $latitude,
         float $longitude,
-        \DateTimeInterface $start,
-        \DateTimeInterface $end,
+        \DateTimeInterface $startAt,
+        \DateTimeInterface $endAt,
     ): History {
         $latitude = Assert::latitude($latitude);
         $longitude = Assert::longitude($longitude);
-        Assert::chronologicalRange($start, $end);
+        Assert::chronologicalRange($startAt, $endAt);
 
         // A non-future end also constrains the ordered start.
         // The documented minimum is left to OpenWeather because live availability differs.
-        $end = Assert::notFuture($end, 'end date');
+        $endAt = Assert::notFuture($endAt, 'end date');
 
         // https://openweathermap.org/api/air-pollution
         /** @var History $history */
@@ -69,8 +69,8 @@ final class AirPollution extends Resource
             ->queries([
                 'lat' => $latitude,
                 'lon' => $longitude,
-                'start' => $start->getTimestamp(),
-                'end' => $end->getTimestamp(),
+                'start' => $startAt->getTimestamp(),
+                'end' => $endAt->getTimestamp(),
             ])
             ->get('/data/2.5/air_pollution/history')
             ->entity(History::class);
