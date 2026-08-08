@@ -63,6 +63,7 @@ final class OneCall extends Resource
     public function fifteenMinuteTimeline(
         float $latitude,
         float $longitude,
+        ?\DateTimeInterface $startAt = null,
         ?int $count = null,
     ): FifteenMinuteTimeline {
         $latitude = Assert::latitude($latitude);
@@ -79,6 +80,7 @@ final class OneCall extends Resource
             ->queries([
                 'lat' => $latitude,
                 'lon' => $longitude,
+                'start' => $startAt?->getTimestamp(),
                 'cnt' => $count,
                 'units' => $this->resolvedUnits(),
                 'lang' => $this->resolvedLanguage(),

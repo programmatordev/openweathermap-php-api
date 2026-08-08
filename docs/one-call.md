@@ -114,11 +114,13 @@ initial page of 15-minute forecast periods.
 $timeline = $api->oneCall()->fifteenMinuteTimeline(
     latitude: 38.7223,
     longitude: -9.1393,
+    startAt: new DateTimeImmutable('1 day from now'),
     count: 10,
 );
 ```
 
-The optional positive `count` limits the requested page size.
+Use `startAt` to select a future starting point and `count` to limit the
+requested page size.
 
 The response exposes location metadata, up to 50 periods, and pagination when
 OpenWeather provides it.
@@ -200,7 +202,7 @@ limit the requested page size.
 $timeline = $api->oneCall()->oneDayTimeline(
     latitude: 38.7223,
     longitude: -9.1393,
-    startAt: new DateTimeImmutable('2 days ago'),
+    startAt: new DateTimeImmutable('2 days from now'),
     count: 5,
 );
 ```

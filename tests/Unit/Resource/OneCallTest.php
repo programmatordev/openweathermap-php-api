@@ -181,6 +181,30 @@ final class OneCallTest extends ApiTestCase
         ], $this->query($request));
     }
 
+    public function testGetsFifteenMinuteTimelineFromStart(): void
+    {
+        $this->respondWithFixture('one-call/fifteen-minute/pagination.json');
+
+        $timeline = $this->api->oneCall()->fifteenMinuteTimeline(
+            latitude: 38.7223,
+            longitude: -9.1393,
+            startAt: new \DateTimeImmutable('@1785715200'),
+            count: 50,
+        );
+        $request = $this->client->getLastRequest();
+
+        self::assertSame(1785715200, $timeline->periods()[0]->dateTime()?->getTimestamp());
+        self::assertSame([
+            'lat' => '38.7223',
+            'lon' => '-9.1393',
+            'start' => '1785715200',
+            'cnt' => '50',
+            'units' => 'metric',
+            'lang' => 'en',
+            'appid' => 'api-key',
+        ], $this->query($request));
+    }
+
     public function testGetsNextFifteenMinuteTimelinePage(): void
     {
         $this->respondWithFixture('one-call/fifteen-minute/success.json');
