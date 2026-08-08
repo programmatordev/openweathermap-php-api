@@ -4,7 +4,6 @@ namespace ProgrammatorDev\OpenWeatherMap\Entity\OneCall\Timeline;
 
 use ProgrammatorDev\Api\Context\Context;
 use ProgrammatorDev\Api\Contract\EntityInterface;
-use ProgrammatorDev\Api\Contract\ResolverInterface;
 use ProgrammatorDev\OpenWeatherMap\Hydration\OneCall\PaginationUrlNormalizer;
 use ProgrammatorDev\OpenWeatherMap\Hydration\PayloadReader;
 
@@ -20,7 +19,7 @@ final class Pagination
         private readonly string $pageClass,
         private readonly ?string $previousPageUrl,
         private readonly ?string $nextPageUrl,
-        private readonly ?ResolverInterface $resolver,
+        private readonly ?Context $context,
     ) {}
 
     /**
@@ -44,7 +43,7 @@ final class Pagination
             nextPageUrl: $nextPageUrl === null
                 ? null
                 : PaginationUrlNormalizer::normalize($nextPageUrl),
-            resolver: $context?->resolver(),
+            context: $context,
         );
     }
 
@@ -93,14 +92,14 @@ final class Pagination
             return null;
         }
 
-        if ($this->resolver === null) {
+        if ($this->context === null) {
             throw new \LogicException(
-                'Pagination navigation requires a timeline returned by the API.',
+                'Pagination navigation requires a page returned by the API.',
             );
         }
 
         /** @var TPage $page */
-        $page = $this->resolver->entity($pageUrl, $this->pageClass);
+        $page = $this->context->resolver()->entity($pageUrl, $this->pageClass);
 
         return $page;
     }

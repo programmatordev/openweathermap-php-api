@@ -4,10 +4,15 @@ namespace ProgrammatorDev\OpenWeatherMap\Test\Unit\Entity\OneCall;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use ProgrammatorDev\Api\Config\Config;
+use ProgrammatorDev\Api\Context\Context;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\OneHourTimeline;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\OneHourTimeline\Period;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\Timeline\Pagination;
+use ProgrammatorDev\OpenWeatherMap\Enum\Unit;
+use ProgrammatorDev\OpenWeatherMap\Enum\Units;
 use ProgrammatorDev\OpenWeatherMap\Exception\HydrationException;
+use ProgrammatorDev\OpenWeatherMap\OpenWeatherMap;
 use ProgrammatorDev\OpenWeatherMap\Test\Support\Fixture;
 
 final class OneHourTimelineTest extends TestCase
@@ -53,6 +58,24 @@ final class OneHourTimelineTest extends TestCase
         self::assertSame(1785495600, $timeline->periods()[0]->dateTime()?->getTimestamp());
         self::assertSame(1785564000, $timeline->periods()[19]->dateTime()?->getTimestamp());
         self::assertNull($timeline->periods()[0]->precipitationProbability());
+    }
+
+    public function testHydratesWithConfigurationContextWithoutResolver(): void
+    {
+        $context = new Context(new Config([
+            OpenWeatherMap::OPTION_UNITS => Units::IMPERIAL,
+        ]));
+        $timeline = OneHourTimeline::fromArray([
+            'data' => [['temp' => 72.5]],
+            'next' => '/data/4.0/onecall/timeline/1h?start=1785740400',
+        ], $context);
+
+        self::assertSame(Unit::FAHRENHEIT, $timeline->periods()[0]->temperatureUnit());
+        self::assertTrue($timeline->pagination()->hasNextPage());
+        self::assertSame(
+            '/data/4.0/onecall/timeline/1h?start=1785740400',
+            $timeline->pagination()->nextPageUrl(),
+        );
     }
 
     public function testToleratesMissingNullUnknownAndPartialFields(): void
