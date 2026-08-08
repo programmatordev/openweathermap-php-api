@@ -13,7 +13,7 @@ final class AssertTest extends TestCase
     {
         self::assertSame(
             $value,
-            Assert::nonNegativeInteger($value, 'tile zoom'),
+            Assert::nonNegativeInteger($value, 'value'),
         );
     }
 
@@ -29,9 +29,9 @@ final class AssertTest extends TestCase
     public function testItRejectsNegativeIntegers(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('The tile zoom must be zero or greater.');
+        $this->expectExceptionMessage('The value must be zero or greater.');
 
-        Assert::nonNegativeInteger(-1, 'tile zoom');
+        Assert::nonNegativeInteger(-1, 'value');
     }
 
     #[DataProvider('validTileCoordinates')]
@@ -79,26 +79,28 @@ final class AssertTest extends TestCase
             -1,
             9,
             'x',
-            'The tile X coordinate must be between 0 and 511 for zoom 9.',
+            'At zoom level 9, the tile X coordinate must be between 0 and 511.',
         ];
         yield 'X above maximum' => [
             512,
             9,
             'x',
-            'The tile X coordinate must be between 0 and 511 for zoom 9.',
+            'At zoom level 9, the tile X coordinate must be between 0 and 511.',
         ];
         yield 'Y above zoom zero maximum' => [
             1,
             0,
             'y',
-            'The tile Y coordinate must be between 0 and 0 for zoom 0.',
+            'At zoom level 0, the tile Y coordinate must be 0.',
         ];
     }
 
     public function testTileCoordinateRejectsANegativeZoom(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('The tile zoom must be zero or greater.');
+        $this->expectExceptionMessage(
+            'The tile zoom level must be zero or greater.',
+        );
 
         Assert::tileCoordinate(0, -1, 'x');
     }

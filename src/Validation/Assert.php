@@ -127,15 +127,22 @@ final class Assert
         int $zoom,
         string $axis,
     ): int {
-        $zoom = self::nonNegativeInteger($zoom, 'tile zoom');
+        $zoom = self::nonNegativeInteger($zoom, 'tile zoom level');
         $maximum = (2 ** $zoom) - 1;
 
         if ($coordinate < 0 || $coordinate > $maximum) {
+            if ($maximum === 0) {
+                throw new \InvalidArgumentException(sprintf(
+                    'At zoom level 0, the tile %s coordinate must be 0.',
+                    strtoupper($axis),
+                ));
+            }
+
             throw new \InvalidArgumentException(sprintf(
-                'The tile %s coordinate must be between 0 and %.0f for zoom %d.',
+                'At zoom level %d, the tile %s coordinate must be between 0 and %.0f.',
+                $zoom,
                 strtoupper($axis),
                 $maximum,
-                $zoom,
             ));
         }
 
