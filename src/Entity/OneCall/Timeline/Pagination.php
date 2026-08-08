@@ -9,27 +9,27 @@ use ProgrammatorDev\OpenWeatherMap\Hydration\OneCall\PaginationUrlNormalizer;
 use ProgrammatorDev\OpenWeatherMap\Hydration\PayloadReader;
 
 /**
- * @template TTimeline of EntityInterface
+ * @template TPage of EntityInterface
  */
 final class Pagination
 {
     /**
-     * @param class-string<TTimeline> $timelineClass
+     * @param class-string<TPage> $pageClass
      */
     private function __construct(
-        private readonly string $timelineClass,
+        private readonly string $pageClass,
         private readonly ?string $previousPageUrl,
         private readonly ?string $nextPageUrl,
         private readonly ?ResolverInterface $resolver,
     ) {}
 
     /**
-     * @param class-string<TTimeline> $timelineClass
-     * @return self<TTimeline>
+     * @param class-string<TPage> $pageClass
+     * @return self<TPage>
      */
     public static function fromArray(
         array $data,
-        string $timelineClass,
+        string $pageClass,
         ?Context $context = null,
     ): self {
         $reader = PayloadReader::from($data, self::class);
@@ -37,7 +37,7 @@ final class Pagination
         $nextPageUrl = $reader->nullableString('next');
 
         return new self(
-            timelineClass: $timelineClass,
+            pageClass: $pageClass,
             previousPageUrl: $previousPageUrl === null
                 ? null
                 : PaginationUrlNormalizer::normalize($previousPageUrl),
@@ -59,7 +59,7 @@ final class Pagination
     }
 
     /**
-     * @return TTimeline|null
+     * @return TPage|null
      */
     public function nextPage(): ?EntityInterface
     {
@@ -67,7 +67,7 @@ final class Pagination
     }
 
     /**
-     * @return TTimeline|null
+     * @return TPage|null
      */
     public function previousPage(): ?EntityInterface
     {
@@ -75,7 +75,7 @@ final class Pagination
     }
 
     /**
-     * @return TTimeline|null
+     * @return TPage|null
      */
     private function resolve(?string $pageUrl): ?EntityInterface
     {
@@ -89,9 +89,9 @@ final class Pagination
             );
         }
 
-        /** @var TTimeline $timeline */
-        $timeline = $this->resolver->entity($pageUrl, $this->timelineClass);
+        /** @var TPage $page */
+        $page = $this->resolver->entity($pageUrl, $this->pageClass);
 
-        return $timeline;
+        return $page;
     }
 }

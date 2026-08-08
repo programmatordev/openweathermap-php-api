@@ -6,6 +6,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\FifteenMinuteTimeline;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\FifteenMinuteTimeline\Period;
+use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\Timeline\Pagination;
 use ProgrammatorDev\OpenWeatherMap\Exception\HydrationException;
 use ProgrammatorDev\OpenWeatherMap\Test\Support\Fixture;
 
@@ -23,8 +24,36 @@ final class FifteenMinuteTimelineTest extends TestCase
         self::assertSame(3600, $timeline->timezone()?->offsetSeconds());
         self::assertCount(50, $timeline->periods());
         self::assertContainsOnlyInstancesOf(Period::class, $timeline->periods());
+        self::assertInstanceOf(Pagination::class, $timeline->pagination());
         self::assertSame(1785670200, $timeline->periods()[0]->dateTime()?->getTimestamp());
         self::assertSame(1785714300, $timeline->periods()[49]->dateTime()?->getTimestamp());
+        self::assertNull($timeline->pagination()->previousPageUrl());
+        self::assertSame(
+            'https://api.openweathermap.org/data/4.0/onecall/timeline/15min?'
+            .'cnt=50&lat=38.7223&lon=-9.1393&start=1785715200'
+            .'&appid=%7BAPI%20key%7D&units=metric&lang=en',
+            $timeline->pagination()->nextPageUrl(),
+        );
+    }
+
+    public function testHydratesCapturedBidirectionalPagination(): void
+    {
+        $timeline = FifteenMinuteTimeline::fromArray(
+            Fixture::json('one-call/fifteen-minute/pagination.json'),
+        );
+
+        self::assertSame(
+            'https://api.openweathermap.org/data/4.0/onecall/timeline/15min?'
+            .'cnt=50&lat=38.7223&lon=-9.1393&start=1785670200'
+            .'&appid=%7BAPI%20key%7D&units=metric&lang=en',
+            $timeline->pagination()->previousPageUrl(),
+        );
+        self::assertSame(
+            'https://api.openweathermap.org/data/4.0/onecall/timeline/15min?'
+            .'cnt=50&lat=38.7223&lon=-9.1393&start=1785760200'
+            .'&appid=%7BAPI%20key%7D&units=metric&lang=en',
+            $timeline->pagination()->nextPageUrl(),
+        );
     }
 
     public function testToleratesMissingNullUnknownAndPartialFields(): void
@@ -34,6 +63,10 @@ final class FifteenMinuteTimelineTest extends TestCase
         self::assertNull($missing->coordinates());
         self::assertNull($missing->timezone());
         self::assertSame([], $missing->periods());
+        self::assertNull($missing->pagination()->previousPageUrl());
+        self::assertNull($missing->pagination()->nextPageUrl());
+        self::assertNull($missing->pagination()->previousPage());
+        self::assertNull($missing->pagination()->nextPage());
 
         $timeline = FifteenMinuteTimeline::fromArray([
             'lat' => null,
@@ -86,6 +119,14 @@ final class FifteenMinuteTimelineTest extends TestCase
         yield 'period field' => [
             ['data' => [['pressure' => '1015.75']]],
             '"pressure" expected int|float, string received.',
+        ];
+        yield 'previous page URL type' => [
+            ['prev' => 1],
+            '"prev" expected string, int received.',
+        ];
+        yield 'next page URL type' => [
+            ['next' => []],
+            '"next" expected string, array received.',
         ];
     }
 }

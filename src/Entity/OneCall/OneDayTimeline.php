@@ -6,12 +6,13 @@ use ProgrammatorDev\Api\Context\Context;
 use ProgrammatorDev\Api\Contract\EntityInterface;
 use ProgrammatorDev\OpenWeatherMap\Entity\Coordinates;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\OneDayTimeline\Period;
+use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\Timeline\Pagination;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\Timeline\TimelinePage;
 
 final class OneDayTimeline implements EntityInterface
 {
     /**
-     * @param TimelinePage<Period> $page
+     * @param TimelinePage<Period, self> $page
      */
     private function __construct(
         private readonly TimelinePage $page,
@@ -43,5 +44,13 @@ final class OneDayTimeline implements EntityInterface
     public function periods(): array
     {
         return $this->page->periods();
+    }
+
+    /**
+     * @return Pagination<self>
+     */
+    public function pagination(): Pagination
+    {
+        return $this->page->pagination();
     }
 }

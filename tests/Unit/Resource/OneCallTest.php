@@ -165,6 +165,11 @@ final class OneCallTest extends ApiTestCase
         self::assertInstanceOf(FifteenMinuteTimeline::class, $timeline);
         self::assertCount(50, $timeline->periods());
         self::assertSame(1785670200, $timeline->periods()[0]->dateTime()?->getTimestamp());
+        self::assertNull($timeline->pagination()->previousPageUrl());
+        self::assertStringContainsString(
+            'appid=',
+            $timeline->pagination()->nextPageUrl() ?? '',
+        );
         self::assertSame('GET', $request->getMethod());
         self::assertSame('/data/4.0/onecall/timeline/15min', $request->getUri()->getPath());
         self::assertSame([
@@ -173,6 +178,74 @@ final class OneCallTest extends ApiTestCase
             'units' => 'metric',
             'lang' => 'en',
             'appid' => 'api-key',
+        ], $this->query($request));
+    }
+
+    public function testGetsNextFifteenMinuteTimelinePage(): void
+    {
+        $this->respondWithFixture('one-call/fifteen-minute/success.json');
+        $this->client->addResponse(new Response(
+            body: '{"data":[{"dt":1785715200}]}',
+        ));
+
+        $timeline = $this->api->oneCall()->fifteenMinuteTimeline(
+            latitude: 38.7223,
+            longitude: -9.1393,
+        );
+
+        self::assertCount(1, $this->client->getRequests());
+
+        $nextPage = $timeline->pagination()->nextPage();
+        $request = $this->client->getLastRequest();
+
+        self::assertInstanceOf(FifteenMinuteTimeline::class, $nextPage);
+        self::assertSame(1785715200, $nextPage->periods()[0]->dateTime()?->getTimestamp());
+        self::assertCount(2, $this->client->getRequests());
+        self::assertSame('GET', $request->getMethod());
+        self::assertSame('https', $request->getUri()->getScheme());
+        self::assertSame('/data/4.0/onecall/timeline/15min', $request->getUri()->getPath());
+        self::assertSame([
+            'cnt' => '50',
+            'lat' => '38.7223',
+            'lon' => '-9.1393',
+            'start' => '1785715200',
+            'appid' => 'api-key',
+            'units' => 'metric',
+            'lang' => 'en',
+        ], $this->query($request));
+    }
+
+    public function testGetsPreviousFifteenMinuteTimelinePage(): void
+    {
+        $this->respondWithFixture('one-call/fifteen-minute/pagination.json');
+        $this->client->addResponse(new Response(
+            body: '{"data":[{"dt":1785670200}]}',
+        ));
+
+        $timeline = $this->api->oneCall()->fifteenMinuteTimeline(
+            latitude: 38.7223,
+            longitude: -9.1393,
+        );
+
+        self::assertCount(1, $this->client->getRequests());
+
+        $previousPage = $timeline->pagination()->previousPage();
+        $request = $this->client->getLastRequest();
+
+        self::assertInstanceOf(FifteenMinuteTimeline::class, $previousPage);
+        self::assertSame(1785670200, $previousPage->periods()[0]->dateTime()?->getTimestamp());
+        self::assertCount(2, $this->client->getRequests());
+        self::assertSame('GET', $request->getMethod());
+        self::assertSame('https', $request->getUri()->getScheme());
+        self::assertSame('/data/4.0/onecall/timeline/15min', $request->getUri()->getPath());
+        self::assertSame([
+            'cnt' => '50',
+            'lat' => '38.7223',
+            'lon' => '-9.1393',
+            'start' => '1785670200',
+            'appid' => 'api-key',
+            'units' => 'metric',
+            'lang' => 'en',
         ], $this->query($request));
     }
 
@@ -356,6 +429,14 @@ final class OneCallTest extends ApiTestCase
         self::assertInstanceOf(OneDayTimeline::class, $timeline);
         self::assertCount(10, $timeline->periods());
         self::assertSame(1785628800, $timeline->periods()[0]->dateTime()?->getTimestamp());
+        self::assertStringContainsString(
+            'appid=',
+            $timeline->pagination()->previousPageUrl() ?? '',
+        );
+        self::assertStringContainsString(
+            'appid=',
+            $timeline->pagination()->nextPageUrl() ?? '',
+        );
         self::assertSame('GET', $request->getMethod());
         self::assertSame('/data/4.0/onecall/timeline/1day', $request->getUri()->getPath());
         self::assertSame([
@@ -386,6 +467,74 @@ final class OneCallTest extends ApiTestCase
             'units' => 'metric',
             'lang' => 'en',
             'appid' => 'api-key',
+        ], $this->query($request));
+    }
+
+    public function testGetsNextOneDayTimelinePage(): void
+    {
+        $this->respondWithFixture('one-call/one-day/success.json');
+        $this->client->addResponse(new Response(
+            body: '{"data":[{"dt":1786492800}]}',
+        ));
+
+        $timeline = $this->api->oneCall()->oneDayTimeline(
+            latitude: 38.7223,
+            longitude: -9.1393,
+        );
+
+        self::assertCount(1, $this->client->getRequests());
+
+        $nextPage = $timeline->pagination()->nextPage();
+        $request = $this->client->getLastRequest();
+
+        self::assertInstanceOf(OneDayTimeline::class, $nextPage);
+        self::assertSame(1786492800, $nextPage->periods()[0]->dateTime()?->getTimestamp());
+        self::assertCount(2, $this->client->getRequests());
+        self::assertSame('GET', $request->getMethod());
+        self::assertSame('https', $request->getUri()->getScheme());
+        self::assertSame('/data/4.0/onecall/timeline/1day', $request->getUri()->getPath());
+        self::assertSame([
+            'cnt' => '10',
+            'lat' => '38.7223',
+            'lon' => '-9.1393',
+            'start' => '1786492800',
+            'appid' => 'api-key',
+            'units' => 'metric',
+            'lang' => 'en',
+        ], $this->query($request));
+    }
+
+    public function testGetsPreviousOneDayTimelinePage(): void
+    {
+        $this->respondWithFixture('one-call/one-day/success.json');
+        $this->client->addResponse(new Response(
+            body: '{"data":[{"dt":1784764800}]}',
+        ));
+
+        $timeline = $this->api->oneCall()->oneDayTimeline(
+            latitude: 38.7223,
+            longitude: -9.1393,
+        );
+
+        self::assertCount(1, $this->client->getRequests());
+
+        $previousPage = $timeline->pagination()->previousPage();
+        $request = $this->client->getLastRequest();
+
+        self::assertInstanceOf(OneDayTimeline::class, $previousPage);
+        self::assertSame(1784764800, $previousPage->periods()[0]->dateTime()?->getTimestamp());
+        self::assertCount(2, $this->client->getRequests());
+        self::assertSame('GET', $request->getMethod());
+        self::assertSame('https', $request->getUri()->getScheme());
+        self::assertSame('/data/4.0/onecall/timeline/1day', $request->getUri()->getPath());
+        self::assertSame([
+            'cnt' => '10',
+            'lat' => '38.7223',
+            'lon' => '-9.1393',
+            'start' => '1784764800',
+            'appid' => 'api-key',
+            'units' => 'metric',
+            'lang' => 'en',
         ], $this->query($request));
     }
 

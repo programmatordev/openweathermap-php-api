@@ -11,25 +11,29 @@ use ProgrammatorDev\OpenWeatherMap\Hydration\PayloadReader;
 
 /**
  * @template TPeriod of EntityInterface
+ * @template TPage of EntityInterface
  */
 final class TimelinePage
 {
     /**
      * @param list<TPeriod> $periods
+     * @param Pagination<TPage> $pagination
      */
     private function __construct(
         private readonly ?Coordinates $coordinates,
         private readonly ?Timezone $timezone,
         private readonly array $periods,
+        private readonly Pagination $pagination,
     ) {}
 
     /**
-     * @template T of EntityInterface
+     * @template TPeriodClass of EntityInterface
+     * @template TPageClass of EntityInterface
      *
-     * @param class-string $entity
-     * @param class-string<T> $periodClass
+     * @param class-string<TPageClass> $entity
+     * @param class-string<TPeriodClass> $periodClass
      *
-     * @return self<T>
+     * @return self<TPeriodClass, TPageClass>
      */
     public static function fromArray(
         array $data,
@@ -62,6 +66,11 @@ final class TimelinePage
             coordinates: $hasCoordinates ? Coordinates::fromArray($data, $context) : null,
             timezone: $hasTimezone ? Timezone::fromArray($data, $context) : null,
             periods: $periods,
+            pagination: Pagination::fromArray(
+                data: $data,
+                pageClass: $entity,
+                context: $context,
+            ),
         );
     }
 
@@ -81,5 +90,13 @@ final class TimelinePage
     public function periods(): array
     {
         return $this->periods;
+    }
+
+    /**
+     * @return Pagination<TPage>
+     */
+    public function pagination(): Pagination
+    {
+        return $this->pagination;
     }
 }
