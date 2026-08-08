@@ -51,6 +51,17 @@ final class MapsTest extends ApiTestCase
         $this->api->maps()->tileUrl(MapLayer::CLOUDS, 1, 2, 0);
     }
 
+    public function testGeneratesAnAuthenticatedTileUrlTemplateWithoutSendingARequest(): void
+    {
+        $template = $this->api->maps()->tileUrlTemplate(MapLayer::WIND);
+
+        self::assertSame(
+            'https://tile.openweathermap.org/map/wind_new/{z}/{x}/{y}.png?appid=api-key',
+            $template,
+        );
+        self::assertSame([], $this->client->getRequests());
+    }
+
     #[DataProvider('layers')]
     public function testGetsWeatherMapTiles(
         MapLayer $layer,

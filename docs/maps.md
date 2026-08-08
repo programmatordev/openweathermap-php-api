@@ -61,6 +61,32 @@ For example, the URL can be used as an image source:
 The URL contains the API key passed to `OpenWeatherMap`. Treat it as a
 credential and expose it only where direct client loading is intended.
 
+## Generate A Tile URL Template
+
+Use `tileUrlTemplate()` when an XYZ mapping library should replace the zoom, X,
+and Y placeholders while loading the visible tiles.
+
+```php
+$urlTemplate = $api->maps()->tileUrlTemplate(
+    MapLayer::PRECIPITATION,
+);
+```
+
+The returned URL retains the standard `{z}`, `{x}`, and `{y}` placeholders:
+
+```text
+https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=...
+```
+
+OpenWeather lists mapping-library integrations in its
+[Weather Maps documentation](https://openweathermap.org/api/weathermaps).
+The returned format can be passed to
+[Leaflet](https://leafletjs.com/reference.html#tilelayer),
+[OpenLayers](https://openlayers.org/en/latest/apidoc/module-ol_source_XYZ-XYZ.html),
+or a [MapLibre raster source](https://maplibre.org/maplibre-style-spec/sources/).
+Like a concrete tile URL, the template contains the API key and does not make an
+HTTP request when generated.
+
 ## Tile Coordinates
 
 X and Y are tile indexes, not longitude and latitude. Weather Maps uses the

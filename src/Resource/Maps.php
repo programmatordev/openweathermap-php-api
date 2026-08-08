@@ -12,7 +12,7 @@ use ProgrammatorDev\OpenWeatherMap\Validation\Assert;
 final class Maps extends Resource
 {
     // https://openweathermap.org/api/weathermaps
-    private const TILE_URL = 'https://tile.openweathermap.org/map/%s/%d/%d/%d.png';
+    private const TILE_URL = 'https://tile.openweathermap.org/map/%s/%s/%s/%s.png';
 
     public function __construct(
         Runtime $runtime,
@@ -27,12 +27,21 @@ final class Maps extends Resource
         int $x,
         int $y,
     ): string {
-        return sprintf(
-            '%s?%s=%s',
-            $this->tileEndpointUrl($layer, $zoom, $x, $y),
-            OpenWeatherMap::AUTHENTICATION_KEY,
-            rawurlencode($this->apiKey),
+        return $this->appendAuthentication(
+            $this->buildTileUrl($layer, $zoom, $x, $y),
         );
+    }
+
+    public function tileUrlTemplate(MapLayer $layer): string
+    {
+        // XYZ clients replace these placeholders for every visible tile.
+        return $this->appendAuthentication(sprintf(
+            self::TILE_URL,
+            rawurlencode($layer->value),
+            '{z}',
+            '{x}',
+            '{y}',
+        ));
     }
 
     public function tile(
@@ -43,7 +52,7 @@ final class Maps extends Resource
     ): MapTile {
         $response = $this
             ->endpoint()
-            ->get($this->tileEndpointUrl($layer, $zoom, $x, $y));
+            ->get($this->buildTileUrl($layer, $zoom, $x, $y));
         $contents = $response->data();
 
         if (!is_string($contents)) {
@@ -64,7 +73,19 @@ final class Maps extends Resource
         return new MapTile($contents, $contentType);
     }
 
-    private function tileEndpointUrl(
+    private function appendAuthentication(string $url): string
+    {
+        // URL generation does not send a request through the SDK authentication
+        // pipeline, so append the same query credential explicitly.
+        return sprintf(
+            '%s?%s=%s',
+            $url,
+            OpenWeatherMap::AUTHENTICATION_KEY,
+            rawurlencode($this->apiKey),
+        );
+    }
+
+    private function buildTileUrl(
         MapLayer $layer,
         int $zoom,
         int $x,
