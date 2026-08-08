@@ -120,14 +120,12 @@ $timeline = $api->oneCall()->fifteenMinuteTimeline(
 
 The optional positive `count` limits the requested page size.
 
-The response exposes location metadata, up to 50 periods, and pagination URLs
-when OpenWeather provides them.
+The response exposes location metadata, up to 50 periods, and pagination when
+OpenWeather provides it.
 
 ```php
 echo $timeline->coordinates()?->latitude();
 echo $timeline->timezone()?->identifier();
-echo $timeline->previousPageUrl();
-echo $timeline->nextPageUrl();
 
 foreach ($timeline->periods() as $period) {
     echo $period->dateTime()?->format(DATE_ATOM);
@@ -135,8 +133,6 @@ foreach ($timeline->periods() as $period) {
     echo $period->precipitationProbability();
 }
 ```
-
-The pagination URL getters do not make another API request.
 
 ## One-hour Timeline
 
@@ -180,9 +176,6 @@ foreach ($timeline->periods() as $period) {
     echo $period->snow()?->lastHour();
 }
 ```
-
-As with the 15-minute timeline, `previousPageUrl()` and `nextPageUrl()` do not
-make another request.
 
 ## One-day Timeline
 
@@ -230,8 +223,31 @@ foreach ($timeline->periods() as $period) {
 ```
 
 OpenWeather does not currently define units for the daily scalar rain and snow
-values, so these getters return raw nullable floats. `previousPageUrl()` and
-`nextPageUrl()` do not make another request.
+values, so these getters return raw nullable floats.
+
+## Timeline Pagination
+
+The 15-minute, one-hour, and one-day timelines provide explicit pagination.
+
+```php
+$pagination = $timeline->pagination();
+
+if ($pagination->hasPreviousPage()) {
+    $previousTimeline = $pagination->previousPage();
+}
+
+if ($pagination->hasNextPage()) {
+    $nextTimeline = $pagination->nextPage();
+}
+
+echo $pagination->previousPageUrl();
+echo $pagination->nextPageUrl();
+```
+
+The availability checks and URL getters do not make another API request.
+`previousPage()` and `nextPage()` request the corresponding page when its URL
+is available and otherwise return `null`. Pagination does not iterate
+automatically.
 
 ## Alert
 

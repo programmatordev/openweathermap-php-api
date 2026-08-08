@@ -27,6 +27,8 @@ final class OneHourTimelineTest extends TestCase
         self::assertInstanceOf(Pagination::class, $timeline->pagination());
         self::assertSame(1785668400, $timeline->periods()[0]->dateTime()?->getTimestamp());
         self::assertSame(1785736800, $timeline->periods()[19]->dateTime()?->getTimestamp());
+        self::assertTrue($timeline->pagination()->hasPreviousPage());
+        self::assertTrue($timeline->pagination()->hasNextPage());
         self::assertSame(
             'https://api.openweathermap.org/data/4.0/onecall/timeline/1h?'
             .'cnt=20&lat=38.7223&lon=-9.1393&start=1785596400'
@@ -62,6 +64,8 @@ final class OneHourTimelineTest extends TestCase
         self::assertSame([], $missing->periods());
         self::assertNull($missing->pagination()->previousPageUrl());
         self::assertNull($missing->pagination()->nextPageUrl());
+        self::assertFalse($missing->pagination()->hasPreviousPage());
+        self::assertFalse($missing->pagination()->hasNextPage());
         self::assertNull($missing->pagination()->previousPage());
         self::assertNull($missing->pagination()->nextPage());
 

@@ -53,9 +53,19 @@ final class Pagination
         return $this->previousPageUrl;
     }
 
+    public function hasPreviousPage(): bool
+    {
+        return $this->previousPageUrl !== null;
+    }
+
     public function nextPageUrl(): ?string
     {
         return $this->nextPageUrl;
+    }
+
+    public function hasNextPage(): bool
+    {
+        return $this->nextPageUrl !== null;
     }
 
     /**
