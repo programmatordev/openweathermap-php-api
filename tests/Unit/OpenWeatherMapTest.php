@@ -88,7 +88,7 @@ class OpenWeatherMapTest extends TestCase
 
     public function testReturnsMapImagesAsRawResponseData(): void
     {
-        $contents = Fixture::contents('weather-maps/tile/clouds-new.png');
+        $contents = Fixture::contents('maps/tile/clouds-new.png');
         $client = new Client();
         $client->addResponse(new Response(
             headers: ['Content-Type' => 'image/png'],
@@ -108,12 +108,12 @@ class OpenWeatherMapTest extends TestCase
 
     public function testDecodesMislabeledJsonBeforeMappingTheHttpError(): void
     {
-        $data = Fixture::json('weather-maps/tile/missing-key.json');
+        $data = Fixture::json('maps/tile/missing-key.json');
         $client = new Client();
         $client->addResponse(new Response(
             status: 401,
             headers: ['Content-Type' => 'image/png'],
-            body: Fixture::contents('weather-maps/tile/missing-key.json'),
+            body: Fixture::contents('maps/tile/missing-key.json'),
         ));
 
         $api = new OpenWeatherMap('api-key');

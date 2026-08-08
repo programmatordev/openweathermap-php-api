@@ -23,18 +23,18 @@ final class PayloadDecoderTest extends TestCase
         $response = new Response(
             status: 401,
             headers: ['Content-Type' => 'image/png'],
-            body: Fixture::contents('weather-maps/tile/missing-key.json'),
+            body: Fixture::contents('maps/tile/missing-key.json'),
         );
 
         self::assertSame(
-            Fixture::json('weather-maps/tile/missing-key.json'),
+            Fixture::json('maps/tile/missing-key.json'),
             ($this->decoder)($response),
         );
     }
 
     public function testItReturnsBinaryBodiesUnchanged(): void
     {
-        $contents = Fixture::contents('weather-maps/tile/clouds-new.png');
+        $contents = Fixture::contents('maps/tile/clouds-new.png');
         $response = new Response(
             headers: ['Content-Type' => 'image/png'],
             body: $contents,

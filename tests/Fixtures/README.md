@@ -14,6 +14,11 @@ tests/Fixtures/<product>/<endpoint>/<scenario>.json
 tests/Fixtures/<product>/<endpoint>/<scenario>.meta.json
 ```
 
+Name top-level product folders after the corresponding public resource, using
+kebab case where required, such as `maps`, `stations`, `air-pollution`, and
+`one-call`. When a resource and endpoint are the same concept, operation names
+may be used directly as scenarios instead of adding a redundant folder.
+
 For example:
 
 ```text
@@ -25,7 +30,8 @@ Use stable endpoint and scenario names such as `success`, `empty`,
 `missing-optional-fields`, or `invalid-request`. Do not include a captured
 location name in a filename because the returned name may change or be absent.
 Use the actual body format as the fixture extension, such as `.png` for a map
-tile, even when the response advertises an incorrect content type.
+tile, even when the response advertises an incorrect content type. Use
+`.empty` for a successful response with a zero-byte body.
 
 ## Metadata
 
@@ -73,8 +79,14 @@ action performed:
 }
 ```
 
-- Remove API keys from URLs and pagination links.
-- Replace private station identifiers, names, and coordinates.
+- Never record API keys or authentication headers in request metadata. Because
+  they are excluded at the capture boundary, do not list them as sanitization.
+- Remove API keys from response URLs and pagination links, and record those
+  response changes in `sanitization`.
+- Replace identifiers, names, and coordinates belonging to persistent or
+  user-owned stations.
+- Generated identifiers and deliberately public metadata for a temporary
+  fixture station may remain unchanged after its deletion is verified.
 - Public test locations and coordinates may remain unchanged.
 - Do not change ordinary weather or geocoding values merely to make assertions
   easier.

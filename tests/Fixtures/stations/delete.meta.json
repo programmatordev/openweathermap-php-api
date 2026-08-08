@@ -1,0 +1,17 @@
+{
+    "provenance": "captured",
+    "product": "Weather Stations API",
+    "endpoint": "Delete station",
+    "apiVersion": "3.0",
+    "capturedAt": "2026-08-08T20:33:09Z",
+    "httpStatus": 204,
+    "bodyFormat": "empty",
+    "bodyBytes": 0,
+    "request": {
+        "method": "DELETE",
+        "path": "/data/3.0/stations/6a779284adde3b0001343e02",
+        "query": {}
+    },
+    "sanitization": [],
+    "notes": "The generated identifier belongs to the deleted temporary fixture station and is unchanged. The successful response had no body or Content-Type header, and a following list request confirmed the account returned from zero stations to zero."
+}

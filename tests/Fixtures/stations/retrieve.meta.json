@@ -1,0 +1,16 @@
+{
+    "provenance": "captured",
+    "product": "Weather Stations API",
+    "endpoint": "Retrieve station",
+    "apiVersion": "3.0",
+    "capturedAt": "2026-08-08T20:33:09Z",
+    "httpStatus": 200,
+    "contentType": "application/json; charset=utf-8",
+    "request": {
+        "method": "GET",
+        "path": "/data/3.0/stations/6a779284adde3b0001343e02",
+        "query": {}
+    },
+    "sanitization": [],
+    "notes": "The deliberately public fixture metadata and generated station identifier are unchanged. The temporary station was deleted before the batch completed."
+}

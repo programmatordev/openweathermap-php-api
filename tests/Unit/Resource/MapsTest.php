@@ -100,27 +100,27 @@ final class MapsTest extends ApiTestCase
         yield 'clouds' => [
             MapLayer::CLOUDS,
             '/map/clouds_new/1/1/1.png',
-            'weather-maps/tile/clouds-new.png',
+            'maps/tile/clouds-new.png',
         ];
         yield 'precipitation' => [
             MapLayer::PRECIPITATION,
             '/map/precipitation_new/1/1/1.png',
-            'weather-maps/tile/precipitation-new.png',
+            'maps/tile/precipitation-new.png',
         ];
         yield 'pressure' => [
             MapLayer::PRESSURE,
             '/map/pressure_new/1/1/1.png',
-            'weather-maps/tile/pressure-new.png',
+            'maps/tile/pressure-new.png',
         ];
         yield 'wind' => [
             MapLayer::WIND,
             '/map/wind_new/1/1/1.png',
-            'weather-maps/tile/wind-new.png',
+            'maps/tile/wind-new.png',
         ];
         yield 'temperature' => [
             MapLayer::TEMPERATURE,
             '/map/temp_new/1/1/1.png',
-            'weather-maps/tile/temp-new.png',
+            'maps/tile/temp-new.png',
         ];
     }
 

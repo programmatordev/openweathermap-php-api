@@ -1,0 +1,28 @@
+{
+    "provenance": "captured",
+    "product": "Weather Stations API",
+    "endpoint": "Register station",
+    "apiVersion": "3.0",
+    "capturedAt": "2026-08-08T20:33:09Z",
+    "httpStatus": 201,
+    "contentType": "application/json; charset=utf-8",
+    "request": {
+        "method": "POST",
+        "path": "/data/3.0/stations",
+        "query": {},
+        "body": {
+            "external_id": "openweathermap-php-api-fixture",
+            "name": "OpenWeatherMap PHP API Fixture",
+            "latitude": 38.7223,
+            "longitude": -9.1393,
+            "altitude": 100
+        }
+    },
+    "sanitization": [
+        {
+            "path": "$.user_id",
+            "action": "replaced private account identifier with user-fixture"
+        }
+    ],
+    "notes": "The deliberately public fixture metadata and generated station identifier are unchanged. The temporary station was deleted and the account returned from zero stations to zero."
+}

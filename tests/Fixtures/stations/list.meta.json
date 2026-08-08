@@ -1,0 +1,16 @@
+{
+    "provenance": "captured",
+    "product": "Weather Stations API",
+    "endpoint": "List stations",
+    "apiVersion": "3.0",
+    "capturedAt": "2026-08-08T20:33:09Z",
+    "httpStatus": 200,
+    "contentType": "application/json; charset=utf-8",
+    "request": {
+        "method": "GET",
+        "path": "/data/3.0/stations",
+        "query": {}
+    },
+    "sanitization": [],
+    "notes": "The captured account contained only the deliberately public temporary fixture station. Its generated identifier is unchanged, and the station was deleted before the batch completed."
+}
