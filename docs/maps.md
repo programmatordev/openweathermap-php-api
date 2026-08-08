@@ -6,29 +6,6 @@ free and paid subscriptions. See the
 [official Weather Maps documentation](https://openweathermap.org/api/weathermaps)
 for API details.
 
-## Generate A Tile URL
-
-Use `tileUrl()` to generate an authenticated URL for a mapping library, image,
-or other client that loads the tile directly.
-
-```php
-use ProgrammatorDev\OpenWeatherMap\Enum\MapLayer;
-use ProgrammatorDev\OpenWeatherMap\OpenWeatherMap;
-
-$api = new OpenWeatherMap($_ENV['OPENWEATHERMAP_API_KEY']);
-
-$url = $api->maps()->tileUrl(
-    layer: MapLayer::PRECIPITATION,
-    zoom: 6,
-    x: 31,
-    y: 20,
-);
-```
-
-Generating the URL does not make an HTTP request. It contains the API key passed
-to `OpenWeatherMap`, so treat it as a credential and avoid including it in logs
-or other unintended output.
-
 ## Fetch A Tile
 
 Use `tile()` with a layer, zoom level, and X and Y tile coordinates.
@@ -55,6 +32,34 @@ header('Content-Type: ' . $tile->contentType());
 
 echo $tile->contents();
 ```
+
+## Generate A Tile URL
+
+Use `tileUrl()` when an image or another client needs to load one specific tile
+directly. Generating the URL does not make an HTTP request.
+
+```php
+use ProgrammatorDev\OpenWeatherMap\Enum\MapLayer;
+use ProgrammatorDev\OpenWeatherMap\OpenWeatherMap;
+
+$api = new OpenWeatherMap($_ENV['OPENWEATHERMAP_API_KEY']);
+
+$url = $api->maps()->tileUrl(
+    layer: MapLayer::PRECIPITATION,
+    zoom: 6,
+    x: 31,
+    y: 20,
+);
+```
+
+For example, the URL can be used as an image source:
+
+```php
+<img src="<?= $url ?>" alt="Precipitation map tile">
+```
+
+The URL contains the API key passed to `OpenWeatherMap`. Treat it as a
+credential and expose it only where direct client loading is intended.
 
 ## Tile Coordinates
 
