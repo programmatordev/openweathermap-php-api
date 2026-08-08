@@ -16,6 +16,7 @@ use ProgrammatorDev\OpenWeatherMap\Exception\TooManyRequestsException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnauthorizedException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnexpectedErrorException;
 use ProgrammatorDev\OpenWeatherMap\OpenWeatherMap;
+use ProgrammatorDev\OpenWeatherMap\Test\Support\Fixture;
 
 class OpenWeatherMapTest extends TestCase
 {
@@ -47,7 +48,7 @@ class OpenWeatherMapTest extends TestCase
         self::assertSame('future_language', $api->config()->get(OpenWeatherMap::OPTION_LANGUAGE));
     }
 
-    public function testConfiguresBaseUrlQueryAuthenticationAndJsonDecoding(): void
+    public function testConfiguresBaseUrlQueryAuthenticationAndJsonPayloadDecoding(): void
     {
         $client = new Client();
         $client->addResponse(new Response(body: '{"ok":true}'));
@@ -68,6 +69,56 @@ class OpenWeatherMapTest extends TestCase
         ));
         self::assertSame(['appid' => 'secret'], $query);
         self::assertSame(['ok' => true], $response->data());
+    }
+
+    public function testReturnsMapImagesAsRawResponseData(): void
+    {
+        $contents = Fixture::contents('weather-maps/tile/clouds-new.png');
+        $client = new Client();
+        $client->addResponse(new Response(
+            headers: ['Content-Type' => 'image/png'],
+            body: $contents,
+        ));
+
+        $api = new OpenWeatherMap('api-key');
+        $api->setup()->client($client);
+
+        $response = $api->send(
+            Method::GET,
+            'https://tile.openweathermap.org/map/clouds_new/1/1/1.png',
+        );
+
+        self::assertSame($contents, $response->data());
+    }
+
+    public function testDecodesMislabeledJsonBeforeMappingTheHttpError(): void
+    {
+        $data = Fixture::json('weather-maps/tile/missing-key.json');
+        $client = new Client();
+        $client->addResponse(new Response(
+            status: 401,
+            headers: ['Content-Type' => 'image/png'],
+            body: Fixture::contents('weather-maps/tile/missing-key.json'),
+        ));
+
+        $api = new OpenWeatherMap('api-key');
+        $api->setup()->client($client);
+
+        try {
+            $api->send(
+                Method::GET,
+                'https://tile.openweathermap.org/map/clouds_new/1/1/1.png',
+            );
+        } catch (UnauthorizedException $exception) {
+            self::assertSame($data['message'], $exception->getMessage());
+            self::assertSame(401, $exception->statusCode());
+            self::assertSame(401, $exception->apiCode());
+            self::assertSame($data, $exception->responseData());
+
+            return;
+        }
+
+        self::fail(sprintf('Expected %s to be thrown.', UnauthorizedException::class));
     }
 
     #[DataProvider('httpErrors')]

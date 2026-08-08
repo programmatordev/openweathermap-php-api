@@ -16,6 +16,7 @@ use ProgrammatorDev\OpenWeatherMap\Resource\AirPollution;
 use ProgrammatorDev\OpenWeatherMap\Resource\Geocoding;
 use ProgrammatorDev\OpenWeatherMap\Resource\OneCall;
 use ProgrammatorDev\OpenWeatherMap\Resource\Weather;
+use ProgrammatorDev\OpenWeatherMap\Response\PayloadDecoder;
 use ProgrammatorDev\OpenWeatherMap\Validation\Assert;
 
 class OpenWeatherMap extends Api
@@ -40,7 +41,7 @@ class OpenWeatherMap extends Api
 
         $this->baseUrl(self::BASE_URL);
         $this->auth()->query(self::AUTHENTICATION_KEY, $apiKey);
-        $this->responses()->json();
+        $this->responses()->custom(new PayloadDecoder());
 
         $this->errors()->when(static fn (ErrorContext $context): ?ApiException => match (true) {
             $context->statusCode() === 400 => BadRequestException::fromContext($context),
