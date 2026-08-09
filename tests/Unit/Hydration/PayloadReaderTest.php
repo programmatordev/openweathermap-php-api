@@ -19,6 +19,7 @@ final class PayloadReaderTest extends TestCase
             'daylight' => true,
             'rain' => ['1h' => 0.4],
             'alerts' => ['alert-1', 'alert-2'],
+            'created_at' => '2026-08-08T20:33:08.107Z',
         ], 'Weather');
 
         self::assertSame('Lisbon', $reader->nullableString('name'));
@@ -31,6 +32,10 @@ final class PayloadReaderTest extends TestCase
             ['alert-1', 'alert-2'],
             $reader->nullableStringList('alerts')
         );
+        self::assertSame(
+            '2026-08-08T20:33:08+00:00',
+            $reader->nullableDateTime('created_at')?->format(\DateTimeInterface::ATOM),
+        );
     }
 
     public function testMissingAndNullValuesAreTolerated(): void
@@ -41,6 +46,7 @@ final class PayloadReaderTest extends TestCase
         self::assertNull($reader->nullableString('name'));
         self::assertNull($reader->nullableStringList('alerts'));
         self::assertNull($reader->nullableTimestamp('observed_at'));
+        self::assertNull($reader->nullableDateTime('created_at'));
     }
 
     public function testUnknownFieldsAreIgnored(): void
@@ -87,6 +93,26 @@ final class PayloadReaderTest extends TestCase
         self::assertSame('2023-11-14T22:13:20+00:00', $timestamp->format(\DateTimeInterface::ATOM));
     }
 
+    #[DataProvider('invalidDateTimeProvider')]
+    public function testItRejectsMalformedDateTimeStrings(string $value): void
+    {
+        $reader = PayloadReader::from(['created_at' => $value], 'Weather');
+
+        $this->expectException(HydrationException::class);
+        $this->expectExceptionMessage(sprintf(
+            'Cannot hydrate Weather: "created_at" expected ISO 8601 date-time string, "%s" received.',
+            $value,
+        ));
+
+        $reader->nullableDateTime('created_at');
+    }
+
+    public static function invalidDateTimeProvider(): iterable
+    {
+        yield 'relative value' => ['tomorrow'];
+        yield 'invalid calendar date' => ['2026-02-31T12:00:00Z'];
+    }
+
     #[DataProvider('invalidValueProvider')]
     public function testItRejectsKnownFieldsWithInvalidTypes(
         string $method,
@@ -121,5 +147,6 @@ final class PayloadReaderTest extends TestCase
         yield 'boolean' => ['nullableBool', 1, 'bool', 'int'];
         yield 'array' => ['nullableArray', new \stdClass(), 'array', 'stdClass'];
         yield 'timestamp' => ['nullableTimestamp', '1700000000', 'int', 'string'];
+        yield 'date and time' => ['nullableDateTime', 1700000000, 'string', 'int'];
     }
 }

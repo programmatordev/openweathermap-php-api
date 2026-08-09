@@ -16,6 +16,7 @@ use ProgrammatorDev\OpenWeatherMap\Resource\AirPollution;
 use ProgrammatorDev\OpenWeatherMap\Resource\Geocoding;
 use ProgrammatorDev\OpenWeatherMap\Resource\Maps;
 use ProgrammatorDev\OpenWeatherMap\Resource\OneCall;
+use ProgrammatorDev\OpenWeatherMap\Resource\Stations;
 use ProgrammatorDev\OpenWeatherMap\Resource\Weather;
 use ProgrammatorDev\OpenWeatherMap\Response\PayloadDecoder;
 use ProgrammatorDev\OpenWeatherMap\Validation\Assert;
@@ -82,6 +83,11 @@ class OpenWeatherMap extends Api
     public function oneCall(): OneCall
     {
         return $this->resource(OneCall::class);
+    }
+
+    public function stations(): Stations
+    {
+        return $this->resource(Stations::class);
     }
 
     public function weather(): Weather

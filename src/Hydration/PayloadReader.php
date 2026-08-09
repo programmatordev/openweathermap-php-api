@@ -110,6 +110,55 @@ final class PayloadReader
             ->setTimezone(new \DateTimeZone('UTC'));
     }
 
+    public function nullableDateTime(string $path): ?\DateTimeImmutable
+    {
+        $value = $this->nullableString($path);
+
+        if ($value === null) {
+            return null;
+        }
+
+        // Station responses use UTC ISO 8601 strings with variable
+        // fractional-second precision, including nanoseconds.
+        if (preg_match(
+            '/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/D',
+            $value,
+        ) !== 1) {
+            throw HydrationException::invalidValue(
+                $this->entity,
+                $path,
+                'ISO 8601 date-time string',
+                $value,
+            );
+        }
+
+        try {
+            $dateTime = new \DateTimeImmutable($value);
+        } catch (\Exception) {
+            throw HydrationException::invalidValue(
+                $this->entity,
+                $path,
+                'ISO 8601 date-time string',
+                $value,
+            );
+        }
+
+        $errors = \DateTimeImmutable::getLastErrors();
+
+        if ($errors !== false
+            && ($errors['warning_count'] > 0 || $errors['error_count'] > 0)
+        ) {
+            throw HydrationException::invalidValue(
+                $this->entity,
+                $path,
+                'ISO 8601 date-time string',
+                $value,
+            );
+        }
+
+        return $dateTime->setTimezone(new \DateTimeZone('UTC'));
+    }
+
     /**
      * @param \Closure(mixed): bool $accepts
      */
