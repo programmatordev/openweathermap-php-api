@@ -15,24 +15,47 @@ final class Stations extends Resource
         float $longitude,
         float $altitude,
     ): Station {
-        $externalId = Assert::notBlank($externalId, 'external station ID');
-        $name = Assert::notBlank($name, 'station name');
-        $latitude = Assert::latitude($latitude);
-        $longitude = Assert::longitude($longitude);
-        $altitude = Assert::finiteNumber($altitude, 'station altitude');
+        // https://openweathermap.org/api/stations
+        /** @var Station $station */
+        $station = $this
+            ->endpoint()
+            ->json(self::stationPayload(
+                $externalId,
+                $name,
+                $latitude,
+                $longitude,
+                $altitude,
+            ))
+            ->post('/data/3.0/stations')
+            ->entity(Station::class);
+
+        return $station;
+    }
+
+    public function update(
+        string $id,
+        string $externalId,
+        string $name,
+        float $latitude,
+        float $longitude,
+        float $altitude,
+    ): Station {
+        $id = Assert::notBlank($id, 'station ID');
 
         // https://openweathermap.org/api/stations
         /** @var Station $station */
         $station = $this
             ->endpoint()
-            ->json([
-                'external_id' => $externalId,
-                'name' => $name,
-                'latitude' => $latitude,
-                'longitude' => $longitude,
-                'altitude' => $altitude,
+            ->json(self::stationPayload(
+                $externalId,
+                $name,
+                $latitude,
+                $longitude,
+                $altitude,
+            ))
+            ->put('/data/3.0/stations/{id}', [
+                'id' => $id,
             ])
-            ->post('/data/3.0/stations')
             ->entity(Station::class);
 
         return $station;
@@ -64,5 +87,30 @@ final class Stations extends Resource
             ->entity(Station::class);
 
         return $station;
+    }
+
+    /**
+     * @return array{
+     *     external_id: string,
+     *     name: string,
+     *     latitude: float,
+     *     longitude: float,
+     *     altitude: float
+     * }
+     */
+    private static function stationPayload(
+        string $externalId,
+        string $name,
+        float $latitude,
+        float $longitude,
+        float $altitude,
+    ): array {
+        return [
+            'external_id' => Assert::notBlank($externalId, 'external station ID'),
+            'name' => Assert::notBlank($name, 'station name'),
+            'latitude' => Assert::latitude($latitude),
+            'longitude' => Assert::longitude($longitude),
+            'altitude' => Assert::finiteNumber($altitude, 'station altitude'),
+        ];
     }
 }

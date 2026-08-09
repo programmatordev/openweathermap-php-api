@@ -29,6 +29,25 @@ $station = $api->stations()->create(
 The method returns the created `Station`. OpenWeather assigns its internal ID,
 rank, user ID, source type, and creation and update times.
 
+## Update A Station
+
+Use `update()` with the internal station ID and the complete editable station
+information.
+
+```php
+$station = $api->stations()->update(
+    id: 'station-id',
+    externalId: 'home-station',
+    name: 'Home Weather Station',
+    latitude: 38.7223,
+    longitude: -9.1393,
+    altitude: 110,
+);
+```
+
+OpenWeather does not support partial station updates, so all five station values
+are required.
+
 ## List Stations
 
 Use `all()` to retrieve every station associated with the authenticated API

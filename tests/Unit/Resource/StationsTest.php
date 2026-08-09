@@ -53,6 +53,38 @@ final class StationsTest extends ApiTestCase
         self::assertSame(['appid' => 'api-key'], $this->query($request));
     }
 
+    public function testUpdatesAStation(): void
+    {
+        $this->respondWithFixture('stations/update.json');
+
+        $station = $this->api->stations()->update(
+            id: ' 6a779284adde3b0001343e02 ',
+            externalId: ' openweathermap-php-api-fixture-updated ',
+            name: ' Updated OpenWeatherMap PHP API Fixture ',
+            latitude: 38.72,
+            longitude: -9.14,
+            altitude: 110,
+        );
+        $request = $this->client->getLastRequest();
+
+        self::assertInstanceOf(Station::class, $station);
+        self::assertSame('openweathermap-php-api-fixture-updated', $station->externalId());
+        self::assertSame('PUT', $request->getMethod());
+        self::assertSame(
+            '/data/3.0/stations/6a779284adde3b0001343e02',
+            $request->getUri()->getPath(),
+        );
+        self::assertSame(['appid' => 'api-key'], $this->query($request));
+        self::assertSame('application/json', $request->getHeaderLine('Content-Type'));
+        self::assertSame([
+            'external_id' => 'openweathermap-php-api-fixture-updated',
+            'name' => 'Updated OpenWeatherMap PHP API Fixture',
+            'latitude' => 38.72,
+            'longitude' => -9.14,
+            'altitude' => 110,
+        ], json_decode((string) $request->getBody(), true, 512, JSON_THROW_ON_ERROR));
+    }
+
     public function testFindsAStation(): void
     {
         $this->respondWithFixture('stations/retrieve.json');
@@ -78,6 +110,23 @@ final class StationsTest extends ApiTestCase
         );
 
         $this->api->stations()->find('   ');
+    }
+
+    public function testRejectsABlankStationIdentifierWhenUpdating(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            'The station ID must be a non-empty string.',
+        );
+
+        $this->api->stations()->update(
+            id: '   ',
+            externalId: 'station',
+            name: 'Station',
+            latitude: 0,
+            longitude: 0,
+            altitude: 0,
+        );
     }
 
     #[DataProvider('invalidCreationArguments')]
