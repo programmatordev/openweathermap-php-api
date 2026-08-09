@@ -10,7 +10,7 @@ final class StationsTest extends ApiTestCase
 {
     public function testCreatesAStation(): void
     {
-        $this->respondWithFixture('stations/register.json');
+        $this->respondWithFixture('stations/register.json', status: 201);
 
         $station = $this->api->stations()->create(
             externalId: ' openweathermap-php-api-fixture ',
@@ -127,6 +127,32 @@ final class StationsTest extends ApiTestCase
             longitude: 0,
             altitude: 0,
         );
+    }
+
+    public function testDeletesAStation(): void
+    {
+        $this->respondWithFixture('stations/delete.empty', status: 204);
+
+        $this->api->stations()->delete(' 6a779284adde3b0001343e02 ');
+        $request = $this->client->getLastRequest();
+
+        self::assertSame('DELETE', $request->getMethod());
+        self::assertSame(
+            '/data/3.0/stations/6a779284adde3b0001343e02',
+            $request->getUri()->getPath(),
+        );
+        self::assertSame(['appid' => 'api-key'], $this->query($request));
+        self::assertSame('', (string) $request->getBody());
+    }
+
+    public function testRejectsABlankStationIdentifierWhenDeleting(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            'The station ID must be a non-empty string.',
+        );
+
+        $this->api->stations()->delete('   ');
     }
 
     #[DataProvider('invalidCreationArguments')]

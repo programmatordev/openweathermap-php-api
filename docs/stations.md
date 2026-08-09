@@ -88,3 +88,14 @@ $station = $api->stations()->find('station-id');
 
 echo $station->name();
 ```
+
+## Delete A Station
+
+> **Warning:** Deleting a station also permanently deletes its associated
+> measurements.
+
+Use `delete()` with the internal station ID returned by OpenWeather.
+
+```php
+$api->stations()->delete('station-id');
+```

@@ -89,6 +89,18 @@ final class Stations extends Resource
         return $station;
     }
 
+    public function delete(string $id): void
+    {
+        $id = Assert::notBlank($id, 'station ID');
+
+        // https://openweathermap.org/api/stations
+        $this
+            ->endpoint()
+            ->delete('/data/3.0/stations/{id}', [
+                'id' => $id,
+            ]);
+    }
+
     /**
      * @return array{
      *     external_id: string,

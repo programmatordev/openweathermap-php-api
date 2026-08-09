@@ -23,9 +23,15 @@ abstract class ApiTestCase extends TestCase
         $this->api->setup()->client($this->client);
     }
 
-    protected function respondWithFixture(string $path): void
+    protected function respondWithFixture(
+        string $path,
+        int $status = 200,
+    ): void
     {
-        $this->client->addResponse(new Response(body: Fixture::contents($path)));
+        $this->client->addResponse(new Response(
+            status: $status,
+            body: Fixture::contents($path),
+        ));
     }
 
     protected function query(RequestInterface $request): array
