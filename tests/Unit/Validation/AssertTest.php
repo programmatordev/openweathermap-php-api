@@ -43,6 +43,12 @@ final class AssertTest extends TestCase
         Assert::isInstanceOf('value', \stdClass::class, 'value');
     }
 
+    public function testItPreservesANullableNonBlankString(): void
+    {
+        self::assertNull(Assert::nullableNotBlank(null, 'value'));
+        self::assertSame('value', Assert::nullableNotBlank(' value ', 'value'));
+    }
+
     public function testItAcceptsAnArrayContainingOnlyInstancesOfAClass(): void
     {
         $values = [new \stdClass(), new \stdClass()];

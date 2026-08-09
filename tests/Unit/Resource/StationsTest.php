@@ -4,6 +4,7 @@ namespace ProgrammatorDev\OpenWeatherMap\Test\Unit\Resource;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use ProgrammatorDev\OpenWeatherMap\Entity\Stations\Station;
+use ProgrammatorDev\OpenWeatherMap\Request\Stations\CloudLayer;
 use ProgrammatorDev\OpenWeatherMap\Request\Stations\Measurement;
 use ProgrammatorDev\OpenWeatherMap\Test\Support\ApiTestCase;
 
@@ -164,6 +165,7 @@ final class StationsTest extends ApiTestCase
             stationId: 'station-id',
             dateTime: new \DateTimeImmutable('@1786231350'),
             temperature: 19.5,
+            clouds: [new CloudLayer(condition: 'NSC')],
         ));
         $request = $this->client->getLastRequest();
 
@@ -175,6 +177,7 @@ final class StationsTest extends ApiTestCase
             'station_id' => 'station-id',
             'dt' => 1786231350,
             'temperature' => 19.5,
+            'clouds' => [['condition' => 'NSC']],
         ]], json_decode((string) $request->getBody(), true, 512, JSON_THROW_ON_ERROR));
     }
 

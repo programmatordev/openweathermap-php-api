@@ -88,6 +88,15 @@ final class Assert
         return $value;
     }
 
+    public static function nullableNotBlank(
+        ?string $value,
+        string $name,
+    ): ?string {
+        return $value === null
+            ? null
+            : self::notBlank($value, $name);
+    }
+
     public static function latitude(float $latitude): float
     {
         if (!is_finite($latitude) || $latitude < -90 || $latitude > 90) {

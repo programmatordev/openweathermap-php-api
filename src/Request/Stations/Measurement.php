@@ -44,6 +44,14 @@ final class Measurement
 
     private readonly ?string $visibilityPrefix;
 
+    /**
+     * @var list<CloudLayer>
+     */
+    private readonly array $clouds;
+
+    /**
+     * @param list<CloudLayer> $clouds
+     */
     public function __construct(
         string $stationId,
         \DateTimeInterface $dateTime,
@@ -64,6 +72,7 @@ final class Measurement
         ?float $heatIndex = null,
         ?float $visibilityDistance = null,
         ?string $visibilityPrefix = null,
+        array $clouds = [],
     ) {
         $this->stationId = Assert::notBlank($stationId, 'station ID');
         $this->dateTime = \DateTimeImmutable::createFromInterface($dateTime)
@@ -107,9 +116,15 @@ final class Measurement
             $visibilityDistance,
             'visibility distance',
         );
-        $this->visibilityPrefix = $visibilityPrefix === null
-            ? null
-            : Assert::notBlank($visibilityPrefix, 'visibility prefix');
+        $this->visibilityPrefix = Assert::nullableNotBlank(
+            $visibilityPrefix,
+            'visibility prefix',
+        );
+        $this->clouds = array_values(Assert::allInstancesOf(
+            $clouds,
+            CloudLayer::class,
+            'cloud layer',
+        ));
     }
 
     public function stationId(): string
@@ -208,7 +223,15 @@ final class Measurement
     }
 
     /**
-     * @return array<string, int|float|string>
+     * @return list<CloudLayer>
+     */
+    public function clouds(): array
+    {
+        return $this->clouds;
+    }
+
+    /**
+     * @return array<string, int|float|string|list<array<string, float|string>>>
      */
     public function toArray(): array
     {
@@ -232,6 +255,12 @@ final class Measurement
             'heat_index' => $this->heatIndex,
             'visibility_distance' => $this->visibilityDistance,
             'visibility_prefix' => $this->visibilityPrefix,
+            'clouds' => $this->clouds === []
+                ? null
+                : array_map(
+                    static fn(CloudLayer $cloud): array => $cloud->toArray(),
+                    $this->clouds,
+                ),
         ], static fn(mixed $value): bool => $value !== null);
     }
 }

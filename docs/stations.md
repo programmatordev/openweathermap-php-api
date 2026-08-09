@@ -106,6 +106,7 @@ Create a `Measurement` with the station ID, observation time, and available
 readings, then submit it to OpenWeather.
 
 ```php
+use ProgrammatorDev\OpenWeatherMap\Request\Stations\CloudLayer;
 use ProgrammatorDev\OpenWeatherMap\Request\Stations\Measurement;
 
 $measurement = new Measurement(
@@ -116,6 +117,13 @@ $measurement = new Measurement(
     windDirection: 180,
     pressure: 1012,
     humidity: 68,
+    clouds: [
+        new CloudLayer(
+            distance: 1200,
+            condition: 'BKN',
+            cumulus: 'CB',
+        ),
+    ],
 );
 
 $api->stations()->submitMeasurement($measurement);
@@ -133,5 +141,9 @@ $api->stations()->submitMeasurements([
 Measurement units are fixed by the Weather Stations API: Celsius for
 temperatures, metres per second for wind, degrees for wind direction,
 hectopascals for pressure, percent for humidity, millimetres for rain and snow,
-and kilometres for visibility. The API-wide units configuration does not alter
-submitted values.
+kilometres for visibility, and metres for cloud-layer distance. The API-wide
+units configuration does not alter submitted values.
+
+Each `CloudLayer` represents one entry in OpenWeather's `clouds` array. Its
+distance, METAR cloud condition, and cumulus type are optional, but at least one
+value must be provided.

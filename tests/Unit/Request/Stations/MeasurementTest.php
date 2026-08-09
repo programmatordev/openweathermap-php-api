@@ -4,6 +4,7 @@ namespace ProgrammatorDev\OpenWeatherMap\Test\Unit\Request\Stations;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use ProgrammatorDev\OpenWeatherMap\Request\Stations\CloudLayer;
 use ProgrammatorDev\OpenWeatherMap\Request\Stations\Measurement;
 
 final class MeasurementTest extends TestCase
@@ -85,6 +86,47 @@ final class MeasurementTest extends TestCase
             'station_id' => 'station-id',
             'dt' => 1786231350,
         ], $measurement->toArray());
+    }
+
+    public function testMapsCloudLayers(): void
+    {
+        $clouds = [
+            new CloudLayer(condition: 'SCT', distance: 800),
+            new CloudLayer(condition: 'BKN', distance: 1200, cumulus: 'CB'),
+        ];
+        $measurement = new Measurement(
+            stationId: 'station-id',
+            dateTime: new \DateTimeImmutable('@1786231350'),
+            clouds: $clouds,
+        );
+
+        self::assertSame($clouds, $measurement->clouds());
+        self::assertSame([
+            'station_id' => 'station-id',
+            'dt' => 1786231350,
+            'clouds' => [
+                ['distance' => 800.0, 'condition' => 'SCT'],
+                [
+                    'distance' => 1200.0,
+                    'condition' => 'BKN',
+                    'cumulus' => 'CB',
+                ],
+            ],
+        ], $measurement->toArray());
+    }
+
+    public function testRejectsAnInvalidCloudLayer(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            'The cloud layer at index 0 must be an instance of',
+        );
+
+        new Measurement(
+            stationId: 'station-id',
+            dateTime: new \DateTimeImmutable(),
+            clouds: ['invalid'],
+        );
     }
 
     public function testRejectsABlankStationIdentifier(): void
