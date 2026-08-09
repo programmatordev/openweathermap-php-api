@@ -108,6 +108,7 @@ readings, then submit it to OpenWeather.
 ```php
 use ProgrammatorDev\OpenWeatherMap\Request\Stations\CloudLayer;
 use ProgrammatorDev\OpenWeatherMap\Request\Stations\Measurement;
+use ProgrammatorDev\OpenWeatherMap\Request\Stations\Weather;
 
 $measurement = new Measurement(
     stationId: $station->id(),
@@ -122,6 +123,12 @@ $measurement = new Measurement(
             distance: 1200,
             condition: 'BKN',
             cumulus: 'CB',
+        ),
+    ],
+    weather: [
+        new Weather(
+            precipitation: 'RA',
+            intensity: '-',
         ),
     ],
 );
@@ -144,6 +151,16 @@ hectopascals for pressure, percent for humidity, millimetres for rain and snow,
 kilometres for visibility, and metres for cloud-layer distance. The API-wide
 units configuration does not alter submitted values.
 
+Visibility prefixes, cloud conditions, cumulus types, and weather values use
+standard METAR codes. See the
+[NOAA METAR reference](https://aviationweather.gov/help/data/#metar) for their
+meanings.
+
 Each `CloudLayer` represents one entry in OpenWeather's `clouds` array. Its
 distance, METAR cloud condition, and cumulus type are optional, but at least one
 value must be provided.
+
+Each `Weather` represents one entry in the `weather` array. It accepts the
+available METAR precipitation, descriptor, intensity, proximity, obscuration,
+and other codes. At least one value must be provided, and codes are kept as
+strings so additional values accepted by OpenWeather are not restricted.

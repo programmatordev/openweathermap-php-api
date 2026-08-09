@@ -50,7 +50,13 @@ final class Measurement
     private readonly array $clouds;
 
     /**
+     * @var list<Weather>
+     */
+    private readonly array $weather;
+
+    /**
      * @param list<CloudLayer> $clouds
+     * @param list<Weather> $weather
      */
     public function __construct(
         string $stationId,
@@ -73,6 +79,7 @@ final class Measurement
         ?float $visibilityDistance = null,
         ?string $visibilityPrefix = null,
         array $clouds = [],
+        array $weather = [],
     ) {
         $this->stationId = Assert::notBlank($stationId, 'station ID');
         $this->dateTime = \DateTimeImmutable::createFromInterface($dateTime)
@@ -124,6 +131,11 @@ final class Measurement
             $clouds,
             CloudLayer::class,
             'cloud layer',
+        ));
+        $this->weather = array_values(Assert::allInstancesOf(
+            $weather,
+            Weather::class,
+            'weather',
         ));
     }
 
@@ -231,6 +243,14 @@ final class Measurement
     }
 
     /**
+     * @return list<Weather>
+     */
+    public function weather(): array
+    {
+        return $this->weather;
+    }
+
+    /**
      * @return array<string, int|float|string|list<array<string, float|string>>>
      */
     public function toArray(): array
@@ -260,6 +280,12 @@ final class Measurement
                 : array_map(
                     static fn(CloudLayer $cloud): array => $cloud->toArray(),
                     $this->clouds,
+                ),
+            'weather' => $this->weather === []
+                ? null
+                : array_map(
+                    static fn(Weather $weather): array => $weather->toArray(),
+                    $this->weather,
                 ),
         ], static fn(mixed $value): bool => $value !== null);
     }
