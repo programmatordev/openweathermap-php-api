@@ -27,18 +27,19 @@ foreach ($stations as $station) {
     echo $station->id();
     echo $station->name();
     echo $station->externalId();
-    echo $station->coordinates()?->latitude();
-    echo $station->coordinates()?->longitude();
+    echo $station->latitude();
+    echo $station->longitude();
     echo $station->altitude();
     echo $station->rank();
-    echo $station->createdAt()?->format(DATE_ATOM);
-    echo $station->updatedAt()?->format(DATE_ATOM);
+    echo $station->createdAt()->format(DATE_ATOM);
+    echo $station->updatedAt()->format(DATE_ATOM);
 }
 ```
 
-Every response property may be absent or `null`. Creation and update times are
-returned as UTC `DateTimeImmutable` values. Registration responses may also
-populate `userId()` and `sourceType()`; other station responses omit them.
+Core station properties are required because they describe station metadata
+registered with OpenWeather. Creation and update times are returned as UTC
+`DateTimeImmutable` values. Registration responses may also populate
+`userId()` and `sourceType()`; other station responses omit them.
 
 ## Find A Station
 

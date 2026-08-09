@@ -23,8 +23,11 @@ final class PayloadReaderTest extends TestCase
         ], 'Weather');
 
         self::assertSame('Lisbon', $reader->nullableString('name'));
+        self::assertSame('Lisbon', $reader->requiredString('name'));
         self::assertSame(3600, $reader->nullableInt('timezone'));
+        self::assertSame(3600, $reader->requiredInt('timezone'));
         self::assertSame(20.0, $reader->nullableFloat('temperature'));
+        self::assertSame(20.0, $reader->requiredFloat('temperature'));
         self::assertSame(12.5, $reader->nullableFloat('cloudiness'));
         self::assertTrue($reader->nullableBool('daylight'));
         self::assertSame(['1h' => 0.4], $reader->nullableArray('rain'));
@@ -35,6 +38,10 @@ final class PayloadReaderTest extends TestCase
         self::assertSame(
             '2026-08-08T20:33:08+00:00',
             $reader->nullableDateTime('created_at')?->format(\DateTimeInterface::ATOM),
+        );
+        self::assertSame(
+            '2026-08-08T20:33:08+00:00',
+            $reader->requiredDateTime('created_at')->format(\DateTimeInterface::ATOM),
         );
     }
 
@@ -111,6 +118,30 @@ final class PayloadReaderTest extends TestCase
     {
         yield 'relative value' => ['tomorrow'];
         yield 'invalid calendar date' => ['2026-02-31T12:00:00Z'];
+    }
+
+    #[DataProvider('missingRequiredValueProvider')]
+    public function testItRejectsMissingRequiredValues(
+        string $method,
+        string $expectedType,
+    ): void {
+        $reader = PayloadReader::from([], 'Weather');
+
+        $this->expectException(HydrationException::class);
+        $this->expectExceptionMessage(sprintf(
+            'Cannot hydrate Weather: "value" expected %s, null received.',
+            $expectedType,
+        ));
+
+        $reader->{$method}('value');
+    }
+
+    public static function missingRequiredValueProvider(): iterable
+    {
+        yield 'string' => ['requiredString', 'string'];
+        yield 'integer' => ['requiredInt', 'int'];
+        yield 'float' => ['requiredFloat', 'int|float'];
+        yield 'date and time' => ['requiredDateTime', 'ISO 8601 date-time string'];
     }
 
     #[DataProvider('invalidValueProvider')]

@@ -159,6 +159,59 @@ final class PayloadReader
         return $dateTime->setTimezone(new \DateTimeZone('UTC'));
     }
 
+    public function requiredString(string $path): string
+    {
+        return $this->requiredValue(
+            $path,
+            'string',
+            $this->nullableString($path),
+        );
+    }
+
+    public function requiredInt(string $path): int
+    {
+        return $this->requiredValue(
+            $path,
+            'int',
+            $this->nullableInt($path),
+        );
+    }
+
+    public function requiredFloat(string $path): float
+    {
+        return $this->requiredValue(
+            $path,
+            'int|float',
+            $this->nullableFloat($path),
+        );
+    }
+
+    public function requiredDateTime(string $path): \DateTimeImmutable
+    {
+        return $this->requiredValue(
+            $path,
+            'ISO 8601 date-time string',
+            $this->nullableDateTime($path),
+        );
+    }
+
+    private function requiredValue(
+        string $path,
+        string $expectedType,
+        mixed $value,
+    ): mixed {
+        if ($value === null) {
+            throw HydrationException::invalidType(
+                $this->entity,
+                $path,
+                $expectedType,
+                $value,
+            );
+        }
+
+        return $value;
+    }
+
     /**
      * @param \Closure(mixed): bool $accepts
      */

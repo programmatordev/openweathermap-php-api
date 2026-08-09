@@ -15,15 +15,15 @@ final class StationTest extends TestCase
         $station = Station::fromArray(Fixture::json('stations/retrieve.json'));
 
         self::assertSame('6a779284adde3b0001343e02', $station->id());
-        self::assertSame('2026-08-08T20:33:08+00:00', $station->createdAt()?->format(\DateTimeInterface::ATOM));
-        self::assertSame('107000', $station->createdAt()?->format('u'));
-        self::assertSame('UTC', $station->createdAt()?->getTimezone()->getName());
-        self::assertSame('2026-08-08T20:33:08+00:00', $station->updatedAt()?->format(\DateTimeInterface::ATOM));
-        self::assertSame('107000', $station->updatedAt()?->format('u'));
+        self::assertSame('2026-08-08T20:33:08+00:00', $station->createdAt()->format(\DateTimeInterface::ATOM));
+        self::assertSame('107000', $station->createdAt()->format('u'));
+        self::assertSame('UTC', $station->createdAt()->getTimezone()->getName());
+        self::assertSame('2026-08-08T20:33:08+00:00', $station->updatedAt()->format(\DateTimeInterface::ATOM));
+        self::assertSame('107000', $station->updatedAt()->format('u'));
         self::assertSame('openweathermap-php-api-fixture', $station->externalId());
         self::assertSame('OpenWeatherMap PHP API Fixture', $station->name());
-        self::assertSame(38.7223, $station->coordinates()?->latitude());
-        self::assertSame(-9.1393, $station->coordinates()?->longitude());
+        self::assertSame(38.7223, $station->latitude());
+        self::assertSame(-9.1393, $station->longitude());
         self::assertSame(100.0, $station->altitude());
         self::assertSame(10, $station->rank());
         self::assertNull($station->userId());
@@ -37,50 +37,73 @@ final class StationTest extends TestCase
         self::assertSame('6a779284adde3b0001343e02', $station->id());
         self::assertSame('user-fixture', $station->userId());
         self::assertSame(5, $station->sourceType());
-        self::assertSame('107598', $station->createdAt()?->format('u'));
-        self::assertSame('107598', $station->updatedAt()?->format('u'));
+        self::assertSame('107598', $station->createdAt()->format('u'));
+        self::assertSame('107598', $station->updatedAt()->format('u'));
     }
 
-    public function testToleratesMissingNullUnknownAndPartialFields(): void
+    public function testToleratesNullAndUnknownOptionalFields(): void
     {
-        $missing = Station::fromArray([]);
-
-        self::assertNull($missing->id());
-        self::assertNull($missing->createdAt());
-        self::assertNull($missing->updatedAt());
-        self::assertNull($missing->externalId());
-        self::assertNull($missing->name());
-        self::assertNull($missing->coordinates());
-        self::assertNull($missing->altitude());
-        self::assertNull($missing->rank());
-        self::assertNull($missing->userId());
-        self::assertNull($missing->sourceType());
-
-        $station = Station::fromArray([
-            'id' => null,
-            'created_at' => null,
-            'updated_at' => null,
-            'external_id' => null,
-            'name' => null,
-            'latitude' => null,
-            'altitude' => null,
-            'rank' => null,
+        $data = Fixture::json('stations/retrieve.json');
+        $data = array_replace($data, [
             'user_id' => null,
             'source_type' => null,
             'unknown' => new \stdClass(),
         ]);
+        $station = Station::fromArray($data);
 
-        self::assertNull($station->id());
-        self::assertNull($station->createdAt());
-        self::assertNull($station->updatedAt());
-        self::assertNull($station->externalId());
-        self::assertNull($station->name());
-        self::assertNull($station->coordinates()?->latitude());
-        self::assertNull($station->coordinates()?->longitude());
-        self::assertNull($station->altitude());
-        self::assertNull($station->rank());
         self::assertNull($station->userId());
         self::assertNull($station->sourceType());
+    }
+
+    #[DataProvider('requiredFields')]
+    public function testRejectsMissingRequiredFields(
+        string $field,
+        string $path,
+        string $expectedType,
+    ): void {
+        $data = Fixture::json('stations/retrieve.json');
+        unset($data[$field]);
+
+        $this->expectException(HydrationException::class);
+        $this->expectExceptionMessage(sprintf(
+            '"%s" expected %s, null received.',
+            $path,
+            $expectedType,
+        ));
+
+        Station::fromArray($data);
+    }
+
+    #[DataProvider('requiredFields')]
+    public function testRejectsNullRequiredFields(
+        string $field,
+        string $path,
+        string $expectedType,
+    ): void {
+        $data = Fixture::json('stations/retrieve.json');
+        $data[$field] = null;
+
+        $this->expectException(HydrationException::class);
+        $this->expectExceptionMessage(sprintf(
+            '"%s" expected %s, null received.',
+            $path,
+            $expectedType,
+        ));
+
+        Station::fromArray($data);
+    }
+
+    public static function requiredFields(): iterable
+    {
+        yield 'identifier' => ['id', 'id', 'string'];
+        yield 'created date' => ['created_at', 'created_at', 'ISO 8601 date-time string'];
+        yield 'updated date' => ['updated_at', 'updated_at', 'ISO 8601 date-time string'];
+        yield 'external identifier' => ['external_id', 'external_id', 'string'];
+        yield 'name' => ['name', 'name', 'string'];
+        yield 'latitude' => ['latitude', 'latitude', 'int|float'];
+        yield 'longitude' => ['longitude', 'longitude', 'int|float'];
+        yield 'altitude' => ['altitude', 'altitude', 'int|float'];
+        yield 'rank' => ['rank', 'rank', 'int'];
     }
 
     #[DataProvider('invalidFields')]
@@ -89,7 +112,10 @@ final class StationTest extends TestCase
         $this->expectException(HydrationException::class);
         $this->expectExceptionMessage($message);
 
-        Station::fromArray($data);
+        Station::fromArray(array_replace(
+            Fixture::json('stations/retrieve.json'),
+            $data,
+        ));
     }
 
     public static function invalidFields(): iterable
