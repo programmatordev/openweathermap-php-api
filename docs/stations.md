@@ -99,3 +99,39 @@ Use `delete()` with the internal station ID returned by OpenWeather.
 ```php
 $api->stations()->delete('station-id');
 ```
+
+## Submit Measurements
+
+Create a `Measurement` with the station ID, observation time, and available
+readings, then submit it to OpenWeather.
+
+```php
+use ProgrammatorDev\OpenWeatherMap\Request\Stations\Measurement;
+
+$measurement = new Measurement(
+    stationId: $station->id(),
+    dateTime: new DateTimeImmutable('now'),
+    temperature: 19.5,
+    windSpeed: 2.4,
+    windDirection: 180,
+    pressure: 1012,
+    humidity: 68,
+);
+
+$api->stations()->submitMeasurement($measurement);
+```
+
+Use `submitMeasurements()` to send several observations in one request.
+
+```php
+$api->stations()->submitMeasurements([
+    $firstMeasurement,
+    $secondMeasurement,
+]);
+```
+
+Measurement units are fixed by the Weather Stations API: Celsius for
+temperatures, metres per second for wind, degrees for wind direction,
+hectopascals for pressure, percent for humidity, millimetres for rain and snow,
+and kilometres for visibility. The API-wide units configuration does not alter
+submitted values.

@@ -6,6 +6,74 @@ final class Assert
 {
     private function __construct() {}
 
+    /**
+     * @template T
+     *
+     * @param array<T> $values
+     *
+     * @return non-empty-array<T>
+     */
+    public static function notEmpty(array $values, string $name): array
+    {
+        if ($values === []) {
+            throw new \InvalidArgumentException(sprintf(
+                'The %s must not be empty.',
+                $name,
+            ));
+        }
+
+        return $values;
+    }
+
+    /**
+     * @template T of object
+     *
+     * @param class-string<T> $class
+     *
+     * @return T
+     */
+    public static function isInstanceOf(
+        mixed $value,
+        string $class,
+        string $name,
+    ): object {
+        if (!$value instanceof $class) {
+            throw new \InvalidArgumentException(sprintf(
+                'The %s must be an instance of %s.',
+                $name,
+                $class,
+            ));
+        }
+
+        return $value;
+    }
+
+    /**
+     * @template T of object
+     *
+     * @param array<array-key, mixed> $values
+     * @param class-string<T> $class
+     *
+     * @return array<array-key, T>
+     */
+    public static function allInstancesOf(
+        array $values,
+        string $class,
+        string $name,
+    ): array {
+        $instances = [];
+
+        foreach ($values as $index => $value) {
+            $instances[$index] = self::isInstanceOf(
+                $value,
+                $class,
+                sprintf('%s at index %s', $name, $index),
+            );
+        }
+
+        return $instances;
+    }
+
     public static function notBlank(string $value, string $name): string
     {
         $value = trim($value);
@@ -52,6 +120,15 @@ final class Assert
         }
 
         return $value;
+    }
+
+    public static function nullableFiniteNumber(
+        ?float $value,
+        string $name,
+    ): ?float {
+        return $value === null
+            ? null
+            : self::finiteNumber($value, $name);
     }
 
     public static function countryCode(string $countryCode): string

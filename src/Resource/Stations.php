@@ -4,6 +4,7 @@ namespace ProgrammatorDev\OpenWeatherMap\Resource;
 
 use ProgrammatorDev\Api\Resource;
 use ProgrammatorDev\OpenWeatherMap\Entity\Stations\Station;
+use ProgrammatorDev\OpenWeatherMap\Request\Stations\Measurement;
 use ProgrammatorDev\OpenWeatherMap\Validation\Assert;
 
 final class Stations extends Resource
@@ -99,6 +100,35 @@ final class Stations extends Resource
             ->delete('/data/3.0/stations/{id}', [
                 'id' => $id,
             ]);
+    }
+
+    public function submitMeasurement(Measurement $measurement): void
+    {
+        $this->submitMeasurements([$measurement]);
+    }
+
+    /**
+     * @param list<Measurement> $measurements
+     */
+    public function submitMeasurements(array $measurements): void
+    {
+        $measurements = Assert::notEmpty($measurements, 'station measurements');
+        $measurements = Assert::allInstancesOf(
+            $measurements,
+            Measurement::class,
+            'station measurement',
+        );
+        $payload = [];
+
+        foreach ($measurements as $measurement) {
+            $payload[] = $measurement->toArray();
+        }
+
+        // https://openweathermap.org/api/stations#measurement
+        $this
+            ->endpoint()
+            ->json($payload)
+            ->post('/data/3.0/measurements');
     }
 
     /**

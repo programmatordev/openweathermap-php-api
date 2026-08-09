@@ -8,6 +8,65 @@ use ProgrammatorDev\OpenWeatherMap\Validation\Assert;
 
 final class AssertTest extends TestCase
 {
+    public function testItAcceptsANonEmptyArray(): void
+    {
+        $values = ['value'];
+
+        self::assertSame($values, Assert::notEmpty($values, 'values'));
+    }
+
+    public function testItRejectsAnEmptyArray(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The values must not be empty.');
+
+        Assert::notEmpty([], 'values');
+    }
+
+    public function testItAcceptsAnInstanceOfAClass(): void
+    {
+        $value = new \stdClass();
+
+        self::assertSame(
+            $value,
+            Assert::isInstanceOf($value, \stdClass::class, 'value'),
+        );
+    }
+
+    public function testItRejectsAValueThatIsNotAnInstanceOfAClass(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            'The value must be an instance of stdClass.',
+        );
+
+        Assert::isInstanceOf('value', \stdClass::class, 'value');
+    }
+
+    public function testItAcceptsAnArrayContainingOnlyInstancesOfAClass(): void
+    {
+        $values = [new \stdClass(), new \stdClass()];
+
+        self::assertSame(
+            $values,
+            Assert::allInstancesOf($values, \stdClass::class, 'value'),
+        );
+    }
+
+    public function testItRejectsAnArrayContainingAnotherType(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            'The value at index 1 must be an instance of stdClass.',
+        );
+
+        Assert::allInstancesOf(
+            [new \stdClass(), 'value'],
+            \stdClass::class,
+            'value',
+        );
+    }
+
     #[DataProvider('finiteNumbers')]
     public function testItAcceptsFiniteNumbers(float $value): void
     {
@@ -35,6 +94,12 @@ final class AssertTest extends TestCase
         yield 'negative infinity' => [-INF];
         yield 'positive infinity' => [INF];
         yield 'not a number' => [NAN];
+    }
+
+    public function testItPreservesANullableFiniteNumber(): void
+    {
+        self::assertNull(Assert::nullableFiniteNumber(null, 'value'));
+        self::assertSame(10.5, Assert::nullableFiniteNumber(10.5, 'value'));
     }
 
     #[DataProvider('nonNegativeIntegers')]

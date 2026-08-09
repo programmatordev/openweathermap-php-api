@@ -4,6 +4,7 @@ namespace ProgrammatorDev\OpenWeatherMap\Test\Unit\Resource;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use ProgrammatorDev\OpenWeatherMap\Entity\Stations\Station;
+use ProgrammatorDev\OpenWeatherMap\Request\Stations\Measurement;
 use ProgrammatorDev\OpenWeatherMap\Test\Support\ApiTestCase;
 
 final class StationsTest extends ApiTestCase
@@ -153,6 +154,134 @@ final class StationsTest extends ApiTestCase
         );
 
         $this->api->stations()->delete('   ');
+    }
+
+    public function testSubmitsAMeasurement(): void
+    {
+        $this->respondWithFixture('stations/measurements/submit.empty', status: 204);
+
+        $this->api->stations()->submitMeasurement(new Measurement(
+            stationId: 'station-id',
+            dateTime: new \DateTimeImmutable('@1786231350'),
+            temperature: 19.5,
+        ));
+        $request = $this->client->getLastRequest();
+
+        self::assertSame('POST', $request->getMethod());
+        self::assertSame('/data/3.0/measurements', $request->getUri()->getPath());
+        self::assertSame(['appid' => 'api-key'], $this->query($request));
+        self::assertSame('application/json', $request->getHeaderLine('Content-Type'));
+        self::assertSame([[
+            'station_id' => 'station-id',
+            'dt' => 1786231350,
+            'temperature' => 19.5,
+        ]], json_decode((string) $request->getBody(), true, 512, JSON_THROW_ON_ERROR));
+    }
+
+    public function testSubmitsMultipleMeasurements(): void
+    {
+        $this->respondWithFixture('stations/measurements/submit.empty', status: 204);
+
+        $measurements = [
+            new Measurement(
+                stationId: '6a77b80aadde3b0001343e08',
+                dateTime: new \DateTimeImmutable('@1786143600'),
+                temperature: 19.5,
+                windSpeed: 2.4,
+                windGust: 4.1,
+                windDirection: 180,
+                pressure: 1012,
+                humidity: 68,
+                rainLastHour: 0.2,
+            ),
+            new Measurement(
+                stationId: '6a77b80aadde3b0001343e08',
+                dateTime: new \DateTimeImmutable('@1786228200'),
+                temperature: 20.5,
+                windSpeed: 3.2,
+                windGust: 5.3,
+                windDirection: 200,
+                pressure: 1013,
+                humidity: 64,
+                rainLastHour: 0.4,
+            ),
+            new Measurement(
+                stationId: '6a77b80aadde3b0001343e08',
+                dateTime: new \DateTimeImmutable('@1786230720'),
+                temperature: 21.5,
+                windSpeed: 4,
+                windGust: 6.5,
+                windDirection: 220,
+                pressure: 1014,
+                humidity: 60,
+                rainLastHour: 0.6,
+            ),
+        ];
+
+        $this->api->stations()->submitMeasurements($measurements);
+        $request = $this->client->getLastRequest();
+
+        self::assertSame(
+            [
+                [
+                    'station_id' => '6a77b80aadde3b0001343e08',
+                    'dt' => 1786143600,
+                    'temperature' => 19.5,
+                    'wind_speed' => 2.4,
+                    'wind_gust' => 4.1,
+                    'wind_deg' => 180,
+                    'pressure' => 1012,
+                    'humidity' => 68,
+                    'rain_1h' => 0.2,
+                ],
+                [
+                    'station_id' => '6a77b80aadde3b0001343e08',
+                    'dt' => 1786228200,
+                    'temperature' => 20.5,
+                    'wind_speed' => 3.2,
+                    'wind_gust' => 5.3,
+                    'wind_deg' => 200,
+                    'pressure' => 1013,
+                    'humidity' => 64,
+                    'rain_1h' => 0.4,
+                ],
+                [
+                    'station_id' => '6a77b80aadde3b0001343e08',
+                    'dt' => 1786230720,
+                    'temperature' => 21.5,
+                    'wind_speed' => 4,
+                    'wind_gust' => 6.5,
+                    'wind_deg' => 220,
+                    'pressure' => 1014,
+                    'humidity' => 60,
+                    'rain_1h' => 0.6,
+                ],
+            ],
+            json_decode((string) $request->getBody(), true, 512, JSON_THROW_ON_ERROR),
+        );
+    }
+
+    public function testRejectsAnEmptyMeasurementBatch(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            'The station measurements must not be empty.',
+        );
+
+        $this->api->stations()->submitMeasurements([]);
+    }
+
+    public function testRejectsAnInvalidMeasurementBatchItem(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            'The station measurement at index 1 must be an instance of',
+        );
+
+        $this->api->stations()->submitMeasurements([
+            new Measurement('station-id', new \DateTimeImmutable()),
+            'invalid',
+        ]);
     }
 
     #[DataProvider('invalidCreationArguments')]
