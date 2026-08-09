@@ -8,6 +8,35 @@ use ProgrammatorDev\OpenWeatherMap\Validation\Assert;
 
 final class AssertTest extends TestCase
 {
+    #[DataProvider('finiteNumbers')]
+    public function testItAcceptsFiniteNumbers(float $value): void
+    {
+        self::assertSame($value, Assert::finiteNumber($value, 'value'));
+    }
+
+    public static function finiteNumbers(): iterable
+    {
+        yield 'negative' => [-10.5];
+        yield 'zero' => [0.0];
+        yield 'positive' => [10.5];
+    }
+
+    #[DataProvider('nonFiniteNumbers')]
+    public function testItRejectsNonFiniteNumbers(float $value): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The value must be a finite number.');
+
+        Assert::finiteNumber($value, 'value');
+    }
+
+    public static function nonFiniteNumbers(): iterable
+    {
+        yield 'negative infinity' => [-INF];
+        yield 'positive infinity' => [INF];
+        yield 'not a number' => [NAN];
+    }
+
     #[DataProvider('nonNegativeIntegers')]
     public function testItAcceptsNonNegativeIntegers(int $value): void
     {

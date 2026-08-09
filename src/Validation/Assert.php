@@ -42,6 +42,18 @@ final class Assert
         return $longitude;
     }
 
+    public static function finiteNumber(float $value, string $name): float
+    {
+        if (!is_finite($value)) {
+            throw new \InvalidArgumentException(sprintf(
+                'The %s must be a finite number.',
+                $name,
+            ));
+        }
+
+        return $value;
+    }
+
     public static function countryCode(string $countryCode): string
     {
         $countryCode = strtoupper(trim($countryCode));

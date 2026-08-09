@@ -1,10 +1,33 @@
 # Weather Stations
 
-Weather Stations API 3.0 manages personal weather stations associated with an
-OpenWeather account and is available on OpenWeather's standard free and paid
-subscriptions. See the
+The Weather Stations API lets you register and manage personal weather stations
+associated with your OpenWeather account.
+
+It is available on OpenWeather's standard free and paid subscriptions. See the
 [official Weather Stations documentation](https://openweathermap.org/api/stations)
 for API details.
+
+## Create A Station
+
+Use `create()` to register a station with its external ID, name, coordinates,
+and altitude.
+
+```php
+use ProgrammatorDev\OpenWeatherMap\OpenWeatherMap;
+
+$api = new OpenWeatherMap($_ENV['OPENWEATHERMAP_API_KEY']);
+
+$station = $api->stations()->create(
+    externalId: 'home-station',
+    name: 'Home Weather Station',
+    latitude: 38.7223,
+    longitude: -9.1393,
+    altitude: 100,
+);
+```
+
+The method returns the created `Station`. OpenWeather assigns its internal ID,
+rank, user ID, source type, and creation and update times.
 
 ## List Stations
 
@@ -12,10 +35,6 @@ Use `all()` to retrieve every station associated with the authenticated API
 key.
 
 ```php
-use ProgrammatorDev\OpenWeatherMap\OpenWeatherMap;
-
-$api = new OpenWeatherMap($_ENV['OPENWEATHERMAP_API_KEY']);
-
 $stations = $api->stations()->all();
 ```
 

@@ -2,11 +2,42 @@
 
 namespace ProgrammatorDev\OpenWeatherMap\Test\Unit\Resource;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use ProgrammatorDev\OpenWeatherMap\Entity\Stations\Station;
 use ProgrammatorDev\OpenWeatherMap\Test\Support\ApiTestCase;
 
 final class StationsTest extends ApiTestCase
 {
+    public function testCreatesAStation(): void
+    {
+        $this->respondWithFixture('stations/register.json');
+
+        $station = $this->api->stations()->create(
+            externalId: ' openweathermap-php-api-fixture ',
+            name: ' OpenWeatherMap PHP API Fixture ',
+            latitude: 38.7223,
+            longitude: -9.1393,
+            altitude: 100,
+        );
+        $request = $this->client->getLastRequest();
+
+        self::assertInstanceOf(Station::class, $station);
+        self::assertSame('6a779284adde3b0001343e02', $station->id());
+        self::assertSame('user-fixture', $station->userId());
+        self::assertSame(5, $station->sourceType());
+        self::assertSame('POST', $request->getMethod());
+        self::assertSame('/data/3.0/stations', $request->getUri()->getPath());
+        self::assertSame(['appid' => 'api-key'], $this->query($request));
+        self::assertSame('application/json', $request->getHeaderLine('Content-Type'));
+        self::assertSame([
+            'external_id' => 'openweathermap-php-api-fixture',
+            'name' => 'OpenWeatherMap PHP API Fixture',
+            'latitude' => 38.7223,
+            'longitude' => -9.1393,
+            'altitude' => 100,
+        ], json_decode((string) $request->getBody(), true, 512, JSON_THROW_ON_ERROR));
+    }
+
     public function testListsStations(): void
     {
         $this->respondWithFixture('stations/list.json');
@@ -47,5 +78,70 @@ final class StationsTest extends ApiTestCase
         );
 
         $this->api->stations()->find('   ');
+    }
+
+    #[DataProvider('invalidCreationArguments')]
+    public function testRejectsInvalidCreationArguments(
+        string $externalId,
+        string $name,
+        float $latitude,
+        float $longitude,
+        float $altitude,
+        string $message,
+    ): void {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage($message);
+
+        $this->api->stations()->create(
+            $externalId,
+            $name,
+            $latitude,
+            $longitude,
+            $altitude,
+        );
+    }
+
+    public static function invalidCreationArguments(): iterable
+    {
+        yield 'blank external identifier' => [
+            '   ',
+            'Station',
+            0,
+            0,
+            0,
+            'The external station ID must be a non-empty string.',
+        ];
+        yield 'blank name' => [
+            'station',
+            '   ',
+            0,
+            0,
+            0,
+            'The station name must be a non-empty string.',
+        ];
+        yield 'invalid latitude' => [
+            'station',
+            'Station',
+            90.0001,
+            0,
+            0,
+            'Latitude must be a finite number between -90 and 90.',
+        ];
+        yield 'invalid longitude' => [
+            'station',
+            'Station',
+            0,
+            180.0001,
+            0,
+            'Longitude must be a finite number between -180 and 180.',
+        ];
+        yield 'non-finite altitude' => [
+            'station',
+            'Station',
+            0,
+            0,
+            INF,
+            'The station altitude must be a finite number.',
+        ];
     }
 }

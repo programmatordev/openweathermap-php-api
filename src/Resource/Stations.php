@@ -8,6 +8,36 @@ use ProgrammatorDev\OpenWeatherMap\Validation\Assert;
 
 final class Stations extends Resource
 {
+    public function create(
+        string $externalId,
+        string $name,
+        float $latitude,
+        float $longitude,
+        float $altitude,
+    ): Station {
+        $externalId = Assert::notBlank($externalId, 'external station ID');
+        $name = Assert::notBlank($name, 'station name');
+        $latitude = Assert::latitude($latitude);
+        $longitude = Assert::longitude($longitude);
+        $altitude = Assert::finiteNumber($altitude, 'station altitude');
+
+        // https://openweathermap.org/api/stations
+        /** @var Station $station */
+        $station = $this
+            ->endpoint()
+            ->json([
+                'external_id' => $externalId,
+                'name' => $name,
+                'latitude' => $latitude,
+                'longitude' => $longitude,
+                'altitude' => $altitude,
+            ])
+            ->post('/data/3.0/stations')
+            ->entity(Station::class);
+
+        return $station;
+    }
+
     /**
      * @return list<Station>
      */
