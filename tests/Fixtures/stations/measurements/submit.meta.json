@@ -1,0 +1,52 @@
+{
+    "provenance": "captured",
+    "product": "Weather Stations API",
+    "endpoint": "Submit station measurements",
+    "apiVersion": "3.0",
+    "capturedAt": "2026-08-08T23:13:27Z",
+    "httpStatus": 204,
+    "bodyFormat": "empty",
+    "bodyBytes": 0,
+    "request": {
+        "method": "POST",
+        "path": "/data/3.0/measurements",
+        "query": {},
+        "body": [
+            {
+                "station_id": "6a77b80aadde3b0001343e08",
+                "dt": 1786143600,
+                "temperature": 19.5,
+                "wind_speed": 2.4,
+                "wind_gust": 4.1,
+                "wind_deg": 180,
+                "pressure": 1012,
+                "humidity": 68,
+                "rain_1h": 0.2
+            },
+            {
+                "station_id": "6a77b80aadde3b0001343e08",
+                "dt": 1786228200,
+                "temperature": 20.5,
+                "wind_speed": 3.2,
+                "wind_gust": 5.3,
+                "wind_deg": 200,
+                "pressure": 1013,
+                "humidity": 64,
+                "rain_1h": 0.4
+            },
+            {
+                "station_id": "6a77b80aadde3b0001343e08",
+                "dt": 1786230720,
+                "temperature": 21.5,
+                "wind_speed": 4.0,
+                "wind_gust": 6.5,
+                "wind_deg": 220,
+                "pressure": 1014,
+                "humidity": 60,
+                "rain_1h": 0.6
+            }
+        ]
+    },
+    "sanitization": [],
+    "notes": "The generated identifier belongs to a deliberately public temporary fixture station. Submission returned no body or Content-Type header. The station and its measurements were deleted before the batch completed."
+}
