@@ -102,16 +102,23 @@ final class Stations extends Resource
             ]);
     }
 
-    public function submitMeasurement(Measurement $measurement): void
+    public function submitMeasurement(
+        string $stationId,
+        Measurement $measurement,
+    ): void
     {
-        $this->submitMeasurements([$measurement]);
+        $this->submitMeasurements($stationId, [$measurement]);
     }
 
     /**
      * @param list<Measurement> $measurements
      */
-    public function submitMeasurements(array $measurements): void
+    public function submitMeasurements(
+        string $stationId,
+        array $measurements,
+    ): void
     {
+        $stationId = Assert::notBlank($stationId, 'station ID');
         $measurements = Assert::notEmpty($measurements, 'station measurements');
         $measurements = Assert::allInstancesOf(
             $measurements,
@@ -121,7 +128,10 @@ final class Stations extends Resource
         $payload = [];
 
         foreach ($measurements as $measurement) {
-            $payload[] = $measurement->toArray();
+            $payload[] = [
+                'station_id' => $stationId,
+                ...$measurement->toArray(),
+            ];
         }
 
         // https://openweathermap.org/api/stations#measurement

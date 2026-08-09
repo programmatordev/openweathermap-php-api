@@ -162,13 +162,15 @@ final class StationsTest extends ApiTestCase
     {
         $this->respondWithFixture('stations/measurements/submit.empty', status: 204);
 
-        $this->api->stations()->submitMeasurement(new Measurement(
-            stationId: 'station-id',
-            dateTime: new \DateTimeImmutable('@1786231350'),
-            temperature: 19.5,
-            clouds: [new CloudLayer(condition: 'NSC')],
-            weather: [new Weather(precipitation: 'RA', intensity: '-')],
-        ));
+        $this->api->stations()->submitMeasurement(
+            'station-id',
+            new Measurement(
+                dateTime: new \DateTimeImmutable('@1786231350'),
+                temperature: 19.5,
+                clouds: [new CloudLayer(condition: 'NSC')],
+                weather: [new Weather(precipitation: 'RA', intensity: '-')],
+            ),
+        );
         $request = $this->client->getLastRequest();
 
         self::assertSame('POST', $request->getMethod());
@@ -190,7 +192,6 @@ final class StationsTest extends ApiTestCase
 
         $measurements = [
             new Measurement(
-                stationId: '6a77b80aadde3b0001343e08',
                 dateTime: new \DateTimeImmutable('@1786143600'),
                 temperature: 19.5,
                 windSpeed: 2.4,
@@ -201,7 +202,6 @@ final class StationsTest extends ApiTestCase
                 rainLastHour: 0.2,
             ),
             new Measurement(
-                stationId: '6a77b80aadde3b0001343e08',
                 dateTime: new \DateTimeImmutable('@1786228200'),
                 temperature: 20.5,
                 windSpeed: 3.2,
@@ -212,7 +212,6 @@ final class StationsTest extends ApiTestCase
                 rainLastHour: 0.4,
             ),
             new Measurement(
-                stationId: '6a77b80aadde3b0001343e08',
                 dateTime: new \DateTimeImmutable('@1786230720'),
                 temperature: 21.5,
                 windSpeed: 4,
@@ -224,7 +223,10 @@ final class StationsTest extends ApiTestCase
             ),
         ];
 
-        $this->api->stations()->submitMeasurements($measurements);
+        $this->api->stations()->submitMeasurements(
+            '6a77b80aadde3b0001343e08',
+            $measurements,
+        );
         $request = $this->client->getLastRequest();
 
         self::assertSame(
@@ -274,7 +276,20 @@ final class StationsTest extends ApiTestCase
             'The station measurements must not be empty.',
         );
 
-        $this->api->stations()->submitMeasurements([]);
+        $this->api->stations()->submitMeasurements('station-id', []);
+    }
+
+    public function testRejectsABlankMeasurementStationIdentifier(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            'The station ID must be a non-empty string.',
+        );
+
+        $this->api->stations()->submitMeasurement(
+            '   ',
+            new Measurement(new \DateTimeImmutable()),
+        );
     }
 
     public function testRejectsAnInvalidMeasurementBatchItem(): void
@@ -284,8 +299,8 @@ final class StationsTest extends ApiTestCase
             'The station measurement at index 1 must be an instance of',
         );
 
-        $this->api->stations()->submitMeasurements([
-            new Measurement('station-id', new \DateTimeImmutable()),
+        $this->api->stations()->submitMeasurements('station-id', [
+            new Measurement(new \DateTimeImmutable()),
             'invalid',
         ]);
     }

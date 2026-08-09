@@ -102,8 +102,8 @@ $api->stations()->delete('station-id');
 
 ## Submit Measurements
 
-Create a `Measurement` with the station ID, observation time, and available
-readings, then submit it to OpenWeather.
+Create a `Measurement` with the observation time and available readings, then
+submit it for a station.
 
 ```php
 use ProgrammatorDev\OpenWeatherMap\Request\Stations\CloudLayer;
@@ -111,7 +111,6 @@ use ProgrammatorDev\OpenWeatherMap\Request\Stations\Measurement;
 use ProgrammatorDev\OpenWeatherMap\Request\Stations\Weather;
 
 $measurement = new Measurement(
-    stationId: $station->id(),
     dateTime: new DateTimeImmutable('now'),
     temperature: 19.5,
     windSpeed: 2.4,
@@ -133,16 +132,22 @@ $measurement = new Measurement(
     ],
 );
 
-$api->stations()->submitMeasurement($measurement);
+$api->stations()->submitMeasurement(
+    stationId: $station->id(),
+    measurement: $measurement,
+);
 ```
 
 Use `submitMeasurements()` to send several observations in one request.
 
 ```php
-$api->stations()->submitMeasurements([
-    $firstMeasurement,
-    $secondMeasurement,
-]);
+$api->stations()->submitMeasurements(
+    stationId: $station->id(),
+    measurements: [
+        $firstMeasurement,
+        $secondMeasurement,
+    ],
+);
 ```
 
 Measurement units are fixed by the Weather Stations API: Celsius for

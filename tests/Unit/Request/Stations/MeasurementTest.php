@@ -13,7 +13,6 @@ final class MeasurementTest extends TestCase
     public function testMapsDocumentedScalarMeasurements(): void
     {
         $measurement = new Measurement(
-            stationId: ' station-id ',
             dateTime: new \DateTimeImmutable('2026-08-08T23:22:30+02:00'),
             temperature: 19.5,
             windSpeed: 2.4,
@@ -34,7 +33,6 @@ final class MeasurementTest extends TestCase
             visibilityPrefix: ' N ',
         );
 
-        self::assertSame('station-id', $measurement->stationId());
         self::assertSame('UTC', $measurement->dateTime()->getTimezone()->getName());
         self::assertSame(19.5, $measurement->temperature());
         self::assertSame(2.4, $measurement->windSpeed());
@@ -54,7 +52,6 @@ final class MeasurementTest extends TestCase
         self::assertSame(10.0, $measurement->visibilityDistance());
         self::assertSame('N', $measurement->visibilityPrefix());
         self::assertSame([
-            'station_id' => 'station-id',
             'dt' => 1786224150,
             'temperature' => 19.5,
             'wind_speed' => 2.4,
@@ -79,12 +76,10 @@ final class MeasurementTest extends TestCase
     public function testOmitsUnavailableScalarMeasurements(): void
     {
         $measurement = new Measurement(
-            stationId: 'station-id',
             dateTime: new \DateTimeImmutable('@1786231350'),
         );
 
         self::assertSame([
-            'station_id' => 'station-id',
             'dt' => 1786231350,
         ], $measurement->toArray());
     }
@@ -96,14 +91,12 @@ final class MeasurementTest extends TestCase
             new CloudLayer(condition: 'BKN', distance: 1200, cumulus: 'CB'),
         ];
         $measurement = new Measurement(
-            stationId: 'station-id',
             dateTime: new \DateTimeImmutable('@1786231350'),
             clouds: $clouds,
         );
 
         self::assertSame($clouds, $measurement->clouds());
         self::assertSame([
-            'station_id' => 'station-id',
             'dt' => 1786231350,
             'clouds' => [
                 ['distance' => 800.0, 'condition' => 'SCT'],
@@ -124,7 +117,6 @@ final class MeasurementTest extends TestCase
         );
 
         new Measurement(
-            stationId: 'station-id',
             dateTime: new \DateTimeImmutable(),
             clouds: ['invalid'],
         );
@@ -137,14 +129,12 @@ final class MeasurementTest extends TestCase
             new Weather(obscuration: 'FG'),
         ];
         $measurement = new Measurement(
-            stationId: 'station-id',
             dateTime: new \DateTimeImmutable('@1786231350'),
             weather: $weather,
         );
 
         self::assertSame($weather, $measurement->weather());
         self::assertSame([
-            'station_id' => 'station-id',
             'dt' => 1786231350,
             'weather' => [
                 ['precipitation' => 'RA', 'intensity' => '-'],
@@ -161,20 +151,9 @@ final class MeasurementTest extends TestCase
         );
 
         new Measurement(
-            stationId: 'station-id',
             dateTime: new \DateTimeImmutable(),
             weather: ['invalid'],
         );
-    }
-
-    public function testRejectsABlankStationIdentifier(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage(
-            'The station ID must be a non-empty string.',
-        );
-
-        new Measurement('   ', new \DateTimeImmutable());
     }
 
     #[DataProvider('invalidWindDirections')]
@@ -186,7 +165,6 @@ final class MeasurementTest extends TestCase
         );
 
         new Measurement(
-            'station-id',
             new \DateTimeImmutable(),
             windDirection: $windDirection,
         );
@@ -206,7 +184,6 @@ final class MeasurementTest extends TestCase
         );
 
         new Measurement(
-            'station-id',
             new \DateTimeImmutable(),
             temperature: INF,
         );
@@ -220,7 +197,6 @@ final class MeasurementTest extends TestCase
         );
 
         new Measurement(
-            'station-id',
             new \DateTimeImmutable(),
             visibilityPrefix: '   ',
         );

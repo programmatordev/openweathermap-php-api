@@ -6,8 +6,6 @@ use ProgrammatorDev\OpenWeatherMap\Validation\Assert;
 
 final class Measurement
 {
-    private readonly string $stationId;
-
     private readonly \DateTimeImmutable $dateTime;
 
     private readonly ?float $temperature;
@@ -59,7 +57,6 @@ final class Measurement
      * @param list<Weather> $weather
      */
     public function __construct(
-        string $stationId,
         \DateTimeInterface $dateTime,
         ?float $temperature = null,
         ?float $windSpeed = null,
@@ -81,7 +78,6 @@ final class Measurement
         array $clouds = [],
         array $weather = [],
     ) {
-        $this->stationId = Assert::notBlank($stationId, 'station ID');
         $this->dateTime = \DateTimeImmutable::createFromInterface($dateTime)
             ->setTimezone(new \DateTimeZone('UTC'));
         $this->temperature = Assert::nullableFiniteNumber($temperature, 'temperature');
@@ -137,11 +133,6 @@ final class Measurement
             Weather::class,
             'weather',
         ));
-    }
-
-    public function stationId(): string
-    {
-        return $this->stationId;
     }
 
     public function dateTime(): \DateTimeImmutable
@@ -256,7 +247,6 @@ final class Measurement
     public function toArray(): array
     {
         return array_filter([
-            'station_id' => $this->stationId,
             'dt' => $this->dateTime->getTimestamp(),
             'temperature' => $this->temperature,
             'wind_speed' => $this->windSpeed,
