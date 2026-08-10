@@ -3,7 +3,9 @@
 namespace ProgrammatorDev\OpenWeatherMap\Resource;
 
 use ProgrammatorDev\Api\Resource;
+use ProgrammatorDev\OpenWeatherMap\Entity\Stations\MeasurementAggregate;
 use ProgrammatorDev\OpenWeatherMap\Entity\Stations\Station;
+use ProgrammatorDev\OpenWeatherMap\Enum\AggregationInterval;
 use ProgrammatorDev\OpenWeatherMap\Request\Stations\Measurement;
 use ProgrammatorDev\OpenWeatherMap\Validation\Assert;
 
@@ -139,6 +141,34 @@ final class Stations extends Resource
             ->endpoint()
             ->json($payload)
             ->post('/data/3.0/measurements');
+    }
+
+    /**
+     * @return list<MeasurementAggregate>
+     */
+    public function measurements(
+        string $stationId,
+        AggregationInterval $interval,
+        \DateTimeInterface $startAt,
+        \DateTimeInterface $endAt,
+        int $limit,
+    ): array {
+        $stationId = Assert::notBlank($stationId, 'station ID');
+        Assert::chronologicalRange($startAt, $endAt);
+        $limit = Assert::positiveInteger($limit, 'result limit');
+
+        // https://openweathermap.org/api/stations#measurement
+        return $this
+            ->endpoint()
+            ->queries([
+                'station_id' => $stationId,
+                'type' => $interval,
+                'limit' => $limit,
+                'from' => $startAt->getTimestamp(),
+                'to' => $endAt->getTimestamp(),
+            ])
+            ->get('/data/3.0/measurements')
+            ->collection(MeasurementAggregate::class);
     }
 
     /**

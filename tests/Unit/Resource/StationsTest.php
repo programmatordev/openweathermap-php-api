@@ -3,7 +3,9 @@
 namespace ProgrammatorDev\OpenWeatherMap\Test\Unit\Resource;
 
 use PHPUnit\Framework\Attributes\DataProvider;
+use ProgrammatorDev\OpenWeatherMap\Entity\Stations\MeasurementAggregate;
 use ProgrammatorDev\OpenWeatherMap\Entity\Stations\Station;
+use ProgrammatorDev\OpenWeatherMap\Enum\AggregationInterval;
 use ProgrammatorDev\OpenWeatherMap\Request\Stations\CloudLayer;
 use ProgrammatorDev\OpenWeatherMap\Request\Stations\Measurement;
 use ProgrammatorDev\OpenWeatherMap\Request\Stations\Weather;
@@ -303,6 +305,100 @@ final class StationsTest extends ApiTestCase
             new Measurement(new \DateTimeImmutable()),
             'invalid',
         ]);
+    }
+
+    public function testAggregatesMeasurements(): void
+    {
+        $this->respondWithFixture(
+            'stations/measurements/aggregate-hour-success.json',
+        );
+
+        $aggregates = $this->api->stations()->measurements(
+            stationId: ' 6a77ba36adde3b0001343e09 ',
+            interval: AggregationInterval::HOUR,
+            startAt: new \DateTimeImmutable('@1786231349'),
+            endAt: new \DateTimeImmutable('@1786345863'),
+            limit: 100,
+        );
+        $request = $this->client->getLastRequest();
+
+        self::assertCount(1, $aggregates);
+        self::assertContainsOnlyInstancesOf(MeasurementAggregate::class, $aggregates);
+        self::assertSame(AggregationInterval::HOUR, $aggregates[0]->interval());
+        self::assertSame(20.5, $aggregates[0]->temperature()?->average());
+        self::assertSame(0.6, $aggregates[0]->precipitation()?->rain());
+        self::assertSame('GET', $request->getMethod());
+        self::assertSame('/data/3.0/measurements', $request->getUri()->getPath());
+        self::assertSame([
+            'station_id' => '6a77ba36adde3b0001343e09',
+            'type' => 'h',
+            'limit' => '100',
+            'from' => '1786231349',
+            'to' => '1786345863',
+            'appid' => 'api-key',
+        ], $this->query($request));
+    }
+
+    public function testReturnsAnEmptyMeasurementAggregateCollection(): void
+    {
+        $this->respondWithFixture(
+            'stations/measurements/aggregate-minute-empty.json',
+        );
+
+        $aggregates = $this->api->stations()->measurements(
+            stationId: 'station-id',
+            interval: AggregationInterval::MINUTE,
+            startAt: new \DateTimeImmutable('@1786143599'),
+            endAt: new \DateTimeImmutable('@1786230780'),
+            limit: 10,
+        );
+
+        self::assertSame([], $aggregates);
+    }
+
+    #[DataProvider('invalidAggregationArguments')]
+    public function testRejectsInvalidAggregationArguments(
+        string $stationId,
+        \DateTimeInterface $startAt,
+        \DateTimeInterface $endAt,
+        int $limit,
+        string $message,
+    ): void {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage($message);
+
+        $this->api->stations()->measurements(
+            $stationId,
+            AggregationInterval::HOUR,
+            $startAt,
+            $endAt,
+            $limit,
+        );
+    }
+
+    public static function invalidAggregationArguments(): iterable
+    {
+        yield 'blank station identifier' => [
+            '   ',
+            new \DateTimeImmutable('@100'),
+            new \DateTimeImmutable('@200'),
+            1,
+            'The station ID must be a non-empty string.',
+        ];
+        yield 'reversed date range' => [
+            'station-id',
+            new \DateTimeImmutable('@200'),
+            new \DateTimeImmutable('@100'),
+            1,
+            'The end date must be after or equal to the start date.',
+        ];
+        yield 'non-positive result limit' => [
+            'station-id',
+            new \DateTimeImmutable('@100'),
+            new \DateTimeImmutable('@200'),
+            0,
+            'The result limit must be at least 1.',
+        ];
     }
 
     #[DataProvider('invalidCreationArguments')]
