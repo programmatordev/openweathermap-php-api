@@ -169,3 +169,53 @@ Each `Weather` represents one entry in the `weather` array. It accepts the
 available METAR precipitation, descriptor, intensity, proximity, obscuration,
 and other codes. At least one value must be provided, and codes are kept as
 strings so additional values accepted by OpenWeather are not restricted.
+
+## Retrieve Measurements
+
+Use `measurements()` to retrieve measurements aggregated by minute, hour, or
+day for a station and time range.
+
+```php
+use ProgrammatorDev\OpenWeatherMap\Enum\AggregationInterval;
+
+$measurements = $api->stations()->measurements(
+    stationId: $station->id(),
+    interval: AggregationInterval::HOUR,
+    startAt: new DateTimeImmutable('2 days ago'),
+    endAt: new DateTimeImmutable('now'),
+    limit: 100,
+);
+```
+
+> **Processing delay:** Submitted measurements are aggregated asynchronously
+> and may take more than 24 hours to appear. OpenWeather does not document an
+> availability timeframe.
+
+The method returns an array of `MeasurementAggregate` entities and returns an
+empty array when no aggregates are available for the requested interval. Each
+entity identifies its aggregation interval, bucket time, and station.
+
+```php
+foreach ($measurements as $measurement) {
+    echo $measurement->interval()?->value;
+    echo $measurement->dateTime()?->format(DATE_ATOM);
+    echo $measurement->stationId();
+
+    echo $measurement->temperature()?->average(); // 20.5
+    echo $measurement->temperature()?->averageWithUnit(); // 20.5 °C
+    echo $measurement->humidity()?->averageWithUnit(); // 64 %
+    echo $measurement->wind()?->speedWithUnit(); // 3.08 m/s
+    echo $measurement->pressure()?->averageWithUnit(); // 1013 hPa
+    echo $measurement->precipitation()?->rainWithUnit(); // 0.6 mm
+}
+```
+
+Temperature and pressure aggregates expose `minimum()`, `maximum()`,
+`average()`, and `weight()`. Humidity exposes `average()` and `weight()`. Wind
+exposes `direction()` and `speed()`, while precipitation exposes `rain()` and
+`snow()`. Measurement properties and nested structures are nullable because
+OpenWeather may omit data that was unavailable for an aggregation bucket.
+
+The endpoint returns aggregates rather than the original submitted
+measurements. Submitted visibility, cloud layers, METAR weather descriptions,
+and other raw fields are not included in the documented aggregate response.
