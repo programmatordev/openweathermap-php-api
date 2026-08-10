@@ -1,0 +1,30 @@
+[
+    {
+        "type": "d",
+        "date": 1786233600,
+        "station_id": "6a77ba36adde3b0001343e09",
+        "temp": {
+            "max": 21.5,
+            "min": 19.5,
+            "average": 20.5,
+            "weight": 3
+        },
+        "humidity": {
+            "average": 64,
+            "weight": 3
+        },
+        "wind": {
+            "deg": 203.4,
+            "speed": 3.08
+        },
+        "pressure": {
+            "min": 1012,
+            "max": 1014,
+            "average": 1013,
+            "weight": 3
+        },
+        "precipitation": {
+            "rain": 0.6
+        }
+    }
+]
