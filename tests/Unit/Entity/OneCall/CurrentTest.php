@@ -41,9 +41,9 @@ final class CurrentTest extends TestCase
         self::assertSame(71, $current->humidity());
         self::assertSame(Unit::PERCENT, $current->humidityUnit());
         self::assertSame('71 %', $current->humidityWithUnit());
-        self::assertSame(18.75, $current->dewPointTemperature());
-        self::assertSame(Unit::CELSIUS, $current->dewPointTemperatureUnit());
-        self::assertSame('18.75 °C', $current->dewPointTemperatureWithUnit());
+        self::assertSame(18.75, $current->dewPoint());
+        self::assertSame(Unit::CELSIUS, $current->dewPointUnit());
+        self::assertSame('18.75 °C', $current->dewPointWithUnit());
         self::assertSame(7.53, $current->ultravioletIndex());
         self::assertSame(40, $current->clouds()?->coverage());
         self::assertSame(Unit::PERCENT, $current->clouds()?->coverageUnit());
@@ -123,7 +123,7 @@ final class CurrentTest extends TestCase
         self::assertSame(Unit::FAHRENHEIT, $current->temperatureUnit());
         self::assertSame('72.5 °F', $current->temperatureWithUnit());
         self::assertSame('71 °F', $current->feelsLikeTemperatureWithUnit());
-        self::assertSame('60 °F', $current->dewPointTemperatureWithUnit());
+        self::assertSame('60 °F', $current->dewPointWithUnit());
         self::assertSame(Unit::MILES_PER_HOUR, $current->wind()?->speedUnit());
         self::assertSame('10 mph', $current->wind()?->speedWithUnit());
         self::assertSame('15 mph', $current->wind()?->gustWithUnit());
@@ -138,7 +138,7 @@ final class CurrentTest extends TestCase
         self::assertNull($missing->dateTime());
         self::assertNull($missing->temperature());
         self::assertNull($missing->temperatureWithUnit());
-        self::assertNull($missing->dewPointTemperature());
+        self::assertNull($missing->dewPoint());
         self::assertNull($missing->ultravioletIndex());
         self::assertNull($missing->wind());
         self::assertNull($missing->clouds());

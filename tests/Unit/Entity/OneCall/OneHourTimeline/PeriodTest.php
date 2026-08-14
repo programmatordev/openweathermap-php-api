@@ -28,7 +28,7 @@ final class PeriodTest extends TestCase
         self::assertSame(1015.0, $period->pressure());
         self::assertSame('1015 hPa', $period->pressureWithUnit());
         self::assertSame(62, $period->humidity());
-        self::assertSame(17.27, $period->dewPointTemperature());
+        self::assertSame(17.27, $period->dewPoint());
         self::assertSame(7.53, $period->ultravioletIndex());
         self::assertSame(10000, $period->visibility());
         self::assertSame(3.87, $period->wind()?->speed());
@@ -90,7 +90,7 @@ final class PeriodTest extends TestCase
         self::assertSame(Unit::FAHRENHEIT, $period->temperatureUnit());
         self::assertSame('72.5 °F', $period->temperatureWithUnit());
         self::assertSame('71 °F', $period->feelsLikeTemperatureWithUnit());
-        self::assertSame('60 °F', $period->dewPointTemperatureWithUnit());
+        self::assertSame('60 °F', $period->dewPointWithUnit());
         self::assertSame(Unit::MILES_PER_HOUR, $period->wind()?->speedUnit());
         self::assertSame('10 mph', $period->wind()?->speedWithUnit());
         self::assertSame('15 mph', $period->wind()?->gustWithUnit());

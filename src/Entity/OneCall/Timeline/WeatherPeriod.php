@@ -30,7 +30,7 @@ abstract class WeatherPeriod implements EntityInterface
         private readonly ?float $feelsLikeTemperature,
         private readonly ?float $pressure,
         private readonly ?int $humidity,
-        private readonly ?float $dewPointTemperature,
+        private readonly ?float $dewPoint,
         private readonly ?float $ultravioletIndex,
         private readonly ?int $visibility,
         private readonly ?Wind $wind,
@@ -74,7 +74,7 @@ abstract class WeatherPeriod implements EntityInterface
             feelsLikeTemperature: $reader->nullableFloat('feels_like'),
             pressure: $reader->nullableFloat('pressure'),
             humidity: $reader->nullableInt('humidity'),
-            dewPointTemperature: $reader->nullableFloat('dew_point'),
+            dewPoint: $reader->nullableFloat('dew_point'),
             ultravioletIndex: $reader->nullableFloat('uvi'),
             visibility: $reader->nullableInt('visibility'),
             wind: $hasWind
@@ -166,21 +166,21 @@ abstract class WeatherPeriod implements EntityInterface
         return MeasurementFormatter::format($this->humidity, $this->humidityUnit());
     }
 
-    public function dewPointTemperature(): ?float
+    public function dewPoint(): ?float
     {
-        return $this->dewPointTemperature;
+        return $this->dewPoint;
     }
 
-    public function dewPointTemperatureUnit(): Unit
+    public function dewPointUnit(): Unit
     {
         return $this->units->temperatureUnit();
     }
 
-    public function dewPointTemperatureWithUnit(): ?string
+    public function dewPointWithUnit(): ?string
     {
         return MeasurementFormatter::format(
-            $this->dewPointTemperature,
-            $this->dewPointTemperatureUnit(),
+            $this->dewPoint,
+            $this->dewPointUnit(),
         );
     }
 

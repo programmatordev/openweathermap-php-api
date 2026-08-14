@@ -32,7 +32,7 @@ final class Current implements EntityInterface
         private readonly ?float $feelsLikeTemperature,
         private readonly ?int $pressure,
         private readonly ?int $humidity,
-        private readonly ?float $dewPointTemperature,
+        private readonly ?float $dewPoint,
         private readonly ?float $ultravioletIndex,
         private readonly ?int $visibility,
         private readonly ?Wind $wind,
@@ -86,7 +86,7 @@ final class Current implements EntityInterface
             feelsLikeTemperature: $reader->nullableFloat('data.0.feels_like'),
             pressure: $reader->nullableInt('data.0.pressure'),
             humidity: $reader->nullableInt('data.0.humidity'),
-            dewPointTemperature: $reader->nullableFloat('data.0.dew_point'),
+            dewPoint: $reader->nullableFloat('data.0.dew_point'),
             ultravioletIndex: $reader->nullableFloat('data.0.uvi'),
             visibility: $reader->nullableInt('data.0.visibility'),
             wind: $hasWind
@@ -197,21 +197,21 @@ final class Current implements EntityInterface
         return MeasurementFormatter::format($this->humidity, $this->humidityUnit());
     }
 
-    public function dewPointTemperature(): ?float
+    public function dewPoint(): ?float
     {
-        return $this->dewPointTemperature;
+        return $this->dewPoint;
     }
 
-    public function dewPointTemperatureUnit(): Unit
+    public function dewPointUnit(): Unit
     {
         return $this->units->temperatureUnit();
     }
 
-    public function dewPointTemperatureWithUnit(): ?string
+    public function dewPointWithUnit(): ?string
     {
         return MeasurementFormatter::format(
-            $this->dewPointTemperature,
-            $this->dewPointTemperatureUnit(),
+            $this->dewPoint,
+            $this->dewPointUnit(),
         );
     }
 
