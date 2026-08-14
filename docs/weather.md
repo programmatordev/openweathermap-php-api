@@ -37,6 +37,11 @@ echo $current->humidity();
 echo $current->visibility();
 ```
 
+`minimumTemperature()` and `maximumTemperature()` are the lowest and highest
+temperatures currently observed within the requested location. OpenWeather
+notes that they are mainly useful for geographically large cities; they are not
+the day's forecast low and high.
+
 Conditions, wind, and clouds are exposed as nested entities. A condition keeps
 the raw OpenWeather icon code and provides its absolute image URL. A response
 can contain multiple conditions; OpenWeather defines the first as the primary

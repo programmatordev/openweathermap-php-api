@@ -107,8 +107,9 @@ See OpenWeather's
 [official One Call 4.0 15-minute forecast documentation](https://openweathermap.org/api/one-call-4#15min)
 for API details.
 
-Use `fifteenMinuteTimeline()` with a latitude and longitude to retrieve the
-initial page of 15-minute forecast periods.
+Use `fifteenMinuteTimeline()` with a latitude and longitude to retrieve
+15-minute forecast periods. When `startAt` is omitted, OpenWeather starts the
+timeline at the current UTC time.
 
 ```php
 $timeline = $api->oneCall()->fifteenMinuteTimeline(
@@ -119,8 +120,9 @@ $timeline = $api->oneCall()->fifteenMinuteTimeline(
 );
 ```
 
-Use `startAt` to select a future starting point and `count` to limit the
-requested page size.
+Use `startAt` to select a future starting point and `count` to limit the number
+of periods returned. Both are optional, and `count` must be positive when
+provided.
 
 The response exposes location metadata, up to 50 periods, and pagination when
 OpenWeather provides it.
@@ -151,8 +153,9 @@ See OpenWeather's
 [official One Call 4.0 hourly forecast documentation](https://openweathermap.org/api/one-call-4#hourly)
 for API details.
 
-Use `oneHourTimeline()` with a latitude and longitude to retrieve the default
-hourly timeline.
+Use `oneHourTimeline()` with a latitude and longitude to retrieve hourly
+periods. When `startAt` is omitted, OpenWeather starts the timeline at the
+current UTC time.
 
 ```php
 $timeline = $api->oneCall()->oneHourTimeline(
@@ -161,8 +164,9 @@ $timeline = $api->oneCall()->oneHourTimeline(
 );
 ```
 
-Pass an optional `DateTimeInterface` value to select a historical or future
-starting point. Availability depends on OpenWeather.
+Use `startAt` to select a historical or future starting point and `count` to
+limit the number of periods returned. `count` must be positive when provided,
+and timeline availability depends on OpenWeather.
 
 ```php
 $timeline = $api->oneCall()->oneHourTimeline(
@@ -172,8 +176,6 @@ $timeline = $api->oneCall()->oneHourTimeline(
     count: 10,
 );
 ```
-
-The optional positive `count` limits the requested page size.
 
 The response contains up to 20 periods. Historical and forecast periods expose
 their UTC date and time through `dateTime()`.
@@ -194,8 +196,9 @@ See OpenWeather's
 [official One Call 4.0 daily forecast documentation](https://openweathermap.org/api/one-call-4#daily)
 for API details.
 
-Use `oneDayTimeline()` with a latitude and longitude to retrieve the default
-daily timeline.
+Use `oneDayTimeline()` with a latitude and longitude to retrieve daily periods.
+When `startAt` is omitted, OpenWeather starts the timeline at the current UTC
+time.
 
 ```php
 $timeline = $api->oneCall()->oneDayTimeline(
@@ -205,7 +208,8 @@ $timeline = $api->oneCall()->oneDayTimeline(
 ```
 
 Use `startAt` to select a historical or future starting point and `count` to
-limit the requested page size.
+limit the number of periods returned. Both are optional, and `count` must be
+positive when provided.
 
 ```php
 $timeline = $api->oneCall()->oneDayTimeline(
@@ -216,9 +220,9 @@ $timeline = $api->oneCall()->oneDayTimeline(
 );
 ```
 
-Daily periods provide UTC dates, astronomy, daily temperatures, weather
-measurements, conditions, precipitation probability, rain, snow, and alert
-references.
+The response contains up to 10 periods. Daily periods provide UTC dates,
+astronomy, daily temperatures, weather measurements, conditions, precipitation
+probability, rain, snow, and alert references.
 
 ```php
 foreach ($timeline->periods() as $period) {
@@ -241,6 +245,11 @@ values, so these getters return raw nullable floats.
 The 15-minute, one-hour, and one-day timelines provide explicit pagination.
 
 ```php
+$timeline = $api->oneCall()->oneHourTimeline(
+    latitude: 38.7223,
+    longitude: -9.1393,
+);
+
 $pagination = $timeline->pagination();
 
 if ($pagination->hasPreviousPage()) {
@@ -269,32 +278,39 @@ See OpenWeather's
 [official One Call 4.0 weather alert documentation](https://openweathermap.org/api/one-call-4#alerts)
 for API details.
 
-Current weather and timeline periods may provide alert IDs. Use `alert()` to
-retrieve the corresponding alert.
+Current weather and timeline periods may provide alert IDs. Use `alert()` with
+one of those IDs to retrieve the corresponding alert.
 
 ```php
-$alert = $api->oneCall()->alert($id);
+$current = $api->oneCall()->current(
+    latitude: 38.7223,
+    longitude: -9.1393,
+);
+
+$alertIds = $current->alertIds();
+
+if ($alertIds !== []) {
+    $alert = $api->oneCall()->alert($alertIds[0]);
+
+    echo $alert->id();
+    echo $alert->senderName();
+    echo $alert->event();
+    echo $alert->startsAt()?->format(DATE_ATOM);
+    echo $alert->endsAt()?->format(DATE_ATOM);
+    echo $alert->description('en-US');
+
+    foreach ($alert->descriptions() as $description) {
+        echo $description->languageCode();
+        echo $description->text();
+    }
+
+    foreach ($alert->tags() as $tag) {
+        echo $tag;
+    }
+}
 ```
 
 Alerts provide sender and event information, validity dates, localized
 descriptions, and tags.
-
-```php
-echo $alert->id();
-echo $alert->senderName();
-echo $alert->event();
-echo $alert->startsAt()?->format(DATE_ATOM);
-echo $alert->endsAt()?->format(DATE_ATOM);
-echo $alert->description('en-US');
-
-foreach ($alert->descriptions() as $description) {
-    echo $description->languageCode();
-    echo $description->text();
-}
-
-foreach ($alert->tags() as $tag) {
-    echo $tag;
-}
-```
 
 `description()` returns the first exact language-code match or `null`.

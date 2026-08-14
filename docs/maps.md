@@ -54,7 +54,7 @@ $url = $api->maps()->tileUrl(
 
 For example, the URL can be used as an image source:
 
-```php
+```html
 <img src="<?= $url ?>" alt="Precipitation map tile">
 ```
 
@@ -63,8 +63,9 @@ credential and expose it only where direct client loading is intended.
 
 ## Generate A Tile URL Template
 
-Use `tileUrlTemplate()` when an XYZ mapping library should replace the zoom, X,
-and Y placeholders while loading the visible tiles.
+Use `tileUrlTemplate()` with an XYZ mapping library. XYZ is a common map-tile
+format in which the library replaces `{z}` with the zoom level, `{x}` with the
+horizontal tile index, and `{y}` with the vertical tile index as the map moves.
 
 ```php
 $urlTemplate = $api->maps()->tileUrlTemplate(

@@ -28,8 +28,8 @@ composer require programmatordev/openweathermap-php-api
 
 ## Getting Started
 
-Create the API client with an OpenWeather API key, then select a resource and
-endpoint:
+Create the API client with an OpenWeather API key, then choose an API and call
+one of its methods:
 
 ```php
 use ProgrammatorDev\OpenWeatherMap\OpenWeatherMap;
@@ -68,9 +68,8 @@ $api = new OpenWeatherMap(
 );
 ```
 
-Compatible resources can override those values for one fluent request chain.
-The original client configuration and other resource instances remain
-unchanged:
+Weather and One Call requests can override those values for one fluent request
+chain. The client-wide configuration remains unchanged for later requests:
 
 ```php
 $current = $api

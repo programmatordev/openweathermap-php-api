@@ -7,7 +7,9 @@ for API details.
 
 ## Lookup By Name
 
-Use `byName()` with OpenWeather's comma-separated location query. The optional
+Use `byName()` with a city name, optionally followed by a state code and
+two-letter ISO 3166 country code: `city`, `city,country`, or
+`city,state,country`. The state code is intended for US locations. The optional
 result limit must be between one and five; omit it to use the API default.
 
 ```php

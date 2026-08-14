@@ -22,8 +22,8 @@ $current = $api->airPollution()->current(
 );
 ```
 
-The returned `Current` entity exposes the observation directly. Every property
-may be absent or explicitly `null`.
+`current()` returns the air-quality observation for the requested coordinates.
+Every property may be absent or explicitly `null`.
 
 ```php
 echo $current->coordinates()?->latitude();

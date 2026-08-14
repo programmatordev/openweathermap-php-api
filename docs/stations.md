@@ -106,9 +106,7 @@ Create a `Measurement` with the observation time and available readings, then
 submit it for a station.
 
 ```php
-use ProgrammatorDev\OpenWeatherMap\Request\Stations\CloudLayer;
 use ProgrammatorDev\OpenWeatherMap\Request\Stations\Measurement;
-use ProgrammatorDev\OpenWeatherMap\Request\Stations\Weather;
 
 $measurement = new Measurement(
     dateTime: new DateTimeImmutable('now'),
@@ -117,6 +115,24 @@ $measurement = new Measurement(
     windDirection: 180,
     pressure: 1012,
     humidity: 68,
+);
+
+$api->stations()->submitMeasurement(
+    stationId: $station->id(),
+    measurement: $measurement,
+);
+```
+
+Optional METAR cloud and weather observations can be included in a
+measurement:
+
+```php
+use ProgrammatorDev\OpenWeatherMap\Request\Stations\CloudLayer;
+use ProgrammatorDev\OpenWeatherMap\Request\Stations\Measurement;
+use ProgrammatorDev\OpenWeatherMap\Request\Stations\Weather;
+
+$measurement = new Measurement(
+    dateTime: new DateTimeImmutable('now'),
     clouds: [
         new CloudLayer(
             distance: 1200,
@@ -130,11 +146,6 @@ $measurement = new Measurement(
             intensity: '-',
         ),
     ],
-);
-
-$api->stations()->submitMeasurement(
-    stationId: $station->id(),
-    measurement: $measurement,
 );
 ```
 
@@ -161,10 +172,9 @@ standard METAR codes. See the
 [NOAA METAR reference](https://aviationweather.gov/help/data/#metar) for their
 meanings.
 
-> **Upstream inconsistency:** OpenWeather documents `visibilityPrefix` as a
-> compass-direction string, but its live API rejected a documented string value
-> during verification. Omit this value unless OpenWeather clarifies or corrects
-> the accepted type.
+OpenWeather documents `visibilityPrefix` as a compass-direction string, but its
+live API rejected a documented string value during verification. Leaving it
+`null` avoids this upstream mismatch.
 
 Each `CloudLayer` represents one entry in OpenWeather's `clouds` array. Its
 distance, METAR cloud condition, and cumulus type are optional, but at least one
@@ -175,10 +185,10 @@ available METAR precipitation, descriptor, intensity, proximity, obscuration,
 and other codes. At least one value must be provided, and codes are kept as
 strings so additional values accepted by OpenWeather are not restricted.
 
-METAR visibility, cloud, and weather values appear to be write-only in this API.
-A successful submission has no response body, and OpenWeather does not document
-a method for retrieving the original measurement payload. These values
-therefore could not be read back or verified after submission.
+METAR visibility, cloud, and weather values appear to be submission-only in
+this API. OpenWeather's aggregate response does not include them, and the
+documentation does not provide an endpoint for retrieving the original
+measurement payload.
 
 ## Retrieve Measurements
 
@@ -203,7 +213,8 @@ $measurements = $api->stations()->measurements(
 
 The method returns an array of `MeasurementAggregate` entities and returns an
 empty array when no aggregates are available for the requested interval. Each
-entity identifies its aggregation interval, bucket time, and station.
+entity summarizes readings for one requested minute, hour, or day interval and
+identifies the timestamp and station returned by OpenWeather.
 
 ```php
 foreach ($measurements as $measurement) {
@@ -223,8 +234,10 @@ foreach ($measurements as $measurement) {
 Temperature and pressure aggregates expose `minimum()`, `maximum()`,
 `average()`, and `weight()`. Humidity exposes `average()` and `weight()`. Wind
 exposes `direction()` and `speed()`, while precipitation exposes `rain()` and
-`snow()`. Measurement properties and nested structures are nullable because
-OpenWeather may omit data that was unavailable for an aggregation bucket.
+`snow()`. OpenWeather returns `weight` without documenting its meaning, so
+`weight()` exposes the nullable integer unchanged. Measurement properties and
+nested structures are nullable because OpenWeather may omit data that was
+unavailable for an aggregation interval.
 
 The endpoint returns aggregates rather than the original submitted
 measurements. Submitted visibility, cloud layers, METAR weather descriptions,
