@@ -24,5 +24,5 @@
             "action": "replaced private account identifier with user-fixture"
         }
     ],
-    "notes": "The deliberately public fixture metadata and generated station identifier are unchanged. The temporary station was deleted and the account returned from zero stations to zero."
+    "notes": "The deliberately public fixture metadata and generated station identifier are unchanged. The temporary station was deleted and the account returned from one station to zero."
 }

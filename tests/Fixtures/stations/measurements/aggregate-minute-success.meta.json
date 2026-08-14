@@ -18,5 +18,5 @@
         }
     },
     "sanitization": [],
-    "notes": "The first aggregate appeared between 23 hours 43 minutes and 31 hours 43 minutes after its three source measurements were accepted. The second aggregate appeared approximately 30 hours after its fully populated source measurement was accepted. Both empty precipitation objects are preserved exactly."
+    "notes": "The first aggregate appeared between 23 hours 43 minutes and 31 hours 43 minutes after its three source measurements were accepted. The second aggregate appeared approximately 30 hours after its fully populated source measurement was accepted. Both empty precipitation objects are preserved exactly. The retained station was deleted after capture, and a following list request confirmed that no stations remained."
 }

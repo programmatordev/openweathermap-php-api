@@ -1,4 +1,4 @@
-# Weather Maps
+# Maps
 
 Weather Maps API 1.0 provides current cloud, precipitation, sea-level pressure,
 wind-speed, and temperature overlays. It is available on OpenWeather's standard

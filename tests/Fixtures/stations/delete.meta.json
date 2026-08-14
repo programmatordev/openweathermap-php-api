@@ -13,5 +13,5 @@
         "query": {}
     },
     "sanitization": [],
-    "notes": "The generated identifier belongs to the deleted temporary fixture station and is unchanged. The successful response had no body or Content-Type header, and a following list request confirmed the account returned from zero stations to zero."
+    "notes": "The generated identifier belongs to the deleted temporary fixture station and is unchanged. The successful response had no body or Content-Type header, and a following list request confirmed the account returned from one station to zero."
 }

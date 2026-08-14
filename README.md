@@ -19,8 +19,8 @@ use yet.
 - [One Call 4.0](docs/one-call.md)
 - [Air Pollution](docs/air-pollution.md)
 - [Weather](docs/weather.md)
-- [Weather Maps](docs/maps.md)
-- [Weather Stations](docs/stations.md)
+- [Maps](docs/maps.md)
+- [Stations](docs/stations.md)
 - [Geocoding](docs/geocoding.md)
 
 ## License

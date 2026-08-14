@@ -1,4 +1,4 @@
-# Weather Stations
+# Stations
 
 The Weather Stations API lets you register and manage personal weather stations
 associated with your OpenWeather account.
@@ -161,6 +161,11 @@ standard METAR codes. See the
 [NOAA METAR reference](https://aviationweather.gov/help/data/#metar) for their
 meanings.
 
+> **Upstream inconsistency:** OpenWeather documents `visibilityPrefix` as a
+> compass-direction string, but its live API rejected a documented string value
+> during verification. Omit this value unless OpenWeather clarifies or corrects
+> the accepted type.
+
 Each `CloudLayer` represents one entry in OpenWeather's `clouds` array. Its
 distance, METAR cloud condition, and cumulus type are optional, but at least one
 value must be provided.
@@ -169,6 +174,11 @@ Each `Weather` represents one entry in the `weather` array. It accepts the
 available METAR precipitation, descriptor, intensity, proximity, obscuration,
 and other codes. At least one value must be provided, and codes are kept as
 strings so additional values accepted by OpenWeather are not restricted.
+
+METAR visibility, cloud, and weather values appear to be write-only in this API.
+A successful submission has no response body, and OpenWeather does not document
+a method for retrieving the original measurement payload. These values
+therefore could not be read back or verified after submission.
 
 ## Retrieve Measurements
 
