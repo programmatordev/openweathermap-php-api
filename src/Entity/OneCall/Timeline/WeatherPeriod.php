@@ -6,6 +6,7 @@ use ProgrammatorDev\Api\Context\Context;
 use ProgrammatorDev\Api\Contract\EntityInterface;
 use ProgrammatorDev\OpenWeatherMap\Entity\Weather\Clouds;
 use ProgrammatorDev\OpenWeatherMap\Entity\Weather\Condition;
+use ProgrammatorDev\OpenWeatherMap\Entity\Weather\Concern\HasPrecipitationProbability;
 use ProgrammatorDev\OpenWeatherMap\Entity\Weather\Current\Precipitation;
 use ProgrammatorDev\OpenWeatherMap\Entity\Weather\Wind;
 use ProgrammatorDev\OpenWeatherMap\Enum\Unit;
@@ -20,6 +21,8 @@ use ProgrammatorDev\OpenWeatherMap\Hydration\UnitsResolver;
  */
 abstract class WeatherPeriod implements EntityInterface
 {
+    use HasPrecipitationProbability;
+
     /**
      * @param list<Condition> $conditions
      * @param list<string> $alertIds
@@ -89,7 +92,9 @@ abstract class WeatherPeriod implements EntityInterface
                     'all' => $reader->nullableInt('clouds'),
                 ], $context)
                 : null,
-            precipitationProbability: $reader->nullableFloat('pop'),
+            precipitationProbability: self::normalizePrecipitationProbability(
+                $reader->nullableFloat('pop'),
+            ),
             conditions: $conditions,
             rain: $rain === null ? null : Precipitation::fromArray($rain, $context),
             snow: $snow === null ? null : Precipitation::fromArray($snow, $context),
@@ -212,11 +217,6 @@ abstract class WeatherPeriod implements EntityInterface
     public function clouds(): ?Clouds
     {
         return $this->clouds;
-    }
-
-    public function precipitationProbability(): ?float
-    {
-        return $this->precipitationProbability;
     }
 
     /**

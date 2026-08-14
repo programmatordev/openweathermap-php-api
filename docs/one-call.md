@@ -136,6 +136,15 @@ foreach ($timeline->periods() as $period) {
 }
 ```
 
+The 15-minute, one-hour, and one-day timelines normalize OpenWeather's
+fractional precipitation probability to a percentage:
+
+```php
+$period->precipitationProbability();          // 91.0
+$period->precipitationProbabilityUnit();      // Unit::PERCENT
+$period->precipitationProbabilityWithUnit();  // '91 %'
+```
+
 ## One-hour Timeline
 
 See OpenWeather's

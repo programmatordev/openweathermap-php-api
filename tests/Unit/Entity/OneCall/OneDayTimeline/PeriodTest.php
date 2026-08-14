@@ -48,6 +48,8 @@ final class PeriodTest extends TestCase
         self::assertNull($period->wind()?->gust());
         self::assertSame(41, $period->clouds()?->coverage());
         self::assertSame(0.0, $period->precipitationProbability());
+        self::assertSame(Unit::PERCENT, $period->precipitationProbabilityUnit());
+        self::assertSame('0 %', $period->precipitationProbabilityWithUnit());
         self::assertSame('Clouds', $period->conditions()[0]->group());
         self::assertNull($period->rain());
         self::assertNull($period->snow());
@@ -76,6 +78,7 @@ final class PeriodTest extends TestCase
 
         self::assertSame(1785456000, $historical->dateTime()?->getTimestamp());
         self::assertNull($historical->precipitationProbability());
+        self::assertNull($historical->precipitationProbabilityWithUnit());
         self::assertSame(1785628800, $forecast->dateTime()?->getTimestamp());
         self::assertSame(0.0, $forecast->precipitationProbability());
     }

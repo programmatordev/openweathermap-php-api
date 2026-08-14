@@ -5,6 +5,7 @@ namespace ProgrammatorDev\OpenWeatherMap\Entity\Weather\Forecast;
 use ProgrammatorDev\Api\Context\Context;
 use ProgrammatorDev\Api\Contract\EntityInterface;
 use ProgrammatorDev\OpenWeatherMap\Entity\Weather\Clouds;
+use ProgrammatorDev\OpenWeatherMap\Entity\Weather\Concern\HasPrecipitationProbability;
 use ProgrammatorDev\OpenWeatherMap\Entity\Weather\Concern\HasWeatherMeasurements;
 use ProgrammatorDev\OpenWeatherMap\Entity\Weather\Condition;
 use ProgrammatorDev\OpenWeatherMap\Entity\Weather\Wind;
@@ -18,6 +19,7 @@ use ProgrammatorDev\OpenWeatherMap\Hydration\UnitsResolver;
 
 final class Period implements EntityInterface
 {
+    use HasPrecipitationProbability;
     use HasWeatherMeasurements;
 
     /**
@@ -98,7 +100,9 @@ final class Period implements EntityInterface
             clouds: $clouds === null ? null : Clouds::fromArray($clouds, $context),
             wind: $wind === null ? null : Wind::fromArray($wind, $context),
             visibility: $reader->nullableInt('visibility'),
-            precipitationProbability: $reader->nullableFloat('pop'),
+            precipitationProbability: self::normalizePrecipitationProbability(
+                $reader->nullableFloat('pop'),
+            ),
             rain: $rain === null ? null : Precipitation::fromArray($rain, $context),
             snow: $snow === null ? null : Precipitation::fromArray($snow, $context),
             partOfDay: $partOfDay,
@@ -145,11 +149,6 @@ final class Period implements EntityInterface
     public function wind(): ?Wind
     {
         return $this->wind;
-    }
-
-    public function precipitationProbability(): ?float
-    {
-        return $this->precipitationProbability;
     }
 
     public function rain(): ?Precipitation

@@ -36,6 +36,8 @@ final class PeriodTest extends TestCase
         self::assertSame(4.47, $period->wind()?->gust());
         self::assertSame(48, $period->clouds()?->coverage());
         self::assertSame(0.0, $period->precipitationProbability());
+        self::assertSame(Unit::PERCENT, $period->precipitationProbabilityUnit());
+        self::assertSame('0 %', $period->precipitationProbabilityWithUnit());
         self::assertSame('Clouds', $period->conditions()[0]->group());
         self::assertNull($period->rain());
         self::assertNull($period->snow());
@@ -47,7 +49,8 @@ final class PeriodTest extends TestCase
         $period = self::fromFixture('one-call/one-hour/rain.json');
 
         self::assertSame('Rain', $period->conditions()[0]->group());
-        self::assertSame(1.0, $period->precipitationProbability());
+        self::assertSame(100.0, $period->precipitationProbability());
+        self::assertSame('100 %', $period->precipitationProbabilityWithUnit());
         self::assertSame(1.72, $period->rain()?->lastHour());
         self::assertSame(Unit::MILLIMETERS_PER_HOUR, $period->rain()?->lastHourUnit());
         self::assertSame('1.72 mm/h', $period->rain()?->lastHourWithUnit());
@@ -63,7 +66,7 @@ final class PeriodTest extends TestCase
         );
 
         self::assertSame('Snow', $period->conditions()[0]->group());
-        self::assertSame(1.0, $period->precipitationProbability());
+        self::assertSame(100.0, $period->precipitationProbability());
         self::assertSame(2.54, $period->snow()?->lastHour());
         self::assertSame('2.54 mm/h', $period->snow()?->lastHourWithUnit());
         self::assertNull($period->rain());

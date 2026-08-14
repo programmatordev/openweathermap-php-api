@@ -6,6 +6,7 @@ use ProgrammatorDev\Api\Context\Context;
 use ProgrammatorDev\Api\Contract\EntityInterface;
 use ProgrammatorDev\OpenWeatherMap\Entity\Weather\Clouds;
 use ProgrammatorDev\OpenWeatherMap\Entity\Weather\Condition;
+use ProgrammatorDev\OpenWeatherMap\Entity\Weather\Concern\HasPrecipitationProbability;
 use ProgrammatorDev\OpenWeatherMap\Entity\Weather\Wind;
 use ProgrammatorDev\OpenWeatherMap\Enum\Unit;
 use ProgrammatorDev\OpenWeatherMap\Enum\Units;
@@ -16,6 +17,8 @@ use ProgrammatorDev\OpenWeatherMap\Hydration\UnitsResolver;
 
 final class Period implements EntityInterface
 {
+    use HasPrecipitationProbability;
+
     /**
      * @param list<Condition> $conditions
      * @param list<string> $alertIds
@@ -99,7 +102,9 @@ final class Period implements EntityInterface
                     'all' => $reader->nullableInt('clouds'),
                 ], $context)
                 : null,
-            precipitationProbability: $reader->nullableFloat('pop'),
+            precipitationProbability: self::normalizePrecipitationProbability(
+                $reader->nullableFloat('pop'),
+            ),
             conditions: $conditions,
             // Live daily responses return scalar precipitation, while the field table
             // still describes hourly objects: https://openweathermap.org/api/one-call-4
@@ -226,11 +231,6 @@ final class Period implements EntityInterface
     public function clouds(): ?Clouds
     {
         return $this->clouds;
-    }
-
-    public function precipitationProbability(): ?float
-    {
-        return $this->precipitationProbability;
     }
 
     /**

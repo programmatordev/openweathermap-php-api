@@ -111,6 +111,16 @@ echo $forecast->city()?->coordinates()?->longitude();
 echo $forecast->city()?->timezoneOffset();
 ```
 
+OpenWeather returns precipitation probability as a fraction. The library
+normalizes it to a percentage so it follows the same getter pattern as other
+measurements:
+
+```php
+$period->precipitationProbability();          // 60.0
+$period->precipitationProbabilityUnit();      // Unit::PERCENT
+$period->precipitationProbabilityWithUnit();  // '60 %'
+```
+
 Forecast, sunrise, and sunset timestamps are nullable UTC
 `DateTimeImmutable` values. The city timezone offset remains separate.
 
