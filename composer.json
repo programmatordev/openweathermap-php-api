@@ -1,8 +1,8 @@
 {
     "name": "programmatordev/openweathermap-php-api",
-    "description": "OpenWeatherMap PHP library that provides convenient access to the OpenWeatherMap API",
+    "description": "A fluent PHP client for OpenWeather APIs, including weather, air pollution, geocoding, maps, stations, and One Call",
     "type": "library",
-    "keywords": ["openweathermap", "api", "php", "php8", "sdk", "psr-18", "psr-17", "psr-6", "psr-3"],
+    "keywords": ["openweather", "openweathermap", "weather", "forecast", "air-quality", "geocoding", "api", "php", "php8", "sdk", "psr-18", "psr-17", "psr-6", "psr-3"],
     "license": "MIT",
     "authors": [
         {
