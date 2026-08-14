@@ -149,6 +149,11 @@ $measurement = new Measurement(
 );
 ```
 
+METAR visibility, cloud, and weather values appear to be submission-only in
+this API. OpenWeather's aggregate response does not include them, and the
+documentation does not provide an endpoint for retrieving the original
+measurement payload.
+
 Use `submitMeasurements()` to send several observations in one request.
 
 ```php
@@ -184,11 +189,6 @@ Each `Weather` represents one entry in the `weather` array. It accepts the
 available METAR precipitation, descriptor, intensity, proximity, obscuration,
 and other codes. At least one value must be provided, and codes are kept as
 strings so additional values accepted by OpenWeather are not restricted.
-
-METAR visibility, cloud, and weather values appear to be submission-only in
-this API. OpenWeather's aggregate response does not include them, and the
-documentation does not provide an endpoint for retrieving the original
-measurement payload.
 
 ## Retrieve Measurements
 

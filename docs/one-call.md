@@ -287,10 +287,8 @@ $current = $api->oneCall()->current(
     longitude: -9.1393,
 );
 
-$alertIds = $current->alertIds();
-
-if ($alertIds !== []) {
-    $alert = $api->oneCall()->alert($alertIds[0]);
+foreach ($current->alertIds() as $id) {
+    $alert = $api->oneCall()->alert($id);
 
     echo $alert->id();
     echo $alert->senderName();
