@@ -109,6 +109,13 @@ These guides cover client configuration and failures shared across the APIs:
 - [Error Handling](docs/errors.md) — Handle OpenWeather API errors and client
   failures.
 
+## Upgrading
+
+Version 4 is a complete rewrite without backward compatibility. Existing
+integrations should treat it as a new implementation. See
+[Upgrading To 4.0](UPGRADE-4.0.md) for the release expectations and current
+baseline.
+
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
