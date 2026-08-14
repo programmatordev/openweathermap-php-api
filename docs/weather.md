@@ -2,8 +2,7 @@
 
 ## Current
 
-The Current Weather API is available on OpenWeather's standard free and paid
-subscriptions. See the
+See the
 [official Current Weather API documentation](https://openweathermap.org/api/current)
 for API details.
 
@@ -75,8 +74,7 @@ from UTC in seconds.
 
 ## Forecast
 
-The 5 Day / 3 Hour Forecast API is available on OpenWeather's standard free
-and paid subscriptions. See the
+See the
 [official forecast documentation](https://openweathermap.org/api/forecast5)
 for API details.
 
@@ -116,8 +114,7 @@ echo $forecast->city()?->coordinates()?->longitude();
 echo $forecast->city()?->timezoneOffset();
 ```
 
-OpenWeather returns precipitation probability as a fraction. The library
-normalizes it to a percentage so it follows the same getter pattern as other
+Precipitation probability follows the same getter pattern as other
 measurements:
 
 ```php

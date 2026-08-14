@@ -1,15 +1,14 @@
 # One Call 4.0
 
-One Call 4.0 requires a separate OpenWeather subscription and includes free
-daily API calls. Consult OpenWeather's official documentation for the current
-allowance, pricing, usage limits, and account configuration before using these
-endpoints in production.
+OpenWeather manages access and usage terms for One Call 4.0. Consult the
+[official One Call documentation](https://openweathermap.org/api/one-call-4)
+for current requirements before using these endpoints.
 
 ## Current
 
 See OpenWeather's
 [official One Call API 4.0 documentation](https://openweathermap.org/api/one-call-4#current)
-for API details and current subscription terms.
+for API details.
 
 Use `current()` with a latitude and longitude.
 
@@ -24,9 +23,9 @@ $current = $api->oneCall()->current(
 );
 ```
 
-Every response property may be absent or explicitly `null`. Coordinates and
-timezone metadata describe the requested location, while `dateTime()` and the
-astronomical timestamps remain UTC values.
+Every response property may be absent or `null`. Coordinates and timezone
+details describe the requested location. `dateTime()`, sunrise, and sunset use
+UTC.
 
 ```php
 echo $current->coordinates()?->latitude();
@@ -53,7 +52,7 @@ $current = $api
     ->current(38.7223, -9.1393);
 ```
 
-Measurement getters return nullable values. Companion methods provide the unit
+Measurement getters return nullable values. Related methods provide the unit
 and a formatted value. With the default metric configuration, for example:
 
 ```php
@@ -80,7 +79,7 @@ $timeline = $api->oneCall()->minuteTimeline(
 );
 ```
 
-The response exposes location metadata and forecast periods. Each period
+The response contains location details and forecast periods. Each period
 provides its UTC date and time, precipitation, and any referenced alert IDs.
 
 ```php
@@ -124,7 +123,7 @@ Use `startAt` to select a future starting point and `count` to limit the number
 of periods returned. Both are optional, and `count` must be positive when
 provided.
 
-The response exposes location metadata, up to 50 periods, and pagination when
+The response contains location details, up to 50 periods, and pagination when
 OpenWeather provides it.
 
 ```php
@@ -138,8 +137,8 @@ foreach ($timeline->periods() as $period) {
 }
 ```
 
-The 15-minute, one-hour, and one-day timelines normalize OpenWeather's
-fractional precipitation probability to a percentage:
+Precipitation probability follows the same getter pattern as other
+measurements:
 
 ```php
 $period->precipitationProbability();          // 91.0
@@ -177,8 +176,8 @@ $timeline = $api->oneCall()->hourTimeline(
 );
 ```
 
-The response contains up to 20 periods. Historical and forecast periods expose
-their UTC date and time through `dateTime()`.
+The response contains up to 20 periods. `dateTime()` returns each period's UTC
+date and time.
 
 ```php
 foreach ($timeline->periods() as $period) {
@@ -220,9 +219,9 @@ $timeline = $api->oneCall()->dayTimeline(
 );
 ```
 
-The response contains up to 10 periods. Daily periods provide UTC dates,
-astronomy, daily temperatures, weather measurements, conditions, precipitation
-probability, rain, snow, and alert references.
+The response contains up to 10 periods. Daily periods provide UTC dates, sun
+and moon times, daily temperatures, weather measurements, conditions,
+precipitation probability, rain, snow, and alert references.
 
 ```php
 foreach ($timeline->periods() as $period) {
@@ -237,12 +236,12 @@ foreach ($timeline->periods() as $period) {
 }
 ```
 
-OpenWeather does not currently define units for the daily scalar rain and snow
-values, so these getters return raw nullable floats.
+OpenWeather does not define units for the daily `rain` and `snow` values, so
+these getters return nullable floats without conversion.
 
 ## Timeline Pagination
 
-The 15-minute, one-hour, and one-day timelines provide explicit pagination.
+The 15-minute, one-hour, and one-day timelines support pagination.
 
 ```php
 $timeline = $api->oneCall()->hourTimeline(
@@ -266,11 +265,8 @@ echo $pagination->nextPageUrl();
 
 The availability checks and URL getters do not make another API request.
 `previousPage()` and `nextPage()` request the corresponding page when its URL
-is available and otherwise return `null`. Pagination does not iterate
-automatically. Every pagination request counts as a separate One Call API call
-under your OpenWeather subscription; consult the
-[official documentation](https://openweathermap.org/api/one-call-4#pagination)
-for current usage and billing terms.
+is available and otherwise return `null`. The library does not fetch every page
+automatically. Each page navigation sends a separate API request.
 
 ## Alert
 
@@ -308,7 +304,7 @@ foreach ($current->alertIds() as $id) {
 }
 ```
 
-Alerts provide sender and event information, validity dates, localized
+Alerts provide sender and event information, start and end times, localized
 descriptions, and tags.
 
 `description()` returns the first exact language-code match or `null`.

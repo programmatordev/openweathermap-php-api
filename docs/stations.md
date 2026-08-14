@@ -3,9 +3,9 @@
 The Weather Stations API lets you register and manage personal weather stations
 associated with your OpenWeather account.
 
-Availability depends on the products enabled for the OpenWeather account. See
-the [official Weather Stations documentation](https://openweathermap.org/api/stations)
-and current account configuration for access details.
+See the
+[official Weather Stations documentation](https://openweathermap.org/api/stations)
+for API details.
 
 ## Create A Station
 
@@ -74,10 +74,10 @@ foreach ($stations as $station) {
 }
 ```
 
-Core station properties are required because they describe station metadata
+The main station properties are required because they describe the station
 registered with OpenWeather. Creation and update times are returned as UTC
-`DateTimeImmutable` values. Registration responses may also populate
-`userId()` and `sourceType()`; other station responses omit them.
+`DateTimeImmutable` values. The create response may also include `userId()` and
+`sourceType()`; other station responses omit them.
 
 ## Find A Station
 
@@ -207,9 +207,9 @@ $measurements = $api->stations()->measurements(
 );
 ```
 
-> **Processing delay:** Submitted measurements are aggregated asynchronously
-> and may take more than 24 hours to appear. OpenWeather does not document an
-> availability timeframe.
+> **Processing delay:** OpenWeather processes submitted measurements in the
+> background. They may take more than 24 hours to appear, and OpenWeather does
+> not document how long processing should take.
 
 The method returns an array of `MeasurementAggregate` entities and returns an
 empty array when no aggregates are available for the requested interval. Each

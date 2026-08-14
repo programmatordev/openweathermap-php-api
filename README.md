@@ -5,9 +5,8 @@
 [![Tests](https://github.com/programmatordev/openweathermap-php-api/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/programmatordev/openweathermap-php-api/actions/workflows/ci.yml?query=branch%3Amain)
 
 A fluent PHP client for OpenWeather APIs covering current and forecast weather,
-air pollution, geocoding, maps, stations, and One Call. Responses are mapped to
-typed entities that safely handle conditional, missing, and `null` data while
-keeping common requests concise.
+air pollution, geocoding, maps, stations, and One Call. Responses use typed
+entities that safely handle conditional, missing, and `null` data.
 
 The library is built on
 [`programmatordev/php-api-sdk`](https://github.com/programmatordev/php-api-sdk)
@@ -45,9 +44,9 @@ echo $current->temperature();
 echo $current->temperatureWithUnit();
 ```
 
-Response properties may be missing or explicitly `null`, so entity getters
-return nullable values where appropriate. Collection getters return empty
-arrays when the corresponding response collection is absent or `null`.
+Response properties may be missing or `null`, so getters return nullable values
+where appropriate. Collection getters return empty arrays when the response
+does not contain that collection.
 
 ## Configuration
 

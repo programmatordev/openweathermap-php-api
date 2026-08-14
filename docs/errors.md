@@ -1,7 +1,7 @@
 # Error Handling
 
-The library distinguishes unsuccessful OpenWeather responses from local input,
-transport, decoding, and response-mapping failures.
+The library separates OpenWeather API errors from invalid input, HTTP client
+failures, decoding errors, and invalid response data.
 
 ## OpenWeather API Errors
 
@@ -54,7 +54,7 @@ try {
 } catch (TooManyRequestsException $exception) {
     // Defer or slow down further requests.
 } catch (UnauthorizedException $exception) {
-    // Check the API key and its access to the requested product.
+    // Check the API key and whether it can use this endpoint.
 } catch (ApiException $exception) {
     // Handle any other unsuccessful OpenWeather response.
 }
@@ -71,7 +71,7 @@ extend `ApiException`:
 | `Psr\Http\Client\ClientExceptionInterface` | The PSR-18 client could not complete the HTTP request. |
 | `JsonException` | A successful response expected to contain JSON could not be decoded. |
 | `HydrationException` | A known response property contains an invalid type or value. |
-| `UnexpectedValueException` | A non-JSON response, such as a map tile, has an unexpected payload or media type. |
+| `UnexpectedValueException` | A non-JSON response, such as a map tile, has unexpected content or a wrong content type. |
 
 Missing, explicitly `null`, conditional, and unknown response properties are
 tolerated. `HydrationException` is reserved for known non-null properties whose

@@ -1,7 +1,6 @@
 # Air Pollution
 
-Current, forecast, and historical air pollution are included in OpenWeather's
-standard free and paid subscriptions.
+This guide covers current, forecast, and historical air pollution.
 
 ## Current
 
@@ -103,7 +102,7 @@ Forecast periods use the same OpenWeather Air Quality Index and fixed
 The Historical Air Pollution API returns hourly observations for a coordinate
 and date range. See the
 [official Air Pollution API documentation](https://openweathermap.org/api/air-pollution)
-for availability and API details.
+for API details.
 
 Use `history()` with a latitude, longitude, start date, and end date. The date
 arguments accept any `DateTimeInterface` implementation. The end must be after

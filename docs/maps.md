@@ -1,8 +1,7 @@
 # Maps
 
 Weather Maps API 1.0 provides current cloud, precipitation, sea-level pressure,
-wind-speed, and temperature overlays. It is available on OpenWeather's standard
-free and paid subscriptions. See the
+wind-speed, and temperature overlays. See the
 [official Weather Maps documentation](https://openweathermap.org/api/weathermaps)
 for API details.
 
@@ -85,7 +84,7 @@ The returned format can be passed to
 [Leaflet](https://leafletjs.com/reference.html#tilelayer),
 [OpenLayers](https://openlayers.org/en/latest/apidoc/module-ol_source_XYZ-XYZ.html),
 or a [MapLibre raster source](https://maplibre.org/maplibre-style-spec/sources/).
-Like a concrete tile URL, the template contains the API key and does not make an
+Like a specific tile URL, the template contains the API key and does not make an
 HTTP request when generated.
 
 ## Tile Coordinates

@@ -2,8 +2,8 @@
 
 `OpenWeatherMap` uses PHP API SDK's `setup()` method for client-wide HTTP
 configuration. Most applications can rely on PHP-HTTP discovery and use the
-client without additional setup. Configure the following extension points when
-the application needs to provide its own infrastructure or request behavior.
+client without additional setup. Use the options below when the application
+needs its own HTTP services or request behavior.
 
 ```php
 use ProgrammatorDev\OpenWeatherMap\OpenWeatherMap;
@@ -11,7 +11,7 @@ use ProgrammatorDev\OpenWeatherMap\OpenWeatherMap;
 $api = new OpenWeatherMap($_ENV['OPENWEATHERMAP_API_KEY']);
 ```
 
-The examples below use infrastructure supplied by the application:
+The examples below use objects supplied by the application:
 `$httpClient` implements PSR-18, `$cachePool` implements PSR-6, and `$logger`
 implements PSR-3.
 
@@ -31,7 +31,7 @@ Use `client()` to provide a specific PSR-18 client instead.
 $api->setup()->client($httpClient);
 ```
 
-The returned client builder can also receive custom request and stream
+`client()` returns a builder that can also receive custom request and stream
 factories.
 
 See the official PHP API SDK
@@ -40,9 +40,9 @@ for all client and factory options.
 
 ## Cache
 
-Use `cache()` with a PSR-6 cache pool to cache eligible HTTP responses. The
-fallback TTL is used when a response does not provide a supported cache
-directive. GET and HEAD requests are cacheable by default. Packagist lists
+Use `cache()` with a PSR-6 cache pool to cache supported HTTP responses. The
+default TTL sets the cache lifetime when a response does not provide one. GET
+and HEAD requests are cacheable by default. Packagist lists
 available [PSR-6 cache implementations](https://packagist.org/providers/psr/cache-implementation).
 
 ```php
@@ -53,7 +53,8 @@ $api
 ```
 
 Cache configuration is client-wide. After configuring a pool, `withCache()` can
-override cache behavior for one immutable request chain.
+change cache behavior for one request chain without changing the client-wide
+settings.
 
 ```php
 use ProgrammatorDev\Api\Builder\CacheBuilder;
@@ -99,7 +100,7 @@ $retryPlugin = new RetryPlugin([
 $api->setup()->plugins()->add($retryPlugin, priority: 25);
 ```
 
-Retries make additional OpenWeather requests and can affect quotas or billing.
+Retries may send additional OpenWeather requests.
 Plugin priority controls middleware order. Priority `25` places this retry
 plugin after authentication and before cache; consult the linked documentation
 when choosing priorities for other plugins.
@@ -128,9 +129,9 @@ $api->setup()->hooks()->beforeRequest(
 );
 ```
 
-Return a PSR-7 request to replace it for the remainder of the request pipeline,
-or return `null` when no replacement is required. Response hooks follow the
-same pattern with a PSR-7 response.
+Return a PSR-7 request to use it for the current request, or return `null` to
+keep the original request. Response hooks follow the same pattern with a PSR-7
+response.
 
 See the official PHP API SDK
 [hook documentation](https://github.com/programmatordev/php-api-sdk/blob/main/docs/13-hooks.md)

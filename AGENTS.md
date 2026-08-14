@@ -10,13 +10,13 @@ Composer with PSR-4 autoloading under the
 ## Sources Of Truth
 
 - Use the official OpenWeather documentation for endpoint paths, parameters,
-  response fields, availability, and subscription constraints.
+  response fields, and current access requirements.
 - Use the installed PHP API SDK documentation and source for its supported
   authoring patterns.
 - Read existing resources, entities, tests, and documentation before changing
   related behavior.
-- Do not infer API availability from OpenWeather documentation sidebars; verify
-  it against the current official API catalog or pricing information.
+- Do not infer API access from documentation sidebars; verify it against the
+  current official API documentation.
 
 ## Code Changes
 
@@ -71,6 +71,7 @@ Composer with PSR-4 autoloading under the
 - Update public documentation alongside implemented API areas.
 - Keep method signatures, examples, supported endpoints, and response entities
   aligned with the implementation.
-- Clearly distinguish standard free-plan APIs from APIs requiring separate or
-  paid subscriptions.
-- Document potentially billable or destructive behavior prominently.
+- Avoid hard-coded claims about plans, prices, quotas, or allowances. Link to
+  the official OpenWeather documentation for current access requirements.
+- Document destructive behavior and actions that send additional requests
+  prominently.
