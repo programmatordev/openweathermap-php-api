@@ -3,9 +3,9 @@
 The Weather Stations API lets you register and manage personal weather stations
 associated with your OpenWeather account.
 
-It is available on OpenWeather's standard free and paid subscriptions. See the
-[official Weather Stations documentation](https://openweathermap.org/api/stations)
-for API details.
+Availability depends on the products enabled for the OpenWeather account. See
+the [official Weather Stations documentation](https://openweathermap.org/api/stations)
+and current account configuration for access details.
 
 ## Create A Station
 
