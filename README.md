@@ -102,10 +102,12 @@ These guides cover each API's endpoints, response entities, and usage examples:
 
 ### Client Guides
 
-These guides cover configuration and behavior shared across the APIs:
+These guides cover client configuration and failures shared across the APIs:
 
-- [Setup](docs/setup.md)
-- [Error Handling](docs/errors.md)
+- [Setup](docs/setup.md) — Configure caching, logging, HTTP clients, plugins,
+  and request hooks.
+- [Error Handling](docs/errors.md) — Handle OpenWeather API errors and client
+  failures.
 
 ## License
 
