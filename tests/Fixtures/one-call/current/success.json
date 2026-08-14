@@ -1,0 +1,32 @@
+{
+    "lat": 38.7223,
+    "lon": -9.1393,
+    "timezone": "Europe/Lisbon",
+    "timezone_offset": 3600,
+    "data": [
+        {
+            "dt": 1785668004,
+            "sunrise": 1785649113,
+            "sunset": 1785700020,
+            "temp": 24.34,
+            "feels_like": 24.68,
+            "pressure": 1016,
+            "humidity": 71,
+            "dew_point": 18.75,
+            "uvi": 7.53,
+            "clouds": 40,
+            "visibility": 10000,
+            "wind_speed": 2.24,
+            "wind_deg": 293,
+            "wind_gust": 5.36,
+            "weather": [
+                {
+                    "id": 802,
+                    "main": "Clouds",
+                    "description": "scattered clouds",
+                    "icon": "03d"
+                }
+            ]
+        }
+    ]
+}

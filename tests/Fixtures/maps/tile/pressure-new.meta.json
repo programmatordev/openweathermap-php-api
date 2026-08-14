@@ -1,0 +1,22 @@
+{
+    "provenance": "captured",
+    "product": "Weather Maps API",
+    "endpoint": "Map tile",
+    "apiVersion": "1.0",
+    "capturedAt": "2026-08-08T10:22:04Z",
+    "httpStatus": 200,
+    "contentType": "image/png",
+    "bodyFormat": "png",
+    "bodyBytes": 66276,
+    "sha256": "b5310fd2b200e551ee3d9943e5b45ad6b71907bf8fa5f12de5060b6217ac8b55",
+    "image": {
+        "width": 256,
+        "height": 256
+    },
+    "request": {
+        "method": "GET",
+        "path": "/map/pressure_new/1/1/1.png",
+        "query": {}
+    },
+    "sanitization": []
+}

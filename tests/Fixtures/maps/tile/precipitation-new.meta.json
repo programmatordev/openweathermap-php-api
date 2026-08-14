@@ -1,0 +1,22 @@
+{
+    "provenance": "captured",
+    "product": "Weather Maps API",
+    "endpoint": "Map tile",
+    "apiVersion": "1.0",
+    "capturedAt": "2026-08-08T10:22:04Z",
+    "httpStatus": 200,
+    "contentType": "image/png",
+    "bodyFormat": "png",
+    "bodyBytes": 81096,
+    "sha256": "c082371b48f55d29df23b5527666a5b88285ce0da52b8c542724600c782f62a4",
+    "image": {
+        "width": 256,
+        "height": 256
+    },
+    "request": {
+        "method": "GET",
+        "path": "/map/precipitation_new/1/1/1.png",
+        "query": {}
+    },
+    "sanitization": []
+}

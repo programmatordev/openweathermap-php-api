@@ -1,0 +1,390 @@
+{
+  "lat": -38.4,
+  "lon": -71.58,
+  "timezone": "America/Santiago",
+  "timezone_offset": -14400,
+  "data": [
+    {
+      "dt": 1785628800,
+      "sunrise": 1785671200,
+      "sunset": 1785707904,
+      "moonrise": 1785633300,
+      "moonset": 1785590340,
+      "moon_phase": 0.6,
+      "temp": {
+        "day": -2.28,
+        "min": -2.9,
+        "max": -1.84,
+        "night": -2.51,
+        "eve": -2.35,
+        "morn": -2.17
+      },
+      "feels_like": {
+        "day": -2.28,
+        "night": -2.51,
+        "eve": -2.35,
+        "morn": -2.17
+      },
+      "pressure": 1015.3,
+      "humidity": 99,
+      "wind_speed": 3.91,
+      "wind_deg": 316,
+      "weather": [
+        {
+          "id": 601,
+          "main": "Snow",
+          "description": "snow",
+          "icon": "13d"
+        }
+      ],
+      "clouds": 100,
+      "pop": 1,
+      "snow": 60.98,
+      "uvi": 0
+    },
+    {
+      "dt": 1785715200,
+      "sunrise": 1785757540,
+      "sunset": 1785794355,
+      "moonrise": 1785723540,
+      "moonset": 1785678120,
+      "moon_phase": 0.63,
+      "temp": {
+        "day": -2.09,
+        "min": -3.01,
+        "max": -0.99,
+        "night": -2.93,
+        "eve": -2.13,
+        "morn": -2.86
+      },
+      "feels_like": {
+        "day": -2.09,
+        "night": -2.93,
+        "eve": -2.13,
+        "morn": -2.86
+      },
+      "pressure": 1022.42,
+      "humidity": 99,
+      "wind_speed": 1.96,
+      "wind_deg": 305,
+      "weather": [
+        {
+          "id": 601,
+          "main": "Snow",
+          "description": "snow",
+          "icon": "13d"
+        }
+      ],
+      "clouds": 100,
+      "pop": 1,
+      "snow": 22.08,
+      "uvi": 0
+    },
+    {
+      "dt": 1785801600,
+      "sunrise": 1785843880,
+      "sunset": 1785880807,
+      "moonrise": 1785813960,
+      "moonset": 1785765900,
+      "moon_phase": 0.67,
+      "temp": {
+        "day": -0.5,
+        "min": -2.78,
+        "max": 0.14,
+        "night": -2.06,
+        "eve": -1.52,
+        "morn": -1.68
+      },
+      "feels_like": {
+        "day": -0.5,
+        "night": -2.06,
+        "eve": -1.52,
+        "morn": -1.68
+      },
+      "pressure": 1020.64,
+      "humidity": 96,
+      "wind_speed": 2,
+      "wind_deg": 283,
+      "weather": [
+        {
+          "id": 600,
+          "main": "Snow",
+          "description": "light snow",
+          "icon": "13d"
+        }
+      ],
+      "clouds": 99,
+      "pop": 0.36,
+      "snow": 1.01,
+      "uvi": 0
+    },
+    {
+      "dt": 1785888000,
+      "sunrise": 1785930218,
+      "sunset": 1785967259,
+      "moonrise": 0,
+      "moonset": 1785853800,
+      "moon_phase": 0.7,
+      "temp": {
+        "day": 0.01,
+        "min": -2.87,
+        "max": 0.52,
+        "night": -2.66,
+        "eve": -1.02,
+        "morn": -2.23
+      },
+      "feels_like": {
+        "day": 0.01,
+        "night": -2.66,
+        "eve": -1.02,
+        "morn": -2.23
+      },
+      "pressure": 1014.13,
+      "humidity": 95,
+      "wind_speed": 2.1,
+      "wind_deg": 337,
+      "weather": [
+        {
+          "id": 601,
+          "main": "Snow",
+          "description": "snow",
+          "icon": "13d"
+        }
+      ],
+      "clouds": 100,
+      "pop": 0.72,
+      "snow": 4.9,
+      "uvi": 0
+    },
+    {
+      "dt": 1785974400,
+      "sunrise": 1786016554,
+      "sunset": 1786053711,
+      "moonrise": 1785904440,
+      "moonset": 1785942000,
+      "moon_phase": 0.75,
+      "temp": {
+        "day": -3.34,
+        "min": -5.41,
+        "max": -0.38,
+        "night": -0.78,
+        "eve": -4.84,
+        "morn": -2.7
+      },
+      "feels_like": {
+        "day": -3.34,
+        "night": -0.78,
+        "eve": -4.84,
+        "morn": -2.7
+      },
+      "pressure": 1009.7,
+      "humidity": 98,
+      "wind_speed": 5.53,
+      "wind_deg": 280,
+      "weather": [
+        {
+          "id": 602,
+          "main": "Snow",
+          "description": "heavy snow",
+          "icon": "13d"
+        }
+      ],
+      "clouds": 100,
+      "pop": 1,
+      "snow": 73.78,
+      "uvi": 0
+    },
+    {
+      "dt": 1786060800,
+      "sunrise": 1786102890,
+      "sunset": 1786140164,
+      "moonrise": 1785995220,
+      "moonset": 1786030560,
+      "moon_phase": 0.77,
+      "temp": {
+        "day": -6,
+        "min": -7.83,
+        "max": -4.7,
+        "night": -4.87,
+        "eve": -7.47,
+        "morn": -4.82
+      },
+      "feels_like": {
+        "day": -6,
+        "night": -4.87,
+        "eve": -7.47,
+        "morn": -4.82
+      },
+      "pressure": 1013.16,
+      "humidity": 97,
+      "wind_speed": 7.06,
+      "wind_deg": 265,
+      "weather": [
+        {
+          "id": 602,
+          "main": "Snow",
+          "description": "heavy snow",
+          "icon": "13d"
+        }
+      ],
+      "clouds": 100,
+      "pop": 1,
+      "snow": 257.03,
+      "uvi": 0
+    },
+    {
+      "dt": 1786147200,
+      "sunrise": 1786189224,
+      "sunset": 1786226616,
+      "moonrise": 1786086060,
+      "moonset": 1786119600,
+      "moon_phase": 0.81,
+      "temp": {
+        "day": -5.83,
+        "min": -7.18,
+        "max": -3.82,
+        "night": -7.18,
+        "eve": -4.63,
+        "morn": -6.95
+      },
+      "feels_like": {
+        "day": -5.83,
+        "night": -7.18,
+        "eve": -4.63,
+        "morn": -6.95
+      },
+      "pressure": 1021.05,
+      "humidity": 98,
+      "wind_speed": 5.9,
+      "wind_deg": 290,
+      "weather": [
+        {
+          "id": 602,
+          "main": "Snow",
+          "description": "heavy snow",
+          "icon": "13d"
+        }
+      ],
+      "clouds": 100,
+      "pop": 1,
+      "snow": 237.96,
+      "uvi": 0
+    },
+    {
+      "dt": 1786233600,
+      "sunrise": 1786275556,
+      "sunset": 1786313069,
+      "moonrise": 1786176780,
+      "moonset": 1786209420,
+      "moon_phase": 0.84,
+      "temp": {
+        "day": -4.05,
+        "min": -4.67,
+        "max": -3.24,
+        "night": -3.92,
+        "eve": -3.28,
+        "morn": -4.55
+      },
+      "feels_like": {
+        "day": -4.05,
+        "night": -3.92,
+        "eve": -3.28,
+        "morn": -4.55
+      },
+      "pressure": 1021.17,
+      "humidity": 99,
+      "wind_speed": 4.62,
+      "wind_deg": 292,
+      "weather": [
+        {
+          "id": 602,
+          "main": "Snow",
+          "description": "heavy snow",
+          "icon": "13d"
+        }
+      ],
+      "clouds": 100,
+      "pop": 1,
+      "snow": 271.81,
+      "uvi": 0
+    },
+    {
+      "dt": 1786320000,
+      "sunrise": 1786361888,
+      "sunset": 1786399521,
+      "moonrise": 1786267140,
+      "moonset": 1786299840,
+      "moon_phase": 0.88,
+      "temp": {
+        "day": -3.12,
+        "min": -7.68,
+        "max": -3.07,
+        "night": -3.43,
+        "eve": -4.67,
+        "morn": -3.66
+      },
+      "feels_like": {
+        "day": -3.12,
+        "night": -3.43,
+        "eve": -4.67,
+        "morn": -3.66
+      },
+      "pressure": 1025.25,
+      "humidity": 99,
+      "wind_speed": 2.64,
+      "wind_deg": 286,
+      "weather": [
+        {
+          "id": 602,
+          "main": "Snow",
+          "description": "heavy snow",
+          "icon": "13d"
+        }
+      ],
+      "clouds": 100,
+      "pop": 0.97,
+      "snow": 50.39,
+      "uvi": 0
+    },
+    {
+      "dt": 1786406400,
+      "sunrise": 1786448218,
+      "sunset": 1786485974,
+      "moonrise": 1786356900,
+      "moonset": 1786390800,
+      "moon_phase": 0.92,
+      "temp": {
+        "day": -3.15,
+        "min": -7.31,
+        "max": -3.14,
+        "night": -7.31,
+        "eve": -3.42,
+        "morn": -5.8
+      },
+      "feels_like": {
+        "day": -3.15,
+        "night": -7.31,
+        "eve": -3.42,
+        "morn": -5.8
+      },
+      "pressure": 1021.44,
+      "humidity": 99,
+      "wind_speed": 1.67,
+      "wind_deg": 335,
+      "weather": [
+        {
+          "id": 602,
+          "main": "Snow",
+          "description": "heavy snow",
+          "icon": "13d"
+        }
+      ],
+      "clouds": 100,
+      "pop": 1,
+      "snow": 55.84,
+      "uvi": 0
+    }
+  ],
+  "prev": "http://api.openweathermap.org/data/4.0/onecall/timeline/1day?cnt=10&lat=-38.4000&lon=-71.5800&start=1784764800&appid={API key}&units=metric&lang=en",
+  "next": "http://api.openweathermap.org/data/4.0/onecall/timeline/1day?cnt=10&lat=-38.4000&lon=-71.5800&start=1786492800&appid={API key}&units=metric&lang=en"
+}

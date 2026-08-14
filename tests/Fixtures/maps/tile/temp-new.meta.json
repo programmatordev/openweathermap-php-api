@@ -1,0 +1,22 @@
+{
+    "provenance": "captured",
+    "product": "Weather Maps API",
+    "endpoint": "Map tile",
+    "apiVersion": "1.0",
+    "capturedAt": "2026-08-08T10:22:04Z",
+    "httpStatus": 200,
+    "contentType": "image/png",
+    "bodyFormat": "png",
+    "bodyBytes": 57338,
+    "sha256": "aec0f69761e259099ac09d9b69a1156ec50233fd4ac67ba667e792c860e878ed",
+    "image": {
+        "width": 256,
+        "height": 256
+    },
+    "request": {
+        "method": "GET",
+        "path": "/map/temp_new/1/1/1.png",
+        "query": {}
+    },
+    "sanitization": []
+}

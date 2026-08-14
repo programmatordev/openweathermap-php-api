@@ -2,4 +2,4 @@
 
 namespace ProgrammatorDev\OpenWeatherMap\Exception;
 
-class UnauthorizedException extends ApiErrorException {}
+class UnauthorizedException extends ApiException {}

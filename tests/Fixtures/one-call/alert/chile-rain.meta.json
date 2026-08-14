@@ -1,0 +1,14 @@
+{
+    "provenance": "captured",
+    "product": "One Call API",
+    "endpoint": "Detailed weather alert by ID",
+    "apiVersion": "4.0",
+    "capturedAt": "2026-08-02T11:44:45Z",
+    "httpStatus": 200,
+    "request": {
+        "method": "GET",
+        "path": "/data/4.0/onecall/alert/urn:oid:2.49.0.0.152.0.2026.7.31.14.20.43:f1076d7511a15522d5a6e41917020bc0",
+        "query": {}
+    },
+    "sanitization": []
+}

@@ -4,57 +4,118 @@
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
 [![Tests](https://github.com/programmatordev/openweathermap-php-api/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/programmatordev/openweathermap-php-api/actions/workflows/ci.yml?query=branch%3Amain)
 
-OpenWeatherMap PHP library that provides convenient access to the OpenWeatherMap API.
+A fluent PHP client for OpenWeather APIs covering current and forecast weather,
+air pollution, geocoding, maps, stations, and One Call. Responses use typed
+entities that safely handle conditional, missing, and `null` data.
 
-Supports [PSR-18 HTTP clients](https://www.php-fig.org/psr/psr-18), [PSR-17 HTTP factories](https://www.php-fig.org/psr/psr-17), [PSR-6 caches](https://www.php-fig.org/psr/psr-6) and [PSR-3 logs](https://www.php-fig.org/psr/psr-3).
+The library is built on
+[`programmatordev/php-api-sdk`](https://github.com/programmatordev/php-api-sdk),
+which provides HTTP client discovery and optional caching, logging, plugins,
+and request hooks.
 
 ## Requirements
 
-- PHP 8.1 or higher.
-
-## API Key
-
-A key is required to be able to make requests to the API.
-You must sign up for an [OpenWeatherMap account](https://openweathermap.org/appid#signup) to get one.
+- PHP 8.1 or higher
+- An OpenWeather API key
 
 ## Installation
 
-Install the library via [Composer](https://getcomposer.org/):
+Install the library with Composer:
 
 ```bash
 composer require programmatordev/openweathermap-php-api
 ```
 
-## Basic Usage
+## Getting Started
 
-Simple usage looks like:
+Create the API client with an OpenWeather API key, then choose an API and call
+one of its methods:
 
 ```php
 use ProgrammatorDev\OpenWeatherMap\OpenWeatherMap;
 
-// initialize
-$api = new OpenWeatherMap('yourapikey');
+$api = new OpenWeatherMap($_ENV['OPENWEATHERMAP_API_KEY']);
 
-// get current weather by coordinate (latitude, longitude)
-$weather = $api->weather()->getCurrent(50, 50);
-// show current temperature
-echo $weather->getTemperature();
+$current = $api->weather()->current(
+    latitude: 38.7223,
+    longitude: -9.1393,
+);
+
+echo $current->temperature();
+echo $current->temperatureWithUnit();
 ```
+
+Response properties may be missing or `null`, so getters return nullable values
+where appropriate. Collection getters return empty arrays when the response
+does not contain that collection.
+
+## Configuration
+
+The client defaults to metric units and English. The equivalent explicit
+configuration is:
+
+```php
+use ProgrammatorDev\OpenWeatherMap\Enum\Language;
+use ProgrammatorDev\OpenWeatherMap\Enum\Units;
+use ProgrammatorDev\OpenWeatherMap\OpenWeatherMap;
+
+$api = new OpenWeatherMap(
+    apiKey: $_ENV['OPENWEATHERMAP_API_KEY'],
+    options: [
+        'units' => Units::METRIC,
+        'language' => Language::ENGLISH,
+    ],
+);
+```
+
+Weather and One Call requests can override those values for one fluent request
+chain. The client-wide configuration remains unchanged for later requests:
+
+```php
+$current = $api
+    ->weather()
+    ->withUnits(Units::IMPERIAL)
+    ->withLanguage(Language::PORTUGUESE)
+    ->current(latitude: 38.7223, longitude: -9.1393);
+```
+
+`withLanguage()` also accepts a non-empty language-code string, allowing new
+OpenWeather languages to be used without waiting for an enum update.
+
+See OpenWeather's
+[units of measurement](https://openweathermap.org/api/current?collection=current_forecast#data) and
+[multilingual support](https://openweathermap.org/api/current?collection=current_forecast#multi)
+documentation for the currently supported values.
 
 ## Documentation
 
-- [Usage](docs/01-usage.md)
-- [Configuration](docs/02-configuration.md)
-- [Supported APIs](docs/03-supported-apis.md)
-- [Error Handling](docs/04-error-handling.md)
-- [Entities](docs/05-entities.md)
+### APIs
 
-## Contributing
+These guides cover each API's endpoints, response entities, and usage examples:
 
-Any form of contribution to improve this library (including requests) will be welcome and appreciated.
-Make sure to open a pull request or issue.
+- [One Call 4.0](docs/one-call.md)
+- [Air Pollution](docs/air-pollution.md)
+- [Weather](docs/weather.md)
+- [Maps](docs/maps.md)
+- [Stations](docs/stations.md)
+- [Geocoding](docs/geocoding.md)
+
+### Client Guides
+
+These guides cover client configuration and failures shared across the APIs:
+
+- [Setup](docs/setup.md) — Configure caching, logging, HTTP clients, plugins,
+  and request hooks.
+- [Error Handling](docs/errors.md) — Handle OpenWeather API errors and client
+  failures.
+
+## Upgrading
+
+Version 4 is a complete rewrite without backward compatibility. Existing
+integrations should treat it as a new implementation. See
+[Upgrading To 4.0](UPGRADE-4.0.md) for the release expectations and current
+baseline.
 
 ## License
 
-This project is licensed under the MIT license. 
-Please see the [LICENSE](LICENSE) file distributed with this source code for further information regarding copyright and licensing.
+This project is licensed under the [MIT License](LICENSE).

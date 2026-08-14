@@ -2,4 +2,4 @@
 
 namespace ProgrammatorDev\OpenWeatherMap\Exception;
 
-class NotFoundException extends ApiErrorException {}
+class NotFoundException extends ApiException {}

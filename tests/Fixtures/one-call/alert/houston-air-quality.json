@@ -1,0 +1,16 @@
+{
+  "id": "urn:oid:2.49.0.1.840.0.ecea2e4e89531a971e82aa9bfb2483dd830a4738.001.1:7038934a0b3cdfbb142576a95acc4a0a",
+  "sender_name": "NWS Houston/Galveston TX",
+  "event": "",
+  "start": 1785614160,
+  "end": 1785715200,
+  "description": [
+    {
+      "language": "en-US",
+      "description": "AQAHGX\n\nThe Texas Commission on Environmental Quality (TCEQ) has issued an\nOzone Action Day for the Houston, Galveston, and Brazoria area for\nSunday, August 2, 2026.\n\nAtmospheric conditions are expected to be favorable for producing\nhigh levels of ozone pollution in the Houston, Galveston, and\nsurrounding areas on Sunday. You can help prevent ozone pollution by\nsharing a ride, walking, riding a bicycle, taking your lunch to work,\navoiding drive through lanes, conserving energy and keeping your vehicle\nproperly tuned.\n\nFor more information on ozone:\nOzone: The Facts www.tceq.texas.gov/airquality/monops/ozonefacts.html\nEPA AirNow: www.airnow.gov/?city=Houston&state=TX&country=USA\nTake Care of Texas:\nwww.takecareoftexas.org/conservation-tips/keep-our-air-clean"
+    }
+  ],
+  "tags": [
+    "Air quality"
+  ]
+}

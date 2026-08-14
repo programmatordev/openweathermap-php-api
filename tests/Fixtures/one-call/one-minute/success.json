@@ -1,0 +1,248 @@
+{
+  "lat": 38.7223,
+  "lon": -9.1393,
+  "timezone": "Europe/Lisbon",
+  "timezone_offset": 3600,
+  "data": [
+    {
+      "dt": 1785669780,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785669840,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785669900,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785669960,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785670020,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785670080,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785670140,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785670200,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785670260,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785670320,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785670380,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785670440,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785670500,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785670560,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785670620,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785670680,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785670740,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785670800,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785670860,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785670920,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785670980,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785671040,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785671100,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785671160,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785671220,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785671280,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785671340,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785671400,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785671460,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785671520,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785671580,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785671640,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785671700,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785671760,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785671820,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785671880,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785671940,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785672000,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785672060,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785672120,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785672180,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785672240,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785672300,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785672360,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785672420,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785672480,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785672540,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785672600,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785672660,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785672720,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785672780,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785672840,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785672900,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785672960,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785673020,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785673080,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785673140,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785673200,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785673260,
+      "precipitation": 0
+    },
+    {
+      "dt": 1785673320,
+      "precipitation": 0
+    }
+  ]
+}

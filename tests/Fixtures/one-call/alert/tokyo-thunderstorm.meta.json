@@ -1,0 +1,14 @@
+{
+    "provenance": "captured",
+    "product": "One Call API",
+    "endpoint": "Detailed weather alert by ID",
+    "apiVersion": "4.0",
+    "capturedAt": "2026-08-02T11:44:45Z",
+    "httpStatus": 200,
+    "request": {
+        "method": "GET",
+        "path": "/data/4.0/onecall/alert/VPWW54_JPTK_020757_02_202608020757550_001_55787:14:1311500:0:0:bd980f52b5594645c6a36b4016fdd359",
+        "query": {}
+    },
+    "sanitization": []
+}

@@ -1,0 +1,19 @@
+{
+    "provenance": "captured",
+    "product": "One Call API",
+    "endpoint": "Current weather by coordinates",
+    "apiVersion": "4.0",
+    "capturedAt": "2026-08-02T10:53:24Z",
+    "httpStatus": 200,
+    "request": {
+        "method": "GET",
+        "path": "/data/4.0/onecall/current",
+        "query": {
+            "lat": 38.7223,
+            "lon": -9.1393,
+            "units": "metric",
+            "lang": "en"
+        }
+    },
+    "sanitization": []
+}

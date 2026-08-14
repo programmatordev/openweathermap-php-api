@@ -1,0 +1,19 @@
+{
+    "provenance": "captured",
+    "product": "Weather Maps API",
+    "endpoint": "Map tile",
+    "apiVersion": "1.0",
+    "capturedAt": "2026-08-08T10:22:04Z",
+    "httpStatus": 401,
+    "contentType": "image/png",
+    "bodyFormat": "json",
+    "bodyBytes": 107,
+    "sha256": "cdee0b4f0401915d83300301514984fef2ddfb91245c52358326f9e11f8707d9",
+    "request": {
+        "method": "GET",
+        "path": "/map/clouds_new/1/1/1.png",
+        "query": {}
+    },
+    "sanitization": [],
+    "notes": "OpenWeather labeled this JSON error body as image/png."
+}

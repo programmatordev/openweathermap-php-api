@@ -1,0 +1,22 @@
+{
+    "provenance": "captured",
+    "product": "Weather Stations API",
+    "endpoint": "Aggregate station measurements",
+    "apiVersion": "3.0",
+    "capturedAt": "2026-08-14T07:30:22Z",
+    "httpStatus": 200,
+    "contentType": "application/json; charset=utf-8",
+    "request": {
+        "method": "GET",
+        "path": "/data/3.0/measurements",
+        "query": {
+            "station_id": "6a77ba36adde3b0001343e09",
+            "type": "m",
+            "limit": 100,
+            "from": 1786231349,
+            "to": 1786692622
+        }
+    },
+    "sanitization": [],
+    "notes": "The first aggregate appeared between 23 hours 43 minutes and 31 hours 43 minutes after its three source measurements were accepted. The second aggregate appeared approximately 30 hours after its fully populated source measurement was accepted. Both empty precipitation objects are preserved exactly. The retained station was deleted after capture, and a following list request confirmed that no stations remained."
+}

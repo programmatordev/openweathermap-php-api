@@ -1,0 +1,17 @@
+{
+    "provenance": "captured",
+    "product": "Geocoding API",
+    "endpoint": "Direct geocoding",
+    "apiVersion": "1.0",
+    "capturedAt": "2026-07-31T17:19:23Z",
+    "httpStatus": 200,
+    "request": {
+        "method": "GET",
+        "path": "/geo/1.0/direct",
+        "query": {
+            "q": "ThisPlaceShouldNotExistOpenWeatherFixture987654321",
+            "limit": 5
+        }
+    },
+    "sanitization": []
+}

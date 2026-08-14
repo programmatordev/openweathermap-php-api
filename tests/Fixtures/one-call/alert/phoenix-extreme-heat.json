@@ -1,0 +1,16 @@
+{
+  "id": "urn:oid:2.49.0.1.840.0.cd17291384fae80fe8e7d9bdf80b7daacd96d2b2.003.1:42df637e7a40cbc59c30cd956a8a638b",
+  "sender_name": "NWS Phoenix AZ",
+  "event": "",
+  "start": 1785653280,
+  "end": 1785898800,
+  "description": [
+    {
+      "language": "en-US",
+      "description": "* WHAT...Dangerously hot and humid conditions. Afternoon temperatures\n109 to 116. Major to Extreme Heat Risk.\n\n* WHERE...The Phoenix metropolitan area.\n\n* WHEN...Until 8 PM MST Tuesday.\n\n* IMPACTS...Increase in heat related illnesses, including heat\ncramps, heat exhaustion, and heat stroke. Heat stroke can lead to\ndeath.\n\n* ADDITIONAL DETAILS...In Maricopa County, Call 2-1-1 to find a free\ncooling center, transportation, water and more.\nhttps://www.maricopa.gov/heat"
+    }
+  ],
+  "tags": [
+    "Extreme high temperature"
+  ]
+}

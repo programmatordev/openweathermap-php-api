@@ -2,4 +2,4 @@
 
 namespace ProgrammatorDev\OpenWeatherMap\Exception;
 
-class UnexpectedErrorException extends ApiErrorException {}
+class UnexpectedErrorException extends ApiException {}

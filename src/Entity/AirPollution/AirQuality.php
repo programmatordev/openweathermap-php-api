@@ -2,38 +2,51 @@
 
 namespace ProgrammatorDev\OpenWeatherMap\Entity\AirPollution;
 
-class AirQuality
+use ProgrammatorDev\Api\Context\Context;
+use ProgrammatorDev\Api\Contract\EntityInterface;
+use ProgrammatorDev\OpenWeatherMap\Enum\AirQualityIndex;
+use ProgrammatorDev\OpenWeatherMap\Exception\HydrationException;
+use ProgrammatorDev\OpenWeatherMap\Hydration\PayloadReader;
+
+final class AirQuality implements EntityInterface
 {
-    private int $index;
+    private function __construct(
+        private readonly ?AirQualityIndex $airQualityIndex,
+        private readonly ?Components $components,
+    ) {}
 
-    private string $qualitativeName;
-
-    public function __construct(array $data)
+    public static function fromArray(array $data, ?Context $context = null): static
     {
-        $this->index = $data['aqi'];
-        $this->qualitativeName = $this->findQualitativeName($this->index);
+        $reader = PayloadReader::from($data, self::class);
+        $airQualityIndex = $reader->nullableInt('main.aqi');
+
+        if ($airQualityIndex !== null) {
+            $airQualityIndex = AirQualityIndex::tryFrom($airQualityIndex)
+                ?? throw HydrationException::invalidValue(
+                    self::class,
+                    'main.aqi',
+                    'an integer from 1 through 5',
+                    $airQualityIndex,
+                );
+        }
+
+        $components = $reader->nullableArray('components');
+
+        return new self(
+            airQualityIndex: $airQualityIndex,
+            components: $components === null
+                ? null
+                : Components::fromArray($components, $context),
+        );
     }
 
-    public function getIndex(): int
+    public function airQualityIndex(): ?AirQualityIndex
     {
-        return $this->index;
+        return $this->airQualityIndex;
     }
 
-    public function getQualitativeName(): string
+    public function components(): ?Components
     {
-        return $this->qualitativeName;
-    }
-
-    private function findQualitativeName(int $index): string
-    {
-        // levels based on https://openweathermap.org/api/air-pollution
-        return match ($index) {
-            1 => 'Good',
-            2 => 'Fair',
-            3 => 'Moderate',
-            4 => 'Poor',
-            5 => 'Very Poor',
-            default => 'Undefined'
-        };
+        return $this->components;
     }
 }

@@ -1,0 +1,19 @@
+{
+    "provenance": "captured",
+    "product": "5 Day / 3 Hour Forecast API",
+    "endpoint": "5 day / 3 hour forecast by coordinates",
+    "apiVersion": "2.5",
+    "capturedAt": "2026-08-01T09:02:25Z",
+    "httpStatus": 200,
+    "request": {
+        "method": "GET",
+        "path": "/data/2.5/forecast",
+        "query": {
+            "lat": 38.7223,
+            "lon": -9.1393,
+            "units": "metric",
+            "lang": "en"
+        }
+    },
+    "sanitization": []
+}

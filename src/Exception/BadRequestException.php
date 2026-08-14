@@ -2,4 +2,4 @@
 
 namespace ProgrammatorDev\OpenWeatherMap\Exception;
 
-class BadRequestException extends ApiErrorException {}
+class BadRequestException extends ApiException {}

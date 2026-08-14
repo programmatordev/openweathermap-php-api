@@ -1,0 +1,29 @@
+{
+    "provenance": "captured",
+    "product": "One Call API",
+    "endpoint": "1-hour timeline by coordinates",
+    "apiVersion": "4.0",
+    "capturedAt": "2026-08-02T11:31:32Z",
+    "httpStatus": 200,
+    "request": {
+        "method": "GET",
+        "path": "/data/4.0/onecall/timeline/1h",
+        "query": {
+            "lat": 38.7223,
+            "lon": -9.1393,
+            "start": 1785495600,
+            "units": "metric",
+            "lang": "en"
+        }
+    },
+    "sanitization": [
+        {
+            "path": "$.prev",
+            "action": "replaced appid query value with {API key}"
+        },
+        {
+            "path": "$.next",
+            "action": "replaced appid query value with {API key}"
+        }
+    ]
+}

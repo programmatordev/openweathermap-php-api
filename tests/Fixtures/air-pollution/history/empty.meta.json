@@ -1,0 +1,19 @@
+{
+    "provenance": "captured",
+    "product": "Air Pollution API",
+    "endpoint": "Historical air pollution by coordinates and time range",
+    "apiVersion": "2.5",
+    "capturedAt": "2026-08-01T20:59:08Z",
+    "httpStatus": 200,
+    "request": {
+        "method": "GET",
+        "path": "/data/2.5/air_pollution/history",
+        "query": {
+            "lat": 38.7223,
+            "lon": -9.1393,
+            "start": 1604188800,
+            "end": 1604192400
+        }
+    },
+    "sanitization": []
+}

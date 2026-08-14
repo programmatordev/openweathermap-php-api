@@ -2,114 +2,157 @@
 
 namespace ProgrammatorDev\OpenWeatherMap;
 
-use Http\Message\Authentication\QueryParam;
 use ProgrammatorDev\Api\Api;
-use ProgrammatorDev\Api\Event\PostRequestEvent;
-use ProgrammatorDev\Api\Event\ResponseContentsEvent;
+use ProgrammatorDev\Api\Context\ErrorContext;
+use ProgrammatorDev\OpenWeatherMap\Enum\Language;
+use ProgrammatorDev\OpenWeatherMap\Enum\Units;
+use ProgrammatorDev\OpenWeatherMap\Exception\ApiException;
 use ProgrammatorDev\OpenWeatherMap\Exception\BadRequestException;
 use ProgrammatorDev\OpenWeatherMap\Exception\NotFoundException;
 use ProgrammatorDev\OpenWeatherMap\Exception\TooManyRequestsException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnauthorizedException;
 use ProgrammatorDev\OpenWeatherMap\Exception\UnexpectedErrorException;
-use ProgrammatorDev\OpenWeatherMap\Language\Language;
-use ProgrammatorDev\OpenWeatherMap\Resource\AirPollutionResource;
-use ProgrammatorDev\OpenWeatherMap\Resource\AssistantResource;
-use ProgrammatorDev\OpenWeatherMap\Resource\GeocodingResource;
-use ProgrammatorDev\OpenWeatherMap\Resource\OneCallResource;
-use ProgrammatorDev\OpenWeatherMap\Resource\WeatherResource;
-use ProgrammatorDev\OpenWeatherMap\UnitSystem\UnitSystem;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use ProgrammatorDev\OpenWeatherMap\Resource\AirPollution;
+use ProgrammatorDev\OpenWeatherMap\Resource\Geocoding;
+use ProgrammatorDev\OpenWeatherMap\Resource\Maps;
+use ProgrammatorDev\OpenWeatherMap\Resource\OneCall;
+use ProgrammatorDev\OpenWeatherMap\Resource\Stations;
+use ProgrammatorDev\OpenWeatherMap\Resource\Weather;
+use ProgrammatorDev\OpenWeatherMap\Response\PayloadDecoder;
+use ProgrammatorDev\OpenWeatherMap\Validation\Assert;
 
 class OpenWeatherMap extends Api
 {
-    public readonly array $options;
+    public const AUTHENTICATION_KEY = 'appid';
+    public const OPTION_LANGUAGE = 'language';
+    public const OPTION_UNITS = 'units';
 
-    private OptionsResolver $optionsResolver;
+    private const BASE_URL = 'https://api.openweathermap.org';
+
+    private readonly string $apiKey;
 
     public function __construct(
-        #[\SensitiveParameter] public readonly string $apiKey,
-        array $options = []
+        #[\SensitiveParameter] string $apiKey,
+        array $options = [],
     )
     {
         parent::__construct();
 
-        $this->optionsResolver = new OptionsResolver();
+        $this->apiKey = $this->validateApiKey($apiKey);
+        $options = $this->validateOptions($options);
 
-        $this->options = $this->configureOptions($options);
-        $this->configureApi();
-    }
+        $this->config($options, defaults: [
+            self::OPTION_UNITS => Units::METRIC,
+            self::OPTION_LANGUAGE => Language::ENGLISH,
+        ]);
 
-    public function oneCall(): OneCallResource
-    {
-        return new OneCallResource($this);
-    }
+        $this->baseUrl(self::BASE_URL);
+        $this->auth()->query(self::AUTHENTICATION_KEY, $this->apiKey);
+        $this->responses()->custom(new PayloadDecoder());
 
-    public function assistant(): AssistantResource
-    {
-        return new AssistantResource($this);
-    }
-
-    public function weather(): WeatherResource
-    {
-        return new WeatherResource($this);
-    }
-
-    public function airPollution(): AirPollutionResource
-    {
-        return new AirPollutionResource($this);
-    }
-
-    public function geocoding(): GeocodingResource
-    {
-        return new GeocodingResource($this);
-    }
-
-    private function configureOptions(array $options): array
-    {
-        $this->optionsResolver->setDefault('unitSystem', UnitSystem::METRIC);
-        $this->optionsResolver->setDefault('language', Language::ENGLISH);
-
-        $this->optionsResolver->setAllowedTypes('unitSystem', 'string');
-        $this->optionsResolver->setAllowedTypes('language', 'string');
-
-        $this->optionsResolver->setAllowedValues('unitSystem', UnitSystem::getOptions());
-
-        return $this->optionsResolver->resolve($options);
-    }
-
-    private function configureApi(): void
-    {
-        $this->setBaseUrl('https://api.openweathermap.org');
-
-        $this->setAuthentication(new QueryParam(['appid' => $this->apiKey]));
-
-        $this->addQueryDefault('units', $this->options['unitSystem']);
-        $this->addQueryDefault('lang', $this->options['language']);
-
-        $this->addPostRequestListener(function(PostRequestEvent $event) {
-            $response = $event->getResponse();
-            $statusCode = $response->getStatusCode();
-
-            // if there was a response with an error status code
-            if ($statusCode >= 400) {
-                $error = json_decode($response->getBody()->getContents(), true);
-
-                match ($statusCode) {
-                    400 => throw new BadRequestException($error),
-                    401 => throw new UnauthorizedException($error),
-                    404 => throw new NotFoundException($error),
-                    429 => throw new TooManyRequestsException($error),
-                    default => throw new UnexpectedErrorException($error)
-                };
-            }
+        $this->errors()->when(static fn (ErrorContext $context): ?ApiException => match (true) {
+            $context->statusCode() === 400 => BadRequestException::fromContext($context),
+            $context->statusCode() === 401 => UnauthorizedException::fromContext($context),
+            $context->statusCode() === 404 => NotFoundException::fromContext($context),
+            $context->statusCode() === 429 => TooManyRequestsException::fromContext($context),
+            $context->statusCode() >= 400 && $context->statusCode() <= 599 => UnexpectedErrorException::fromContext($context),
+            default => null,
         });
+    }
 
-        $this->addResponseContentsListener(function(ResponseContentsEvent $event) {
-            // decode json string response into an array
-            $contents = $event->getContents();
-            $contents = json_decode($contents, true);
+    public function airPollution(): AirPollution
+    {
+        return $this->resource(AirPollution::class);
+    }
 
-            $event->setContents($contents);
-        });
+    public function geocoding(): Geocoding
+    {
+        return $this->resource(Geocoding::class);
+    }
+
+    public function maps(): Maps
+    {
+        // URL generation does not send a request through the SDK authentication
+        // pipeline, so Maps also needs the validated key directly.
+        return $this->resourceWith(
+            Maps::class,
+            apiKey: $this->apiKey,
+        );
+    }
+
+    public function oneCall(): OneCall
+    {
+        return $this->resource(OneCall::class);
+    }
+
+    public function stations(): Stations
+    {
+        return $this->resource(Stations::class);
+    }
+
+    public function weather(): Weather
+    {
+        return $this->resource(Weather::class);
+    }
+
+    private function validateApiKey(
+        #[\SensitiveParameter] string $apiKey,
+    ): string
+    {
+        return Assert::notBlank($apiKey, 'API key');
+    }
+
+    private function validateOptions(array $options): array
+    {
+        $unknownOptions = array_diff(
+            array_keys($options),
+            [self::OPTION_LANGUAGE, self::OPTION_UNITS]
+        );
+
+        if ($unknownOptions !== []) {
+            throw new \InvalidArgumentException(sprintf(
+                'Unknown OpenWeatherMap option%s: %s.',
+                count($unknownOptions) === 1 ? '' : 's',
+                implode(', ', $unknownOptions)
+            ));
+        }
+
+        if (array_key_exists(self::OPTION_UNITS, $options)) {
+            $this->validateUnits($options[self::OPTION_UNITS]);
+        }
+
+        if (array_key_exists(self::OPTION_LANGUAGE, $options)) {
+            $options[self::OPTION_LANGUAGE] = $this->validateLanguage(
+                $options[self::OPTION_LANGUAGE],
+            );
+        }
+
+        return $options;
+    }
+
+    private function validateUnits(mixed $units): void
+    {
+        if (!$units instanceof Units) {
+            throw new \InvalidArgumentException(sprintf(
+                'The "%s" option must be an instance of %s.',
+                self::OPTION_UNITS,
+                Units::class
+            ));
+        }
+    }
+
+    private function validateLanguage(mixed $language): Language|string
+    {
+        if (!$language instanceof Language && !is_string($language)) {
+            throw new \InvalidArgumentException(sprintf(
+                'The "%s" option must be an instance of %s or a string.',
+                self::OPTION_LANGUAGE,
+                Language::class
+            ));
+        }
+
+        return is_string($language)
+            ? Assert::notBlank($language, sprintf('"%s" option', self::OPTION_LANGUAGE))
+            : $language;
     }
 }
