@@ -1,6 +1,6 @@
 <?php
 
-namespace ProgrammatorDev\OpenWeatherMap\Entity\OneCall\OneHourTimeline;
+namespace ProgrammatorDev\OpenWeatherMap\Entity\OneCall\HourTimeline;
 
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\Timeline\WeatherPeriod;
 

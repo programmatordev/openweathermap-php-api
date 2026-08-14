@@ -147,18 +147,18 @@ $period->precipitationProbabilityUnit();      // Unit::PERCENT
 $period->precipitationProbabilityWithUnit();  // '91 %'
 ```
 
-## One-hour Timeline
+## Hour Timeline
 
 See OpenWeather's
 [official One Call 4.0 hourly forecast documentation](https://openweathermap.org/api/one-call-4#hourly)
 for API details.
 
-Use `oneHourTimeline()` with a latitude and longitude to retrieve hourly
+Use `hourTimeline()` with a latitude and longitude to retrieve hourly
 periods. When `startAt` is omitted, OpenWeather starts the timeline at the
 current UTC time.
 
 ```php
-$timeline = $api->oneCall()->oneHourTimeline(
+$timeline = $api->oneCall()->hourTimeline(
     latitude: 38.7223,
     longitude: -9.1393,
 );
@@ -169,7 +169,7 @@ limit the number of periods returned. `count` must be positive when provided,
 and timeline availability depends on OpenWeather.
 
 ```php
-$timeline = $api->oneCall()->oneHourTimeline(
+$timeline = $api->oneCall()->hourTimeline(
     latitude: 38.7223,
     longitude: -9.1393,
     startAt: new DateTimeImmutable('2 days ago'),
@@ -190,18 +190,18 @@ foreach ($timeline->periods() as $period) {
 }
 ```
 
-## One-day Timeline
+## Day Timeline
 
 See OpenWeather's
 [official One Call 4.0 daily forecast documentation](https://openweathermap.org/api/one-call-4#daily)
 for API details.
 
-Use `oneDayTimeline()` with a latitude and longitude to retrieve daily periods.
+Use `dayTimeline()` with a latitude and longitude to retrieve daily periods.
 When `startAt` is omitted, OpenWeather starts the timeline at the current UTC
 time.
 
 ```php
-$timeline = $api->oneCall()->oneDayTimeline(
+$timeline = $api->oneCall()->dayTimeline(
     latitude: 38.7223,
     longitude: -9.1393,
 );
@@ -212,7 +212,7 @@ limit the number of periods returned. Both are optional, and `count` must be
 positive when provided.
 
 ```php
-$timeline = $api->oneCall()->oneDayTimeline(
+$timeline = $api->oneCall()->dayTimeline(
     latitude: 38.7223,
     longitude: -9.1393,
     startAt: new DateTimeImmutable('2 days from now'),
@@ -245,7 +245,7 @@ values, so these getters return raw nullable floats.
 The 15-minute, one-hour, and one-day timelines provide explicit pagination.
 
 ```php
-$timeline = $api->oneCall()->oneHourTimeline(
+$timeline = $api->oneCall()->hourTimeline(
     latitude: 38.7223,
     longitude: -9.1393,
 );

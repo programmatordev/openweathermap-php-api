@@ -1,6 +1,6 @@
 <?php
 
-namespace ProgrammatorDev\OpenWeatherMap\Entity\OneCall\OneDayTimeline;
+namespace ProgrammatorDev\OpenWeatherMap\Entity\OneCall\DayTimeline;
 
 use ProgrammatorDev\Api\Context\Context;
 use ProgrammatorDev\Api\Contract\EntityInterface;
@@ -10,10 +10,12 @@ use ProgrammatorDev\OpenWeatherMap\Formatting\MeasurementFormatter;
 use ProgrammatorDev\OpenWeatherMap\Hydration\PayloadReader;
 use ProgrammatorDev\OpenWeatherMap\Hydration\UnitsResolver;
 
-final class FeelsLikeTemperature implements EntityInterface
+final class Temperature implements EntityInterface
 {
     private function __construct(
         private readonly ?float $day,
+        private readonly ?float $minimum,
+        private readonly ?float $maximum,
         private readonly ?float $night,
         private readonly ?float $evening,
         private readonly ?float $morning,
@@ -26,6 +28,8 @@ final class FeelsLikeTemperature implements EntityInterface
 
         return new self(
             day: $reader->nullableFloat('day'),
+            minimum: $reader->nullableFloat('min'),
+            maximum: $reader->nullableFloat('max'),
             night: $reader->nullableFloat('night'),
             evening: $reader->nullableFloat('eve'),
             morning: $reader->nullableFloat('morn'),
@@ -46,6 +50,36 @@ final class FeelsLikeTemperature implements EntityInterface
     public function dayWithUnit(): ?string
     {
         return $this->format($this->day);
+    }
+
+    public function minimum(): ?float
+    {
+        return $this->minimum;
+    }
+
+    public function minimumUnit(): Unit
+    {
+        return $this->units->temperatureUnit();
+    }
+
+    public function minimumWithUnit(): ?string
+    {
+        return $this->format($this->minimum);
+    }
+
+    public function maximum(): ?float
+    {
+        return $this->maximum;
+    }
+
+    public function maximumUnit(): Unit
+    {
+        return $this->units->temperatureUnit();
+    }
+
+    public function maximumWithUnit(): ?string
+    {
+        return $this->format($this->maximum);
     }
 
     public function night(): ?float

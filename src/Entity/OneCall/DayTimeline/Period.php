@@ -1,6 +1,6 @@
 <?php
 
-namespace ProgrammatorDev\OpenWeatherMap\Entity\OneCall\OneDayTimeline;
+namespace ProgrammatorDev\OpenWeatherMap\Entity\OneCall\DayTimeline;
 
 use ProgrammatorDev\Api\Context\Context;
 use ProgrammatorDev\Api\Contract\EntityInterface;

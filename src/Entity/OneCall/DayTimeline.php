@@ -5,11 +5,11 @@ namespace ProgrammatorDev\OpenWeatherMap\Entity\OneCall;
 use ProgrammatorDev\Api\Context\Context;
 use ProgrammatorDev\Api\Contract\EntityInterface;
 use ProgrammatorDev\OpenWeatherMap\Entity\Coordinates;
-use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\OneDayTimeline\Period;
+use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\DayTimeline\Period;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\Timeline\Pagination;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\Timeline\TimelinePage;
 
-final class OneDayTimeline implements EntityInterface
+final class DayTimeline implements EntityInterface
 {
     /**
      * @param TimelinePage<Period, self> $page

@@ -8,8 +8,8 @@ use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\Alert;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\Current;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\FifteenMinuteTimeline;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\MinuteTimeline;
-use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\OneDayTimeline;
-use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\OneHourTimeline;
+use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\DayTimeline;
+use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\HourTimeline;
 use ProgrammatorDev\OpenWeatherMap\Enum\Unit;
 use ProgrammatorDev\OpenWeatherMap\Enum\Units;
 use ProgrammatorDev\OpenWeatherMap\Test\Support\ApiTestCase;
@@ -298,17 +298,17 @@ final class OneCallTest extends ApiTestCase
         ], $this->query($request));
     }
 
-    public function testGetsOneHourTimelineByCoordinates(): void
+    public function testGetsHourTimelineByCoordinates(): void
     {
         $this->respondWithFixture('one-call/one-hour/success.json');
 
-        $timeline = $this->api->oneCall()->oneHourTimeline(
+        $timeline = $this->api->oneCall()->hourTimeline(
             latitude: 38.7223,
             longitude: -9.1393,
         );
         $request = $this->client->getLastRequest();
 
-        self::assertInstanceOf(OneHourTimeline::class, $timeline);
+        self::assertInstanceOf(HourTimeline::class, $timeline);
         self::assertCount(20, $timeline->periods());
         self::assertSame(1785668400, $timeline->periods()[0]->dateTime()?->getTimestamp());
         self::assertStringContainsString(
@@ -330,11 +330,11 @@ final class OneCallTest extends ApiTestCase
         ], $this->query($request));
     }
 
-    public function testGetsOneHourTimelineFromStart(): void
+    public function testGetsHourTimelineFromStart(): void
     {
         $this->respondWithFixture('one-call/one-hour/history.json');
 
-        $timeline = $this->api->oneCall()->oneHourTimeline(
+        $timeline = $this->api->oneCall()->hourTimeline(
             latitude: 38.7223,
             longitude: -9.1393,
             startAt: new \DateTimeImmutable('@1785495600'),
@@ -352,14 +352,14 @@ final class OneCallTest extends ApiTestCase
         ], $this->query($request));
     }
 
-    public function testGetsNextOneHourTimelinePage(): void
+    public function testGetsNextHourTimelinePage(): void
     {
         $this->respondWithFixture('one-call/one-hour/success.json');
         $this->client->addResponse(new Response(
             body: '{"data":[{"dt":1785740400}]}',
         ));
 
-        $timeline = $this->api->oneCall()->oneHourTimeline(
+        $timeline = $this->api->oneCall()->hourTimeline(
             latitude: 38.7223,
             longitude: -9.1393,
         );
@@ -369,7 +369,7 @@ final class OneCallTest extends ApiTestCase
         $nextPage = $timeline->pagination()->nextPage();
         $request = $this->client->getLastRequest();
 
-        self::assertInstanceOf(OneHourTimeline::class, $nextPage);
+        self::assertInstanceOf(HourTimeline::class, $nextPage);
         self::assertSame(1785740400, $nextPage->periods()[0]->dateTime()?->getTimestamp());
         self::assertCount(2, $this->client->getRequests());
         self::assertSame('GET', $request->getMethod());
@@ -386,14 +386,14 @@ final class OneCallTest extends ApiTestCase
         ], $this->query($request));
     }
 
-    public function testGetsPreviousOneHourTimelinePage(): void
+    public function testGetsPreviousHourTimelinePage(): void
     {
         $this->respondWithFixture('one-call/one-hour/success.json');
         $this->client->addResponse(new Response(
             body: '{"data":[{"dt":1785596400}]}',
         ));
 
-        $timeline = $this->api->oneCall()->oneHourTimeline(
+        $timeline = $this->api->oneCall()->hourTimeline(
             latitude: 38.7223,
             longitude: -9.1393,
         );
@@ -403,7 +403,7 @@ final class OneCallTest extends ApiTestCase
         $previousPage = $timeline->pagination()->previousPage();
         $request = $this->client->getLastRequest();
 
-        self::assertInstanceOf(OneHourTimeline::class, $previousPage);
+        self::assertInstanceOf(HourTimeline::class, $previousPage);
         self::assertSame(1785596400, $previousPage->periods()[0]->dateTime()?->getTimestamp());
         self::assertCount(2, $this->client->getRequests());
         self::assertSame('GET', $request->getMethod());
@@ -420,7 +420,7 @@ final class OneCallTest extends ApiTestCase
         ], $this->query($request));
     }
 
-    public function testOneHourTimelineAcceptsFluentConfiguration(): void
+    public function testHourTimelineAcceptsFluentConfiguration(): void
     {
         $this->client->addResponse(new Response(
             body: '{"data":[{"temp":72.5}]}',
@@ -430,7 +430,7 @@ final class OneCallTest extends ApiTestCase
             ->oneCall()
             ->withUnits(Units::IMPERIAL)
             ->withLanguage('pt')
-            ->oneHourTimeline(38.7223, -9.1393, count: 3);
+            ->hourTimeline(38.7223, -9.1393, count: 3);
         $request = $this->client->getLastRequest();
 
         self::assertSame(Unit::FAHRENHEIT, $timeline->periods()[0]->temperatureUnit());
@@ -440,17 +440,17 @@ final class OneCallTest extends ApiTestCase
         self::assertSame('pt', $this->query($request)['lang']);
     }
 
-    public function testGetsOneDayTimelineByCoordinates(): void
+    public function testGetsDayTimelineByCoordinates(): void
     {
         $this->respondWithFixture('one-call/one-day/success.json');
 
-        $timeline = $this->api->oneCall()->oneDayTimeline(
+        $timeline = $this->api->oneCall()->dayTimeline(
             latitude: 38.7223,
             longitude: -9.1393,
         );
         $request = $this->client->getLastRequest();
 
-        self::assertInstanceOf(OneDayTimeline::class, $timeline);
+        self::assertInstanceOf(DayTimeline::class, $timeline);
         self::assertCount(10, $timeline->periods());
         self::assertSame(1785628800, $timeline->periods()[0]->dateTime()?->getTimestamp());
         self::assertStringContainsString(
@@ -472,11 +472,11 @@ final class OneCallTest extends ApiTestCase
         ], $this->query($request));
     }
 
-    public function testGetsOneDayTimelineFromStart(): void
+    public function testGetsDayTimelineFromStart(): void
     {
         $this->respondWithFixture('one-call/one-day/history.json');
 
-        $timeline = $this->api->oneCall()->oneDayTimeline(
+        $timeline = $this->api->oneCall()->dayTimeline(
             latitude: 38.7223,
             longitude: -9.1393,
             startAt: new \DateTimeImmutable('@1785456000'),
@@ -494,14 +494,14 @@ final class OneCallTest extends ApiTestCase
         ], $this->query($request));
     }
 
-    public function testGetsNextOneDayTimelinePage(): void
+    public function testGetsNextDayTimelinePage(): void
     {
         $this->respondWithFixture('one-call/one-day/success.json');
         $this->client->addResponse(new Response(
             body: '{"data":[{"dt":1786492800}]}',
         ));
 
-        $timeline = $this->api->oneCall()->oneDayTimeline(
+        $timeline = $this->api->oneCall()->dayTimeline(
             latitude: 38.7223,
             longitude: -9.1393,
         );
@@ -511,7 +511,7 @@ final class OneCallTest extends ApiTestCase
         $nextPage = $timeline->pagination()->nextPage();
         $request = $this->client->getLastRequest();
 
-        self::assertInstanceOf(OneDayTimeline::class, $nextPage);
+        self::assertInstanceOf(DayTimeline::class, $nextPage);
         self::assertSame(1786492800, $nextPage->periods()[0]->dateTime()?->getTimestamp());
         self::assertCount(2, $this->client->getRequests());
         self::assertSame('GET', $request->getMethod());
@@ -528,14 +528,14 @@ final class OneCallTest extends ApiTestCase
         ], $this->query($request));
     }
 
-    public function testGetsPreviousOneDayTimelinePage(): void
+    public function testGetsPreviousDayTimelinePage(): void
     {
         $this->respondWithFixture('one-call/one-day/success.json');
         $this->client->addResponse(new Response(
             body: '{"data":[{"dt":1784764800}]}',
         ));
 
-        $timeline = $this->api->oneCall()->oneDayTimeline(
+        $timeline = $this->api->oneCall()->dayTimeline(
             latitude: 38.7223,
             longitude: -9.1393,
         );
@@ -545,7 +545,7 @@ final class OneCallTest extends ApiTestCase
         $previousPage = $timeline->pagination()->previousPage();
         $request = $this->client->getLastRequest();
 
-        self::assertInstanceOf(OneDayTimeline::class, $previousPage);
+        self::assertInstanceOf(DayTimeline::class, $previousPage);
         self::assertSame(1784764800, $previousPage->periods()[0]->dateTime()?->getTimestamp());
         self::assertCount(2, $this->client->getRequests());
         self::assertSame('GET', $request->getMethod());
@@ -562,7 +562,7 @@ final class OneCallTest extends ApiTestCase
         ], $this->query($request));
     }
 
-    public function testOneDayTimelineAcceptsFluentConfigurationAndCount(): void
+    public function testDayTimelineAcceptsFluentConfigurationAndCount(): void
     {
         $this->client->addResponse(new Response(
             body: '{"data":[{"temp":{"day":72.5}}]}',
@@ -572,7 +572,7 @@ final class OneCallTest extends ApiTestCase
             ->oneCall()
             ->withUnits(Units::IMPERIAL)
             ->withLanguage('pt')
-            ->oneDayTimeline(38.7223, -9.1393, count: 3);
+            ->dayTimeline(38.7223, -9.1393, count: 3);
         $request = $this->client->getLastRequest();
 
         self::assertSame(Unit::FAHRENHEIT, $timeline->periods()[0]->temperature()?->dayUnit());
@@ -619,7 +619,7 @@ final class OneCallTest extends ApiTestCase
     }
 
     #[DataProvider('invalidCoordinates')]
-    public function testOneHourTimelineRejectsInvalidCoordinates(
+    public function testHourTimelineRejectsInvalidCoordinates(
         float $latitude,
         float $longitude,
         string $message,
@@ -627,11 +627,11 @@ final class OneCallTest extends ApiTestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage($message);
 
-        $this->api->oneCall()->oneHourTimeline($latitude, $longitude);
+        $this->api->oneCall()->hourTimeline($latitude, $longitude);
     }
 
     #[DataProvider('invalidCoordinates')]
-    public function testOneDayTimelineRejectsInvalidCoordinates(
+    public function testDayTimelineRejectsInvalidCoordinates(
         float $latitude,
         float $longitude,
         string $message,
@@ -639,7 +639,7 @@ final class OneCallTest extends ApiTestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage($message);
 
-        $this->api->oneCall()->oneDayTimeline($latitude, $longitude);
+        $this->api->oneCall()->dayTimeline($latitude, $longitude);
     }
 
     public function testFifteenMinuteTimelineRejectsInvalidCount(): void
@@ -650,20 +650,20 @@ final class OneCallTest extends ApiTestCase
         $this->api->oneCall()->fifteenMinuteTimeline(38.7223, -9.1393, count: 0);
     }
 
-    public function testOneHourTimelineRejectsInvalidCount(): void
+    public function testHourTimelineRejectsInvalidCount(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('The timeline count must be at least 1.');
 
-        $this->api->oneCall()->oneHourTimeline(38.7223, -9.1393, count: 0);
+        $this->api->oneCall()->hourTimeline(38.7223, -9.1393, count: 0);
     }
 
-    public function testOneDayTimelineRejectsInvalidCount(): void
+    public function testDayTimelineRejectsInvalidCount(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('The timeline count must be at least 1.');
 
-        $this->api->oneCall()->oneDayTimeline(38.7223, -9.1393, count: 0);
+        $this->api->oneCall()->dayTimeline(38.7223, -9.1393, count: 0);
     }
 
     public static function invalidCoordinates(): iterable

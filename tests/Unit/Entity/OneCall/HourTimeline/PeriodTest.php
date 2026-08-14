@@ -1,12 +1,12 @@
 <?php
 
-namespace ProgrammatorDev\OpenWeatherMap\Test\Unit\Entity\OneCall\OneHourTimeline;
+namespace ProgrammatorDev\OpenWeatherMap\Test\Unit\Entity\OneCall\HourTimeline;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ProgrammatorDev\Api\Config\Config;
 use ProgrammatorDev\Api\Context\Context;
-use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\OneHourTimeline\Period;
+use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\HourTimeline\Period;
 use ProgrammatorDev\OpenWeatherMap\Enum\Unit;
 use ProgrammatorDev\OpenWeatherMap\Enum\Units;
 use ProgrammatorDev\OpenWeatherMap\Exception\HydrationException;

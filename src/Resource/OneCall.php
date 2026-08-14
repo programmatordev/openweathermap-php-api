@@ -5,10 +5,10 @@ namespace ProgrammatorDev\OpenWeatherMap\Resource;
 use ProgrammatorDev\Api\Resource;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\Alert;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\Current;
+use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\DayTimeline;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\FifteenMinuteTimeline;
+use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\HourTimeline;
 use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\MinuteTimeline;
-use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\OneDayTimeline;
-use ProgrammatorDev\OpenWeatherMap\Entity\OneCall\OneHourTimeline;
 use ProgrammatorDev\OpenWeatherMap\Resource\Concern\WithLanguage;
 use ProgrammatorDev\OpenWeatherMap\Resource\Concern\WithUnits;
 use ProgrammatorDev\OpenWeatherMap\Validation\Assert;
@@ -91,12 +91,12 @@ final class OneCall extends Resource
         return $timeline;
     }
 
-    public function oneHourTimeline(
+    public function hourTimeline(
         float $latitude,
         float $longitude,
         ?\DateTimeInterface $startAt = null,
         ?int $count = null,
-    ): OneHourTimeline {
+    ): HourTimeline {
         $latitude = Assert::latitude($latitude);
         $longitude = Assert::longitude($longitude);
 
@@ -105,7 +105,7 @@ final class OneCall extends Resource
         }
 
         // https://openweathermap.org/api/one-call-4#hourly
-        /** @var OneHourTimeline $timeline */
+        /** @var HourTimeline $timeline */
         $timeline = $this
             ->endpoint()
             ->queries([
@@ -117,17 +117,17 @@ final class OneCall extends Resource
                 'lang' => $this->resolvedLanguage(),
             ])
             ->get('/data/4.0/onecall/timeline/1h')
-            ->entity(OneHourTimeline::class);
+            ->entity(HourTimeline::class);
 
         return $timeline;
     }
 
-    public function oneDayTimeline(
+    public function dayTimeline(
         float $latitude,
         float $longitude,
         ?\DateTimeInterface $startAt = null,
         ?int $count = null,
-    ): OneDayTimeline {
+    ): DayTimeline {
         $latitude = Assert::latitude($latitude);
         $longitude = Assert::longitude($longitude);
 
@@ -136,7 +136,7 @@ final class OneCall extends Resource
         }
 
         // https://openweathermap.org/api/one-call-4#daily
-        /** @var OneDayTimeline $timeline */
+        /** @var DayTimeline $timeline */
         $timeline = $this
             ->endpoint()
             ->queries([
@@ -148,7 +148,7 @@ final class OneCall extends Resource
                 'lang' => $this->resolvedLanguage(),
             ])
             ->get('/data/4.0/onecall/timeline/1day')
-            ->entity(OneDayTimeline::class);
+            ->entity(DayTimeline::class);
 
         return $timeline;
     }
