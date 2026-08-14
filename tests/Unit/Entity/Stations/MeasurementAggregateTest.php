@@ -61,12 +61,12 @@ final class MeasurementAggregateTest extends TestCase
 
     public function testHydratesCapturedHourAndDayAggregates(): void
     {
-        $hour = MeasurementAggregate::fromArray(
-            Fixture::json('stations/measurements/aggregate-hour-success.json')[0],
-        );
-        $day = MeasurementAggregate::fromArray(
-            Fixture::json('stations/measurements/aggregate-day-success.json')[0],
-        );
+        $hours = Fixture::json('stations/measurements/aggregate-hour-success.json');
+        $days = Fixture::json('stations/measurements/aggregate-day-success.json');
+        $hour = MeasurementAggregate::fromArray($hours[0]);
+        $day = MeasurementAggregate::fromArray($days[0]);
+        $populatedHour = MeasurementAggregate::fromArray($hours[1]);
+        $populatedDay = MeasurementAggregate::fromArray($days[1]);
 
         self::assertSame(AggregationInterval::HOUR, $hour->interval());
         self::assertSame(AggregationInterval::DAY, $day->interval());
@@ -76,6 +76,11 @@ final class MeasurementAggregateTest extends TestCase
         self::assertSame(Unit::MILLIMETER, $hour->precipitation()?->rainUnit());
         self::assertSame('0.6 mm', $hour->precipitation()?->rainWithUnit());
         self::assertSame(0.6, $day->precipitation()?->rain());
+        self::assertSame(1014.2, $populatedHour->pressure()?->average());
+        self::assertSame(0.1, $populatedHour->precipitation()?->snow());
+        self::assertSame('0.1 mm', $populatedHour->precipitation()?->snowWithUnit());
+        self::assertSame(3.4, $populatedDay->precipitation()?->rain());
+        self::assertSame(0.5, $populatedDay->precipitation()?->snow());
     }
 
     public function testToleratesMissingNullUnknownAndPartialFields(): void

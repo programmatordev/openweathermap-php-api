@@ -26,5 +26,34 @@
         "precipitation": {
             "rain": 0.6
         }
+    },
+    {
+        "type": "h",
+        "date": 1786291200,
+        "station_id": "6a77ba36adde3b0001343e09",
+        "temp": {
+            "max": 16.7,
+            "min": 16.7,
+            "average": 16.7,
+            "weight": 1
+        },
+        "humidity": {
+            "average": 72,
+            "weight": 1
+        },
+        "wind": {
+            "deg": 230,
+            "speed": 4.8
+        },
+        "pressure": {
+            "min": 1014.2,
+            "max": 1014.2,
+            "average": 1014.2,
+            "weight": 1
+        },
+        "precipitation": {
+            "rain": 0.6,
+            "snow": 0.1
+        }
     }
 ]

@@ -317,16 +317,17 @@ final class StationsTest extends ApiTestCase
             stationId: ' 6a77ba36adde3b0001343e09 ',
             interval: AggregationInterval::HOUR,
             startAt: new \DateTimeImmutable('@1786231349'),
-            endAt: new \DateTimeImmutable('@1786345863'),
+            endAt: new \DateTimeImmutable('@1786692622'),
             limit: 100,
         );
         $request = $this->client->getLastRequest();
 
-        self::assertCount(1, $aggregates);
+        self::assertCount(2, $aggregates);
         self::assertContainsOnlyInstancesOf(MeasurementAggregate::class, $aggregates);
         self::assertSame(AggregationInterval::HOUR, $aggregates[0]->interval());
         self::assertSame(20.5, $aggregates[0]->temperature()?->average());
         self::assertSame(0.6, $aggregates[0]->precipitation()?->rain());
+        self::assertSame(0.1, $aggregates[1]->precipitation()?->snow());
         self::assertSame('GET', $request->getMethod());
         self::assertSame('/data/3.0/measurements', $request->getUri()->getPath());
         self::assertSame([
@@ -334,7 +335,7 @@ final class StationsTest extends ApiTestCase
             'type' => 'h',
             'limit' => '100',
             'from' => '1786231349',
-            'to' => '1786345863',
+            'to' => '1786692622',
             'appid' => 'api-key',
         ], $this->query($request));
     }
