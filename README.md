@@ -9,8 +9,9 @@ air pollution, geocoding, maps, stations, and One Call. Responses use typed
 entities that safely handle conditional, missing, and `null` data.
 
 The library is built on
-[`programmatordev/php-api-sdk`](https://github.com/programmatordev/php-api-sdk)
-and supports client-wide and request-local configuration.
+[`programmatordev/php-api-sdk`](https://github.com/programmatordev/php-api-sdk),
+which provides HTTP client discovery and optional caching, logging, plugins,
+and request hooks.
 
 ## Requirements
 

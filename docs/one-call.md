@@ -39,30 +39,6 @@ foreach ($current->conditions() as $condition) {
 }
 ```
 
-Configure units and language for a request:
-
-```php
-use ProgrammatorDev\OpenWeatherMap\Enum\Language;
-use ProgrammatorDev\OpenWeatherMap\Enum\Units;
-
-$current = $api
-    ->oneCall()
-    ->withUnits(Units::IMPERIAL)
-    ->withLanguage(Language::PORTUGUESE)
-    ->current(38.7223, -9.1393);
-```
-
-Measurement getters return nullable values. Related methods provide the unit
-and a formatted value. With the default metric configuration, for example:
-
-```php
-use ProgrammatorDev\OpenWeatherMap\Enum\Unit;
-
-$current->temperature();          // 24.34
-$current->temperatureUnit();      // Unit::CELSIUS
-$current->temperatureWithUnit();  // '24.34 °C'
-```
-
 ## Minute Timeline
 
 See OpenWeather's
@@ -241,7 +217,7 @@ these getters return nullable floats without conversion.
 
 ## Timeline Pagination
 
-The 15-minute, one-hour, and one-day timelines support pagination.
+The 15-minute, hour, and day timelines support pagination.
 
 ```php
 $timeline = $api->oneCall()->hourTimeline(
@@ -267,6 +243,34 @@ The availability checks and URL getters do not make another API request.
 `previousPage()` and `nextPage()` request the corresponding page when its URL
 is available and otherwise return `null`. The library does not fetch every page
 automatically. Each page navigation sends a separate API request.
+
+## Units And Language
+
+Current and timeline requests use the client configuration by default. Use
+`withUnits()` and `withLanguage()` to change those values for one request
+chain.
+
+```php
+use ProgrammatorDev\OpenWeatherMap\Enum\Language;
+use ProgrammatorDev\OpenWeatherMap\Enum\Units;
+
+$current = $api
+    ->oneCall()
+    ->withUnits(Units::IMPERIAL)
+    ->withLanguage(Language::PORTUGUESE)
+    ->current(38.7223, -9.1393);
+```
+
+Measurement getters return nullable values. Related methods provide the unit
+and a formatted value. With the default metric configuration, for example:
+
+```php
+use ProgrammatorDev\OpenWeatherMap\Enum\Unit;
+
+$current->temperature();          // 24.34
+$current->temperatureUnit();      // Unit::CELSIUS
+$current->temperatureWithUnit();  // '24.34 °C'
+```
 
 ## Alert
 

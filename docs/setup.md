@@ -15,9 +15,9 @@ The examples below use objects supplied by the application:
 `$httpClient` implements PSR-18, `$cachePool` implements PSR-6, and `$logger`
 implements PSR-3.
 
-Setup changes apply to subsequent requests made by the client. They do not
-affect methods such as `maps()->tileUrl()` and `maps()->tileUrlTemplate()`,
-which generate URLs without making an HTTP request.
+Setup changes apply to later requests made by the client. Some methods do not
+send an HTTP request and are therefore unaffected. Their API guides note this
+where relevant.
 
 ## HTTP Client
 

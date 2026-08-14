@@ -36,9 +36,9 @@ echo $current->humidity();
 echo $current->visibility();
 ```
 
-`minimumTemperature()` and `maximumTemperature()` are the lowest and highest
-temperatures currently observed within the requested location. OpenWeather
-notes that they are mainly useful for geographically large cities; they are not
+`minimumTemperature()` and `maximumTemperature()` are OpenWeather's optional
+minimum and maximum temperatures for the city at the current moment. They are
+mainly useful for large cities and often match `temperature()`. They are not
 the day's forecast low and high.
 
 Conditions, wind, and clouds are exposed as nested entities. A condition keeps
@@ -78,8 +78,9 @@ See the
 [official forecast documentation](https://openweathermap.org/api/forecast5)
 for API details.
 
-Use `forecast()` with a latitude and longitude. The optional `count` limits the
-number of three-hour periods returned and must be positive.
+Use `forecast()` with a latitude and longitude to retrieve up to five days of
+weather forecasts, with one period every three hours. The optional `count`
+limits the number of periods returned and must be positive.
 
 ```php
 $forecast = $api->weather()->forecast(

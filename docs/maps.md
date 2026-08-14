@@ -106,12 +106,11 @@ For example:
 | 2 | 4 × 4 | 0–3 |
 | 6 | 64 × 64 | 0–63 |
 
-Zoom must be zero or greater. At any zoom level, the largest valid X or Y value
-is `(2 ** $zoom) - 1`. Mapping libraries normally calculate these indexes from
-the displayed geographic area; they should not be replaced directly with a
-location's longitude and latitude.
+Zoom must be zero or greater. X and Y start at 0, and their highest valid value
+is one less than the number of tiles along that axis, as shown in the table.
+Mapping libraries normally calculate these indexes from the displayed
+geographic area; they should not be replaced directly with a location's
+longitude and latitude.
 
-Applications displaying Weather Maps data must provide visible OpenWeather
-attribution. Consult the
-[official FAQ](https://openweathermap.org/faq)
-for the current attribution requirements.
+OpenWeather's attribution requirements depend on the applicable license. See
+the [official FAQ](https://openweathermap.org/faq) for current guidance.
