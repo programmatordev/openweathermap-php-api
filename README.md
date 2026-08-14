@@ -89,9 +89,9 @@ documentation for the currently supported values.
 
 ## Documentation
 
-See [Setup](docs/setup.md) to configure a custom HTTP client, cache, logger,
-plugins, or request hooks. The API guides cover endpoints, response entities,
-and usage examples:
+### APIs
+
+These guides cover each API's endpoints, response entities, and usage examples:
 
 - [One Call 4.0](docs/one-call.md)
 - [Air Pollution](docs/air-pollution.md)
@@ -99,6 +99,13 @@ and usage examples:
 - [Maps](docs/maps.md)
 - [Stations](docs/stations.md)
 - [Geocoding](docs/geocoding.md)
+
+### Client Guides
+
+These guides cover configuration and behavior shared across the APIs:
+
+- [Setup](docs/setup.md)
+- [Error Handling](docs/errors.md)
 
 ## License
 
